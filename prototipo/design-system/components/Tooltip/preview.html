@@ -1,0 +1,19 @@
+<!-- @dsCard group="Sobreposições" height=110 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>Tooltip</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { paddingTop: 40, display: "flex", gap: 12 } }, /* @__PURE__ */ React.createElement(P.Tooltip, { content: "Ouvir em voz alta" }, /* @__PURE__ */ React.createElement(P.IconButton, { icon: "volume", label: "Ouvir comunicado" })), /* @__PURE__ */ React.createElement(P.Tooltip, { content: "Frequ\xEAncia m\xEDnima: 75%" }, /* @__PURE__ */ React.createElement("span", { tabIndex: 0, style: { textDecoration: "underline dotted", textUnderlineOffset: 3 } }, "72% de frequ\xEAncia")));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Entrar no Colégio Recreio</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-1)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div style="font-family: var(--font-sans); color: var(--ink);">
+<x-import component-from-global-scope="Recreio.LoginLayout" school="{{school}}">
+<h1 style="margin: 0 0 8px; font-family: var(--font-display); font-weight: 800; font-size: 2.25rem; line-height: 2.5rem; letter-spacing: -0.035em;">Entrar</h1>
+<p style="margin: 0 0 28px; color: var(--ink-2);">Use o e-mail ou o celular cadastrado na escola. Enviamos um código, sem senha.</p>
+<div style="display: flex; flex-direction: column; gap: 16px;">
+<x-import component-from-global-scope="Recreio.TextField" label="E-mail ou celular" icon="mail" default-value="fernanda.lima@email.com" size="lg"></x-import>
+<a class="rc-btn rc-btn-primary rc-btn-lg rc-btn-full" href="Familia-Hoje.dc.html">Receber código</a>
+<a class="rc-btn rc-btn-secondary rc-btn-lg rc-btn-full" href="Familia-Hoje.dc.html">Entrar com passkey</a>
+<div style="display: flex; align-items: center; gap: 12px; color: var(--ink-3); font-size: 13px;"><span style="flex: 1; height: 1px; background: var(--line);"></span>é da equipe da escola?<span style="flex: 1; height: 1px; background: var(--line);"></span></div>
+<a class="rc-btn rc-btn-ghost rc-btn-lg rc-btn-full" href="Escola-Painel.dc.html">Entrar como direção, secretaria ou professor</a>
+<p style="margin: 0; font-size: 14px; color: var(--ink-2);">Primeiro acesso? O convite chegou no e-mail informado na matrícula.</p>
+</div>
+</x-import>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { school: { name: 'Colégio Recreio', unit: 'Aldeota e Eusébio' } };
+  }
+}
+</script>
+</body>
+</html>

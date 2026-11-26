@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Celular: Integral</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+<header class="rc-app-bar"><a class="rc-app-back" href="Celular-Mais.dc.html" aria-label="Voltar"><x-import component-from-global-scope="Recreio.Icon" name="chevron-left" size="{{s22}}"></x-import></a><h1>Integral<small>Davi Lima · 2º ano B</small></h1><span></span></header>
+<div class="rc-app-scroll">
+<div style="padding: 12px;">
+<x-import component-from-global-scope="Recreio.ProgramTracker" student="Davi Lima · 2º ano B" programs="{{programs}}" week="{{week}}" blocks="{{blocks}}"></x-import>
+</div>
+</div>
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="mais"></x-import>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const shared = {
+      tabs: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Celular-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', count: 2, href: 'Celular-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Celular-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 1, href: 'Celular-Chat.dc.html' }, { id: 'mais', label: 'Mais', icon: 'menu', href: 'Celular-Mais.dc.html' }]
+    };
+    return Object.assign({ yes: true, no: false, s22: 22 }, shared, {
+      programs: ['regular', 'integral', 'reforco'],
+      week: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'].map((d, i) => Object.assign({ day: d, today: i === 2 }, [{ regular: true, integral: true, reforco: true }, { regular: true, integral: true }, { regular: true, integral: true, reforco: null }, { regular: null, integral: null }, {}][i])),
+      blocks: [
+        { time: '11h50', program: 'integral', status: 'feito', title: 'Almoço', note: 'Comeu quase tudo.', icon: 'utensils' },
+        { time: '13h30', program: 'integral', status: 'agora', title: 'Estudo dirigido', note: 'Matemática: dezenas e unidades.', icon: 'edit' },
+        { time: '14h40', program: 'reforco', status: 'proximo', title: 'Reforço de leitura' },
+        { time: '17h00', program: 'integral', status: 'proximo', title: 'Saída', note: 'Você está autorizada', icon: 'logout' }]
+    });
+  }
+}
+</script>
+</body>
+</html>

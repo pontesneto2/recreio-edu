@@ -1,0 +1,14 @@
+import '@testing-library/jest-dom/vitest';
+import { cleanup } from '@testing-library/react';
+
+beforeEach(() => {
+  vi.stubGlobal(
+    'matchMedia',
+    vi.fn(() => ({ matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn() })),
+  );
+});
+
+afterEach(() => {
+  cleanup();
+  vi.unstubAllGlobals();
+});

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Celular: Sem internet</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status is-nav" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+<div class="rc-app-banner is-offline"><x-import component-from-global-scope="Recreio.Icon" name="wifi-off" size="{{s18}}"></x-import><span style="flex: 1;">Sem internet. Você vê o que foi salvo às 13h39.</span><a href="#pop-tentar" style="font-weight: 700;">Tentar</a></div><header class="rc-app-head"><div class="rc-app-headrow"><x-import component-from-global-scope="Recreio.SchoolMark" name="Colégio Recreio" size="{{s32}}"></x-import><strong>Colégio Recreio</strong><a class="rc-app-bell" href="Celular-Notificacoes.dc.html" aria-label="Notificações, 3 novas"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span>3</span></a><x-import component-from-global-scope="Recreio.Avatar" name="Fernanda Lima" size="{{s32}}"></x-import></div><p class="rc-app-kicker">Modo sem internet</p><h1 class="rc-app-h1">O essencial continua aqui</h1><div class="rc-app-kids"><a class="rc-app-kid is-on" href="#">Davi · 2º B</a><a class="rc-app-kid" href="#">Ana Beatriz · 9º A</a></div></header>
+<div class="rc-app-scroll">
+<div class="rc-app-body"><div class="rc-app-sec"><h2>Disponível agora</h2></div><div class="rc-app-card is-flush"><a class="rc-app-row" href="Celular-Autorizacoes.dc.html"><span class="rc-app-ico is-success"><x-import component-from-global-scope="Recreio.Icon" name="qr" size="{{s20}}"></x-import></span><span><strong>QR de retirada do Davi</strong><small>Vale hoje até 18h · funciona sem internet</small></span><x-import component-from-global-scope="Recreio.Icon" name="chevron-right" size="{{s16}}"></x-import></a><a class="rc-app-row" href="Celular-Agenda.dc.html"><span class="rc-app-ico is-success"><x-import component-from-global-scope="Recreio.Icon" name="calendar" size="{{s20}}"></x-import></span><span><strong>Agenda de hoje</strong><small>5 lançamentos salvos às 13h39</small></span><x-import component-from-global-scope="Recreio.Icon" name="chevron-right" size="{{s16}}"></x-import></a><a class="rc-app-row" href="Celular-Boletim.dc.html"><span class="rc-app-ico is-success"><x-import component-from-global-scope="Recreio.Icon" name="chart" size="{{s20}}"></x-import></span><span><strong>Boletim do 3º bimestre</strong><small>Salvo no aparelho</small></span><x-import component-from-global-scope="Recreio.Icon" name="chevron-right" size="{{s16}}"></x-import></a><a class="rc-app-row" href="Celular-Horarios.dc.html"><span class="rc-app-ico is-success"><x-import component-from-global-scope="Recreio.Icon" name="clock" size="{{s20}}"></x-import></span><span><strong>Horário de aulas</strong><small>Semana inteira salva</small></span><x-import component-from-global-scope="Recreio.Icon" name="chevron-right" size="{{s16}}"></x-import></a></div><div class="rc-app-sec"><h2>Esperando a conexão voltar</h2></div><div class="rc-app-card is-flush"><div class="rc-app-row"><span class="rc-app-ico is-warning"><x-import component-from-global-scope="Recreio.Icon" name="eye" size="{{s20}}"></x-import></span><span><strong>Visto na prova de Ciências</strong><small>Você deu o visto às 13h40 · envia sozinho</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="warning" size="sm">Na fila</x-import></div><div class="rc-app-row"><span class="rc-app-ico is-warning"><x-import component-from-global-scope="Recreio.Icon" name="chat" size="{{s20}}"></x-import></span><span><strong>Recado para o Prof. Ricardo</strong><small>Escrito às 13h41 · envia sozinho</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="warning" size="sm">Na fila</x-import></div></div><div class="rc-app-sec"><h2>Precisa de internet</h2></div><div class="rc-app-card is-flush"><div class="rc-app-row"><span class="rc-app-ico is-neutral"><x-import component-from-global-scope="Recreio.Icon" name="wallet" size="{{s20}}"></x-import></span><span><strong>Pagar com Pix</strong><small>O código é gerado na hora pelo banco</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="neutral" size="sm">Indisponível</x-import></div><div class="rc-app-row"><span class="rc-app-ico is-neutral"><x-import component-from-global-scope="Recreio.Icon" name="edit" size="{{s20}}"></x-import></span><span><strong>Assinar contrato</strong><small>A assinatura é validada no servidor</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="neutral" size="sm">Indisponível</x-import></div></div></div>
+</div>
+
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="hoje"></x-import>
+<div id="pop-tentar" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Ainda sem conexão"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-warning"><x-import component-from-global-scope="Recreio.Icon" name="wifi-off" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Ainda sem conexão</p><p class="rc-dialog-desc">O app tenta de novo sozinho a cada 30 segundos. Nada do que você fez se perde.</p></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#"><span class="rc-btn-label">Entendi</span></a></div></div></div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return Object.assign({ yes: true, no: false, one: 1, two: 2, three: 3, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96, tabs: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Celular-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', count: 2, href: 'Celular-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Celular-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 1, href: 'Celular-Chat.dc.html' }, { id: 'mais', label: 'Mais', icon: 'menu', href: 'Celular-Mais.dc.html' }] }, {
+
+    });
+  }
+}
+</script>
+</body>
+</html>

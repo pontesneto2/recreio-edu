@@ -1,0 +1,20 @@
+<!-- @dsCard group="Plataforma" height=720 width=1280 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>LoginLayout</title>
+<style>body{padding:0px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    const [step, setStep] = React.useState(0);
+    return /* @__PURE__ */ React.createElement("div", { style: { height: 720, overflow: "hidden" } }, /* @__PURE__ */ React.createElement(P.LoginLayout, { school: { name: "Col\xE9gio Recreio", unit: "Aldeota e Eus\xE9bio" } }, /* @__PURE__ */ React.createElement("h1", { style: { fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "2.25rem", lineHeight: "2.5rem", letterSpacing: "-.035em", margin: "0 0 8px" } }, "Entrar"), /* @__PURE__ */ React.createElement("p", { style: { margin: "0 0 28px", color: "var(--ink-2)" } }, "Use o e-mail ou o celular cadastrado na escola. Enviamos um c\xF3digo, sem senha."), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 16 } }, /* @__PURE__ */ React.createElement(P.TextField, { label: "E-mail ou celular", icon: "mail", defaultValue: "fernanda.lima@email.com", size: "lg" }), /* @__PURE__ */ React.createElement(P.Button, { variant: "primary", size: "lg", full: true, iconRight: "arrow-right" }, "Receber c\xF3digo"), /* @__PURE__ */ React.createElement(P.Button, { variant: "secondary", size: "lg", full: true, icon: "key" }, "Entrar com passkey"), /* @__PURE__ */ React.createElement("p", { style: { margin: 0, fontSize: 14, color: "var(--ink-2)" } }, "Primeiro acesso? O convite chegou no e-mail informado na matr\xEDcula."))));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

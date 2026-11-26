@@ -1,0 +1,177 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Família: Documentos</title>
+<link rel="stylesheet" href="vendor/tokens.css"><link rel="stylesheet" href="vendor/bundle.css"><link rel="stylesheet" href="vendor/telas.css"><style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+<script src="vendor/react.js"></script><script src="vendor/react-dom.js"></script><script src="vendor/bundle.js"></script></head>
+<body><div id="app"></div><template id="dc-src"><x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" groups="{{nav}}" active="documentos"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="file" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Documentos</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Declarações na hora e pedidos à secretaria, sem ir ao colégio</p></div></div>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar documento" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Familia-Notificacoes.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px; padding: 16px 20px; border-radius: var(--radius-lg); background: var(--surface-1); border: 1px solid var(--line); box-shadow: var(--shadow-1);">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; min-width: 0; max-width: 100%;">
+<div style="display: flex; flex-direction: column; gap: 6px;"><span style="font-size: 14px; font-weight: 600;">Aluno</span><x-import component-from-global-scope="Recreio.SegmentedControl" label="Aluno" value="ana" options="{{alunos}}"></x-import></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-primary" href="#pop-pedir"><x-import component-from-global-scope="Recreio.Icon" name="plus" size="{{s18}}"></x-import>Pedir outro documento</a></div>
+</div>
+<section aria-label="Resumo dos documentos" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 16px;">
+<x-import component-from-global-scope="Recreio.StatCard" color="azul" label="Pedidos em andamento" value="{{and}}" icon="clock" hint="Histórico escolar · pronto até 30/11" href="#pedidos"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="verde" label="Prontos para baixar" value="{{prontos}}" icon="download" hint="Declaração de matrícula e boletim" href="#pedidos"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="roxo" label="Guardados no colégio" value="{{guard}}" icon="file-text" hint="Contratos, recibos e informes" href="#guardados"></x-import>
+</section>
+<div class="rc-split" style="gap: 24px; align-items: start; --split: minmax(0, 1fr) minmax(0, 1fr);">
+<div style="display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Emitir na hora" subtitle="Saem com o cabeçalho do colégio, a assinatura da direção e um QR de autenticidade">
+<div>
+<sc-for list="{{agora}}" as="a" hint-placeholder-count="4">
+<div class="tl-linha " style="--cols: 40px minmax(0, 1fr) auto;"><span class="tl-ic rc-c-{{a.cor}}"><x-import component-from-global-scope="Recreio.Icon" name="{{a.icon}}" size="{{s20}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{a.t}}</strong><small>{{a.m}}</small></span><span class="tl-linha-fim"><a class="rc-btn rc-btn-secondary rc-btn-sm" href="#pop-emitir"><x-import component-from-global-scope="Recreio.Icon" name="download" size="{{s18}}"></x-import>Emitir</a></span></div>
+</sc-for>
+</div>
+</x-import>
+<div id="pedidos"><x-import component-from-global-scope="Recreio.Card" title="Seus pedidos" subtitle="A secretaria prepara e avisa quando ficar pronto">
+<div>
+<sc-for list="{{pedidos}}" as="p" hint-placeholder-count="3">
+<div class="rc-popup-row" style="grid-template-columns: 36px minmax(0, 1fr) auto;"><span class="rc-dialog-icon {{p.cls}}" style="width: 36px; height: 36px; border-radius: var(--radius-sm);"><x-import component-from-global-scope="Recreio.Icon" name="file-text" size="{{s18}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{p.nome}}</strong><small style="color: var(--ink-2);">{{p.meta}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{p.tone}}" size="sm">{{p.st}}</x-import></div>
+</sc-for>
+</div>
+</x-import></div>
+<div id="guardados"><x-import component-from-global-scope="Recreio.Card" title="Guardados no colégio" subtitle="Documentos já assinados ou emitidos">
+<div>
+<sc-for list="{{guardados}}" as="p" hint-placeholder-count="4">
+<div class="rc-popup-row" style="grid-template-columns: 36px minmax(0, 1fr) auto;"><span class="rc-dialog-icon {{p.cls}}" style="width: 36px; height: 36px; border-radius: var(--radius-sm);"><x-import component-from-global-scope="Recreio.Icon" name="file" size="{{s18}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{p.nome}}</strong><small style="color: var(--ink-2);">{{p.meta}}</small></span><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-baixado">Baixar</a></div>
+</sc-for>
+</div>
+</x-import></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Prévia da declaração" subtitle="É assim que o documento sai">
+<div class="tl-folha"><div class="tl-folha-topo"><x-import component-from-global-scope="Recreio.SchoolMark" name="{{m.name}}" src="{{m.logo}}" size="{{s48}}"></x-import><div style="min-width: 0;"><strong style="display: block; font-size: 1.0625rem;">{{m.legalName}}</strong><small style="color: var(--ink-2);">CNPJ {{m.cnpj}} · {{m.address}} · {{m.phone}}</small></div></div><h3>Declaração de matrícula</h3><p style="margin: 0;">Declaramos, para os devidos fins, que <strong>Ana Beatriz Ramos Lima</strong>, nascida em 14/03/2012, matrícula 2018-0214, está regularmente matriculada no <strong>9º ano A do Ensino Fundamental</strong>, turno da manhã, no ano letivo de 2026, com frequência de 95% até esta data.</p><p style="margin: 0;">Fortaleza, 25 de novembro de 2026.</p><div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px;"><div><strong style="display: block;">{{m.signer}}</strong><small style="color: var(--ink-2);">{{m.signerRole}} · assinatura digital</small></div><div style="display: flex; align-items: center; gap: 10px;"><x-import component-from-global-scope="Recreio.FakeQR" seed="RC-2026-118402" size="{{s72}}" label="QR de autenticidade"></x-import><small style="color: var(--ink-2);">Confira a autenticidade<br>Código RC-2026-118402</small></div></div></div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Alert" tone="info" title="Vale como original">Quem receber confere a autenticidade pelo QR ou pelo código, no site do colégio.</x-import>
+</div>
+</div>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="hoje"></x-import>
+</div>
+</div>
+<div id="pop-emitir" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Emitir a declaração agora?">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="file-text" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Emitir a declaração agora?</p><p class="rc-dialog-desc">O documento sai com o cabeçalho do colégio, a assinatura da direção e um QR de autenticidade.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-emitido">Emitir</a></div>
+</div>
+</div>
+<div id="pop-emitido" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Documento pronto">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="download" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Documento pronto</p><p class="rc-dialog-desc">O PDF foi salvo no aparelho e enviado para o seu e-mail. Ele fica em Seus pedidos.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Baixar de novo</a></div>
+</div>
+</div>
+<div id="pop-pedir" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Pedir documento à secretaria">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="file" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Pedir documento à secretaria</p><p class="rc-dialog-desc">Para o que precisa de conferência manual. Você acompanha o pedido aqui.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: flex; flex-direction: column; gap: 14px;"><x-import component-from-global-scope="Recreio.RadioGroup" legend="Documento" value="hist" options="{{tiposDoc}}"></x-import><x-import component-from-global-scope="Recreio.RadioGroup" legend="Como quer receber" value="pdf" options="{{retirada}}"></x-import><x-import component-from-global-scope="Recreio.TextArea" label="Observação (opcional)" default-value="Preciso para a matrícula no Ensino Médio." rows="{{n2}}"></x-import></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-pedido-ok">Enviar pedido</a></div>
+</div>
+</div>
+<div id="pop-pedido-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Pedido enviado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Pedido enviado</p><p class="rc-dialog-desc">Protocolo 2026-0418. A secretaria avisa pelo sino quando o documento ficar pronto.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-baixado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Arquivo baixado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="download" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Arquivo baixado</p><p class="rc-dialog-desc">O PDF foi salvo no aparelho.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc></template><script id="dc-js" type="text/plain">
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 3, bellNotifs: [
+      { icon: 'mail', title: 'Bilhete para assinar: aula de campo', text: 'Ana Beatriz · 9º ano A · prazo 26/11', time: 'Hoje, 11h20', unread: true, priority: 'importante' },
+      { icon: 'heart', title: 'Davi passou pela enfermaria', text: 'Dor de cabeça, já voltou para a sala', time: 'Hoje, 10h25', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: 'Mensalidade de dezembro disponível', text: 'R$ 1.406,00 · vence em 10/12', time: 'Hoje, 8h00', unread: true, priority: 'rotina' },
+      { icon: 'chart', title: 'Boletim do 3º bimestre publicado', text: 'Ana Beatriz e Davi', time: 'Ontem, 18h30', priority: 'rotina' }] };
+    const tabs = [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Familia-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }];
+    const shared = {
+      bellCount: 3, activeChild: 'k1', activeProfile: 'resp',
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      user: { name: 'Fernanda Lima' },
+      kids: [{ id: 'k1', name: 'Davi Lima', group: '2º ano B' }, { id: 'k2', name: 'Ana Beatriz Lima', group: '9º ano A' }],
+      profiles: [{ id: 'resp', label: 'Responsável', icon: 'users', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'calendario', label: 'Calendário', icon: 'flag', href: 'Familia-Calendario.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', count: 2, href: 'Familia-Comunicados.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'autorizacoes', label: 'Autorizações', icon: 'key', count: 1, href: 'Familia-Autorizacoes.dc.html' }] },
+        { label: 'Acadêmico', items: [{ id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'check-circle', href: 'Familia-Frequencia.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Familia-Horarios.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Familia-Integral.dc.html' }, { id: 'inclusao', label: 'Plano individual', icon: 'star', href: 'Familia-Inclusao.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 1, href: 'Familia-Ocorrencias.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Familia-Biblioteca.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Familia-Materiais.dc.html' }] },
+        { label: 'Serviços', items: [{ id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Familia-Cardapio.dc.html' }, { id: 'saude', label: 'Saúde', icon: 'heart', href: 'Familia-Saude.dc.html' }, { id: 'documentos', label: 'Documentos', icon: 'file', href: 'Familia-Documentos.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', href: 'Familia-Atendimentos.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', count: 2, href: 'Familia-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', href: 'Familia-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', count: 1, href: 'Familia-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'financeiro', label: 'Mensalidades', icon: 'wallet', count: 1, urgent: true, href: 'Familia-Financeiro.dc.html' }, { id: 'dae', label: 'DAE', icon: 'receipt', href: 'Familia-DAE.dc.html' }, { id: 'ir', label: 'Recibo para IR', icon: 'receipt', href: 'Familia-Recibo-IR.dc.html' }, { id: 'rematricula', label: 'Rematrícula 2027', icon: 'file-text', href: 'Familia-Rematricula.dc.html' }, { id: 'matricula', label: 'Matrícula 2027', icon: 'graduation', href: 'Familia-Matricula.dc.html' }] },
+        { label: 'Conta', items: [{ id: 'prefs', label: 'Acessibilidade', icon: 'accessibility', href: 'Familia-Preferencias.dc.html' }] }]
+    };
+    const m = Object.assign({ name: 'Colégio Recreio', legalName: 'Colégio Recreio Ltda.', cnpj: '07.412.386/0001-52', address: 'Av. Santos Dumont, 2450 · Aldeota · Fortaleza, CE', phone: '(85) 3254-1987', signer: 'Lúcia Menezes', signerRole: 'Diretora geral' }, (window.Recreio.loadBrand && window.Recreio.loadBrand()) || {});
+    const __r = Object.assign({ yes: true, no: false, tabs }, shared, {
+      activeChild: 'k2',
+      n2: 2, n3: 3, n4: 4, n5: 5, n6: 6,
+      go_pop_baixado: () => { location.hash = 'pop-baixado'; }, go_pop_emitido: () => { location.hash = 'pop-emitido'; }, go_pop_emitir: () => { location.hash = 'pop-emitir'; }, go_pop_lidas: () => { location.hash = 'pop-lidas'; }, go_pop_pedido_ok: () => { location.hash = 'pop-pedido-ok'; }, go_pop_pedir: () => { location.hash = 'pop-pedir'; },
+      m, and: 1, prontos: 2, guard: 4,
+      alunos: [{ value: 'davi', label: 'Davi · 2º B' }, { value: 'ana', label: 'Ana Beatriz · 9º A' }],
+      agora: [
+        { icon: 'file-text', cor: 'azul', t: 'Declaração de matrícula', m: 'Para estágio, plano de saúde, transporte e meia-entrada' },
+        { icon: 'check-circle', cor: 'verde', t: 'Declaração de frequência', m: 'Com o percentual de presença até hoje' },
+        { icon: 'wallet', cor: 'roxo', t: 'Declaração de quitação', m: 'Só sai se não houver mensalidade em aberto' },
+        { icon: 'receipt', cor: 'laranja', t: 'Informe de pagamentos para o IR', m: 'Ano-base 2025 · R$ 33.190,00 pagos' }],
+      pedidos: [
+        { nome: 'Histórico escolar · Ana Beatriz', meta: 'Pedido em 23/11 · a secretaria confere as notas desde 2018', st: 'Em preparo · até 30/11', tone: 'info', cls: 'rc-tone-info' },
+        { nome: 'Declaração de matrícula · Ana Beatriz', meta: 'Emitida hoje às 9h41 · código RC-2026-118402', st: 'Pronta', tone: 'success', cls: 'rc-tone-success' },
+        { nome: '2ª via do boletim do 3º bimestre · Davi', meta: 'Emitida hoje às 9h45', st: 'Pronta', tone: 'success', cls: 'rc-tone-success' }],
+      guardados: [{ nome: 'Contrato 2026 · Ana Beatriz', meta: 'Assinado em 12/12/2025', cls: 'rc-tone-neutral' }, { nome: 'Contrato 2026 · Davi', meta: 'Assinado em 12/12/2025', cls: 'rc-tone-neutral' }, { nome: 'Informe para o IR 2025', meta: 'R$ 33.190,00 pagos', cls: 'rc-tone-neutral' }, { nome: 'Ficha de saúde · Davi', meta: 'Atualizada em 02/02/2026', cls: 'rc-tone-neutral' }],
+      tiposDoc: [{ value: 'hist', label: 'Histórico escolar', description: 'Até 5 dias úteis' }, { value: 'transf', label: 'Declaração de transferência', description: 'Até 2 dias úteis' }, { value: 'cont', label: 'Conteúdo programático', description: 'Até 5 dias úteis' }, { value: 'outro', label: 'Outro documento', description: 'A secretaria responde em 1 dia útil' }],
+      retirada: [{ value: 'pdf', label: 'PDF no app e por e-mail' }, { value: 'papel', label: 'Via impressa, retirada na secretaria' }]
+    });
+    return Object.assign({ s12: 12, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96 }, bell, __r);
+  }
+}
+</script><script src="vendor/runtime.js"></script></body></html>

@@ -1,0 +1,34 @@
+<!-- @dsCard group="Secretaria" height=620 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>EnrollmentChecklist</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { maxWidth: 720 } }, /* @__PURE__ */ React.createElement(
+      P.EnrollmentChecklist,
+      {
+        student: "Davi Lima \xB7 3\xBA ano B em 2027",
+        year: 2027,
+        step: 1,
+        contract: { summary: "12 parcelas de R$ 1.560,00 com vencimento no dia 10 e 5% de desconto de pontualidade." },
+        documents: [
+          { name: "Ficha de rematr\xEDcula", status: "aprovado" },
+          { name: "Declara\xE7\xE3o de quita\xE7\xE3o 2026", status: "aprovado", note: "Gerada pelo financeiro em 18/11" },
+          { name: "RG ou certid\xE3o de nascimento", status: "enviado", note: "Enviado ontem, em an\xE1lise" },
+          { name: "Comprovante de resid\xEAncia", status: "recusado", note: "Conta em nome de terceiro. Envie com declara\xE7\xE3o do titular." },
+          { name: "Carteira de vacina\xE7\xE3o", status: "pendente", note: "P\xE1gina das vacinas, frente e verso" }
+        ]
+      }
+    ));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

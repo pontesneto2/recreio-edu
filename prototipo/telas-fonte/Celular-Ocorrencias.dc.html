@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Celular: Ocorrências</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+<header class="rc-app-bar"><a class="rc-app-back" href="Celular-Mais.dc.html" aria-label="Voltar"><x-import component-from-global-scope="Recreio.Icon" name="chevron-left" size="{{s22}}"></x-import></a><h1>Ocorrências<small>Ana Beatriz · 9º ano A · 2026</small></h1><span></span></header>
+<div class="rc-app-scroll">
+<div class="rc-app-body"><div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;"><div class="rc-app-card"><small style="color: var(--ink-2);">No ano</small><span class="rc-app-big">2</span></div><div class="rc-app-card"><small style="color: var(--ink-2);">Elogios</small><span class="rc-app-big" style="color: var(--success);">1</span></div><div class="rc-app-card"><small style="color: var(--ink-2);">Sem ciência</small><span class="rc-app-big" style="color: var(--danger);">1</span></div></div><div class="rc-app-card"><div style="display: flex; flex-wrap: wrap; gap: 6px;"><x-import component-from-global-scope="Recreio.StatusPill" tone="warning" size="sm" icon="clock">Atraso</x-import><x-import component-from-global-scope="Recreio.StatusPill" tone="danger" size="sm" icon="alert">Falta a sua ciência</x-import></div><strong style="font-size: 1.0625rem;">Chegou atrasada na 1ª aula</strong><p style="margin: 0; color: var(--ink-2); line-height: 1.45;">Quinta, 15/10. Entrada às 7h48. Registrado pela portaria e visto pela coordenação.</p><small style="color: var(--ink-2);">Juliana Sampaio · Coordenação</small><div style="display: flex; gap: 8px;"><a class="rc-btn rc-btn-primary rc-btn-sm" href="#pop-ciencia"><x-import component-from-global-scope="Recreio.Icon" name="check" size="{{s18}}"></x-import><span class="rc-btn-label">Dar ciência</span></a><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-resposta"><x-import component-from-global-scope="Recreio.Icon" name="chat" size="{{s18}}"></x-import><span class="rc-btn-label">Responder</span></a></div></div><div class="rc-app-card"><div style="display: flex; flex-wrap: wrap; gap: 6px;"><x-import component-from-global-scope="Recreio.StatusPill" tone="success" size="sm" icon="star">Elogio</x-import><x-import component-from-global-scope="Recreio.StatusPill" tone="neutral" size="sm">Ciente em 26/09</x-import></div><strong style="font-size: 1.0625rem;">Ajudou colegas na feira de ciências</strong><p style="margin: 0; color: var(--ink-2); line-height: 1.45;">Sexta, 25/09. Organizou a apresentação do grupo e explicou o experimento para os visitantes.</p><small style="color: var(--ink-2);">Prof. Marcos Vinícius Teixeira · Ciências</small></div></div>
+</div>
+
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="mais"></x-import>
+<div id="pop-ciencia" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Ciência registrada"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog rc-dialog-hero"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Ciência registrada</p><p class="rc-dialog-desc">A coordenação vê que você leu a ocorrência, com data e hora.</p></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#"><span class="rc-btn-label">Concluir</span></a></div></div></div><div id="pop-resposta" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Responder à coordenação"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="chat" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Responder à coordenação</p><p class="rc-dialog-desc">Sua resposta fica junto da ocorrência, na ficha da Ana Beatriz.</p></div></div><div class="rc-dialog-body"><x-import component-from-global-scope="Recreio.TextArea" label="Sua resposta" rows="{{three}}"></x-import></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#"><span class="rc-btn-label">Cancelar</span></a><a class="rc-btn rc-btn-primary" href="#pop-resp-ok"><span class="rc-btn-label">Enviar</span></a></div></div></div><div id="pop-resp-ok" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Resposta enviada"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog rc-dialog-hero"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Resposta enviada</p><p class="rc-dialog-desc">Juliana Sampaio recebe o aviso agora.</p></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#"><span class="rc-btn-label">Concluir</span></a></div></div></div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return Object.assign({ yes: true, no: false, one: 1, two: 2, three: 3, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96, tabs: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Celular-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', count: 2, href: 'Celular-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Celular-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 1, href: 'Celular-Chat.dc.html' }, { id: 'mais', label: 'Mais', icon: 'menu', href: 'Celular-Mais.dc.html' }] }, {
+
+    });
+  }
+}
+</script>
+</body>
+</html>

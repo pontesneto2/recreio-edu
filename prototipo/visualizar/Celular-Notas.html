@@ -1,0 +1,36 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Celular: Professor · Notas</title>
+<link rel="stylesheet" href="vendor/tokens.css"><link rel="stylesheet" href="vendor/bundle.css"><style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+<script src="vendor/react.js"></script><script src="vendor/react-dom.js"></script><script src="vendor/bundle.js"></script></head>
+<body><div id="app"></div><template id="dc-src"><x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+<header class="rc-app-bar"><a class="rc-app-back" href="Celular-Professor.html" aria-label="Voltar"><x-import component-from-global-scope="Recreio.Icon" name="chevron-left" size="{{s22}}"></x-import></a><h1>Lançar notas<small>9º ano A · Matemática · 4º bimestre</small></h1><span></span></header>
+<div class="rc-app-scroll">
+<div class="rc-app-body"><x-import component-from-global-scope="Recreio.FilterChips" label="Avaliação" value="{{av}}" options="{{avs}}" single="{{yes}}"></x-import><x-import component-from-global-scope="Recreio.GradeList" assessment="Simulado" students="{{st}}" values="{{vals}}"></x-import></div>
+</div>
+
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="notas"></x-import>
+
+</div>
+</x-import>
+</x-dc></template><script id="dc-js" type="text/plain">
+class Component extends DCLogic {
+  renderVals() {
+    return Object.assign({ yes: true, no: false, one: 1, two: 2, three: 3, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96, tabs: [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Celular-Professor.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Celular-Chamada.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Celular-Notas.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', count: 2, href: 'Celular-Lancar.dc.html' }] }, {
+      av: ['sim'], avs: [{ value: 'p1', label: 'Prova 1' }, { value: 'tr', label: 'Trabalho' }, { value: 'p2', label: 'Prova 2' }, { value: 'sim', label: 'Simulado · peso 1' }],
+      st: [{ id: 's1', name: 'Ana Beatriz Lima' }, { id: 's2', name: 'Arthur Nogueira' }, { id: 's3', name: 'Bruno Sales' }, { id: 's4', name: 'Caio Reis', note: 'Prova ampliada' }, { id: 's5', name: 'Davi Martins' }, { id: 's6', name: 'Larissa Bezerra' }, { id: 's7', name: 'Isabela Fontenele' }, { id: 's8', name: 'João Pedro Cavalcante' }, { id: 's9', name: 'Lucas Andrade' }, { id: 's10', name: 'Marina Teixeira' }],
+      vals: { s1: 8, s2: 5.5, s6: 9 }
+    });
+  }
+}
+</script><script src="vendor/runtime.js"></script></body></html>

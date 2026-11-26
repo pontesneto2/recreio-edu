@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Celular: Entrar</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+
+<div class="rc-app-scroll">
+
+<div class="rc-app-body" style="flex: 1; justify-content: center; gap: 20px; padding: 24px;">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center;">
+<x-import component-from-global-scope="Recreio.SchoolMark" name="Colégio Recreio" size="{{s72}}"></x-import>
+<div><p class="rc-app-big" style="margin: 0; font-size: 1.625rem;">Colégio Recreio</p><p style="margin: 4px 0 0; color: var(--ink-2);">Educar para a vida, desde 1987</p></div>
+</div>
+<x-import component-from-global-scope="Recreio.TextField" label="CPF ou e-mail" default-value="fernanda.lima@email.com"></x-import>
+<x-import component-from-global-scope="Recreio.TextField" label="Senha" type="password" default-value="recreio2026"></x-import>
+<a class="rc-btn rc-btn-primary rc-btn-full" href="#pop-perfil" style="min-height: 48px;"><span class="rc-btn-label">Entrar</span></a>
+<a class="rc-btn rc-btn-secondary rc-btn-full" href="#pop-perfil" style="min-height: 48px;"><x-import component-from-global-scope="Recreio.Icon" name="scan" size="{{s18}}"></x-import><span class="rc-btn-label">Entrar com biometria</span></a>
+<div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 600;"><a href="#pop-senha">Esqueci a senha</a><a href="#pop-primeiro">Primeiro acesso</a></div>
+<p style="margin: 8px 0 0; text-align: center; font-size: 12px; color: var(--ink-2);">Feito por Recreio Sistema Educacional</p>
+</div>
+</div>
+
+<div class="rc-app-home"></div>
+<div id="pop-perfil" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Entrar como"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="users" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Entrar como</p><p class="rc-dialog-desc">Sua conta tem mais de um perfil neste colégio.</p></div></div><div class="rc-dialog-body"><div class="rc-app-card is-flush"><a class="rc-app-row" href="Celular-Hoje.dc.html"><span class="rc-app-ico"><x-import component-from-global-scope="Recreio.Icon" name="users" size="{{s20}}"></x-import></span><span><strong>Responsável</strong><small>Davi Lima e Ana Beatriz Lima</small></span><x-import component-from-global-scope="Recreio.Icon" name="chevron-right" size="{{s16}}"></x-import></a><a class="rc-app-row" href="Celular-Professor.dc.html"><span class="rc-app-ico"><x-import component-from-global-scope="Recreio.Icon" name="book" size="{{s20}}"></x-import></span><span><strong>Professor</strong><small>Demonstração: Prof. Ricardo Albuquerque</small></span><x-import component-from-global-scope="Recreio.Icon" name="chevron-right" size="{{s16}}"></x-import></a><a class="rc-app-row" href="Celular-Aluno.dc.html"><span class="rc-app-ico"><x-import component-from-global-scope="Recreio.Icon" name="graduation" size="{{s20}}"></x-import></span><span><strong>Aluno</strong><small>Demonstração: Ana Beatriz Lima · 9º ano A</small></span><x-import component-from-global-scope="Recreio.Icon" name="chevron-right" size="{{s16}}"></x-import></a><a class="rc-app-row" href="Celular-Portaria.dc.html"><span class="rc-app-ico"><x-import component-from-global-scope="Recreio.Icon" name="gate" size="{{s20}}"></x-import></span><span><strong>Portaria</strong><small>Demonstração: Francisco Araújo</small></span><x-import component-from-global-scope="Recreio.Icon" name="chevron-right" size="{{s16}}"></x-import></a></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#"><span class="rc-btn-label">Cancelar</span></a></div></div></div><div id="pop-senha" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Recuperar a senha"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="key" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Recuperar a senha</p><p class="rc-dialog-desc">Enviamos um link para o e-mail e um código por SMS para o celular do cadastro.</p></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#"><span class="rc-btn-label">Cancelar</span></a><a class="rc-btn rc-btn-primary" href="#pop-senha-ok"><span class="rc-btn-label">Enviar link</span></a></div></div></div><div id="pop-senha-ok" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Link enviado"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog rc-dialog-hero"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Link enviado</p><p class="rc-dialog-desc">Confira o e-mail fe••••@gmail.com. O link vale por 30 minutos.</p></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#"><span class="rc-btn-label">Concluir</span></a></div></div></div><div id="pop-primeiro" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Primeiro acesso"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="info" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Primeiro acesso</p><p class="rc-dialog-desc">Use o CPF do responsável financeiro e o código que a secretaria enviou na matrícula. Sem o código? Fale com a secretaria: (85) 3254-1987.</p></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#"><span class="rc-btn-label">Entendi</span></a></div></div></div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return Object.assign({ yes: true, no: false, one: 1, two: 2, three: 3, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96, tabs: [] }, {
+
+    });
+  }
+}
+</script>
+</body>
+</html>

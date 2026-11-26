@@ -1,0 +1,221 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Gestão: Grupos e permissões</title>
+<link rel="stylesheet" href="vendor/tokens.css"><link rel="stylesheet" href="vendor/bundle.css"><style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+<script src="vendor/react.js"></script><script src="vendor/react-dom.js"></script><script src="vendor/bundle.js"></script></head>
+<body><div id="app"></div><template id="dc-src"><x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" units="{{units}}" groups="{{nav}}" active="permissoes"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="shield" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Grupos e permissões</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Quem pode ver, criar, editar, excluir e aprovar em cada módulo</p></div></div>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar funcionário" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Escola-Notificacoes.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<section aria-label="Indicadores de acesso" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px;">
+<x-import component-from-global-scope="Recreio.StatCard" color="azul" label="Grupos" value="{{nGrupos}}" icon="shield" hint="7 padrão · 5 criados pela escola"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="verde" label="Pessoas com acesso" value="{{nPessoas}}" icon="users" hint="Unidade Aldeota · 4 em mais de um grupo"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="amarelo" label="Sem verificação em 2 etapas" value="{{sem2fa}}" icon="lock" hint="Portaria e monitores do integral"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="roxo" label="Mudanças em 30 dias" value="{{mudancas}}" icon="history" hint="Todas no registro de auditoria" href="#auditoria"></x-import>
+</section>
+<x-import component-from-global-scope="Recreio.PermissionMatrix" default-group="prof" default-open="notas" groups="{{groups}}" modules="{{mods}}" value="{{val}}" scopes="{{scopes}}" rules="{{rules}}" restrictions="{{restr}}"></x-import>
+<div id="auditoria"><x-import component-from-global-scope="Recreio.Card" title="Registro de auditoria" subtitle="Quem mudou cada permissão e quando. A direção recebe um resumo semanal.">
+<div>
+<sc-for list="{{audit}}" as="a" hint-placeholder-count="5">
+<div class="rc-popup-row" style="grid-template-columns: 36px minmax(0, 1fr) auto;"><x-import component-from-global-scope="Recreio.Avatar" name="{{a.quem}}" size="{{s36}}"></x-import><span style="min-width: 0;"><strong style="display: block;">{{a.oque}}</strong><small style="color: var(--ink-2);">{{a.quem}} · {{a.quando}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{a.tone}}" size="sm">{{a.tipo}}</x-import></div>
+</sc-for>
+</div>
+</x-import></div>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="permissoes"></x-import>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc></template><script id="dc-js" type="text/plain">
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 5, bellNotifs: [
+      { icon: 'clipboard', title: '5 justificativas para analisar', text: 'Frequência · Fundamental II', time: 'Hoje, 11h05', unread: true, priority: 'importante' },
+      { icon: 'chat', title: 'Fernanda Lima respondeu no chat', text: 'Ana Beatriz · 9º ano A', time: 'Hoje, 10h12', unread: true, priority: 'rotina' },
+      { icon: 'edit', title: 'História 9º B: faltam 4 notas', text: 'Fechamento do 4º bimestre', time: 'Hoje, 9h00', unread: true, priority: 'importante' },
+      { icon: 'alert', title: 'Ocorrência sem resposta da família', text: 'Mateus Holanda · 9º ano C · há 7 dias', time: 'Hoje, 8h30', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: '63 mensalidades vencidas', text: '41 famílias · a régua de cobrança enviou lembretes', time: 'Hoje, 7h00', unread: true, priority: 'rotina' }] };
+    const tabs = [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'comunicados', label: 'Avisos', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }];
+    const shared = {
+      bellCount: 5, activeChild: undefined, activeProfile: 'dir', kids: [],
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      units: [{ id: 'aldeota', label: 'Unidade Aldeota', meta: '1.248 alunos · Infantil ao Médio', href: 'Escola-Painel.dc.html', current: true }, { id: 'eusebio', label: 'Unidade Eusébio', meta: '936 alunos · Infantil e Fundamental I', href: 'Escola-Painel.dc.html' }, { id: 'rede', label: 'Todas as unidades', meta: 'Visão consolidada da rede', href: 'Escola-Painel.dc.html' }],
+      user: { name: 'Lúcia Menezes' },
+      profiles: [{ id: 'dir', label: 'Direção', icon: 'shield', school: 'Colégio Recreio' }, { id: 'prof', label: 'Professora', icon: 'book', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'chat', label: 'Chat com famílias', icon: 'chat', count: 4, href: 'Escola-Chat.dc.html' }] },
+        { label: 'Pedagógico', items: [{ id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Escola-Horarios.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'clipboard', count: 5, href: 'Escola-Frequencia.dc.html' }, { id: 'boletins', label: 'Fechamento e boletins', icon: 'chart', href: 'Escola-Boletins.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 3, href: 'Escola-Ocorrencias.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Escola-Integral.dc.html' }, { id: 'saude', label: 'Saúde e enfermaria', icon: 'heart', href: 'Escola-Saude.dc.html' }, { id: 'inclusao', label: 'Inclusão e AEE', icon: 'accessibility', href: 'Escola-Inclusao.dc.html' }, { id: 'medidas', label: 'Medidas disciplinares', icon: 'flag', href: 'Escola-Medidas.dc.html' }, { id: 'extras', label: 'Pontos extras', icon: 'star', href: 'Escola-Pontos-extras.dc.html' }, { id: 'eja', label: 'EJA', icon: 'moon', href: 'Escola-EJA.dc.html' }] },
+        { label: 'Secretaria', items: [{ id: 'alunos', label: 'Alunos', icon: 'users', href: 'Escola-Alunos.dc.html' }, { id: 'equipe', label: 'Equipe', icon: 'user', href: 'Escola-Equipe.dc.html' }, { id: 'captacao', label: 'Captação', icon: 'filter', count: 9, href: 'Escola-Captacao.dc.html' }, { id: 'matriculas', label: 'Matrículas', icon: 'file-text', count: 12, href: 'Escola-Matriculas.dc.html' }, { id: 'contratos', label: 'Contratos', icon: 'edit', count: 200, href: 'Escola-Contratos.dc.html' }, { id: 'solicitacoes', label: 'Solicitações', icon: 'file', count: 6, href: 'Escola-Solicitacoes.dc.html' }, { id: 'certificados', label: 'Certificados e diplomas', icon: 'graduation', href: 'Escola-Certificados.dc.html' }, { id: 'transferencias', label: 'Transferências', icon: 'sync', href: 'Escola-Transferencias.dc.html' }, { id: 'fotos', label: 'Fotos de alunos', icon: 'camera', href: 'Escola-Fotos.dc.html' }, { id: 'importacao', label: 'Migração de dados', icon: 'upload', href: 'Escola-Importacao.dc.html' }, { id: 'calendario', label: 'Calendário letivo', icon: 'flag', href: 'Escola-Calendario.dc.html' }, { id: 'autorizacoes', label: 'Passeios e autorizações', icon: 'key', href: 'Escola-Autorizacoes.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Escola-Biblioteca.dc.html' }] },
+        { label: 'Família e serviços', items: [{ id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 4, href: 'Escola-Atendimentos.dc.html' }, { id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Escola-Cardapio.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', href: 'Escola-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', count: 9, href: 'Escola-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', href: 'Escola-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'mensalidades', label: 'Mensalidades', icon: 'wallet', count: 41, urgent: true, href: 'Escola-Mensalidades.dc.html' }, { id: 'fiscal', label: 'Notas fiscais e IR', icon: 'receipt', count: 3, href: 'Escola-Fiscal.dc.html' }, { id: 'dae', label: 'DAE SEFAZ-CE', icon: 'receipt', href: 'Escola-DAE.dc.html' }, { id: 'caixa', label: 'Caixa e contas a pagar', icon: 'card', href: 'Escola-Caixa.dc.html' }] },
+        { label: 'Gestão', items: [{ id: 'relatorios', label: 'Relatórios e censo', icon: 'sparkline', href: 'Escola-Relatorios.dc.html' }, { id: 'permissoes', label: 'Grupos e permissões', icon: 'shield', href: 'Escola-Permissoes.dc.html' }, { id: 'modulos', label: 'Módulos e marca', icon: 'modules', href: 'Escola-Modulos.dc.html' }] }]
+    };
+    const __r = Object.assign({ yes: true, no: false, tabs }, shared, {
+      nGrupos: 12, nPessoas: 96, sem2fa: 11, mudancas: 16, s36: 36,
+      groups: [
+        { id: 'dir', name: 'Direção', icon: 'shield', color: 'azul', description: 'Super admin. Acesso total, inclusive financeiro e permissões.', members: [{ name: 'Lúcia Menezes', role: 'Diretora geral' }, { name: 'Roberto Farias', role: 'Diretor administrativo' }, { name: 'Ana Paula Viana', role: 'Vice-diretora' }] },
+        { id: 'coord', name: 'Coordenação', icon: 'users', color: 'roxo', description: 'Acompanha as turmas do seu segmento, fecha e reabre diários.', members: [{ name: 'Juliana Sampaio', role: 'Coordenadora · Fundamental II' }, { name: 'Patrícia Rocha', role: 'Coordenadora · Fundamental I' }, { name: 'Fábio Teles', role: 'Coordenador · Ensino Médio' }, { name: 'Lia Bastos', role: 'Coordenadora · Infantil' }, { name: 'Rui Martins', role: 'Orientador educacional' }, { name: 'Vera Sá', role: 'Psicopedagoga' }] },
+        { id: 'prof', name: 'Professor titular', icon: 'book', color: 'verde', description: 'Lança notas, chamada, agenda e ocorrências das próprias turmas.', members: [{ name: 'Ricardo Albuquerque', role: 'Matemática · 9º A, 9º B, 8º A, 1ª série EM' }, { name: 'Helena Costa', role: 'Português · 9º A, 9º B, 9º C' }, { name: 'Marcos Vinícius Teixeira', role: 'Ciências · 8º A, 9º A, 9º C' }, { name: 'Caio Bezerra', role: 'Artes · 6º ao 9º ano', also: 'Integral' }, { name: 'Luana Freitas', role: 'Polivalente · 2º ano B' }, { name: 'Tatiane Freitas', role: 'Inglês · 7º A e 9º A' }, { name: 'Débora Lins', role: 'Reforço de leitura' }] },
+        { id: 'aux', name: 'Professor auxiliar', icon: 'hand', color: 'ciano', description: 'Apoia o titular: faz chamada e agenda. Não lança nem libera notas.', members: [{ name: 'Bianca Moura', role: 'Auxiliar · Infantil V' }, { name: 'Jéssica Nunes', role: 'Auxiliar · 1º ano A' }] },
+        { id: 'sec', name: 'Secretaria', icon: 'file-text', color: 'ciano', description: 'Cadastro de alunos, matrículas, contratos e autorizações.', members: [{ name: 'Renata Alencar', role: 'Secretária escolar' }, { name: 'Igor Lemos', role: 'Auxiliar de secretaria' }] },
+        { id: 'fin', name: 'Financeiro', icon: 'wallet', color: 'verde', description: 'Mensalidades, acordos, bolsas e remessas do banco.', members: [{ name: 'Paulo Ribeiro', role: 'Analista financeiro' }, { name: 'Simone Dantas', role: 'Assistente financeira' }] },
+        { id: 'int', name: 'Monitor do integral', icon: 'sun-moon', color: 'amarelo', description: 'Rotina, refeição e estudo dirigido do integral.', members: [{ name: 'Camila Rocha', role: 'Monitora · Integral Fund I' }, { name: 'Bruna Leite', role: 'Monitora · tarde' }, { name: 'Sérgio Mota', role: 'Monitor · tarde' }] },
+        { id: 'port', name: 'Portaria', icon: 'gate', color: 'laranja', description: 'Entrada, saída e retirada autorizada. Não vê notas nem financeiro.', members: [{ name: 'Francisco Araújo', role: 'Porteiro · manhã' }, { name: 'Edson Sales', role: 'Porteiro · tarde' }, { name: 'Mara Lima', role: 'Recepção' }, { name: 'José Neto', role: 'Porteiro · folguista' }] },
+        { id: 'bib', name: 'Biblioteca', icon: 'book', color: 'roxo', description: 'Acervo, empréstimos, devoluções e multas.', members: [{ name: 'Joana Paiva', role: 'Bibliotecária' }] },
+        { id: 'nutri', name: 'Nutrição', icon: 'utensils', color: 'verde', description: 'Monta o cardápio e vê restrições alimentares. Criado na ficha da nutricionista, em Equipe.', members: [{ name: 'Marília Castro', role: 'Nutricionista · terceirizada' }] },
+        { id: 'enf', name: 'Enfermaria', icon: 'heart', color: 'vermelho', description: 'Atendimentos, medicação autorizada e ficha de saúde. Único grupo que edita dado de saúde.', members: [{ name: 'Tereza Maciel', role: 'Enfermeira' }] },
+        { id: 'aee', name: 'Atendimento especializado', icon: 'accessibility', color: 'roxo', description: 'Plano individual, adaptações e relatórios de inclusão dos alunos acompanhados.', members: [{ name: 'Marina Duarte', role: 'Professora do AEE' }] }],
+      mods: (() => { const R = (id, label, hint) => ({ id, label, hint }); const AMPLO = ['escola', 'sede', 'segmento', 'turmas', 'proprio']; const SEDE = ['escola', 'sede']; return [
+        { id: 'painel', name: 'Painel', icon: 'home', color: 'azul', section: 'Geral', scopes: ['escola', 'sede', 'segmento'] },
+        { id: 'comunicados', name: 'Comunicados', icon: 'bell', color: 'azul', section: 'Geral', scopes: AMPLO, rules: [R('rede', 'Enviar para toda a rede', 'Sem isso, envia só para o seu alcance.'), R('direto', 'Publicar sem aprovação', 'Sem isso, a coordenação aprova antes.'), R('urgente', 'Marcar como urgente', 'Toca o celular das famílias mesmo no silencioso.')] },
+        { id: 'chat', name: 'Chat com famílias', icon: 'chat', color: 'ciano', section: 'Geral', scopes: AMPLO, rules: [R('iniciar', 'Iniciar conversa com a família'), R('historico', 'Ver conversas de outros atendentes')] },
+        { id: 'notas', name: 'Notas e faltas', icon: 'edit', color: 'roxo', section: 'Pedagógico', scopes: AMPLO, rules: [R('lancar', 'Lançar notas e faltas', 'Nas disciplinas em que é o titular.'), R('liberar', 'Liberar notas para a família', 'A nota aparece no boletim da família.'), R('pos', 'Editar depois do fechamento', 'Altera nota com o bimestre fechado.'), R('reabrir', 'Reabrir diário fechado', 'Pede um motivo, que fica no histórico.')] },
+        { id: 'chamada', name: 'Chamada', icon: 'check-circle', color: 'verde', section: 'Pedagógico', scopes: AMPLO, rules: [R('retro', 'Alterar chamada de dias anteriores'), R('justificar', 'Aceitar justificativa de falta')] },
+        { id: 'agenda', name: 'Agenda da turma', icon: 'calendar', color: 'azul', section: 'Pedagógico', scopes: AMPLO, rules: [R('publicar', 'Publicar lançamentos na agenda'), R('recado', 'Trocar recados com a família'), R('assinatura', 'Exigir assinatura do responsável')] },
+        { id: 'frequencia', name: 'Frequência', icon: 'clipboard', color: 'verde', section: 'Pedagógico', scopes: AMPLO, rules: [R('justificar', 'Analisar justificativas e atestados'), R('busca', 'Acionar a busca ativa', 'Aluno com muitas faltas seguidas.')] },
+        { id: 'boletins', name: 'Fechamento e boletins', icon: 'chart', color: 'roxo', section: 'Pedagógico', scopes: ['escola', 'sede', 'segmento', 'turmas'], rules: [R('fechar', 'Fechar o bimestre'), R('publicar', 'Publicar boletins para as famílias'), R('conselho', 'Registrar decisão do conselho de classe')] },
+        { id: 'ocorrencias', name: 'Ocorrências', icon: 'alert', color: 'laranja', section: 'Pedagógico', scopes: AMPLO, rules: [R('grave', 'Registrar ocorrência grave', 'Avisa a coordenação e a direção na hora.'), R('sigilo', 'Ver ocorrências sigilosas')] },
+        { id: 'integral', name: 'Integral e reforço', icon: 'sun-moon', color: 'amarelo', section: 'Pedagógico', scopes: AMPLO, rules: [R('rotina', 'Lançar rotina, refeição e saída', 'Só dos grupos da própria ficha.'), R('grade', 'Montar a grade e os grupos de reforço'), R('vagas', 'Gerenciar vagas e lista de espera')] },
+        { id: 'horarios', name: 'Horários', icon: 'clock', color: 'azul', section: 'Pedagógico', scopes: AMPLO, rules: [R('montar', 'Montar a grade de aulas'), R('substituir', 'Lançar substituição de professor')] },
+        { id: 'saude', name: 'Saúde e enfermaria', icon: 'heart', color: 'vermelho', section: 'Pedagógico', scopes: AMPLO, rules: [R('atender', 'Registrar atendimento e avisar a família'), R('medicar', 'Dar medicação autorizada pela família'), R('ficha', 'Ver e editar a ficha de saúde completa', 'Sem isso, vê só alergia grave.')] },
+        { id: 'inclusao', name: 'Inclusão e AEE', icon: 'accessibility', color: 'roxo', section: 'Pedagógico', scopes: AMPLO, rules: [R('plano', 'Criar e alterar o plano individual'), R('laudo', 'Ver laudos e relatórios clínicos'), R('familia', 'Enviar relatório para a família')] },
+        { id: 'alunos', name: 'Alunos', icon: 'users', color: 'ciano', section: 'Secretaria', scopes: AMPLO, rules: [R('saude', 'Ver dados de saúde'), R('docs', 'Ver documentos e CPF completos'), R('resp', 'Editar responsáveis e retirada autorizada'), R('transferir', 'Transferir de turma ou de sede')] },
+        { id: 'equipe', name: 'Equipe', icon: 'user', color: 'ciano', section: 'Secretaria', scopes: SEDE, rules: [R('cadastrar', 'Cadastrar e desligar profissional'), R('acesso', 'Definir grupo e turmas do profissional'), R('folha', 'Ver dados de contrato e salário')] },
+        { id: 'captacao', name: 'Captação', icon: 'filter', color: 'verde', section: 'Secretaria', scopes: SEDE, rules: [R('proposta', 'Enviar proposta com desconto'), R('converter', 'Converter interessado em matrícula')] },
+        { id: 'matriculas', name: 'Matrículas', icon: 'file-text', color: 'verde', section: 'Secretaria', scopes: SEDE, rules: [R('desconto', 'Conceder desconto na matrícula'), R('cancelar', 'Cancelar matrícula')] },
+        { id: 'contratos', name: 'Contratos', icon: 'edit', color: 'azul', section: 'Secretaria', scopes: SEDE, rules: [R('lote', 'Enviar contratos em lote'), R('modelo', 'Editar o modelo de contrato'), R('cancelar', 'Cancelar contrato assinado')] },
+        { id: 'autorizacoes', name: 'Passeios e autorizações', icon: 'key', color: 'laranja', section: 'Secretaria', scopes: AMPLO, rules: [R('massa', 'Enviar pedido em massa'), R('bloqueio', 'Bloquear retirada de aluno', 'Usado em decisão judicial.')] },
+        { id: 'portaria', name: 'Portaria', icon: 'gate', color: 'laranja', section: 'Secretaria', scopes: SEDE, rules: [R('fora', 'Liberar saída fora do horário'), R('visitante', 'Cadastrar visitante'), R('antecipada', 'Autorizar saída antecipada', 'Pedido que a família faz pelo app.'), R('incidente', 'Analisar retirada recusada'), R('regrasport', 'Definir horários e regras da portaria')] },
+        { id: 'biblioteca', name: 'Biblioteca', icon: 'book', color: 'ciano', section: 'Secretaria', scopes: SEDE, rules: [R('acervo', 'Cadastrar livros e pedir baixa do acervo'), R('isentar', 'Isentar multa de até R$ 10,00'), R('decidir', 'Aprovar compra, baixa e isenção maior', 'Pedidos que a bibliotecária envia.'), R('regrasbib', 'Definir prazo, multa e meta de leitura')] },
+        { id: 'certificados', name: 'Certificados e diplomas', icon: 'graduation', color: 'roxo', section: 'Secretaria', scopes: SEDE, rules: [R('emitircert', 'Emitir e registrar no livro'), R('segundavia', 'Emitir 2ª via')] },
+        { id: 'transferencias', name: 'Transferências', icon: 'sync', color: 'laranja', section: 'Secretaria', scopes: SEDE, rules: [R('concluirtransf', 'Concluir transferência de saída')] },
+        { id: 'fotos', name: 'Fotos de alunos', icon: 'camera', color: 'ciano', section: 'Secretaria', scopes: SEDE, rules: [R('aprovarfoto', 'Aprovar foto enviada pela família')] },
+        { id: 'importacao', name: 'Migração de dados', icon: 'upload', color: 'azul', section: 'Secretaria', scopes: SEDE, rules: [R('importar', 'Importar e desfazer importação', 'Altera dados de anos anteriores.')] },
+        { id: 'medidas', name: 'Medidas disciplinares', icon: 'flag', color: 'vermelho', section: 'Pedagógico', scopes: SEDE, rules: [R('suspender', 'Aplicar suspensão'), R('recurso', 'Decidir recurso da família')] },
+        { id: 'extras', name: 'Pontos extras', icon: 'star', color: 'amarelo', section: 'Pedagógico', scopes: SEDE, rules: [R('aprovarextra', 'Aprovar ponto extra')] },
+        { id: 'eja', name: 'EJA', icon: 'moon', color: 'roxo', section: 'Pedagógico', scopes: SEDE, rules: [R('aproveitamento', 'Conceder aproveitamento de estudos')] },
+        { id: 'dae', name: 'DAE SEFAZ-CE', icon: 'receipt', color: 'verde', section: 'Financeiro', scopes: SEDE, rules: [R('emitirdae', 'Gerar e enviar DAE'), R('configdae', 'Configurar a integração')] },
+        { id: 'solicitacoes', name: 'Documentos e solicitações', icon: 'file', color: 'azul', section: 'Secretaria', scopes: SEDE, rules: [R('emitir', 'Emitir declaração e histórico'), R('modelo', 'Editar modelos de documento')] },
+        { id: 'calendario', name: 'Calendário letivo', icon: 'flag', color: 'amarelo', section: 'Secretaria', scopes: SEDE, rules: [R('evento', 'Criar e mudar evento do calendário')] },
+        { id: 'atendimentos', name: 'Atendimentos', icon: 'hand', color: 'roxo', section: 'Família e serviços', scopes: AMPLO, rules: [R('agenda', 'Abrir horários de atendimento'), R('ata', 'Registrar a ata da reunião')] },
+        { id: 'cardapio', name: 'Cardápio', icon: 'utensils', color: 'verde', section: 'Família e serviços', scopes: SEDE, rules: [R('publicar', 'Publicar o cardápio da semana'), R('restricao', 'Ver alergias e restrições alimentares')] },
+        { id: 'galeria', name: 'Galeria de fotos', icon: 'image', color: 'rosa', section: 'Família e serviços', scopes: AMPLO, rules: [R('publicar', 'Publicar álbum'), R('imagem', 'Ver quem não autorizou uso de imagem')] },
+        { id: 'loja', name: 'Loja da escola', icon: 'tag', color: 'laranja', section: 'Família e serviços', scopes: SEDE, rules: [R('produto', 'Cadastrar produto e preço'), R('entrega', 'Dar baixa na entrega')] },
+        { id: 'pesquisas', name: 'Pesquisas', icon: 'target', color: 'ciano', section: 'Família e serviços', scopes: AMPLO, rules: [R('criar', 'Criar e enviar pesquisa'), R('respostas', 'Ver respostas com o nome da família')] },
+        { id: 'mensalidades', name: 'Mensalidades', icon: 'wallet', color: 'verde', section: 'Financeiro', scopes: SEDE, rules: [R('valores', 'Ver valores', 'Sem isso, vê só em dia ou em aberto.'), R('baixa', 'Dar baixa manual'), R('desconto', 'Aplicar desconto e bolsa'), R('acordo', 'Propor e aprovar acordo'), R('estorno', 'Estornar pagamento')] },
+        { id: 'fiscal', name: 'Notas fiscais e IR', icon: 'receipt', color: 'verde', section: 'Financeiro', scopes: SEDE, rules: [R('emitir', 'Emitir e reenviar nota fiscal'), R('cancelar', 'Cancelar nota fiscal', 'Pede justificativa e fica no histórico.'), R('informe', 'Publicar o informe para IR')] },
+        { id: 'caixa', name: 'Caixa e contas a pagar', icon: 'card', color: 'verde', section: 'Financeiro', scopes: SEDE, rules: [R('lancar', 'Lançar conta a pagar'), R('aprovar', 'Aprovar pagamento acima da alçada'), R('conciliar', 'Conciliar o extrato do banco')] },
+        { id: 'relatorios', name: 'Relatórios e censo', icon: 'sparkline', color: 'azul', section: 'Gestão', scopes: ['escola', 'sede', 'segmento'], rules: [R('financeiro', 'Ver indicadores financeiros'), R('censo', 'Gerar o arquivo do Censo Escolar')] },
+        { id: 'permissoes', name: 'Grupos e permissões', icon: 'shield', color: 'vermelho', section: 'Gestão', scopes: SEDE, rules: [R('grupos', 'Criar e excluir grupos'), R('auditoria', 'Ver o registro de auditoria')] },
+        { id: 'modulos', name: 'Módulos e marca', icon: 'modules', color: 'roxo', section: 'Gestão', scopes: SEDE, rules: [R('ligar', 'Ligar e desligar módulos'), R('marca', 'Alterar logo e cores da escola')] }]; })(),
+      val: (() => { const all = ['ver', 'criar', 'editar', 'excluir', 'aprovar', 'exportar']; const ids = ['painel', 'comunicados', 'chat', 'notas', 'chamada', 'agenda', 'frequencia', 'boletins', 'ocorrencias', 'integral', 'horarios', 'saude', 'inclusao', 'alunos', 'equipe', 'captacao', 'matriculas', 'contratos', 'autorizacoes', 'portaria', 'biblioteca', 'certificados', 'transferencias', 'fotos', 'importacao', 'medidas', 'extras', 'eja', 'dae', 'solicitacoes', 'calendario', 'atendimentos', 'cardapio', 'galeria', 'loja', 'pesquisas', 'mensalidades', 'fiscal', 'caixa', 'relatorios', 'permissoes', 'modulos']; const V = ['ver'], VC = ['ver', 'criar'], VCE = ['ver', 'criar', 'editar']; return {
+        dir: Object.fromEntries(ids.map((i) => [i, all])),
+        coord: { painel: V, comunicados: ['ver', 'criar', 'editar', 'aprovar'], chat: VCE, notas: ['ver', 'editar', 'aprovar', 'exportar'], chamada: ['ver', 'editar'], agenda: ['ver', 'criar', 'editar', 'aprovar'], frequencia: ['ver', 'editar', 'aprovar', 'exportar'], boletins: ['ver', 'criar', 'editar', 'aprovar', 'exportar'], ocorrencias: all, integral: V, alunos: ['ver', 'exportar'], autorizacoes: VCE, saude: V, inclusao: ['ver', 'editar', 'aprovar'], relatorios: ['ver', 'exportar'], portaria: ['ver', 'editar', 'aprovar', 'exportar'], biblioteca: ['ver', 'editar', 'aprovar', 'exportar'], medidas: all, extras: ['ver', 'criar', 'editar', 'aprovar'], eja: ['ver', 'criar', 'editar', 'exportar'], certificados: ['ver', 'aprovar'] },
+        prof: { comunicados: VC, notas: VCE, chamada: VCE, agenda: VCE, frequencia: V, ocorrencias: VC, horarios: V, atendimentos: VCE },
+        aux: { comunicados: V, notas: V, chamada: VC, agenda: VC, ocorrencias: VC },
+        sec: { comunicados: VC, alunos: ['ver', 'criar', 'editar', 'exportar'], captacao: all, matriculas: all, contratos: ['ver', 'criar', 'editar', 'exportar'], autorizacoes: ['ver', 'criar', 'editar', 'exportar'], portaria: V, certificados: ['ver', 'criar', 'editar', 'exportar'], transferencias: ['ver', 'criar', 'editar', 'exportar'], fotos: VCE, importacao: VC },
+        fin: { comunicados: V, alunos: V, contratos: ['ver', 'exportar'], mensalidades: all, fiscal: all, caixa: ['ver', 'criar', 'editar', 'exportar'], dae: all },
+        int: { comunicados: V, chamada: VC, integral: VCE, ocorrencias: VC, cardapio: V },
+        port: { comunicados: V, autorizacoes: V, portaria: VCE },
+        bib: { comunicados: V, biblioteca: ['ver', 'criar', 'editar', 'exportar'] },
+        nutri: { comunicados: V, cardapio: all },
+        enf: { comunicados: V, saude: all },
+        aee: { comunicados: V, inclusao: all, atendimentos: VCE, ocorrencias: VC } }; })(),
+      scopes: (() => { const fill = (v, ids) => Object.fromEntries(ids.map((i) => [i, v])); return {
+        dir: fill('escola', ['painel', 'comunicados', 'chat', 'notas', 'chamada', 'agenda', 'frequencia', 'boletins', 'ocorrencias', 'integral', 'horarios', 'saude', 'inclusao', 'alunos', 'equipe', 'captacao', 'matriculas', 'contratos', 'autorizacoes', 'portaria', 'biblioteca', 'certificados', 'transferencias', 'fotos', 'importacao', 'medidas', 'extras', 'eja', 'dae', 'solicitacoes', 'calendario', 'atendimentos', 'cardapio', 'galeria', 'loja', 'pesquisas', 'mensalidades', 'fiscal', 'caixa', 'relatorios', 'permissoes', 'modulos']),
+        nutri: fill('sede', ['comunicados', 'cardapio']),
+        enf: fill('sede', ['comunicados', 'saude']),
+        aee: fill('sede', ['comunicados', 'inclusao', 'atendimentos', 'ocorrencias']),
+        coord: fill('segmento', ['painel', 'comunicados', 'chat', 'notas', 'chamada', 'agenda', 'frequencia', 'boletins', 'ocorrencias', 'integral', 'alunos', 'autorizacoes', 'saude', 'inclusao', 'relatorios', 'portaria', 'biblioteca']),
+        prof: Object.assign(fill('turmas', ['notas', 'chamada', 'agenda', 'frequencia']), { comunicados: 'turmas', ocorrencias: 'proprio', horarios: 'proprio', atendimentos: 'proprio' }),
+        aux: Object.assign(fill('turmas', ['comunicados', 'notas', 'chamada', 'agenda']), { ocorrencias: 'proprio' }),
+        int: Object.assign(fill('turmas', ['chamada', 'integral']), { comunicados: 'sede', ocorrencias: 'proprio' }) }; })(),
+      rules: {
+        dir: { comunicados: ['rede', 'direto', 'urgente'], chat: ['iniciar', 'historico'], notas: ['lancar', 'liberar', 'pos', 'reabrir'], chamada: ['retro', 'justificar'], agenda: ['publicar', 'recado', 'assinatura'], frequencia: ['justificar', 'busca'], boletins: ['fechar', 'publicar', 'conselho'], ocorrencias: ['grave', 'sigilo'], integral: ['rotina', 'vagas'], alunos: ['saude', 'docs', 'resp', 'transferir'], matriculas: ['desconto', 'cancelar'], contratos: ['lote', 'modelo', 'cancelar'], autorizacoes: ['massa', 'bloqueio'], portaria: ['fora', 'visitante', 'antecipada', 'incidente', 'regrasport'], biblioteca: ['acervo', 'isentar', 'decidir', 'regrasbib'], mensalidades: ['valores', 'baixa', 'desconto', 'acordo', 'estorno'], permissoes: ['grupos', 'auditoria'], modulos: ['ligar', 'marca'] },
+        coord: { comunicados: ['direto', 'urgente'], chat: ['iniciar', 'historico'], notas: ['pos', 'reabrir'], chamada: ['retro', 'justificar'], agenda: ['publicar', 'recado', 'assinatura'], frequencia: ['justificar', 'busca'], boletins: ['fechar', 'publicar', 'conselho'], ocorrencias: ['grave', 'sigilo'], alunos: ['saude'], autorizacoes: ['massa'], portaria: ['fora', 'antecipada', 'incidente', 'regrasport'], biblioteca: ['decidir', 'regrasbib'] },
+        prof: { notas: ['lancar', 'liberar'], chamada: ['justificar'], agenda: ['publicar', 'recado'], ocorrencias: ['grave'] },
+        aux: { agenda: ['recado'] },
+        sec: { comunicados: ['direto'], alunos: ['saude', 'docs', 'resp', 'transferir'], matriculas: ['desconto'], contratos: ['lote'], autorizacoes: ['massa', 'bloqueio'] },
+        fin: { contratos: [], mensalidades: ['valores', 'baixa', 'desconto', 'acordo'], fiscal: ['emitir', 'informe'], caixa: ['lancar', 'conciliar'] },
+        int: { integral: ['rotina'] },
+        nutri: { cardapio: ['publicar', 'restricao'] },
+        enf: { saude: ['atender', 'medicar', 'ficha'] },
+        aee: { inclusao: ['plano', 'laudo', 'familia'] },
+        port: { portaria: ['visitante'] },
+        bib: { biblioteca: ['acervo', 'isentar'] } },
+      restr: { dir: ['2fa', 'celular'], coord: ['2fa', 'celular'], prof: ['celular', 'mask', 'valores', 'lote'], aux: ['horario', 'celular', 'mask', 'saude', 'valores', 'lote', 'validade'], sec: ['horario', '2fa', 'celular'], fin: ['horario', 'rede', '2fa'], int: ['horario', 'celular', 'mask', 'valores', 'lote'], port: ['horario', 'rede', 'mask', 'saude', 'valores', 'lote'], bib: ['horario', 'celular', 'mask', 'saude', 'valores'], nutri: ['horario', 'mask', 'valores', 'lote'], enf: ['horario', '2fa', 'mask', 'valores', 'lote'], aee: ['2fa', 'celular', 'mask', 'valores', 'lote'] },
+      audit: [
+        { oque: '8 módulos novos ligados: DAE, certificados, transferências, fotos, migração, medidas, pontos extras e EJA', quem: 'Lúcia Menezes', quando: 'Hoje, 11h30', tipo: 'Grupo', tone: 'brand' },
+        { oque: 'Coordenação ganhou a gestão de Biblioteca e Portaria', quem: 'Lúcia Menezes', quando: 'Hoje, 10h48', tipo: 'Regra', tone: 'success' },
+        { oque: 'Grupo Nutrição criado na ficha de Marília Castro', quem: 'Renata Alencar', quando: 'Hoje, 10h20', tipo: 'Grupo', tone: 'brand' },
+        { oque: 'Professor auxiliar perdeu "Lançar notas e faltas"', quem: 'Lúcia Menezes', quando: 'Hoje, 9h14', tipo: 'Regra', tone: 'warning' },
+        { oque: 'Jéssica Nunes entrou em Professor auxiliar', quem: 'Renata Alencar', quando: 'Ontem, 16h40', tipo: 'Pessoa', tone: 'info' },
+        { oque: 'Grupo Biblioteca criado a partir de Secretaria', quem: 'Lúcia Menezes', quando: '18/11, 10h02', tipo: 'Grupo', tone: 'brand' },
+        { oque: 'Portaria passou a exigir acesso só na rede da escola', quem: 'Roberto Farias', quando: '12/11, 8h30', tipo: 'Restrição', tone: 'neutral' },
+        { oque: 'Financeiro ganhou "Propor e aprovar acordo"', quem: 'Roberto Farias', quando: '03/11, 14h15', tipo: 'Regra', tone: 'success' }]
+    });
+    /* Controle de acesso: cada perfil vê só os módulos liberados em Grupos e permissões. */
+    const ACESSO = { prof: ['comunicados', 'notas', 'chamada', 'agenda', 'frequencia', 'ocorrencias', 'inicio', 'diario', 'horarios', 'materiais', 'atendimentos', 'tarefas'], coord: ['painel', 'comunicados', 'chat', 'notas', 'chamada', 'agenda', 'frequencia', 'boletins', 'ocorrencias', 'integral', 'alunos', 'autorizacoes', 'equipe', 'horarios', 'calendario', 'atendimentos', 'cardapio', 'galeria', 'pesquisas', 'saude', 'inclusao', 'relatorios', 'biblioteca', 'portaria', 'medidas', 'extras', 'eja', 'certificados'], sec: ['comunicados', 'alunos', 'matriculas', 'contratos', 'autorizacoes', 'portaria', 'equipe', 'solicitacoes', 'calendario', 'horarios', 'loja', 'pesquisas', 'captacao', 'certificados', 'transferencias', 'fotos', 'importacao'], fin: ['comunicados', 'alunos', 'contratos', 'mensalidades', 'loja', 'fiscal', 'caixa', 'dae'], bib: ['comunicados', 'biblioteca'], port: ['comunicados', 'portaria', 'autorizacoes'], int: ['comunicados', 'chamada', 'integral', 'ocorrencias'], nutri: ['comunicados', 'cardapio'], enf: ['comunicados', 'saude'], aee: ['comunicados', 'inclusao', 'atendimentos', 'ocorrencias'] };
+    const permitidos = ACESSO[__r.activeProfile];
+    if (permitidos) {
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.filter((i) => permitidos.includes(i.id)) })).filter((g) => g.items.length);
+      __r.tabs = (__r.tabs || []).filter((t) => permitidos.includes(t.id));
+      __r.units = null;
+    }
+    /* Biblioteca e portaria: direção e coordenação entram pela visão de gestão. A operação fica com a bibliotecária e a portaria. */
+    if (['dir', 'coord'].includes(__r.activeProfile)) {
+      const GESTAO = { biblioteca: 'Escola-Biblioteca-Gestao.dc.html', portaria: 'Escola-Portaria-Gestao.dc.html' };
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.map((i) => (GESTAO[i.id] ? Object.assign({}, i, { href: GESTAO[i.id] }) : i)) }));
+      __r.tabs = (__r.tabs || []).map((t) => (GESTAO[t.id] ? Object.assign({}, t, { href: GESTAO[t.id] }) : t));
+    }
+    /* Portal do professor: quem entra como professor vê o próprio menu, com as turmas e o planejamento. */
+    if (__r.activeProfile === 'prof') {
+      __r.nav = [
+        { items: [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }] },
+        { label: 'Minhas turmas', items: [{ id: 'diario', label: 'Diário de classe', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'tarefas', label: 'Tarefas', icon: 'list', count: 6, href: 'Professor-Tarefas.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', href: 'Escola-Ocorrencias.dc.html' }] },
+        { label: 'Planejamento', items: [{ id: 'horarios', label: 'Meus horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Professor-Materiais.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 2, href: 'Escola-Atendimentos.dc.html' }] }];
+      __r.tabs = [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'diario', label: 'Diário', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }];
+    }
+    return Object.assign({ pS3: 3, pS16: 16, pS18: 18, pS20: 20, pS22: 22, pS32: 32, pS36: 36, pS40: 40, pYes: true, pFmt: [{ value: 'xlsx', label: 'Excel (.xlsx)' }, { value: 'csv', label: 'CSV' }, { value: 'pdf', label: 'PDF para impressão' }] }, { s22: 22 }, bell, __r);
+  }
+}
+</script><script src="vendor/runtime.js"></script></body></html>

@@ -1,0 +1,18 @@
+<!-- @dsCard group="Pedagógico" height=520 width=760 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>ClassPicker</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;display:grid;gap:28px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  const mine = [{ id: "9a", name: "9\xBA ano A", shift: "Manh\xE3", segment: "Fundamental II", families: 31 }, { id: "9b", name: "9\xBA ano B", shift: "Manh\xE3", segment: "Fundamental II", families: 29 }, { id: "1em", name: "1\xAA s\xE9rie EM", shift: "Tarde", segment: "Ensino M\xE9dio", families: 34 }];
+  const all = mine.concat([{ id: "2a", name: "2\xBA ano A", shift: "Tarde", segment: "Fundamental I", families: 24 }, { id: "2b", name: "2\xBA ano B", shift: "Tarde", segment: "Fundamental I", families: 24 }, { id: "5a", name: "5\xBA ano A", shift: "Tarde", segment: "Fundamental I", families: 29 }, { id: "inf5", name: "Infantil V", shift: "Integral", segment: "Educa\xE7\xE3o Infantil", families: 22 }]);
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gap: 28 } }, /* @__PURE__ */ React.createElement(P.ClassPicker, { scope: "minhas", classes: mine, value: ["9a"] }), /* @__PURE__ */ React.createElement(P.ClassPicker, { scope: "todas", classes: all, value: ["9a", "9b"] }))));
+})();
+</script>
+</body>
+</html>

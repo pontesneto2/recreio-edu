@@ -1,0 +1,19 @@
+<!-- @dsCard group="Portaria e biblioteca" height=340 width=1000 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>LoanItem</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { className: "rc-card", style: { padding: 0, overflow: "hidden" } }, /* @__PURE__ */ React.createElement(P.LoanItem, { index: 0, book: "Iracema", author: "Jos\xE9 de Alencar", student: "Ana Beatriz Lima", group: "9\xBA ano A", due: "02/12", status: "emdia" }), /* @__PURE__ */ React.createElement(P.LoanItem, { index: 1, book: "O Quinze", author: "Rachel de Queiroz", student: "Arthur Nogueira", group: "9\xBA ano A", due: "20/11", status: "atrasado", fine: 2.5, renewals: 2 }), /* @__PURE__ */ React.createElement(P.LoanItem, { index: 2, book: "Menina Bonita do La\xE7o de Fita", author: "Ana Maria Machado", student: "Davi Lima", group: "2\xBA ano B", due: "26/11", status: "vence", renewals: 1 }), /* @__PURE__ */ React.createElement(P.LoanItem, { index: 3, book: "Dom Casmurro", author: "Machado de Assis", student: "Gabriela Moreira", group: "1\xAA s\xE9rie EM", due: "18/11", status: "devolvido" }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

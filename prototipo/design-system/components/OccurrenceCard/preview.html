@@ -1,0 +1,19 @@
+<!-- @dsCard group="Pedagógico" height=760 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>OccurrenceCard</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(420px,1fr))", gap: 16 } }, /* @__PURE__ */ React.createElement(P.OccurrenceCard, { kind: "disciplinar", level: "leve", student: "Arthur Nogueira", group: "9\xBA ano A", date: "24/11, 9h40", author: "Prof. Marcos Vin\xEDcius Teixeira", measures: "Celular guardado na coordena\xE7\xE3o at\xE9 o fim do turno. Conversa com a coordenadora Juliana Sampaio." }, /* @__PURE__ */ React.createElement("p", null, "Usou o celular durante a prova de Ci\xEAncias depois de ser avisado duas vezes. A prova foi recolhida e ser\xE1 refeita na segunda chamada.")), /* @__PURE__ */ React.createElement(P.OccurrenceCard, { kind: "elogio", student: "Ana Beatriz Lima", group: "9\xBA ano A", date: "19/11", author: "Profa. Luana Freitas", acknowledged: true, ackBy: "Fernanda Lima" }, /* @__PURE__ */ React.createElement("p", null, "Liderou o grupo do dessalinizador solar na Feira de Ci\xEAncias e ajudou dois colegas a montar a apresenta\xE7\xE3o.")), /* @__PURE__ */ React.createElement(P.OccurrenceCard, { kind: "saude", student: "Davi Lima", group: "2\xBA ano B", date: "Hoje, 10h20", author: "Enfermaria", guardianView: true, measures: "Fam\xEDlia avisada por liga\xE7\xE3o \xE0s 10h25. Voltou para a sala \xE0s 11h." }, /* @__PURE__ */ React.createElement("p", null, "Queixa de dor de cabe\xE7a no intervalo. Ficou 30 minutos em repouso na enfermaria, sem febre.")));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

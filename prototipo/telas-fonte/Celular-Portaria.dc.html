@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Celular: Portaria</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status is-nav" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+<div class="rc-app-scroll">
+<header style="padding: 16px; background: var(--nav); color: var(--on-nav);"><p style="margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent);">Portaria · Unidade Aldeota</p><h1 style="margin: 4px 0 0; font-size: 1.375rem; font-weight: 800; letter-spacing: -0.025em;">QR lido às 17h42</h1></header>
+<div style="display: flex; flex-direction: column; gap: 14px; padding: 16px;">
+<div class="rc-card" style="padding: 18px; display: flex; flex-direction: column; gap: 14px; border-top: 4px solid var(--success);">
+<div style="display: flex; align-items: center; gap: 12px;"><x-import component-from-global-scope="Recreio.Avatar" name="Davi Lima" size="{{s56}}"></x-import><div><p style="margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2);">Aluno</p><p style="margin: 0; font-size: 1.125rem; font-weight: 750;">Davi Lima</p><p style="margin: 0; font-size: 14px; color: var(--ink-2);">2º ano B · Integral</p></div></div>
+<div style="height: 1px; background: var(--line);"></div>
+<div style="display: flex; align-items: center; gap: 12px;"><x-import component-from-global-scope="Recreio.Avatar" name="Fernanda Lima" size="{{s56}}"></x-import><div><p style="margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2);">Quem busca</p><p style="margin: 0; font-size: 1.125rem; font-weight: 750;">Fernanda Lima</p><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Mãe · RG final 482</p></div></div>
+<x-import component-from-global-scope="Recreio.StatusPill" tone="success" icon="check-circle">Autorizada desde 02/02/2026</x-import>
+<a class="rc-btn rc-btn-primary rc-btn-lg rc-btn-full" href="#pop-saida-ok"><x-import component-from-global-scope="Recreio.Icon" name="check" size="{{pS18}}"></x-import><span class="rc-btn-label">Confirmar saída</span></a>
+<a class="rc-btn rc-btn-secondary rc-btn-full" href="#pop-negar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{pS18}}"></x-import><span class="rc-btn-label">Não liberar</span></a>
+</div>
+<p style="margin: 0 0 4px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2);">Saídas dos últimos minutos</p>
+<div class="rc-card" style="padding: 0; overflow: hidden;">
+<ul class="rc-zebra" style="margin: 0;">
+<sc-for list="{{log}}" as="l" hint-placeholder-count="3">
+<li style="display: flex; justify-content: space-between; gap: 8px; padding: 10px 14px; font-size: 14px;"><span><strong>{{l.n}}</strong> · {{l.g}}</span><span style="color: var(--ink-2);">{{l.t}}</span></li>
+</sc-for>
+</ul>
+</div>
+</div>
+</div>
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="portaria"></x-import>
+</div>
+<div id="pop-saida-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Saída registrada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Saída registrada</p><p class="rc-dialog-desc">A família recebeu o aviso com a hora e o nome de quem retirou.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-negar" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Não liberar a saída?">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-danger"><x-import component-from-global-scope="Recreio.Icon" name="alert" size="{{pS22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Não liberar a saída?</p><p class="rc-dialog-desc">O aluno fica na escola. A coordenação e a família são avisadas agora.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{pS20}}"></x-import></a></div>
+<div class="rc-dialog-body"><x-import component-from-global-scope="Recreio.TextArea" label="Motivo" placeholder="Ex.: pessoa sem autorização ou documento diferente" rows="{{pS3}}"></x-import></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-danger" href="#pop-negado">Não liberar</a></div>
+</div>
+</div>
+<div id="pop-negado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Saída não liberada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-danger"><x-import component-from-global-scope="Recreio.Icon" name="shield" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Saída não liberada</p><p class="rc-dialog-desc">A coordenação foi chamada na portaria. O registro fica no histórico do aluno.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const shared = {
+      tabs: [{ id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Celular-Portaria.dc.html' }, { id: 'retiradas', label: 'Retiradas', icon: 'key', count: 6, href: 'Escola-Autorizacoes.dc.html' }, { id: 'avisos', label: 'Avisos', icon: 'bell', href: 'Escola-Comunicados.dc.html' }]
+    };
+    return Object.assign({ pS3: 3, pS16: 16, pS18: 18, pS20: 20, pS22: 22, pS32: 32, pS36: 36, pS40: 40, pYes: true, pFmt: [{ value: 'xlsx', label: 'Excel (.xlsx)' }, { value: 'csv', label: 'CSV' }, { value: 'pdf', label: 'PDF para impressão' }] }, { yes: true, no: false }, shared, {
+      s56: 56,
+      log: [{ n: 'Gabriela Moreira', g: 'transporte escolar', t: '17h40' }, { n: 'Caio Reis', g: 'saída antecipada', t: '17h31' }, { n: 'Maria Clara Pinheiro', g: 'com o pai', t: '17h25' }]
+    });
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>App: Portaria · Visitante</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status" aria-hidden="true"><span>17:45</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+<header class="rc-app-bar"><a class="rc-app-back" href="App-Portaria-Fila.dc.html" aria-label="Voltar"><x-import component-from-global-scope="Recreio.Icon" name="chevron-left" size="{{s22}}"></x-import></a><h1>Registrar visitante<small>Portão principal</small></h1><span></span></header>
+<div class="rc-app-scroll"><div class="rc-nat-body"><section><h2 class="rc-nat-glabel">Foto na entrada</h2><div class="rc-nat-list"><div class="rc-nat-item no-ico" style="display: block; padding: 10px;"><div class="rc-nat-cam" style="flex: none; height: 260px; border-radius: 18px; overflow: hidden;"><div class="rc-nat-camtop"><span style="font-size: 14px; font-weight: 600;">Câmera frontal</span><a href="#pop-foto" style="display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600;"><x-import component-from-global-scope="Recreio.Icon" name="refresh" size="{{s18}}"></x-import>Virar</a></div><div class="rc-nat-frame is-face" style="top: 40%; width: 104px; height: 132px;"></div><div class="rc-nat-cambottom" style="padding-bottom: 8px;"><a class="rc-nat-shutter" href="#pop-foto" aria-label="Tirar foto" style="transform: scale(.8);"></a></div></div></div></div><p class="rc-nat-gnote">A foto vai no crachá e fica no registro do dia.</p></section><x-import component-from-global-scope="Recreio.SaveGuard" label="Registrar entrada" hint="Preencha os dados para liberar o botão" saved-title="Entrada registrada" saved-message="Crachá 14 impresso. O setor de destino recebeu o aviso."><div style="display: flex; flex-direction: column; gap: 22px;"><section><h2 class="rc-nat-glabel">Quem é</h2><div class="rc-nat-card"><x-import component-from-global-scope="Recreio.TextField" label="Nome completo" placeholder="Ex.: Antônio Barros"></x-import><x-import component-from-global-scope="Recreio.Select" label="Documento" options="{{docs}}" default-value="rg"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Número do documento" hint="RG, CPF ou CNH"></x-import></div></section><section><h2 class="rc-nat-glabel">Destino</h2><div class="rc-nat-card"><x-import component-from-global-scope="Recreio.Select" label="Vai falar com" options="{{destinos}}" placeholder="Escolha o setor"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Motivo" placeholder="Ex.: reunião com a coordenação"></x-import><x-import component-from-global-scope="Recreio.Checkbox" label="Avisar o setor de destino" default-checked="{{yes}}"></x-import></div></section><section><h2 class="rc-nat-glabel">Crachá</h2><div class="rc-nat-list"><div class="rc-nat-item"><span class="rc-nat-ico rc-c-roxo"><x-import component-from-global-scope="Recreio.Icon" name="tag" size="{{s18}}"></x-import></span><span><strong>Crachá 14</strong><small>Próximo livre · impresso ao registrar</small></span><span class="rc-nat-end"><x-import component-from-global-scope="Recreio.StatusPill" tone="success" size="sm">Livre</x-import></span></div></div></section></div></x-import></div></div>
+
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="fila"></x-import>
+<div id="pop-foto" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Foto registrada"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog rc-dialog-hero"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Foto registrada</p><p class="rc-dialog-desc">A foto entra no crachá 14 e no registro do visitante.</p></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#"><span class="rc-btn-label">Concluir</span></a></div></div></div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return Object.assign({ yes: true, no: false, one: 1, two: 2, three: 3, four: 4, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96, s120: 120, s168: 168, tabs: [{ id: 'fila', label: 'A caminho', icon: 'walk', href: 'App-Portaria-Fila.dc.html' }, { id: 'qr', label: 'Ler QR', icon: 'scan', href: 'App-Portaria-QR.dc.html' }, { id: 'registros', label: 'Registros', icon: 'list', href: 'App-Portaria-Registros.dc.html' }] }, {
+      docs: [{ value: 'rg', label: 'RG' }, { value: 'cpf', label: 'CPF' }, { value: 'cnh', label: 'CNH' }],
+      destinos: [{ value: 'sec', label: 'Secretaria' }, { value: 'coord', label: 'Coordenação' }, { value: 'fin', label: 'Financeiro' }, { value: 'dir', label: 'Direção' }, { value: 'bib', label: 'Biblioteca' }, { value: 'man', label: 'Manutenção' }, { value: 'cant', label: 'Cantina' }]
+    });
+  }
+}
+</script>
+</body>
+</html>

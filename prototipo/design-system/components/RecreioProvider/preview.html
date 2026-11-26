@@ -1,0 +1,20 @@
+<!-- @dsCard group="Fundamentos" height=200 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>RecreioProvider</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    const { prefs } = P.usePreferences();
+    return /* @__PURE__ */ React.createElement(P.Card, { title: "Prefer\xEAncias ativas", subtitle: "Lidas do RecreioProvider" }, /* @__PURE__ */ React.createElement(P.DescriptionList, { columns: 3, items: [{ label: "Tamanho do texto", value: prefs.textScale + "%" }, { label: "Espa\xE7amento", value: prefs.spacing }, { label: "Fonte", value: prefs.font }, { label: "Movimento", value: prefs.motion }, { label: "Modo foco", value: prefs.focus ? "ligado" : "desligado" }, { label: "Leitura", value: prefs.reading }] }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!-- @dsCard group="Dados" height=190 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>DescriptionList</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement(P.DescriptionList, { columns: 3, items: [{ label: "Data de nascimento", value: "14/03/2012" }, { label: "Turma", value: "9\xBA ano A \xB7 manh\xE3" }, { label: "Matr\xEDcula", value: "2018-0214" }, { label: "Tipo sangu\xEDneo", value: "O+" }, { label: "Alergias", value: "Amendoim" }, { label: "Plano de sa\xFAde", value: null }] });
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

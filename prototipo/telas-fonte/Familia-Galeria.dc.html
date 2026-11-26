@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Família: Galeria de fotos</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<link rel="stylesheet" href="telas.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" groups="{{nav}}" active="galeria"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="image" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Galeria de fotos</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Momentos da turma, com o seu controle sobre o uso de imagem</p></div></div>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar álbum ou data" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Familia-Notificacoes.dc.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px; padding: 16px 20px; border-radius: var(--radius-lg); background: var(--surface-1); border: 1px solid var(--line); box-shadow: var(--shadow-1);">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; min-width: 0; max-width: 100%;">
+<div style="display: flex; flex-direction: column; gap: 6px;"><span style="font-size: 14px; font-weight: 600;">Aluno</span><x-import component-from-global-scope="Recreio.SegmentedControl" label="Aluno" value="davi" options="{{alunos}}"></x-import></div><x-import component-from-global-scope="Recreio.FilterChips" label="Mostrar" value="{{fTipo}}" options="{{tipos}}"></x-import>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-secondary" href="#pop-consent"><x-import component-from-global-scope="Recreio.Icon" name="shield" size="{{s18}}"></x-import>Uso de imagem</a></div>
+</div>
+<x-import component-from-global-scope="Recreio.Alert" tone="info" title="Você decide onde a imagem do Davi aparece">Hoje: só dentro do app, para as famílias da turma. Nada vai para redes sociais sem a sua autorização.</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Álbuns da turma" subtitle="2º ano B · publicados pelas professoras e aprovados pela coordenação">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); gap: 14px;"><sc-for list="{{albuns}}" as="a" hint-placeholder-count="6"><a class="tl-item rc-c-{{a.cor}}" href="#pop-album"><span class="tl-foto"><x-import component-from-global-scope="Recreio.Icon" name="{{a.icon}}" size="{{s40}}"></x-import><span class="tl-foto-tag">{{a.tag}}</span><span class="tl-foto-qtd">{{a.qtd}}</span></span><strong>{{a.t}}</strong><small style="color: var(--ink-2);">{{a.m}}</small></a></sc-for></div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Fotos em que o Davi aparece" subtitle="14 fotos em novembro · marcadas pela professora" actions="{{baixarTodas}}">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 130px), 1fr)); gap: 10px;"><sc-for list="{{fotos}}" as="f" hint-placeholder-count="8"><a class="tl-foto rc-c-{{f.cor}}" href="#pop-album" aria-label="{{f.t}}"><x-import component-from-global-scope="Recreio.Icon" name="{{f.icon}}" size="{{s32}}"></x-import></a></sc-for></div>
+</x-import>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="hoje"></x-import>
+</div>
+</div>
+<div id="pop-album" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Oficina de tinta natural">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="image" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Oficina de tinta natural</p><p class="rc-dialog-desc">18 fotos · Artes · 23/11 · Profa. Luana Freitas. O Davi aparece em 4.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><span class="tl-foto is-larga rc-c-rosa"><x-import component-from-global-scope="Recreio.Icon" name="palette" size="{{s64}}"></x-import><span class="tl-foto-tag">Foto 3 de 18</span></span><p style="margin: 12px 0 0; font-size: 14px; color: var(--ink-2);">A turma fez tinta com urucum, açafrão e beterraba e pintou o mural do corredor.</p></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#pop-remover">Pedir para tirar esta foto</a><a class="rc-btn rc-btn-primary" href="#pop-baixado"><x-import component-from-global-scope="Recreio.Icon" name="download" size="{{s18}}"></x-import>Baixar o álbum</a></div>
+</div>
+</div>
+<div id="pop-baixado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Fotos baixadas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="download" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Fotos baixadas</p><p class="rc-dialog-desc">As fotos foram salvas no aparelho. O álbum continua aqui até o fim do ano letivo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-remover" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Pedir para tirar a foto">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="shield" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Pedir para tirar a foto</p><p class="rc-dialog-desc">A coordenação tira do álbum em até 1 dia útil. Não precisa explicar o motivo.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-remover-ok">Pedir remoção</a></div>
+</div>
+</div>
+<div id="pop-remover-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Pedido enviado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Pedido enviado</p><p class="rc-dialog-desc">A foto fica oculta para as outras famílias enquanto a coordenação analisa.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-consent" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Uso de imagem do Davi">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="shield" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Uso de imagem do Davi</p><p class="rc-dialog-desc">Você pode mudar quando quiser. A mudança vale para as próximas publicações.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><x-import component-from-global-scope="Recreio.SaveGuard" label="Salvar autorização" hint="Escolha uma opção para liberar o botão Salvar" on-save="{{go_pop_consent_ok}}">
+<x-import component-from-global-scope="Recreio.RadioGroup" legend="Onde a imagem pode aparecer" value="app" options="{{usos}}"></x-import>
+</x-import></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a></div>
+</div>
+</div>
+<div id="pop-consent-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Autorização atualizada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Autorização atualizada</p><p class="rc-dialog-desc">A professora e a coordenação veem a sua escolha antes de publicar qualquer foto.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1440}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 3, bellNotifs: [
+      { icon: 'mail', title: 'Bilhete para assinar: aula de campo', text: 'Ana Beatriz · 9º ano A · prazo 26/11', time: 'Hoje, 11h20', unread: true, priority: 'importante' },
+      { icon: 'heart', title: 'Davi passou pela enfermaria', text: 'Dor de cabeça, já voltou para a sala', time: 'Hoje, 10h25', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: 'Mensalidade de dezembro disponível', text: 'R$ 1.406,00 · vence em 10/12', time: 'Hoje, 8h00', unread: true, priority: 'rotina' },
+      { icon: 'chart', title: 'Boletim do 3º bimestre publicado', text: 'Ana Beatriz e Davi', time: 'Ontem, 18h30', priority: 'rotina' }] };
+    const tabs = [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Familia-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }];
+    const shared = {
+      bellCount: 3, activeChild: 'k1', activeProfile: 'resp',
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      user: { name: 'Fernanda Lima' },
+      kids: [{ id: 'k1', name: 'Davi Lima', group: '2º ano B' }, { id: 'k2', name: 'Ana Beatriz Lima', group: '9º ano A' }],
+      profiles: [{ id: 'resp', label: 'Responsável', icon: 'users', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'calendario', label: 'Calendário', icon: 'flag', href: 'Familia-Calendario.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', count: 2, href: 'Familia-Comunicados.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'autorizacoes', label: 'Autorizações', icon: 'key', count: 1, href: 'Familia-Autorizacoes.dc.html' }] },
+        { label: 'Acadêmico', items: [{ id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'check-circle', href: 'Familia-Frequencia.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Familia-Horarios.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Familia-Integral.dc.html' }, { id: 'inclusao', label: 'Plano individual', icon: 'star', href: 'Familia-Inclusao.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 1, href: 'Familia-Ocorrencias.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Familia-Biblioteca.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Familia-Materiais.dc.html' }] },
+        { label: 'Serviços', items: [{ id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Familia-Cardapio.dc.html' }, { id: 'saude', label: 'Saúde', icon: 'heart', href: 'Familia-Saude.dc.html' }, { id: 'documentos', label: 'Documentos', icon: 'file', href: 'Familia-Documentos.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', href: 'Familia-Atendimentos.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', count: 2, href: 'Familia-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', href: 'Familia-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', count: 1, href: 'Familia-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'financeiro', label: 'Mensalidades', icon: 'wallet', count: 1, urgent: true, href: 'Familia-Financeiro.dc.html' }, { id: 'dae', label: 'DAE', icon: 'receipt', href: 'Familia-DAE.dc.html' }, { id: 'ir', label: 'Recibo para IR', icon: 'receipt', href: 'Familia-Recibo-IR.dc.html' }, { id: 'rematricula', label: 'Rematrícula 2027', icon: 'file-text', href: 'Familia-Rematricula.dc.html' }, { id: 'matricula', label: 'Matrícula 2027', icon: 'graduation', href: 'Familia-Matricula.dc.html' }] },
+        { label: 'Conta', items: [{ id: 'prefs', label: 'Acessibilidade', icon: 'accessibility', href: 'Familia-Preferencias.dc.html' }] }]
+    };
+    const __r = Object.assign({ yes: true, no: false, tabs }, shared, {
+      
+      n2: 2, n3: 3, n4: 4, n5: 5, n6: 6,
+      go_pop_album: () => { location.hash = 'pop-album'; }, go_pop_baixado: () => { location.hash = 'pop-baixado'; }, go_pop_consent: () => { location.hash = 'pop-consent'; }, go_pop_consent_ok: () => { location.hash = 'pop-consent-ok'; }, go_pop_lidas: () => { location.hash = 'pop-lidas'; }, go_pop_remover: () => { location.hash = 'pop-remover'; }, go_pop_remover_ok: () => { location.hash = 'pop-remover-ok'; },
+      alunos: [{ value: 'davi', label: 'Davi · 2º B' }, { value: 'ana', label: 'Ana Beatriz · 9º A' }],
+      fTipo: ['todos'], tipos: [{ value: 'todos', label: 'Tudo' }, { value: 'sala', label: 'Sala de aula' }, { value: 'passeio', label: 'Passeios' }, { value: 'evento', label: 'Eventos' }],
+      baixarTodas: React.createElement('a', { className: 'rc-btn rc-btn-ghost rc-btn-sm', href: '#pop-baixado' }, 'Baixar as 14'),
+      albuns: [
+        { icon: 'palette', cor: 'rosa', tag: 'Novo', qtd: '18 fotos', t: 'Oficina de tinta natural', m: 'Artes · segunda, 23/11 · Profa. Luana Freitas' },
+        { icon: 'book', cor: 'azul', tag: 'Novo', qtd: '12 fotos', t: 'Roda de leitura na biblioteca', m: 'Quinta, 19/11 · com Joana Paiva' },
+        { icon: 'sun', cor: 'amarelo', tag: 'Integral', qtd: '9 fotos', t: 'Horta do integral', m: 'Quarta, 18/11 · colheita do coentro' },
+        { icon: 'star', cor: 'roxo', tag: 'Evento', qtd: '46 fotos', t: 'Feira de Ciências', m: 'Sábado, 07/11 · toda a escola' },
+        { icon: 'heart', cor: 'vermelho', tag: 'Evento', qtd: '31 fotos', t: 'Dia das Crianças', m: 'Sexta, 09/10 · Fundamental I' },
+        { icon: 'walk', cor: 'verde', tag: 'Passeio', qtd: '24 fotos', t: 'Trilha no Parque do Cocó', m: 'Quinta, 24/09 · 2º ano A e B' }],
+      fotos: [{ icon: 'palette', cor: 'rosa', t: 'Davi pintando' }, { icon: 'palette', cor: 'rosa', t: 'Davi com a turma' }, { icon: 'book', cor: 'azul', t: 'Davi lendo' }, { icon: 'sun', cor: 'amarelo', t: 'Davi na horta' }, { icon: 'sun', cor: 'amarelo', t: 'Davi regando' }, { icon: 'star', cor: 'roxo', t: 'Davi na feira' }, { icon: 'star', cor: 'roxo', t: 'Maquete do grupo' }, { icon: 'heart', cor: 'vermelho', t: 'Davi no Dia das Crianças' }],
+      usos: [{ value: 'nao', label: 'Não autorizo', description: 'O Davi não aparece em nenhuma foto publicada.' }, { value: 'app', label: 'Só dentro do app', description: 'Só as famílias da turma veem.' }, { value: 'redes', label: 'App e canais do colégio', description: 'Site, redes sociais e material impresso.' }]
+    });
+    return Object.assign({ s12: 12, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96 }, bell, __r);
+  }
+}
+</script>
+</body>
+</html>

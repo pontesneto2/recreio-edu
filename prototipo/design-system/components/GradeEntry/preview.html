@@ -1,0 +1,27 @@
+<!-- @dsCard group="Pedagógico" height=500 width=1000 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>GradeEntry</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement(
+      P.GradeEntry,
+      {
+        absences: true,
+        assessments: [{ id: "p1", label: "Prova 1", weight: 2 }, { id: "t1", label: "Trabalho", weight: 1 }, { id: "p2", label: "Prova 2", weight: 2 }, { id: "s1", label: "Simulado", weight: 1 }],
+        students: [{ id: "a", name: "Ana Beatriz Lima" }, { id: "b", name: "Arthur Nogueira" }, { id: "c", name: "Bruno Sales" }, { id: "d", name: "Caio Reis" }, { id: "e", name: "Davi Martins" }, { id: "f", name: "Larissa Bezerra" }, { id: "g", name: "Isabela Fontenele" }, { id: "h", name: "Jo\xE3o Pedro Cavalcante" }],
+        values: { "a:p1": "8,5", "a:t1": "10", "a:p2": "9", "a:s1": "8", "a:faltas": "2", "b:p1": "5", "b:t1": "7", "b:p2": "4,5", "b:s1": "5,5", "b:faltas": "9", "c:p1": "7", "c:t1": "12", "c:faltas": "1", "d:p1": "9,5", "d:t1": "9", "d:p2": "8,5", "d:faltas": "0", "e:p1": "6", "e:t1": "8", "e:p2": "6,5", "e:faltas": "4", "f:p1": "9", "f:t1": "10", "f:p2": "9,5", "f:s1": "9", "f:faltas": "0", "g:p1": "7,5", "g:t1": "9", "g:faltas": "3", "h:p1": "4", "h:t1": "6", "h:p2": "5", "h:faltas": "12" }
+      }
+    );
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

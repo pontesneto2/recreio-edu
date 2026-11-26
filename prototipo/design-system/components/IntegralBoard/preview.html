@@ -1,0 +1,21 @@
+<!-- @dsCard group="Pedagógico" height=760 width=1100 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>IntegralBoard</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio; const h = React.createElement;
+  const wk = (r) => ["Seg", "Ter", "Qua", "Qui", "Sex"].map((d, i) => ({ day: d, today: i === 2, text: r[i] }));
+  const students = [
+    { id: 1, name: "Davi Lima", klass: "2\xBA ano B", group: "f1", programs: ["integral", "reforco"], exit: "17h00", pickups: ["Fernanda Lima (m\xE3e)", "Rodrigo Lima (pai)"], workshop: "Rob\xF3tica", reforco: { group: "Leitura", level: 3, max: 4, note: "Subiu do n\xEDvel 2 para o 3 em novembro." }, week: wk(["Regular e integral", "Regular, integral e refor\xE7o", "Regular e integral", "Refor\xE7o marcado", "Previsto"]), log: { almoco: { v: "quase", at: "12h22" }, estudo: { v: "fazendo", at: "13h42", subject: "Matem\xE1tica" } } },
+    { id: 2, name: "Heitor Paiva", klass: "2\xBA ano B", group: "f1", programs: ["integral"], exit: "17h30", pickups: ["Patr\xEDcia Paiva (m\xE3e)"], week: wk(["Regular e integral", "Regular e integral", "Regular e integral", "Previsto", "Previsto"]), log: { almoco: { v: "tudo", at: "12h20" }, descanso: { v: "dormiu", at: "13h25" } } },
+    { id: 3, name: "Sofia Nogueira", klass: "1\xBA ano A", group: "f1", programs: ["semi"], exit: "14h30", pickups: ["Camila Nogueira (m\xE3e)"], week: wk(["Regular e semi", "Regular e semi", "Regular e semi", "Previsto", "Previsto"]), log: {} }];
+  ReactDOM.createRoot(document.getElementById("root")).render(h(P.RecreioProvider, null, h(P.IntegralBoard, { students: students, scope: "meus", groups: [{ value: "f1", label: "Integral Fund I \xB7 Tarde" }], defaultSelected: 1 })));
+})();
+</script>
+</body>
+</html>

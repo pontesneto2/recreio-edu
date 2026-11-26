@@ -1,0 +1,20 @@
+<!-- @dsCard group="Feedback" height=300 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>Alert</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 12, maxWidth: 640 } }, /* @__PURE__ */ React.createElement(P.Alert, { tone: "warning", title: "A mensalidade de novembro vence amanh\xE3", actions: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(P.Button, { size: "sm", variant: "primary" }, "Pagar com Pix"), /* @__PURE__ */ React.createElement(P.Button, { size: "sm", variant: "ghost" }, "Ver detalhes")) }, "Pagando at\xE9 10/11 voc\xEA mant\xE9m o desconto de R$ 62,00."), /* @__PURE__ */ React.createElement(P.Alert, { tone: "success", title: "Rematr\xEDcula conclu\xEDda", onClose: () => {
+    } }, "O contrato de 2027 foi assinado e enviado para o seu e-mail."), /* @__PURE__ */ React.createElement(P.Alert, { tone: "danger", title: "N\xE3o foi poss\xEDvel enviar o comunicado" }, "3 respons\xE1veis est\xE3o sem e-mail nem celular. Complete os cadastros para que todos recebam."));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

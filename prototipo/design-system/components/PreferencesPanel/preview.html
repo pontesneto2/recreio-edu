@@ -1,0 +1,19 @@
+<!-- @dsCard group="Plataforma" height=1000 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>PreferencesPanel</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1fr)", gap: 24, alignItems: "start" } }, /* @__PURE__ */ React.createElement(P.PreferencesPanel, null), /* @__PURE__ */ React.createElement(P.AnnouncementCard, { priority: "rotina", from: "Secretaria", date: "Ontem", title: "Hor\xE1rio de fim de ano", summary: "\xDAltima aula em 18/12. A secretaria funciona at\xE9 23/12, das 8h \xE0s 12h.", requireConfirm: true }, /* @__PURE__ */ React.createElement("p", null, "O calend\xE1rio de 2027 j\xE1 est\xE1 na Agenda. As aulas voltam em 02/02.")));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!-- @dsCard group="Ações" height=90 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>CopyButton</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement(P.CopyButton, { text: "00020126580014br.gov.bcb.pix0136a3f5", label: "Copiar c\xF3digo Pix", copiedLabel: "C\xF3digo copiado", variant: "primary" }), /* @__PURE__ */ React.createElement(P.CopyButton, { text: "2026-0481", label: "Copiar matr\xEDcula" }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

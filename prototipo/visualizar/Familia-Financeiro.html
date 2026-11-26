@@ -1,0 +1,164 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Família: Mensalidades</title>
+<link rel="stylesheet" href="vendor/tokens.css"><link rel="stylesheet" href="vendor/bundle.css"><style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+<script src="vendor/react.js"></script><script src="vendor/react-dom.js"></script><script src="vendor/bundle.js"></script></head>
+<body><div id="app"></div><template id="dc-src"><x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" groups="{{nav}}" active="financeiro"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="wallet" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Mensalidades</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Davi e Ana Beatriz · ano letivo de 2026</p></div></div>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar mensalidade ou recibo" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Familia-Notificacoes.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 14px 20px; border-radius: var(--radius-lg); background: var(--surface-1); border: 1px solid var(--line); box-shadow: var(--shadow-1);">
+<span style="font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2);">Aluno</span>
+<x-import component-from-global-scope="Recreio.SegmentedControl" label="Aluno" value="todos" options="{{alunos}}"></x-import>
+</div>
+<section aria-label="Indicadores financeiros" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px;">
+<x-import component-from-global-scope="Recreio.StatCard" variant="hero" label="Pago em 2026" value="{{paid}}" format="{{money}}" icon="wallet" hint="Davi e Ana Beatriz"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="vermelho" label="Em aberto" value="{{open}}" format="{{money}}" icon="alert" hint="1 vencida e 1 a vencer"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="amarelo" label="Próximo vencimento" value="{{a1}}" format="{{money}}" icon="calendar" hint="Davi · quinta, 10/12 · depois, R$ 1.480,00"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="verde" label="Economia com pontualidade" value="{{saved}}" format="{{money}}" icon="target" hint="5% pagando até o dia 10"></x-import>
+</section>
+<x-import component-from-global-scope="Recreio.Card" title="Mensalidades" subtitle="Toque em uma mensalidade para ver detalhes, pagar com Pix ou boleto e baixar o recibo">
+<div style="display: flex; flex-direction: column; gap: 12px;">
+<details class="rc-fold" open="open">
+<summary class="rc-fold-sum"><span style="display: flex; flex-direction: column;"><strong>Em aberto</strong><small style="color: var(--ink-2); font-weight: 500;">2 mensalidades · R$ 3.058,40</small></span><x-import component-from-global-scope="Recreio.Icon" name="chevron-down" size="{{s20}}"></x-import></summary>
+<div role="table" aria-label="Em aberto" style="display: flex; flex-direction: column; padding-top: 8px;">
+<div role="row" class="rc-rows-row rc-rows-head" style="--cols: 150px minmax(0, 1fr) 120px 150px 150px 24px; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);"><span role="columnheader">Competência</span><span role="columnheader">Aluno e descrição</span><span role="columnheader">Vencimento</span><span role="columnheader">Valor</span><span role="columnheader">Situação</span><span role="columnheader"></span></div>
+<sc-for list="{{abertas}}" as="m" hint-placeholder-count="4">
+<a role="row" class="rc-rows-row" href="Familia-Mensalidade.html" style="--cols: 150px minmax(0, 1fr) 120px 150px 150px 24px; align-items: center; padding: 14px 12px; border-bottom: 1px solid var(--line); color: inherit; text-decoration: none;">
+<strong role="cell">{{m.comp}}</strong>
+<span role="cell" style="display: flex; flex-direction: column; min-width: 0;" data-label="Aluno e descrição"><strong>{{m.aluno}}</strong><small style="color: var(--ink-2);">{{m.desc}}</small></span>
+<span role="cell" data-label="Vencimento">{{m.venc}}</span>
+<span role="cell" style="display: flex; flex-direction: column;" data-label="Valor"><strong style="font-variant-numeric: tabular-nums;">{{m.valor}}</strong><small style="color: var(--ink-2);">{{m.obs}}</small></span>
+<span role="cell" data-label="Situação"><x-import component-from-global-scope="Recreio.StatusPill" tone="{{m.tone}}" icon="{{m.icon}}" size="sm">{{m.status}}</x-import></span>
+<span role="cell" style="color: var(--ink-3);"><x-import component-from-global-scope="Recreio.Icon" name="chevron-right" size="{{s20}}"></x-import></span>
+</a>
+</sc-for>
+</div>
+</details>
+<details class="rc-fold" open="open">
+<summary class="rc-fold-sum"><span style="display: flex; flex-direction: column;"><strong>Pagas em 2026</strong><small style="color: var(--ink-2); font-weight: 500;">21 mensalidades · R$ 31.011,00</small></span><x-import component-from-global-scope="Recreio.Icon" name="chevron-down" size="{{s20}}"></x-import></summary>
+<div role="table" aria-label="Pagas em 2026" style="display: flex; flex-direction: column; padding-top: 8px;">
+<div role="row" class="rc-rows-row rc-rows-head" style="--cols: 150px minmax(0, 1fr) 120px 150px 150px 24px; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);"><span role="columnheader">Competência</span><span role="columnheader">Aluno e descrição</span><span role="columnheader">Vencimento</span><span role="columnheader">Valor</span><span role="columnheader">Situação</span><span role="columnheader"></span></div>
+<sc-for list="{{pagas}}" as="m" hint-placeholder-count="4">
+<a role="row" class="rc-rows-row" href="Familia-Mensalidade.html" style="--cols: 150px minmax(0, 1fr) 120px 150px 150px 24px; align-items: center; padding: 14px 12px; border-bottom: 1px solid var(--line); color: inherit; text-decoration: none;">
+<strong role="cell">{{m.comp}}</strong>
+<span role="cell" style="display: flex; flex-direction: column; min-width: 0;" data-label="Aluno e descrição"><strong>{{m.aluno}}</strong><small style="color: var(--ink-2);">{{m.desc}}</small></span>
+<span role="cell" data-label="Vencimento">{{m.venc}}</span>
+<span role="cell" style="display: flex; flex-direction: column;" data-label="Valor"><strong style="font-variant-numeric: tabular-nums;">{{m.valor}}</strong><small style="color: var(--ink-2);">{{m.obs}}</small></span>
+<span role="cell" data-label="Situação"><x-import component-from-global-scope="Recreio.StatusPill" tone="{{m.tone}}" icon="{{m.icon}}" size="sm">{{m.status}}</x-import></span>
+<span role="cell" style="color: var(--ink-3);"><x-import component-from-global-scope="Recreio.Icon" name="chevron-right" size="{{s20}}"></x-import></span>
+</a>
+</sc-for>
+</div><div style="padding: 12px 0 0;"><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-historico">Ver histórico de 2026</a></div>
+</details>
+<details class="rc-fold">
+<summary class="rc-fold-sum"><span style="display: flex; flex-direction: column;"><strong>2025</strong><small style="color: var(--ink-2); font-weight: 500;">24 mensalidades · R$ 33.190,00 · todas pagas</small></span><x-import component-from-global-scope="Recreio.Icon" name="chevron-down" size="{{s20}}"></x-import></summary>
+<div role="table" aria-label="2025" style="display: flex; flex-direction: column; padding-top: 8px;">
+<div role="row" class="rc-rows-row rc-rows-head" style="--cols: 150px minmax(0, 1fr) 120px 150px 150px 24px; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);"><span role="columnheader">Competência</span><span role="columnheader">Aluno e descrição</span><span role="columnheader">Vencimento</span><span role="columnheader">Valor</span><span role="columnheader">Situação</span><span role="columnheader"></span></div>
+<sc-for list="{{antigas}}" as="m" hint-placeholder-count="4">
+<a role="row" class="rc-rows-row" href="Familia-Mensalidade.html" style="--cols: 150px minmax(0, 1fr) 120px 150px 150px 24px; align-items: center; padding: 14px 12px; border-bottom: 1px solid var(--line); color: inherit; text-decoration: none;">
+<strong role="cell">{{m.comp}}</strong>
+<span role="cell" style="display: flex; flex-direction: column; min-width: 0;" data-label="Aluno e descrição"><strong>{{m.aluno}}</strong><small style="color: var(--ink-2);">{{m.desc}}</small></span>
+<span role="cell" data-label="Vencimento">{{m.venc}}</span>
+<span role="cell" style="display: flex; flex-direction: column;" data-label="Valor"><strong style="font-variant-numeric: tabular-nums;">{{m.valor}}</strong><small style="color: var(--ink-2);">{{m.obs}}</small></span>
+<span role="cell" data-label="Situação"><x-import component-from-global-scope="Recreio.StatusPill" tone="{{m.tone}}" icon="{{m.icon}}" size="sm">{{m.status}}</x-import></span>
+<span role="cell" style="color: var(--ink-3);"><x-import component-from-global-scope="Recreio.Icon" name="chevron-right" size="{{s20}}"></x-import></span>
+</a>
+</sc-for>
+</div>
+</details>
+</div>
+</x-import>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-secondary" href="Familia-Recibo-IR.html">Recibo para Imposto de Renda</a><a class="rc-btn rc-btn-ghost" href="Familia-Chat.html">Falar com o financeiro</a></div>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="financeiro"></x-import>
+</div>
+</div>
+<div id="pop-historico" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Mensalidades pagas em 2026">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-info"><x-import component-from-global-scope="Recreio.Icon" name="history" size="{{pS22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Mensalidades pagas em 2026</p><p class="rc-dialog-desc">Davi e Ana Beatriz · janeiro a setembro · 18 mensalidades</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{pS20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div><sc-for list="{{pHist}}" as="h" hint-placeholder-count="8"><div class="rc-popup-row" style="grid-template-columns: minmax(0, 1fr) auto auto;"><span style="min-width: 0;"><strong style="display: block;">{{h.mes}}</strong><small style="color: var(--ink-2);">{{h.meta}}</small></span><strong style="font-variant-numeric: tabular-nums;">{{h.valor}}</strong><x-import component-from-global-scope="Recreio.StatusPill" tone="success" size="sm">Paga</x-import></div></sc-for></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Fechar</a><a class="rc-btn rc-btn-primary" href="Familia-Recibo-IR.html">Recibo para IR</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc></template><script id="dc-js" type="text/plain">
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 3, bellNotifs: [
+      { icon: 'mail', title: 'Bilhete para assinar: aula de campo', text: 'Ana Beatriz · 9º ano A · prazo 26/11', time: 'Hoje, 11h20', unread: true, priority: 'importante' },
+      { icon: 'heart', title: 'Davi passou pela enfermaria', text: 'Dor de cabeça, já voltou para a sala', time: 'Hoje, 10h25', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: 'Mensalidade de dezembro disponível', text: 'R$ 1.406,00 · vence em 10/12', time: 'Hoje, 8h00', unread: true, priority: 'rotina' },
+      { icon: 'chart', title: 'Boletim do 3º bimestre publicado', text: 'Ana Beatriz e Davi', time: 'Ontem, 18h30', priority: 'rotina' }] };
+    const shared = {
+      tabs: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Familia-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }],
+      activeChild: 'k1', activeProfile: 'resp',
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      user: { name: 'Fernanda Lima' },
+      kids: [{ id: 'k1', name: 'Davi Lima', group: '2º ano B' }, { id: 'k2', name: 'Ana Beatriz Lima', group: '9º ano A' }],
+      profiles: [{ id: 'resp', label: 'Responsável', icon: 'users', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'calendario', label: 'Calendário', icon: 'flag', href: 'Familia-Calendario.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', count: 2, href: 'Familia-Comunicados.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'autorizacoes', label: 'Autorizações', icon: 'key', count: 1, href: 'Familia-Autorizacoes.dc.html' }] },
+        { label: 'Acadêmico', items: [{ id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'check-circle', href: 'Familia-Frequencia.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Familia-Horarios.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Familia-Integral.dc.html' }, { id: 'inclusao', label: 'Plano individual', icon: 'star', href: 'Familia-Inclusao.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 1, href: 'Familia-Ocorrencias.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Familia-Biblioteca.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Familia-Materiais.dc.html' }] },
+        { label: 'Serviços', items: [{ id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Familia-Cardapio.dc.html' }, { id: 'saude', label: 'Saúde', icon: 'heart', href: 'Familia-Saude.dc.html' }, { id: 'documentos', label: 'Documentos', icon: 'file', href: 'Familia-Documentos.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', href: 'Familia-Atendimentos.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', count: 2, href: 'Familia-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', href: 'Familia-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', count: 1, href: 'Familia-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'financeiro', label: 'Mensalidades', icon: 'wallet', count: 1, urgent: true, href: 'Familia-Financeiro.dc.html' }, { id: 'dae', label: 'DAE', icon: 'receipt', href: 'Familia-DAE.dc.html' }, { id: 'ir', label: 'Recibo para IR', icon: 'receipt', href: 'Familia-Recibo-IR.dc.html' }, { id: 'rematricula', label: 'Rematrícula 2027', icon: 'file-text', href: 'Familia-Rematricula.dc.html' }, { id: 'matricula', label: 'Matrícula 2027', icon: 'graduation', href: 'Familia-Matricula.dc.html' }] },
+        { label: 'Conta', items: [{ id: 'prefs', label: 'Acessibilidade', icon: 'accessibility', href: 'Familia-Preferencias.dc.html' }] }]
+    };
+    return Object.assign({ pHist: ['Setembro', 'Agosto', 'Julho', 'Junho', 'Maio', 'Abril', 'Março', 'Fevereiro'].map((m) => ({ mes: m + ' de 2026', meta: 'Ana Beatriz R$ 1.539,00 · Davi R$ 1.406,00 · pagas no Pix', valor: 'R$ 2.945,00' })).concat([{ mes: 'Janeiro de 2026', meta: 'Ana Beatriz R$ 1.620,00 · Davi R$ 1.480,00 · 1ª parcela, sem desconto de pontualidade', valor: 'R$ 3.100,00' }]), pS3: 3, pS16: 16, pS18: 18, pS20: 20, pS22: 22, pS32: 32, pS36: 36, pS40: 40, pYes: true, pFmt: [{ value: 'xlsx', label: 'Excel (.xlsx)' }, { value: 'csv', label: 'CSV' }, { value: 'pdf', label: 'PDF para impressão' }] }, { yes: true, no: false, s22: 22 }, typeof bell !== 'undefined' ? bell : {}, shared, {
+      paid: 31011, open: 3058.4, saved: 1469, a1: 1406, s20: 20,
+      money: (v) => window.Recreio.brl(v),
+      alunos: [{ value: 'davi', label: 'Davi · 2º B' }, { value: 'ana', label: 'Ana Beatriz · 9º A' }, { value: 'todos', label: 'Todos' }],
+      abertas: [
+        { comp: 'Novembro/2026', aluno: 'Ana Beatriz', desc: 'Mensalidade 9º ano', venc: '10/11', valor: 'R$ 1.652,40', obs: 'inclui multa de R$ 32,40', status: 'Vencida', tone: 'danger', icon: 'alert' },
+        { comp: 'Dezembro/2026', aluno: 'Davi', desc: 'Mensalidade 2º ano · integral', venc: '10/12', valor: 'R$ 1.406,00', obs: 'R$ 1.480,00 depois de 10/12', status: 'A vencer', tone: 'warning', icon: 'clock' }],
+      pagas: [
+        { comp: 'Novembro/2026', aluno: 'Davi', desc: 'Mensalidade 2º ano · integral', venc: '10/11', valor: 'R$ 1.406,00', obs: 'Pix em 09/11', status: 'Paga', tone: 'success', icon: 'check-circle' },
+        { comp: 'Outubro/2026', aluno: 'Ana Beatriz', desc: 'Mensalidade 9º ano', venc: '10/10', valor: 'R$ 1.539,00', obs: 'Pix em 08/10', status: 'Paga', tone: 'success', icon: 'check-circle' },
+        { comp: 'Outubro/2026', aluno: 'Davi', desc: 'Mensalidade 2º ano · integral', venc: '10/10', valor: 'R$ 1.406,00', obs: 'Boleto em 10/10', status: 'Paga', tone: 'success', icon: 'check-circle' },
+        { comp: 'Setembro/2026', aluno: 'Ana Beatriz', desc: 'Mensalidade 9º ano', venc: '10/09', valor: 'R$ 1.539,00', obs: 'Pix em 05/09', status: 'Paga', tone: 'success', icon: 'check-circle' }],
+      antigas: [
+        { comp: 'Dezembro/2025', aluno: 'Ana Beatriz', desc: 'Mensalidade 8º ano', venc: '10/12', valor: 'R$ 1.452,00', obs: 'Pix em 09/12', status: 'Paga', tone: 'success', icon: 'check-circle' }]
+    });
+  }
+}
+</script><script src="vendor/runtime.js"></script></body></html>

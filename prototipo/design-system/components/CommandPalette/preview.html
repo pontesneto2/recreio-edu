@@ -1,0 +1,24 @@
+<!-- @dsCard group="Sobreposições" height=520 width=900 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>CommandPalette</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    const [o, setO] = React.useState(true);
+    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(P.Button, { onClick: () => setO(true), icon: "search" }, "Buscar"), /* @__PURE__ */ React.createElement(P.CommandPalette, { open: o, onClose: () => setO(false), groups: [
+      { label: "Alunos", items: [{ label: "Ana Beatriz Lima", meta: "9\xBA ano A \xB7 matr\xEDcula 2018-0214", avatar: true }, { label: "Arthur Nogueira", meta: "9\xBA ano A \xB7 matr\xEDcula 2019-0042", avatar: true }] },
+      { label: "Telas", items: [{ label: "Cobran\xE7as vencidas", icon: "wallet", meta: "Financeiro" }, { label: "Rematr\xEDcula 2027", icon: "file-text", meta: "Secretaria" }] },
+      { label: "A\xE7\xF5es", items: [{ label: "Novo comunicado", icon: "plus", shortcut: "N" }, { label: "Fazer chamada", icon: "check-circle", shortcut: "C" }] }
+    ] }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

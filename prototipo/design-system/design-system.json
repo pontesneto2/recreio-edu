@@ -1,0 +1,72 @@
+{
+  "v": 3,
+  "assetGroups": {
+    "Logos": {
+      "files": {
+        "recreio-logo.png": {
+          "blob": "33f2386e11f7d21f7b6a18f11c5505dc",
+          "name": "recreio-logo.png",
+          "size": 325810,
+          "type": "image/png"
+        },
+        "recreio-logo-negativo.png": {
+          "blob": "91f340c894e448f9d569bd383c00da2a",
+          "name": "recreio-logo-negativo.png",
+          "size": 206009,
+          "type": "image/png"
+        },
+        "recreio-simbolo.png": {
+          "blob": "bc626d34c49c09bd14781a382080562e",
+          "name": "recreio-simbolo.png",
+          "size": 83399,
+          "type": "image/png"
+        },
+        "recreio-icone-app.png": {
+          "blob": "8e42208dc578a22e28147b94d4edeacd",
+          "name": "recreio-icone-app.png",
+          "size": 168806,
+          "type": "image/png"
+        }
+      },
+      "name": "Logos",
+      "order": [
+        "recreio-logo.png",
+        "recreio-logo-negativo.png",
+        "recreio-simbolo.png",
+        "recreio-icone-app.png"
+      ],
+      "tile": "l"
+    }
+  },
+  "blobs": {},
+  "createdOnFiles": {
+    "at": "2026-11-25T14:47:55Z",
+    "v": 1
+  },
+  "docs": {
+    "readme": "project/README.md",
+    "sections": []
+  },
+  "groups": [
+    "Logos"
+  ],
+  "lastChange": {
+    "at": "2026-11-25T16:36:17Z",
+    "by": "Francisco Pontes",
+    "note": "Rebrand para Sistema Recreio: paleta da logo, fonte do sistema (SF Pro/Inter), tabelas zebradas, 16 componentes de módulos e demo Colégio Recreio."
+  },
+  "layout": "files",
+  "libraries": [
+    {
+      "name": "react",
+      "version": "18"
+    },
+    {
+      "name": "react-dom",
+      "version": "18"
+    }
+  ],
+  "namespace": "Recreio",
+  "sections": {},
+  "title": "Sistema Recreio"
+}

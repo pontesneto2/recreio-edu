@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Família: Frequência</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" groups="{{nav}}" active="frequencia"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Frequência</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Presenças, faltas, atrasos e justificativas</p></div></div>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar falta ou disciplina" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Familia-Notificacoes.dc.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 14px 20px; border-radius: var(--radius-lg); background: var(--surface-1); border: 1px solid var(--line); box-shadow: var(--shadow-1);">
+<span style="font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2);">Aluno</span>
+<x-import component-from-global-scope="Recreio.SegmentedControl" label="Aluno" value="ana" options="{{alunos}}"></x-import>
+</div>
+<section aria-label="Indicadores de frequência" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px;">
+<x-import component-from-global-scope="Recreio.StatCard" variant="hero" label="Frequência no ano" value="{{freq}}" format="{{pct}}" delta="{{dFreq}}" delta-suffix=" p.p." delta-label="no bimestre" trend="{{tFreq}}" icon="check-circle"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="roxo" label="Aulas perdidas no ano" value="{{faltas}}" icon="calendar" hint="Somando todas as disciplinas · 11 justificadas"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="laranja" label="Atrasos no bimestre" value="{{atrasos}}" icon="clock" hint="Entrada depois das 7h30"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="verde" label="Margem até o mínimo" value="{{margem}}" format="{{faltasFmt}}" icon="shield" hint="Pode faltar até 42 aulas sem ficar abaixo de 75%"></x-import>
+</section>
+<div class="rc-split" style="gap: 24px; align-items: start;">
+<div style="display: flex; flex-direction: column; gap: 24px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Faltas e atrasos" subtitle="Ana Beatriz · 9º ano A · 2026">
+<div style="padding: 0 0 12px;"><x-import component-from-global-scope="Recreio.FilterChips" label="Situação" single="{{yes}}" value="{{fTodas}}" options="{{situacoes}}"></x-import></div>
+<ul style="list-style: none; margin: 0; padding: 0;">
+<sc-for list="{{registros}}" as="r" hint-placeholder-count="6">
+<li style="display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 14px; align-items: start; padding: 14px 0; border-top: 1px solid var(--line);">
+<span style="display: flex; flex-direction: column; align-items: center; padding: 6px 0; border-radius: var(--radius-sm); background: var(--surface-2);"><strong style="font-size: 18px; line-height: 1;">{{r.dia}}</strong><small style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--ink-2);">{{r.mes}}</small></span>
+<div style="display: flex; flex-direction: column; gap: 6px; min-width: 0;">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px;"><strong>{{r.tipo}}</strong><span style="color: var(--ink-2); font-size: 14px;">{{r.aulas}}</span></div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
+<x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.status}}</x-import>
+<sc-if value="{{r.doc}}"><span style="display: inline-flex; align-items: center; gap: 4px; font-size: 13px; color: var(--ink-2);"><x-import component-from-global-scope="Recreio.Icon" name="paperclip" size="14"></x-import>{{r.doc}}</span></sc-if>
+<sc-if value="{{r.justificar}}"><a class="rc-btn rc-btn-secondary rc-btn-sm" href="#justificar">Enviar justificativa</a></sc-if>
+</div>
+</div>
+</li>
+</sc-for>
+</ul>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Justificar falta ou atraso" subtitle="A coordenação analisa em até 2 dias úteis">
+<div id="justificar" style="display: flex; flex-direction: column; gap: 16px; scroll-margin-top: 160px;">
+<x-import component-from-global-scope="Recreio.Select" label="Dia da falta ou do atraso" default-value="1311" options="{{diasSemJust}}"></x-import>
+<x-import component-from-global-scope="Recreio.TextArea" label="Motivo" hint="Ex.: consulta médica, viagem em família, problema de transporte" rows="{{three}}"></x-import>
+<x-import component-from-global-scope="Recreio.FileDrop" label="Atestado ou declaração" hint="PDF ou foto, até 10 MB"></x-import>
+<div><a class="rc-btn rc-btn-primary" href="#pop-justificada">Enviar para a coordenação</a></div>
+</div>
+</x-import>
+</div>
+<div style="display: flex; flex-direction: column; gap: 24px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Calendário de faltas" subtitle="Vermelho: falta · amarelo: atraso">
+<x-import component-from-global-scope="Recreio.MiniCalendar" year="{{y}}" month="{{m}}" today="{{d}}" selected="{{d}}" events="{{ev}}"></x-import>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Frequência por disciplina" subtitle="Linha tracejada: mínimo de 75%">
+<x-import component-from-global-scope="Recreio.BarChart" label="Frequência por disciplina em 2026" format="{{pctInt}}" reference="{{min}}" reference-label="mínimo 75%" data="{{porDisciplina}}"></x-import>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Frequência por mês" subtitle="Faltas justificadas contam como presença">
+<x-import component-from-global-scope="Recreio.BarChart" label="Frequência por mês em 2026" format="{{pctInt}}" reference="{{min}}" reference-label="mínimo 75%" data="{{months}}"></x-import>
+</x-import>
+</div>
+</div>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="frequencia"></x-import>
+</div>
+</div>
+<div id="pop-justificada" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Justificativa enviada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="send" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Justificativa enviada</p><p class="rc-dialog-desc">A coordenação analisa em até 2 dias úteis. Você recebe a resposta pelo app.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1780}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 3, bellNotifs: [
+      { icon: 'mail', title: 'Bilhete para assinar: aula de campo', text: 'Ana Beatriz · 9º ano A · prazo 26/11', time: 'Hoje, 11h20', unread: true, priority: 'importante' },
+      { icon: 'heart', title: 'Davi passou pela enfermaria', text: 'Dor de cabeça, já voltou para a sala', time: 'Hoje, 10h25', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: 'Mensalidade de dezembro disponível', text: 'R$ 1.406,00 · vence em 10/12', time: 'Hoje, 8h00', unread: true, priority: 'rotina' },
+      { icon: 'chart', title: 'Boletim do 3º bimestre publicado', text: 'Ana Beatriz e Davi', time: 'Ontem, 18h30', priority: 'rotina' }] };
+    const shared = {
+      tabs: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Familia-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }],
+      bellCount: 3, activeChild: 'k1', activeProfile: 'resp',
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      user: { name: 'Fernanda Lima' },
+      kids: [{ id: 'k1', name: 'Davi Lima', group: '2º ano B' }, { id: 'k2', name: 'Ana Beatriz Lima', group: '9º ano A' }],
+      profiles: [{ id: 'resp', label: 'Responsável', icon: 'users', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'calendario', label: 'Calendário', icon: 'flag', href: 'Familia-Calendario.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', count: 2, href: 'Familia-Comunicados.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'autorizacoes', label: 'Autorizações', icon: 'key', count: 1, href: 'Familia-Autorizacoes.dc.html' }] },
+        { label: 'Acadêmico', items: [{ id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'check-circle', href: 'Familia-Frequencia.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Familia-Horarios.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Familia-Integral.dc.html' }, { id: 'inclusao', label: 'Plano individual', icon: 'star', href: 'Familia-Inclusao.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 1, href: 'Familia-Ocorrencias.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Familia-Biblioteca.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Familia-Materiais.dc.html' }] },
+        { label: 'Serviços', items: [{ id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Familia-Cardapio.dc.html' }, { id: 'saude', label: 'Saúde', icon: 'heart', href: 'Familia-Saude.dc.html' }, { id: 'documentos', label: 'Documentos', icon: 'file', href: 'Familia-Documentos.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', href: 'Familia-Atendimentos.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', count: 2, href: 'Familia-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', href: 'Familia-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', count: 1, href: 'Familia-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'financeiro', label: 'Mensalidades', icon: 'wallet', count: 1, urgent: true, href: 'Familia-Financeiro.dc.html' }, { id: 'dae', label: 'DAE', icon: 'receipt', href: 'Familia-DAE.dc.html' }, { id: 'ir', label: 'Recibo para IR', icon: 'receipt', href: 'Familia-Recibo-IR.dc.html' }, { id: 'rematricula', label: 'Rematrícula 2027', icon: 'file-text', href: 'Familia-Rematricula.dc.html' }, { id: 'matricula', label: 'Matrícula 2027', icon: 'graduation', href: 'Familia-Matricula.dc.html' }] },
+        { label: 'Conta', items: [{ id: 'prefs', label: 'Acessibilidade', icon: 'accessibility', href: 'Familia-Preferencias.dc.html' }] }]
+    };
+    const __r = Object.assign({ yes: true, no: false }, shared, {
+      activeChild: 'k2', three: 3,
+      alunos: [{ value: 'davi', label: 'Davi · 2º B' }, { value: 'ana', label: 'Ana Beatriz · 9º A' }, { value: 'todos', label: 'Todos' }],
+      freq: 95, dFreq: -0.6, tFreq: [98, 97, 96, 95.6, 95], faltas: 34, atrasos: 3, margem: 42, min: 75, y: 2026, m: 10, d: 25,
+      pct: (v) => Math.round(v) + '%', pctInt: (v) => v + '%', faltasFmt: (v) => Math.round(v) + ' aulas',
+      ev: { 4: ['danger'], 5: ['warning'], 23: ['danger'], 24: ['warning'] },
+      fTodas: ['todas'],
+      situacoes: [{ value: 'todas', label: 'Todas', count: 6 }, { value: 'sem', label: 'Sem justificativa', count: 2 }, { value: 'analise', label: 'Em análise', count: 1 }, { value: 'justificada', label: 'Justificadas', count: 3 }],
+      registros: [
+        { dia: '24', mes: 'nov', tipo: 'Atraso', aulas: 'Entrada às 7h32 · 2 minutos · 1ª aula de Português', status: 'Sem justificativa', tone: 'danger', justificar: true },
+        { dia: '23', mes: 'nov', tipo: 'Falta', aulas: 'Matemática (2 aulas) e Geografia', status: 'Em análise', tone: 'info', doc: 'atestado-23-11.pdf' },
+        { dia: '11', mes: 'nov', tipo: 'Saída antecipada', aulas: 'Saiu às 10h30 com Fernanda Lima · consulta', status: 'Autorizada', tone: 'success' },
+        { dia: '05', mes: 'nov', tipo: 'Atraso', aulas: 'Entrada às 7h42 · 12 minutos · trânsito', status: 'Justificada', tone: 'success' },
+        { dia: '04', mes: 'nov', tipo: 'Falta', aulas: 'Português e Matemática · 2 aulas', status: 'Justificada', tone: 'success', doc: 'declaracao-consulta.pdf' },
+        { dia: '15', mes: 'out', tipo: 'Atraso', aulas: 'Entrada às 7h48 · 18 minutos', status: 'Sem justificativa', tone: 'danger', justificar: true }],
+      diasSemJust: [{ value: '2411', label: 'Terça, 24/11 · atraso, entrada às 7h32' }, { value: '1510', label: 'Quinta, 15/10 · atraso, entrada às 7h48' }],
+      porDisciplina: [{ label: 'Port.', value: 96 }, { label: 'Mat.', value: 92, highlight: true }, { label: 'Ciên.', value: 98 }, { label: 'Geo.', value: 95 }, { label: 'Hist.', value: 94 }, { label: 'Ing.', value: 100 }, { label: 'Ed. F.', value: 97 }],
+      months: [{ label: 'fev', value: 98 }, { label: 'mar', value: 96 }, { label: 'abr', value: 94 }, { label: 'mai', value: 97 }, { label: 'jun', value: 91 }, { label: 'ago', value: 95 }, { label: 'set', value: 93 }, { label: 'out', value: 96 }, { label: 'nov', value: 92, highlight: true }]
+    });
+    return Object.assign({ pS3: 3, pS16: 16, pS18: 18, pS20: 20, pS22: 22, pS32: 32, pS36: 36, pS40: 40, pYes: true, pFmt: [{ value: 'xlsx', label: 'Excel (.xlsx)' }, { value: 'csv', label: 'CSV' }, { value: 'pdf', label: 'PDF para impressão' }] }, { s22: 22 }, bell, __r);
+  }
+}
+</script>
+</body>
+</html>

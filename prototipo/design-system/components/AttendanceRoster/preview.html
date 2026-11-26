@@ -1,0 +1,28 @@
+<!-- @dsCard group="Pedagógico" height=640 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>AttendanceRoster</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { maxWidth: 680 } }, /* @__PURE__ */ React.createElement(P.AttendanceRoster, { date: "Hoje, 25/11", lesson: "2\xAA aula \xB7 Matem\xE1tica \xB7 9\xBA ano A", value: { s1: "P", s2: "P", s3: "F", s4: "P", s5: "A", s6: "P", s7: "P", s8: "P" }, students: [
+      { id: "s1", name: "Ana Beatriz Lima" },
+      { id: "s2", name: "Arthur Nogueira" },
+      { id: "s3", name: "Bruno Sales" },
+      { id: "s4", name: "Caio Reis", note: "Usa aparelho auditivo" },
+      { id: "s5", name: "Davi Martins" },
+      { id: "s6", name: "Larissa Bezerra" },
+      { id: "s7", name: "Isabela Fontenele" },
+      { id: "s8", name: "Jo\xE3o Pedro Cavalcante" }
+    ] }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

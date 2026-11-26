@@ -1,0 +1,36 @@
+<!-- @dsCard group="Plataforma" height=900 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>ModuleCard</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    const all = [
+      ["nucleo", "users", "N\xFAcleo", "Pessoas, turmas, calend\xE1rio, permiss\xF5es e acessibilidade.", "azul", null, true],
+      ["comunicados", "bell", "Comunicados", "Envio por p\xFAblico, agendamento, confirma\xE7\xE3o de leitura e Libras.", "azul"],
+      ["chat", "chat", "Chat", "Conversas por assunto com professores, coordena\xE7\xE3o e secretaria.", "ciano"],
+      ["agenda", "calendar", "Agenda e agenda online", "Provas, tarefas, eventos e marca\xE7\xE3o de reuni\xE3o com hor\xE1rio livre.", "amarelo"],
+      ["diario", "edit", "Notas e faltas", "Digita\xE7\xE3o em planilha, chamada offline e fechamento de bimestre.", "roxo"],
+      ["boletim", "chart", "Boletim", "Boletim por etapa, recupera\xE7\xE3o e hist\xF3rico escolar.", "roxo"],
+      ["ocorrencias", "alert", "Ocorr\xEAncias", "Disciplinar, pedag\xF3gica, sa\xFAde e elogio, com ci\xEAncia da fam\xEDlia.", "laranja"],
+      ["integral", "sun-moon", "Integral e refor\xE7o", "Turno regular, tempo integral, semi-integral e refor\xE7o no mesmo dia.", "verde"],
+      ["matricula", "file-text", "Matr\xEDcula", "Matr\xEDcula e rematr\xEDcula online, documentos e contrato assinado.", "verde"],
+      ["financeiro", "wallet", "Financeiro", "Mensalidade com Pix e boleto, r\xE9gua de cobran\xE7a e recibo para IR.", "verde"],
+      ["portaria", "gate", "Portaria", "Entrada e sa\xEDda, retirada autorizada com foto e QR.", "laranja"],
+      ["biblioteca", "book", "Biblioteca", "Acervo, empr\xE9stimo, reserva, renova\xE7\xE3o e multa.", "ciano"],
+      ["infantil", "baby", "Educa\xE7\xE3o infantil", "Di\xE1rio de rotina, fotos, card\xE1pio e autoriza\xE7\xF5es.", "rosa"],
+      ["superior", "graduation", "Ensino superior", "Matriz curricular, cr\xE9ditos, est\xE1gio e TCC.", "roxo", ["Notas e faltas"]]
+    ];
+    const [m, setM] = React.useState({ comunicados: true, chat: true, agenda: true, diario: true, boletim: true, ocorrencias: true, integral: true, matricula: true, financeiro: true, portaria: true, biblioteca: false, infantil: true, superior: false });
+    return /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(270px,1fr))", gap: 12 } }, all.map(([id, icon, name, desc, color, req, locked]) => /* @__PURE__ */ React.createElement(P.ModuleCard, { key: id, icon, name, description: desc, color, locked, requires: req || [], enabled: locked || m[id], onToggle: (v) => setM({ ...m, [id]: v }), plan: id === "superior" ? "Plano Rede" : void 0 })));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

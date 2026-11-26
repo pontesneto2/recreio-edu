@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Celular: Professor · Agenda</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+<header class="rc-app-bar"><a class="rc-app-back" href="Celular-Professor.dc.html" aria-label="Voltar"><x-import component-from-global-scope="Recreio.Icon" name="chevron-left" size="{{s22}}"></x-import></a><h1>Novo lançamento<small>Agenda da turma</small></h1><span></span></header>
+<div class="rc-app-scroll">
+<div class="rc-app-body"><div style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: var(--radius-md); background: var(--brand-soft); color: var(--brand-ink);"><x-import component-from-global-scope="Recreio.Icon" name="users" size="{{s20}}"></x-import><span><strong>9º ano A · Manhã</strong><br><small>31 famílias · Prof. Ricardo, titular</small></span></div><div><span class="rc-field-label" style="display: block; margin-bottom: 6px;">Turma e turno</span><x-import component-from-global-scope="Recreio.FilterChips" label="Turma e turno" value="{{tsel}}" options="{{turmas}}"></x-import></div><x-import component-from-global-scope="Recreio.SegmentedControl" label="Tipo" value="tarefa" options="{{tipos}}"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Título" default-value="Lista 9: sistemas de equações"></x-import><x-import component-from-global-scope="Recreio.TextArea" label="Orientação" default-value="Livro, página 150, exercícios 1 a 8." rows="{{three}}"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Para quando" default-value="Sexta, 04/12"></x-import><div class="rc-app-card"><x-import component-from-global-scope="Recreio.Checkbox" label="Pedir visto do responsável" default-checked="{{yes}}"></x-import><x-import component-from-global-scope="Recreio.Checkbox" label="Exigir assinatura"></x-import><x-import component-from-global-scope="Recreio.Checkbox" label="Avisar no celular das famílias agora" default-checked="{{yes}}"></x-import></div><div class="rc-app-sec"><h2>Publicados hoje</h2></div><div class="rc-app-card is-flush"><div class="rc-app-row"><span class="rc-app-ico"><x-import component-from-global-scope="Recreio.Icon" name="edit" size="{{s20}}"></x-import></span><span><strong>Lista 8: equações do 2º grau</strong><small>24 de 31 vistos</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="brand" size="sm">77%</x-import></div></div></div>
+</div>
+<div class="rc-app-cta"><a class="rc-btn rc-btn-ghost" href="#pop-rascunho"><span class="rc-btn-label">Rascunho</span></a><a class="rc-btn rc-btn-primary" href="#pop-publicar"><x-import component-from-global-scope="Recreio.Icon" name="send" size="{{s18}}"></x-import><span class="rc-btn-label">Publicar no 9º A</span></a></div>
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="agenda"></x-import>
+<div id="pop-publicar" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Publicar no 9º ano A · Manhã?"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="send" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Publicar no 9º ano A · Manhã?</p><p class="rc-dialog-desc">A tarefa "Lista 9" vai para a agenda de 31 famílias, com aviso no celular.</p></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#"><span class="rc-btn-label">Revisar</span></a><a class="rc-btn rc-btn-primary" href="#pop-publicado"><span class="rc-btn-label">Publicar agora</span></a></div></div></div><div id="pop-publicado" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Publicado na agenda"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog rc-dialog-hero"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Publicado na agenda</p><p class="rc-dialog-desc">31 famílias receberam. Os vistos aparecem em Publicados hoje.</p></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="Celular-Professor.dc.html"><span class="rc-btn-label">Concluir</span></a></div></div></div><div id="pop-rascunho" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Rascunho salvo"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog rc-dialog-hero"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Rascunho salvo</p><p class="rc-dialog-desc">Você continua depois, no celular ou no computador.</p></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#"><span class="rc-btn-label">Concluir</span></a></div></div></div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return Object.assign({ yes: true, no: false, one: 1, two: 2, three: 3, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96, tabs: [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Celular-Professor.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Celular-Chamada.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Celular-Notas.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', count: 2, href: 'Celular-Lancar.dc.html' }] }, {
+      tsel: ['9a'], turmas: [{ value: '9a', label: '9º A · Manhã' }, { value: '9b', label: '9º B · Manhã' }, { value: '8a', label: '8º A · Manhã' }, { value: '1em', label: '1ª EM · Manhã' }], tipos: [{ value: 'tarefa', label: 'Tarefa' }, { value: 'prova', label: 'Prova' }, { value: 'bilhete', label: 'Bilhete' }, { value: 'recado', label: 'Recado' }]
+    });
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!-- @dsCard group="Portaria e biblioteca" height=420 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>BookCard</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(340px,1fr))", gap: 16 } }, /* @__PURE__ */ React.createElement(P.BookCard, { title: "Iracema", author: "Jos\xE9 de Alencar", year: 1865, copies: 5, available: 3, shelf: "Estante B3", tags: ["9\xBA ano", "Leitura do bimestre"] }), /* @__PURE__ */ React.createElement(P.BookCard, { title: "O Quinze", author: "Rachel de Queiroz", year: 1930, copies: 4, available: 0, shelf: "Estante B3", tags: ["Literatura cearense"] }), /* @__PURE__ */ React.createElement(P.BookCard, { title: "Menina Bonita do La\xE7o de Fita", author: "Ana Maria Machado", year: 1986, copies: 6, available: 2, shelf: "Infantil A1", tags: ["Fundamental I"] }), /* @__PURE__ */ React.createElement(P.BookCard, { title: "Dom Casmurro", author: "Machado de Assis", year: 1899, copies: 6, available: 4, shelf: "Estante B1", tags: ["Ensino M\xE9dio", "Vestibular"] }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

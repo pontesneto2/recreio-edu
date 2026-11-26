@@ -1,0 +1,19 @@
+<!-- @dsCard group="Secretaria" height=380 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>PendingItem</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("ul", { style: { listStyle: "none", margin: 0, padding: 0, maxWidth: 640 } }, /* @__PURE__ */ React.createElement(P.PendingItem, { index: 0, kind: "pagamento", title: "Mensalidade de dezembro", child: "Davi \xB7 2\xBA ano B", due: "Vence em 10/12", dueTone: "warning", amount: 1406, actionLabel: "Pagar" }), /* @__PURE__ */ React.createElement(P.PendingItem, { index: 1, kind: "autorizacao", title: "Visita ao Planet\xE1rio do Drag\xE3o do Mar", child: "Davi \xB7 2\xBA ano B", due: "At\xE9 sexta, 27/11", dueTone: "danger", actionLabel: "Autorizar" }), /* @__PURE__ */ React.createElement(P.PendingItem, { index: 2, kind: "assinatura", title: "Contrato de rematr\xEDcula 2027", child: "Ana Beatriz \xB7 9\xBA ano A", due: "At\xE9 15/12", actionLabel: "Assinar" }), /* @__PURE__ */ React.createElement(P.PendingItem, { index: 3, kind: "reuniao", title: "Plant\xE3o pedag\xF3gico do 9\xBA ano", child: "Ana Beatriz \xB7 9\xBA ano A", due: "S\xE1bado, 05/12", actionLabel: "Marcar hor\xE1rio" }), /* @__PURE__ */ React.createElement(P.PendingItem, { index: 4, kind: "leitura", title: "Comunicado: hor\xE1rio de fim de ano", done: true }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+{
+  "name": "recreio-edu",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Recreio Sistema Educacional: portal web (React) e API (Node).",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "concurrently -n api,web -c blue,magenta \"npm run dev -w @recreio/api\" \"npm run dev -w @recreio/web\"",
+    "dev:api": "npm run dev -w @recreio/api",
+    "dev:web": "npm run dev -w @recreio/web",
+    "prototipo": "serve prototipo/visualizar -l 5000",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "eslint --flag unstable_native_nodejs_ts_config .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky",
+    "check": "npm run lint && npm run typecheck && npm test && npm run build"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
+    "@eslint/js": "^10.0.1",
+    "concurrently": "^10.0.7",
+    "eslint": "^10.15.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.8",
+    "globals": "^17.14.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.2",
+    "prettier": "^3.10.1",
+    "serve": "^14.2.8",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.74.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --flag unstable_native_nodejs_ts_config --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css,yml,yaml}": "prettier --write"
+  }
+}

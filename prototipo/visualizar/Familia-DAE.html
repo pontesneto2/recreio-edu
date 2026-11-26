@@ -1,0 +1,211 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>DAE</title>
+<link rel="stylesheet" href="vendor/tokens.css"><link rel="stylesheet" href="vendor/bundle.css"><style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+<script src="vendor/react.js"></script><script src="vendor/react-dom.js"></script><script src="vendor/bundle.js"></script></head>
+<body><div id="app"></div><template id="dc-src"><x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" groups="{{nav}}" active="dae"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="receipt" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">DAE</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Documento de Arrecadação Estadual · Davi e Ana Beatriz</p></div></div>
+<a class="rc-btn rc-btn-ghost rc-btn-sm" href="Familia-Financeiro.html">Mensalidades</a>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar documento" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Familia-Notificacoes.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 16px;">
+<x-import component-from-global-scope="Recreio.StatCard" color="azul" label="DAE para pagar" value="{{f1}}" icon="file-text" hint="R$ 3.058,40 no total"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="vermelho" label="Vencido" href="#pop-2via" value="{{f2}}" icon="alert" hint="Ana Beatriz · novembro · peça a 2ª via"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="laranja" label="Próximo vencimento" value="{{f3}}" format="{{dias}}" icon="calendar" hint="10/12 · DAE de dezembro do Davi"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="verde" label="Pagos em 2026" href="#historico" value="{{f4}}" icon="check-circle" hint="Davi 11 · Ana Beatriz 10"></x-import>
+</div>
+<x-import component-from-global-scope="Recreio.Alert" tone="warning" title="O DAE de novembro da Ana Beatriz venceu em 10/11">O banco não aceita DAE vencido. Gere a 2ª via: ela sai com novo vencimento e o valor atualizado.</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="DAE do mês" subtitle="O Documento de Arrecadação Estadual substitui o boleto. Pague no app do seu banco com a linha digitável ou o código de barras.">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 16px;">
+<sc-for list="{{daes}}" as="d" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 14px; padding: 20px; border-radius: var(--radius-lg); border: 1px solid var(--line); background: var(--surface-1); min-width: 0;"><div style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 8px;"><span style="min-width: 0;"><small style="display: block; font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);">DAE · {{d.comp}}</small><strong style="display: block; font-size: 1.0625rem;">{{d.filho}}</strong><small style="color: var(--ink-2);">{{d.turma}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{d.tone}}" size="sm">{{d.st}}</x-import></div><div><p style="margin: 0; font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;">{{d.valor}}</p><small style="color: var(--ink-2);">{{d.venc}}</small></div><div style="display: grid; gap: 6px; padding: 12px; border-radius: var(--radius-sm); background: var(--surface-2);"><small style="font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);">Linha digitável</small><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; font-size: 14px; font-weight: 600;">{{d.linha}}</span></div><x-import component-from-global-scope="Recreio.CopyButton" text="{{d.linha}}" label="Copiar linha digitável" copied-label="Linha copiada" variant="{{d.cv}}" full="{{yes}}"></x-import><div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-{{d.bv}} rc-btn-sm" href="{{d.href}}">{{d.bl}}</a><a class="rc-btn rc-btn-secondary rc-btn-sm" href="#pop-baixado">Baixar PDF</a><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-dae">Imprimir</a></div><small style="color: var(--ink-2); line-height: 1.45;">{{d.nota}}</small></div>
+</sc-for>
+</div>
+</x-import>
+<div class="rc-split" style="gap: 24px; align-items: start; --split: minmax(0, 3fr) minmax(0, 2fr);">
+<div style="display: flex; flex-direction: column; gap: 24px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Situação do pagamento" subtitle="DAE de novembro do Davi · confirmado pela SEFAZ-CE">
+<x-import component-from-global-scope="Recreio.Timeline" items="{{linhaTempo}}"></x-import>
+<div style="margin-top: 12px;"><div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-secondary rc-btn-sm" href="#pop-comprovante">Baixar comprovante</a><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-atualizado">Atualizar situação</a></div></div>
+</x-import>
+</div>
+<div style="display: flex; flex-direction: column; gap: 24px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Como pagar" subtitle="Em 3 passos">
+<div>
+<sc-for list="{{passos}}" as="r" hint-placeholder-count="3">
+<div class="rc-popup-row"><span style="display: grid; place-items: center; width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--surface-2); color: var(--brand-ink);"><x-import component-from-global-scope="Recreio.Icon" name="{{r.ic}}" size="{{s18}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{r.n}}</strong><small style="color: var(--ink-2);">{{r.m}}</small></span></div>
+</sc-for>
+</div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Alert" tone="info" title="A confirmação não é na hora">O banco avisa a SEFAZ-CE e a SEFAZ-CE avisa a escola. Costuma levar até 2 dias úteis. Enquanto isso o DAE aparece como Em conferência.</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Precisa de ajuda?">
+<p style="margin: 0; line-height: 1.5; color: var(--ink-2);">Pagou e o DAE segue em aberto depois de 2 dias úteis? Envie o comprovante para o financeiro.</p>
+<div style="margin-top: 12px;"><div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-secondary rc-btn-sm" href="Familia-Chat.html">Falar com o financeiro</a><a class="rc-btn rc-btn-ghost rc-btn-sm" href="Familia-Financeiro.html">Ver Mensalidades</a></div></div>
+</x-import>
+</div>
+</div>
+<div id="historico"><x-import component-from-global-scope="Recreio.Card" title="DAE pagos em 2026" subtitle="21 pagos · R$ 31.011,00 · Davi e Ana Beatriz">
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0;">
+<div data-nosave style="display: flex; flex-wrap: wrap; gap: 12px; align-items: end;"><x-import component-from-global-scope="Recreio.Select" label="Filho" default-value="todos" options="{{filhos}}"></x-import><x-import component-from-global-scope="Recreio.Select" label="Período" default-value="2s" options="{{periodos}}"></x-import></div>
+<div role="table" aria-label="DAE pagos em 2026">
+<div role="row" class="rc-rows-row rc-rows-head" style="--cols: minmax(0, 1.1fr) minmax(0, 1.3fr) 120px minmax(0, 1.2fr) 170px 130px; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);"><span role="columnheader">Competência</span><span role="columnheader">Filho</span><span role="columnheader">Valor</span><span role="columnheader">Pagamento</span><span role="columnheader">Situação</span><span role="columnheader"></span></div>
+<sc-for list="{{pagos}}" as="r" hint-placeholder-count="7">
+<div role="row" class="rc-rows-row" style="--cols: minmax(0, 1.1fr) minmax(0, 1.3fr) 120px minmax(0, 1.2fr) 170px 130px; padding: 12px; align-items: center; border-bottom: 1px solid var(--line);"><span role="cell" style="min-width: 0;"><strong style="font-weight: 600;">{{r.c}}</strong></span><span role="cell" style="min-width: 0;" data-label="Filho"><strong style="display: block; font-weight: 600;">{{r.n}}</strong><small style="color: var(--ink-2);">{{r.m}}</small></span><span role="cell" style="min-width: 0;" data-label="Valor"><strong style="font-weight: 600; font-variant-numeric: tabular-nums;">{{r.v}}</strong></span><span role="cell" style="min-width: 0;" data-label="Pagamento"><small style="color: var(--ink-2);">{{r.p}}</small></span><span role="cell" style="min-width: 0;" data-label="Situação"><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.st}}</x-import></span><span role="cell" style="min-width: 0;"><a class="rc-btn rc-btn-{{r.bv}} rc-btn-sm" href="{{r.href}}">{{r.bl}}</a></span></div>
+</sc-for>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-secondary" href="#pop-baixado">Baixar todos os comprovantes</a><a class="rc-btn rc-btn-ghost" href="Familia-Recibo-IR.html">Recibo para IR</a></div>
+</div>
+</x-import></div>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="dae"></x-import>
+</div>
+</div>
+<div id="pop-dae" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="DAE 2026.12.0318.004417-2">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><div class="rc-dialog-titles"><p class="rc-dialog-title">DAE 2026.12.0318.004417-2</p><p class="rc-dialog-desc">Confira os dados antes de imprimir.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;">
+<div style="display: grid; gap: 14px; padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--line); background: var(--surface-1);"><div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding-bottom: 12px; border-bottom: 1px dashed var(--line);"><span style="min-width: 0;"><strong style="display: block;">Governo do Estado do Ceará · Secretaria da Fazenda</strong><small style="color: var(--ink-2);">Documento de Arrecadação Estadual (DAE) · emitido por órgão externo</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="neutral" size="sm">Prévia</x-import></div><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: 12px 16px;"><div style="min-width: 0;"><small style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);">Número do DAE</small><strong style="display: block; font-weight: 600; overflow-wrap: anywhere;">2026.12.0318.004417-2</strong></div><div style="min-width: 0;"><small style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);">Código da receita</small><strong style="display: block; font-weight: 600; overflow-wrap: anywhere;">8001 · Contribuição escolar</strong></div><div style="min-width: 0;"><small style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);">Competência</small><strong style="display: block; font-weight: 600; overflow-wrap: anywhere;">Dezembro de 2026</strong></div><div style="min-width: 0;"><small style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);">Vencimento</small><strong style="display: block; font-weight: 600; overflow-wrap: anywhere;">10/12/2026</strong></div><div style="min-width: 0;"><small style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);">Valor</small><strong style="display: block; font-weight: 600; overflow-wrap: anywhere;">R$ 1.406,00</strong></div><div style="min-width: 0;"><small style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);">Órgão emissor</small><strong style="display: block; font-weight: 600; overflow-wrap: anywhere;">460012 · Colégio Recreio</strong></div><div style="min-width: 0; grid-column: 1 / -1;"><small style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);">Contribuinte</small><strong style="display: block; font-weight: 600; overflow-wrap: anywhere;">Fernanda Lima · CPF ***.482.193-**</strong></div><div style="min-width: 0; grid-column: 1 / -1;"><small style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);">Referência</small><strong style="display: block; font-weight: 600; overflow-wrap: anywhere;">Davi Lima · 2º ano B · matrícula 2024-0318</strong></div></div><div style="display: grid; gap: 6px; padding: 12px; border-radius: var(--radius-sm); background: var(--surface-2);"><small style="font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);">Linha digitável</small><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; font-weight: 600;">85870000014 2 06000216202 3 61210031800 4 44172026120 9</span><span aria-hidden="true" style="display: block; height: 40px; border-radius: 2px; background: repeating-linear-gradient(90deg, var(--ink-1) 0 2px, transparent 2px 5px, var(--ink-1) 5px 6px, transparent 6px 10px, var(--ink-1) 10px 13px, transparent 13px 15px);"></span></div></div><p style="margin: 0; line-height: 1.5; color: var(--ink-2);">Valor com 5% de desconto de pontualidade. Depois de 10/12 vale o valor cheio, de R$ 1.480,00.</p>
+</div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Fechar</a><a class="rc-btn rc-btn-secondary" href="#pop-baixado">Baixar PDF</a><a class="rc-btn rc-btn-primary" href="#pop-impresso">Imprimir</a></div>
+</div>
+</div>
+<div id="pop-impresso" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="DAE pronto para imprimir">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">DAE pronto para imprimir</p><p class="rc-dialog-desc">O documento abriu na impressão do aparelho, em uma página A4.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-baixado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="PDF baixado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">PDF baixado</p><p class="rc-dialog-desc">O arquivo está nos downloads do aparelho e também fica em Documentos.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-2via" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="2ª via do DAE de novembro">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-md">
+<div class="rc-dialog-head"><div class="rc-dialog-titles"><p class="rc-dialog-title">2ª via do DAE de novembro</p><p class="rc-dialog-desc">Ana Beatriz Lima · 9º ano A</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;">
+<x-import component-from-global-scope="Recreio.DescriptionList" columns="{{two}}" items="{{segVia}}"></x-import><p style="margin: 0; line-height: 1.5; color: var(--ink-2);">A 2ª via cancela o DAE vencido. Só o novo documento vale para pagamento.</p>
+</div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-secondary" href="Familia-Chat.html">Negociar com o financeiro</a><a class="rc-btn rc-btn-primary" href="#pop-2via-ok">Gerar 2ª via</a></div>
+</div>
+</div>
+<div id="pop-2via-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="2ª via gerada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">2ª via gerada</p><p class="rc-dialog-desc">Novo DAE de R$ 1.652,40 com vencimento em 30/11. A linha digitável já está na tela e o PDF foi para Documentos.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-comprovante" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Comprovante baixado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Comprovante baixado</p><p class="rc-dialog-desc">O comprovante traz a autenticação do banco e a confirmação da SEFAZ-CE.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-atualizado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Situação atualizada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Situação atualizada</p><p class="rc-dialog-desc">Consulta feita agora na SEFAZ-CE. Nenhuma mudança desde as 6h00 de hoje.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc></template><script id="dc-js" type="text/plain">
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 3, bellNotifs: [
+      { icon: 'mail', title: 'Bilhete para assinar: aula de campo', text: 'Ana Beatriz · 9º ano A · prazo 26/11', time: 'Hoje, 11h20', unread: true, priority: 'importante' },
+      { icon: 'heart', title: 'Davi passou pela enfermaria', text: 'Dor de cabeça, já voltou para a sala', time: 'Hoje, 10h25', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: 'Mensalidade de dezembro disponível', text: 'R$ 1.406,00 · vence em 10/12', time: 'Hoje, 8h00', unread: true, priority: 'rotina' },
+      { icon: 'chart', title: 'Boletim do 3º bimestre publicado', text: 'Ana Beatriz e Davi', time: 'Ontem, 18h30', priority: 'rotina' }] };
+    const tabs = [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Familia-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }];
+    const shared = {
+      bellCount: 3, activeChild: 'k1', activeProfile: 'resp',
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      user: { name: 'Fernanda Lima' },
+      kids: [{ id: 'k1', name: 'Davi Lima', group: '2º ano B' }, { id: 'k2', name: 'Ana Beatriz Lima', group: '9º ano A' }],
+      profiles: [{ id: 'resp', label: 'Responsável', icon: 'users', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'calendario', label: 'Calendário', icon: 'flag', href: 'Familia-Calendario.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', count: 2, href: 'Familia-Comunicados.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'autorizacoes', label: 'Autorizações', icon: 'key', count: 1, href: 'Familia-Autorizacoes.dc.html' }] },
+        { label: 'Acadêmico', items: [{ id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'check-circle', href: 'Familia-Frequencia.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Familia-Horarios.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Familia-Integral.dc.html' }, { id: 'inclusao', label: 'Plano individual', icon: 'star', href: 'Familia-Inclusao.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 1, href: 'Familia-Ocorrencias.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Familia-Biblioteca.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Familia-Materiais.dc.html' }] },
+        { label: 'Serviços', items: [{ id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Familia-Cardapio.dc.html' }, { id: 'saude', label: 'Saúde', icon: 'heart', href: 'Familia-Saude.dc.html' }, { id: 'documentos', label: 'Documentos', icon: 'file', href: 'Familia-Documentos.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', href: 'Familia-Atendimentos.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', count: 2, href: 'Familia-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', href: 'Familia-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', count: 1, href: 'Familia-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'financeiro', label: 'Mensalidades', icon: 'wallet', count: 1, urgent: true, href: 'Familia-Financeiro.dc.html' }, { id: 'dae', label: 'DAE', icon: 'receipt', href: 'Familia-DAE.dc.html' }, { id: 'ir', label: 'Recibo para IR', icon: 'receipt', href: 'Familia-Recibo-IR.dc.html' }, { id: 'rematricula', label: 'Rematrícula 2027', icon: 'file-text', href: 'Familia-Rematricula.dc.html' }, { id: 'matricula', label: 'Matrícula 2027', icon: 'graduation', href: 'Familia-Matricula.dc.html' }] },
+        { label: 'Conta', items: [{ id: 'prefs', label: 'Acessibilidade', icon: 'accessibility', href: 'Familia-Preferencias.dc.html' }] }]
+    };
+    const __r = Object.assign({ yes: true, no: false, tabs }, shared, {
+      one: 1, two: 2,
+      f1: 2, f2: 1, f3: 15, f4: 21, dias: (v) => v + ' dias',
+      filhos: [{ value: 'todos', label: 'Davi e Ana Beatriz' }, { value: 'davi', label: 'Davi Lima' }, { value: 'ana', label: 'Ana Beatriz Lima' }],
+      periodos: [{ value: '2s', label: '2º semestre de 2026' }, { value: '1s', label: '1º semestre de 2026' }, { value: 'ano', label: 'Todo o ano de 2026' }],
+      daes: [
+        { comp: 'Novembro de 2026', filho: 'Ana Beatriz Lima', turma: '9º ano A · DAE 2026.11.0214.003871-4', st: 'Vencido há 15 dias', tone: 'danger', valor: 'R$ 1.652,40', venc: 'Venceu em 10/11/2026', num: '2026.11.0214.003871-4', linha: '85890000016 5 52400216202 3 61110021400 7 44182026110 2', cv: 'secondary', bl: 'Gerar 2ª via', bv: 'primary', href: '#pop-2via', nota: 'Esta linha não é mais aceita pelo banco. A 2ª via sai com R$ 1.652,40 e vencimento em 30/11.' },
+        { comp: 'Dezembro de 2026', filho: 'Davi Lima', turma: '2º ano B · DAE 2026.12.0318.004417-2', st: 'Em aberto', tone: 'info', valor: 'R$ 1.406,00', venc: 'Vence em 10/12/2026 · faltam 15 dias', num: '2026.12.0318.004417-2', linha: '85870000014 2 06000216202 3 61210031800 4 44172026120 9', cv: 'primary', bl: 'Ver o DAE', bv: 'secondary', href: '#pop-dae', nota: 'Com 5% de desconto de pontualidade até o vencimento. Situação consultada na SEFAZ-CE hoje, 6h00.' }],
+      linhaTempo: [
+        { time: '01/11', title: 'DAE gerado pela escola', meta: 'R$ 1.406,00 até o vencimento, em 10/11', icon: 'file-text', tone: 'neutral', done: true },
+        { time: '01/11', title: 'Registrado na SEFAZ-CE', meta: 'DAE 2026.11.0318.003902-1', icon: 'send', tone: 'info', done: true },
+        { time: '09/11', title: 'Pago por Pix no app do banco', meta: 'Por Fernanda Lima, às 19h42', icon: 'wallet', tone: 'info', done: true },
+        { time: '10/11', title: 'Pagamento confirmado pela SEFAZ-CE', meta: 'Autenticação 7C41.09A2.55E0.1B38', icon: 'check-circle', tone: 'success', done: true },
+        { time: '10/11', title: 'Mensalidade de novembro baixada', meta: 'Baixa automática, sem multa nem juros', icon: 'checks', tone: 'success', done: true }],
+      passos: [
+        { ic: 'copy', n: '1. Copie a linha digitável', m: 'Ou baixe o PDF para ler o código de barras.' },
+        { ic: 'wallet', n: '2. Pague no app do seu banco', m: 'Em Pagamentos, escolha tributos ou contas com código de barras.' },
+        { ic: 'check-circle', n: '3. Acompanhe a confirmação aqui', m: 'A SEFAZ-CE confirma e a mensalidade é baixada sozinha.' }],
+      segVia: [{ label: 'Valor da mensalidade', value: 'R$ 1.620,00' }, { label: 'Multa de 2%', value: 'R$ 32,40' }, { label: 'Juros', value: 'Isentos até 30/11' }, { label: 'Novo valor', value: 'R$ 1.652,40' }, { label: 'Novo vencimento', value: '30/11/2026' }, { label: 'DAE anterior', value: 'Cancelado na SEFAZ-CE' }],
+      pagos: [
+        { c: 'Novembro', n: 'Davi Lima', m: 'DAE 2026.11.0318.003902-1', v: 'R$ 1.406,00', p: 'Pago em 09/11 · Pix no app do banco', st: 'Confirmado pela SEFAZ', tone: 'success', bl: 'Comprovante', bv: 'ghost', href: '#pop-comprovante' },
+        { c: 'Outubro', n: 'Ana Beatriz Lima', m: 'DAE 2026.10.0214.003288-0', v: 'R$ 1.539,00', p: 'Pago em 08/10 · app do banco', st: 'Confirmado pela SEFAZ', tone: 'success', bl: 'Comprovante', bv: 'ghost', href: '#pop-comprovante' },
+        { c: 'Outubro', n: 'Davi Lima', m: 'DAE 2026.10.0318.003301-5', v: 'R$ 1.406,00', p: 'Pago em 10/10 · app do banco', st: 'Confirmado pela SEFAZ', tone: 'success', bl: 'Comprovante', bv: 'ghost', href: '#pop-comprovante' },
+        { c: 'Setembro', n: 'Ana Beatriz Lima', m: 'DAE 2026.09.0214.002704-3', v: 'R$ 1.539,00', p: 'Pago em 05/09 · app do banco', st: 'Confirmado pela SEFAZ', tone: 'success', bl: 'Comprovante', bv: 'ghost', href: '#pop-comprovante' },
+        { c: 'Setembro', n: 'Davi Lima', m: 'DAE 2026.09.0318.002719-8', v: 'R$ 1.406,00', p: 'Pago em 05/09 · app do banco', st: 'Confirmado pela SEFAZ', tone: 'success', bl: 'Comprovante', bv: 'ghost', href: '#pop-comprovante' },
+        { c: 'Agosto', n: 'Ana Beatriz Lima', m: 'DAE 2026.08.0214.002113-6', v: 'R$ 1.539,00', p: 'Pago em 07/08 · app do banco', st: 'Confirmado pela SEFAZ', tone: 'success', bl: 'Comprovante', bv: 'ghost', href: '#pop-comprovante' },
+        { c: 'Agosto', n: 'Davi Lima', m: 'DAE 2026.08.0318.002130-1', v: 'R$ 1.406,00', p: 'Pago em 07/08 · app do banco', st: 'Confirmado pela SEFAZ', tone: 'success', bl: 'Comprovante', bv: 'ghost', href: '#pop-comprovante' }]
+    });
+    return Object.assign({ s36: 36,  s32: 32,  s18: 18,  pS3: 3, pS16: 16, pS18: 18, pS20: 20, pS22: 22, pS32: 32, pS36: 36, pS40: 40, pYes: true, pFmt: [{ value: 'xlsx', label: 'Excel (.xlsx)' }, { value: 'csv', label: 'CSV' }, { value: 'pdf', label: 'PDF para impressão' }] }, { s22: 22 }, bell, __r);
+  }
+}
+</script><script src="vendor/runtime.js"></script></body></html>

@@ -1,0 +1,20 @@
+<!-- @dsCard group="Navegação" height=100 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>Tabs</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    const [t, setT] = React.useState("notas");
+    return /* @__PURE__ */ React.createElement(P.Tabs, { label: "Ficha do aluno", value: t, onChange: setT, tabs: [{ id: "resumo", label: "Resumo" }, { id: "notas", label: "Notas" }, { id: "frequencia", label: "Frequ\xEAncia" }, { id: "financeiro", label: "Financeiro", count: 1 }, { id: "ocorrencias", label: "Ocorr\xEAncias", count: 2 }, { id: "documentos", label: "Documentos" }] });
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

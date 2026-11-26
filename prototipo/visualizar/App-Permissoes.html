@@ -1,0 +1,33 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>App: Permissões</title>
+<link rel="stylesheet" href="vendor/tokens.css"><link rel="stylesheet" href="vendor/bundle.css"><style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+<script src="vendor/react.js"></script><script src="vendor/react-dom.js"></script><script src="vendor/bundle.js"></script></head>
+<body><div id="app"></div><template id="dc-src"><x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+<header class="rc-nat-nav"><div class="rc-nat-navrow"><a class="rc-nat-back" href="App-Perfil-Escolha.html"><x-import component-from-global-scope="Recreio.Icon" name="chevron-left" size="{{s22}}"></x-import>Perfil</a><span class="rc-nat-actions"></span></div><h1 class="rc-nat-title">Permissões</h1><p class="rc-nat-sub">Passo final</p></header>
+<div class="rc-app-scroll"><div class="rc-nat-body"><p style="margin: 0; color: var(--ink-2);">O app pede só o que usa. Você muda depois em Ajustes do celular.</p><div class="rc-nat-card"><x-import component-from-global-scope="Recreio.Switch" label="Notificações" description="Bilhetes para assinar, entrada e saída dos filhos, mensalidades e notas." default-checked="{{yes}}"></x-import></div><div class="rc-nat-card"><x-import component-from-global-scope="Recreio.Switch" label="Câmera" description="Para mandar foto de atestado e mostrar o QR da carteirinha na portaria." default-checked="{{yes}}"></x-import></div><div class="rc-nat-card"><x-import component-from-global-scope="Recreio.Switch" label="Localização" description="Só quando você toca em Estou chegando, para a portaria preparar a saída. O app não guarda o trajeto."></x-import></div><section><div class="rc-nat-list"><a class="rc-nat-item" href="#pop-lgpd"><span class="rc-nat-ico rc-c-azul"><x-import component-from-global-scope="Recreio.Icon" name="shield" size="{{s18}}"></x-import></span><span><strong>Como a escola usa seus dados</strong><small>LGPD e ECA Digital</small></span><span class="rc-nat-end"><x-import component-from-global-scope="Recreio.Icon" name="chevron-right" size="{{s18}}"></x-import></span></a></div></section></div></div>
+<div class="rc-app-cta"><a class="rc-btn rc-btn-primary rc-btn-full" href="App-Familia-Inicio.html"><span class="rc-btn-label">Continuar</span></a></div>
+<div class="rc-app-home"></div>
+<div id="pop-lgpd" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Seus dados"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="shield" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Seus dados</p><p class="rc-dialog-desc">Fotos e localização ficam só com a escola. Nada é vendido nem usado em anúncio.</p></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-secondary" href="#"><span class="rc-btn-label">Fechar</span></a><a class="rc-btn rc-btn-primary" href="#pop-lgpd-ok"><span class="rc-btn-label">Entendi</span></a></div></div></div>
+<div id="pop-lgpd-ok" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Combinado"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog rc-dialog-hero"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Combinado</p><p class="rc-dialog-desc">A política completa fica em Mais, Privacidade.</p></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#"><span class="rc-btn-label">Concluir</span></a></div></div></div>
+</div>
+</x-import>
+</x-dc></template><script id="dc-js" type="text/plain">
+class Component extends DCLogic {
+  renderVals() {
+    return Object.assign({ yes: true, no: false, one: 1, two: 2, three: 3, four: 4, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96, s120: 120, s168: 168 }, {
+
+    });
+  }
+}
+</script><script src="vendor/runtime.js"></script></body></html>

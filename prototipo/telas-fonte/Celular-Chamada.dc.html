@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Celular: Chamada do professor</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+<header class="rc-app-bar"><a class="rc-app-back" href="Celular-Professor.dc.html" aria-label="Voltar"><x-import component-from-global-scope="Recreio.Icon" name="chevron-left" size="{{s22}}"></x-import></a><h1>Chamada<small>1ª série EM · Matemática · 3ª aula</small></h1><span></span></header>
+<div class="rc-app-scroll">
+<div style="padding: 12px;">
+<x-import component-from-global-scope="Recreio.AttendanceRoster" date="Hoje, 25/11" lesson="3ª aula · Matemática · 1ª série EM" offline="{{yes}}" value="{{v}}" students="{{st}}"></x-import>
+</div>
+</div>
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="chamada"></x-import>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const shared = {
+      tabs: [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Celular-Professor.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Celular-Chamada.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Celular-Notas.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', count: 2, href: 'Celular-Lancar.dc.html' }]
+    };
+    return Object.assign({ yes: true, no: false, s22: 22 }, shared, {
+      v: { s1: 'P', s2: 'P', s3: 'F', s4: 'P', s5: 'A', s6: 'P', s7: 'P', s8: 'P' },
+      st: [{ id: 's1', name: 'Alana Ribeiro' }, { id: 's2', name: 'Antônio Cordeiro' }, { id: 's3', name: 'Bárbara Luz' }, { id: 's4', name: 'Breno Câmara' }, { id: 's5', name: 'Carolina Sá' }, { id: 's6', name: 'Cauã Menezes' }, { id: 's7', name: 'Débora Fialho' }, { id: 's8', name: 'Eduardo Guimarães' }]
+    });
+  }
+}
+</script>
+</body>
+</html>

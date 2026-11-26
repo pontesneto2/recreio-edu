@@ -1,0 +1,19 @@
+<!-- @dsCard group="Fundamentos" height=260 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>Logo</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 16, alignItems: "stretch" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "grid", placeItems: "center", padding: 24, borderRadius: 16, background: "#FFFFFF", border: "1px solid var(--line)" } }, /* @__PURE__ */ React.createElement(P.Logo, { variant: "full", tone: "cor", size: 96 })), /* @__PURE__ */ React.createElement("div", { style: { display: "grid", placeItems: "center", padding: 24, borderRadius: 16, background: "#001949" } }, /* @__PURE__ */ React.createElement(P.Logo, { variant: "full", tone: "negativo", size: 80 })), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 24, alignItems: "center", padding: "8px 4px" } }, /* @__PURE__ */ React.createElement(P.Logo, { size: 36, tone: "cor" }), /* @__PURE__ */ React.createElement(P.LogoMark, { size: 40 }), /* @__PURE__ */ React.createElement(P.LogoMark, { size: 24 })), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 24, alignItems: "center", padding: "8px 16px", borderRadius: 12, background: "#001949" } }, /* @__PURE__ */ React.createElement(P.Logo, { size: 32, tone: "negativo" })));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

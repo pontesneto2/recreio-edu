@@ -1,0 +1,19 @@
+<!-- @dsCard group="Campos" height=330 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>TextField</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 16 } }, /* @__PURE__ */ React.createElement(P.TextField, { label: "E-mail ou celular", placeholder: "mariana@email.com", icon: "mail", required: true, hint: "Enviamos um c\xF3digo para entrar, sem senha." }), /* @__PURE__ */ React.createElement(P.TextField, { label: "CPF do respons\xE1vel", defaultValue: "123.456.789-0", error: "Faltou um d\xEDgito. O CPF tem 11 n\xFAmeros." }), /* @__PURE__ */ React.createElement(P.TextField, { label: "Valor da mensalidade", defaultValue: "1.240,00", suffix: "R$", success: "Valor dentro da tabela 2027." }), /* @__PURE__ */ React.createElement(P.TextField, { label: "Observa\xE7\xE3o para a portaria", optional: true, maxLength: 80, placeholder: "Ex.: a av\xF3 L\xFAcia vai buscar hoje" }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

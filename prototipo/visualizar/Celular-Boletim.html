@@ -1,0 +1,34 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Celular: Boletim</title>
+<link rel="stylesheet" href="vendor/tokens.css"><link rel="stylesheet" href="vendor/bundle.css"><style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+<script src="vendor/react.js"></script><script src="vendor/react-dom.js"></script><script src="vendor/bundle.js"></script></head>
+<body><div id="app"></div><template id="dc-src"><x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+<header class="rc-app-bar"><a class="rc-app-back" href="Celular-Mais.html" aria-label="Voltar"><x-import component-from-global-scope="Recreio.Icon" name="chevron-left" size="{{s22}}"></x-import></a><h1>Boletim<small>Ana Beatriz · 9º ano A · 2026</small></h1><span></span></header>
+<div class="rc-app-scroll">
+<div class="rc-app-body"><div class="rc-app-kids"><a class="rc-app-kid" style="background: var(--surface-2); color: var(--ink);" href="#">Davi · 2º B</a><a class="rc-app-kid is-on" href="#">Ana Beatriz · 9º A</a></div><x-import component-from-global-scope="Recreio.SegmentedControl" label="Bimestre" value="b3" options="{{bims}}" full="{{yes}}"></x-import><div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;"><div class="rc-app-card"><small style="color: var(--ink-2);">Média geral</small><span class="rc-app-big">8,1</span><small style="color: var(--success); font-weight: 600;">turma 7,4</small></div><div class="rc-app-card"><small style="color: var(--ink-2);">Frequência</small><span class="rc-app-big">95%</span><small style="color: var(--ink-2);">8 faltas</small></div><div class="rc-app-card"><small style="color: var(--ink-2);">Atenção</small><span class="rc-app-big" style="color: var(--danger);">1</span><small style="color: var(--ink-2);">abaixo de 6</small></div></div><div class="rc-app-card is-flush"><div class="rc-app-row" style="grid-template-columns: minmax(0, 1fr) auto;"><span style="display: flex; flex-direction: column; gap: 4px; min-width: 0;"><strong>Língua Portuguesa</strong><small>Profa. Helena Costa</small><div class="rc-app-meter is-success"><i style="width: 87%;"></i></div></span><strong class="rc-app-big" style="font-size: 1.375rem;">8,7</strong></div><div class="rc-app-row" style="grid-template-columns: minmax(0, 1fr) auto;"><span style="display: flex; flex-direction: column; gap: 4px; min-width: 0;"><strong>Matemática</strong><small>Prof. Ricardo Albuquerque · recuperação em 10/12</small><div class="rc-app-meter is-danger"><i style="width: 54%;"></i></div></span><strong class="rc-app-big" style="font-size: 1.375rem; color: var(--danger);">5,4</strong></div><div class="rc-app-row" style="grid-template-columns: minmax(0, 1fr) auto;"><span style="display: flex; flex-direction: column; gap: 4px; min-width: 0;"><strong>Ciências</strong><small>Prof. Marcos Vinícius Teixeira</small><div class="rc-app-meter is-success"><i style="width: 92%;"></i></div></span><strong class="rc-app-big" style="font-size: 1.375rem;">9,2</strong></div><div class="rc-app-row" style="grid-template-columns: minmax(0, 1fr) auto;"><span style="display: flex; flex-direction: column; gap: 4px; min-width: 0;"><strong>Geografia</strong><small>Prof. Paulo Henrique Brito</small><div class="rc-app-meter"><i style="width: 79%;"></i></div></span><strong class="rc-app-big" style="font-size: 1.375rem;">7,9</strong></div><div class="rc-app-row" style="grid-template-columns: minmax(0, 1fr) auto;"><span style="display: flex; flex-direction: column; gap: 4px; min-width: 0;"><strong>História</strong><small>Prof. Marcelo Dias</small><div class="rc-app-meter"><i style="width: 76%;"></i></div></span><strong class="rc-app-big" style="font-size: 1.375rem;">7,6</strong></div><div class="rc-app-row" style="grid-template-columns: minmax(0, 1fr) auto;"><span style="display: flex; flex-direction: column; gap: 4px; min-width: 0;"><strong>Inglês</strong><small>Teacher Tatiane Freitas</small><div class="rc-app-meter is-success"><i style="width: 95%;"></i></div></span><strong class="rc-app-big" style="font-size: 1.375rem;">9,5</strong></div></div><x-import component-from-global-scope="Recreio.Alert" tone="warning" title="Matemática abaixo da média">A Ana Beatriz está no reforço de quarta, às 14h. No 4º bimestre a nota parcial já subiu para 8,8.</x-import></div>
+</div>
+<div class="rc-app-cta"><a class="rc-btn rc-btn-primary" href="Familia-Boletim-PDF.html"><x-import component-from-global-scope="Recreio.Icon" name="download" size="{{s18}}"></x-import><span class="rc-btn-label">Baixar boletim em PDF</span></a></div>
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="mais"></x-import>
+
+</div>
+</x-import>
+</x-dc></template><script id="dc-js" type="text/plain">
+class Component extends DCLogic {
+  renderVals() {
+    return Object.assign({ yes: true, no: false, one: 1, two: 2, three: 3, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96, tabs: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Celular-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', count: 2, href: 'Celular-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Celular-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 1, href: 'Celular-Chat.dc.html' }, { id: 'mais', label: 'Mais', icon: 'menu', href: 'Celular-Mais.dc.html' }] }, {
+      bims: [{ value: 'b1', label: '1º' }, { value: 'b2', label: '2º' }, { value: 'b3', label: '3º' }, { value: 'b4', label: '4º' }, { value: 'ano', label: 'Ano' }]
+    });
+  }
+}
+</script><script src="vendor/runtime.js"></script></body></html>

@@ -1,0 +1,20 @@
+<!-- @dsCard group="Navegação" height=120 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>TabBar</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    const [a, setA] = React.useState("hoje");
+    return /* @__PURE__ */ React.createElement("div", { style: { maxWidth: 420, border: "1px solid var(--line)", borderRadius: 16, overflow: "hidden" } }, /* @__PURE__ */ React.createElement(P.TabBar, { active: a, onNavigate: setA, items: [{ id: "hoje", label: "Hoje", icon: "home" }, { id: "agenda", label: "Agenda", icon: "calendar" }, { id: "financeiro", label: "Financeiro", icon: "wallet", count: 1 }, { id: "mensagens", label: "Mensagens", icon: "chat", count: 2 }, { id: "mais", label: "Mais", icon: "menu" }] }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

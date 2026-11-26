@@ -1,0 +1,24 @@
+<!-- @dsCard group="Campos" height=260 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>RadioGroup</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    const [v, setV] = React.useState("pix");
+    return /* @__PURE__ */ React.createElement("div", { style: { maxWidth: 560 } }, /* @__PURE__ */ React.createElement(P.RadioGroup, { legend: "Como voc\xEA quer pagar?", variant: "cards", columns: 1, value: v, onChange: setV, options: [
+      { value: "pix", label: "Pix", icon: "qr", description: "Cai na hora. Sem taxa.", meta: "R$ 1.240,00" },
+      { value: "boleto", label: "Boleto", icon: "barcode", description: "Compensa em at\xE9 2 dias \xFAteis.", meta: "R$ 1.240,00" },
+      { value: "cartao", label: "Cart\xE3o de cr\xE9dito", icon: "card", description: "Em at\xE9 3x. Acr\xE9scimo de 3,99%.", meta: "R$ 1.289,48" }
+    ] }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

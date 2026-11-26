@@ -1,0 +1,53 @@
+<!-- @dsCard group="Pedagógico" height=940 width=1120 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>ProgramTracker</title>
+<style>body{padding:0px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    const wk = (a) => ["Seg", "Ter", "Qua", "Qui", "Sex"].map((d, i) => ({ day: d, today: i === 2, ...a[i] }));
+    return /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, alignItems: "start" } }, /* @__PURE__ */ React.createElement(
+      P.ProgramTracker,
+      {
+        student: "Davi Lima \xB7 2\xBA ano B",
+        programs: ["regular", "integral", "reforco"],
+        week: wk([{ regular: true, integral: true }, { regular: true, integral: true, reforco: true }, { regular: true, integral: true, reforco: null }, { regular: null, integral: null, reforco: true }, {}]),
+        summary: "Na semana: 3 de 3 dias no integral e 2 de 2 aulas de refor\xE7o. A leitura subiu do n\xEDvel 2 para o 3 em novembro.",
+        blocks: [
+          { time: "7h02", program: "regular", status: "feito", title: "Entrada", note: "Port\xE3o principal", icon: "door" },
+          { time: "7h30", program: "regular", status: "feito", title: "Aulas do turno regular", note: "Portugu\xEAs, Matem\xE1tica e Artes. Leitura em voz alta muito boa.", by: "Profa. D\xE9bora Lins" },
+          { time: "11h50", program: "integral", status: "feito", title: "Almo\xE7o", note: "Arroz, feij\xE3o, peixe assado e salada. Comeu quase tudo.", icon: "utensils" },
+          { time: "12h40", program: "integral", status: "feito", title: "Descanso", note: "40 minutos", icon: "bed" },
+          { time: "13h30", program: "integral", status: "agora", title: "Estudo dirigido", note: "Tarefa de Matem\xE1tica: dezenas e unidades.", by: "Monitora Camila Rocha", icon: "edit" },
+          { time: "14h40", program: "reforco", status: "proximo", title: "Refor\xE7o de leitura", note: "Grupo de 6 alunos" },
+          { time: "15h30", program: "integral", status: "proximo", title: "Oficina de rob\xF3tica", icon: "sparkline" },
+          { time: "17h00", program: "integral", status: "proximo", title: "Sa\xEDda", note: "Fernanda Lima autorizada", icon: "logout" }
+        ]
+      }
+    ), /* @__PURE__ */ React.createElement(
+      P.ProgramTracker,
+      {
+        student: "Ana Beatriz Lima \xB7 9\xBA ano A",
+        programs: ["regular", "semi", "reforco"],
+        week: wk([{ regular: true, semi: true }, { regular: true, reforco: true }, { regular: true, semi: true }, { regular: true, reforco: false }, { regular: null, semi: null }]),
+        summary: "Semi-integral \xE0s segundas, quartas e sextas. Faltou ao refor\xE7o de Matem\xE1tica na quinta passada.",
+        blocks: [
+          { time: "7h18", program: "regular", status: "feito", title: "Entrada com atraso", note: "18 minutos, port\xE3o da Av. das Escolas", icon: "clock" },
+          { time: "7h30", program: "regular", status: "feito", title: "Aulas do turno regular", note: "Ci\xEAncias, Matem\xE1tica, Portugu\xEAs e Ingl\xEAs." },
+          { time: "12h10", program: "semi", status: "feito", title: "Almo\xE7o", icon: "utensils" },
+          { time: "13h20", program: "semi", status: "agora", title: "Preparat\xF3rio para o Ensino M\xE9dio", note: "Simulado de Matem\xE1tica, 20 quest\xF5es.", by: "Prof. Ricardo Albuquerque", icon: "target" },
+          { time: "15h00", program: "semi", status: "proximo", title: "Sa\xEDda do semi-integral", icon: "logout" }
+        ]
+      }
+    ));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Celular: Calendário escolar</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+<header class="rc-app-bar"><a class="rc-app-back" href="Celular-Agenda.dc.html" aria-label="Voltar"><x-import component-from-global-scope="Recreio.Icon" name="chevron-left" size="{{s22}}"></x-import></a><h1>Calendário escolar<small>Ano letivo de 2026</small></h1><span></span></header>
+<div class="rc-app-scroll">
+<div class="rc-app-body"><div class="rc-app-card"><x-import component-from-global-scope="Recreio.MiniCalendar" year="{{y}}" month="{{m}}" today="{{d}}" selected="{{d}}" events="{{ev}}"></x-import></div><div class="rc-app-sec"><h2>Novembro e dezembro</h2></div><div class="rc-app-card is-flush"><div class="rc-app-row"><span class="rc-app-ico is-warning"><x-import component-from-global-scope="Recreio.Icon" name="flag" size="{{s20}}"></x-import></span><span><strong>Qui, 26/11 · Prova de Ciências</strong><small>9º ano A · 7h30</small></span></div><div class="rc-app-row"><span class="rc-app-ico"><x-import component-from-global-scope="Recreio.Icon" name="bus" size="{{s20}}"></x-import></span><span><strong>Sex, 27/11 · Aula de campo</strong><small>9º ano A · Parque do Cocó</small></span></div><div class="rc-app-row"><span class="rc-app-ico"><x-import component-from-global-scope="Recreio.Icon" name="bus" size="{{s20}}"></x-import></span><span><strong>Ter, 01/12 · Planetário</strong><small>2º ano A e B · 7h30 às 11h30</small></span></div><div class="rc-app-row"><span class="rc-app-ico is-neutral"><x-import component-from-global-scope="Recreio.Icon" name="users" size="{{s20}}"></x-import></span><span><strong>Qui, 03/12 · Reunião de pais</strong><small>9º ano · 18h30 · auditório</small></span></div><div class="rc-app-row"><span class="rc-app-ico is-neutral"><x-import component-from-global-scope="Recreio.Icon" name="lock" size="{{s20}}"></x-import></span><span><strong>Sex, 04/12 · Fim do 4º bimestre</strong><small>Fechamento das notas</small></span></div><div class="rc-app-row"><span class="rc-app-ico is-danger"><x-import component-from-global-scope="Recreio.Icon" name="edit" size="{{s20}}"></x-import></span><span><strong>Qui, 10/12 · Recuperação final</strong><small>Fundamental II e Médio</small></span></div><div class="rc-app-row"><span class="rc-app-ico is-success"><x-import component-from-global-scope="Recreio.Icon" name="star" size="{{s20}}"></x-import></span><span><strong>Sáb, 19/12 · Formatura do 9º ano</strong><small>17h · auditório</small></span></div><div class="rc-app-row"><span class="rc-app-ico is-success"><x-import component-from-global-scope="Recreio.Icon" name="sun" size="{{s20}}"></x-import></span><span><strong>Seg, 21/12 · Início do recesso</strong><small>Volta às aulas em 19/01/2027</small></span></div></div><a class="rc-btn rc-btn-secondary rc-btn-full" href="#pop-cal"><x-import component-from-global-scope="Recreio.Icon" name="download" size="{{s18}}"></x-import><span class="rc-btn-label">Adicionar ao calendário do celular</span></a></div>
+</div>
+
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="agenda"></x-import>
+<div id="pop-cal" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Calendário assinado"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog rc-dialog-hero"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Calendário assinado</p><p class="rc-dialog-desc">As datas do colégio aparecem no calendário do aparelho e se atualizam sozinhas.</p></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#"><span class="rc-btn-label">Concluir</span></a></div></div></div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return Object.assign({ yes: true, no: false, one: 1, two: 2, three: 3, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96, tabs: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Celular-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', count: 2, href: 'Celular-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Celular-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 1, href: 'Celular-Chat.dc.html' }, { id: 'mais', label: 'Mais', icon: 'menu', href: 'Celular-Mais.dc.html' }] }, {
+      y: 2026, m: 10, d: 25, ev: { 26: ['warning'], 27: ['brand'], 30: ['info'] }
+    });
+  }
+}
+</script>
+</body>
+</html>

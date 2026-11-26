@@ -1,0 +1,22 @@
+<!-- @dsCard group="Sobreposições" height=420 width=760 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>SaveGuard</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio; const h = React.createElement;
+  ReactDOM.createRoot(document.getElementById("root")).render(h(P.RecreioProvider, null,
+    h(P.Card, { title: "Como avisamos voc\xEA", subtitle: "Vale para este perfil em todos os aparelhos" },
+      h(P.SaveGuard, { label: "Salvar prefer\xEAncias", hint: "Mude uma op\xE7\xE3o para liberar o bot\xE3o Salvar" },
+        h("div", { style: { display: "grid", gap: 14 } },
+          h(P.Switch, { label: "Notifica\xE7\xE3o no celular", description: "Chega na hora, com som", defaultChecked: true }),
+          h(P.Switch, { label: "E-mail", description: "Resumo di\xE1rio \xE0s 19h", defaultChecked: true }),
+          h(P.Switch, { label: "WhatsApp", description: "S\xF3 urgentes: sa\xFAde, sa\xEDda e seguran\xE7a" }))))));
+})();
+</script>
+</body>
+</html>

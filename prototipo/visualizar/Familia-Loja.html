@@ -1,0 +1,165 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Família: Loja da escola</title>
+<link rel="stylesheet" href="vendor/tokens.css"><link rel="stylesheet" href="vendor/bundle.css"><link rel="stylesheet" href="vendor/telas.css"><style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+<script src="vendor/react.js"></script><script src="vendor/react-dom.js"></script><script src="vendor/bundle.js"></script></head>
+<body><div id="app"></div><template id="dc-src"><x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" groups="{{nav}}" active="loja"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="tag" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Loja da escola</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Uniforme, material, ingressos e passeios, pagos no mesmo app</p></div></div>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar produto" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Familia-Notificacoes.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px; padding: 16px 20px; border-radius: var(--radius-lg); background: var(--surface-1); border: 1px solid var(--line); box-shadow: var(--shadow-1);">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; min-width: 0; max-width: 100%;">
+<div style="display: flex; flex-direction: column; gap: 6px;"><span style="font-size: 14px; font-weight: 600;">Para</span><x-import component-from-global-scope="Recreio.SegmentedControl" label="Para" value="davi" options="{{alunos}}"></x-import></div><x-import component-from-global-scope="Recreio.FilterChips" label="Categoria" value="{{fCat}}" options="{{cats}}"></x-import>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-secondary" href="#pedidos"><x-import component-from-global-scope="Recreio.Icon" name="receipt" size="{{s18}}"></x-import>Meus pedidos</a><a class="rc-btn rc-btn-primary" href="#pop-sacola"><x-import component-from-global-scope="Recreio.Icon" name="tag" size="{{s18}}"></x-import>Sacola · 2 itens</a></div>
+</div>
+<x-import component-from-global-scope="Recreio.Card" title="Loja do Colégio Recreio" subtitle="Uniforme, material e ingressos · entrega em sala ou retirada na secretaria">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); gap: 14px;"><sc-for list="{{produtos}}" as="a" hint-placeholder-count="8"><div class="tl-item rc-c-{{a.cor}}"><span class="tl-foto"><x-import component-from-global-scope="Recreio.Icon" name="{{a.icon}}" size="{{s40}}"></x-import><sc-if value="{{a.tag}}"><span class="tl-foto-tag">{{a.tag}}</span></sc-if></span><strong>{{a.t}}</strong><small style="color: var(--ink-2);">{{a.m}}</small><div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto;"><span class="tl-item-preco">{{a.preco}}</span><a class="rc-btn rc-btn-secondary rc-btn-sm" href="#pop-add"><x-import component-from-global-scope="Recreio.Icon" name="plus" size="{{s18}}"></x-import>Adicionar</a></div></div></sc-for></div>
+</x-import>
+<div class="rc-split" style="gap: 24px; align-items: start; --split: minmax(0, 3fr) minmax(300px, 2fr);">
+<div id="pedidos"><x-import component-from-global-scope="Recreio.Card" title="Meus pedidos" subtitle="Pagos pelo app">
+<div>
+<sc-for list="{{pedidos}}" as="p" hint-placeholder-count="3">
+<div class="rc-popup-row" style="grid-template-columns: 36px minmax(0, 1fr) auto;"><span class="rc-dialog-icon {{p.cls}}" style="width: 36px; height: 36px; border-radius: var(--radius-sm);"><x-import component-from-global-scope="Recreio.Icon" name="receipt" size="{{s18}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{p.nome}}</strong><small style="color: var(--ink-2);">{{p.meta}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{p.tone}}" size="sm">{{p.st}}</x-import></div>
+</sc-for>
+</div>
+</x-import></div>
+<div style="display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Alert" tone="info" title="Sem fila no começo do ano">Compre o kit de material e o uniforme de 2027 até 15/01 e receba na primeira semana de aula.</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Como você paga" subtitle="Na finalização da compra">
+<div>
+<sc-for list="{{pag}}" as="p" hint-placeholder-count="3">
+<div class="rc-popup-row" style="grid-template-columns: 36px minmax(0, 1fr) auto;"><span class="rc-dialog-icon {{p.cls}}" style="width: 36px; height: 36px; border-radius: var(--radius-sm);"><x-import component-from-global-scope="Recreio.Icon" name="{{p.icon}}" size="{{s18}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{p.nome}}</strong><small style="color: var(--ink-2);">{{p.meta}}</small></span></div>
+</sc-for>
+</div>
+</x-import>
+</div>
+</div>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="hoje"></x-import>
+</div>
+</div>
+<div id="pop-add" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Camiseta do uniforme">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="tag" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Camiseta do uniforme</p><p class="rc-dialog-desc">R$ 64,90 cada · malha fria · entrega em sala em até 5 dias úteis.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: flex; flex-direction: column; gap: 14px;"><div style="display: flex; flex-direction: column; gap: 6px;"><span style="font-size: 14px; font-weight: 600;">Tamanho</span><x-import component-from-global-scope="Recreio.SegmentedControl" label="Tamanho" value="8" options="{{tams}}"></x-import></div><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px 16px;"><x-import component-from-global-scope="Recreio.Select" label="Quantidade" default-value="2" options="{{qtdSel}}"></x-import><x-import component-from-global-scope="Recreio.Select" label="Para" default-value="davi" options="{{alunos}}"></x-import></div></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-add-ok">Pôr na sacola</a></div>
+</div>
+</div>
+<div id="pop-add-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Na sacola">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Na sacola</p><p class="rc-dialog-desc">2 camisetas, tamanho 8, para o Davi. Você pode continuar comprando.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#pop-sacola">Ver a sacola</a><a class="rc-btn rc-btn-primary" href="#">Continuar</a></div>
+</div>
+</div>
+<div id="pop-sacola" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Sua sacola">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="tag" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Sua sacola</p><p class="rc-dialog-desc">2 itens para o Davi · total de R$ 177,80.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: flex; flex-direction: column; gap: 14px;"><div>
+<sc-for list="{{sacola}}" as="p" hint-placeholder-count="2">
+<div class="rc-popup-row" style="grid-template-columns: 36px minmax(0, 1fr) auto;"><span class="rc-dialog-icon {{p.cls}}" style="width: 36px; height: 36px; border-radius: var(--radius-sm);"><x-import component-from-global-scope="Recreio.Icon" name="{{p.icon}}" size="{{s18}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{p.nome}}</strong><small style="color: var(--ink-2);">{{p.meta}}</small></span><strong style="white-space: nowrap;">{{p.st}}</strong></div>
+</sc-for>
+</div><x-import component-from-global-scope="Recreio.RadioGroup" legend="Como pagar" value="pix" options="{{pagSel}}"></x-import></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Continuar comprando</a><a class="rc-btn rc-btn-primary" href="#pop-pago">Pagar R$ 177,80</a></div>
+</div>
+</div>
+<div id="pop-pago" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Pedido 1203 pago">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Pedido 1203 pago</p><p class="rc-dialog-desc">O Pix foi confirmado. As camisetas chegam em sala até 02/12 e o Davi já está na lista do Planetário.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#pedidos">Ver meus pedidos</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc></template><script id="dc-js" type="text/plain">
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 3, bellNotifs: [
+      { icon: 'mail', title: 'Bilhete para assinar: aula de campo', text: 'Ana Beatriz · 9º ano A · prazo 26/11', time: 'Hoje, 11h20', unread: true, priority: 'importante' },
+      { icon: 'heart', title: 'Davi passou pela enfermaria', text: 'Dor de cabeça, já voltou para a sala', time: 'Hoje, 10h25', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: 'Mensalidade de dezembro disponível', text: 'R$ 1.406,00 · vence em 10/12', time: 'Hoje, 8h00', unread: true, priority: 'rotina' },
+      { icon: 'chart', title: 'Boletim do 3º bimestre publicado', text: 'Ana Beatriz e Davi', time: 'Ontem, 18h30', priority: 'rotina' }] };
+    const tabs = [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Familia-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }];
+    const shared = {
+      bellCount: 3, activeChild: 'k1', activeProfile: 'resp',
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      user: { name: 'Fernanda Lima' },
+      kids: [{ id: 'k1', name: 'Davi Lima', group: '2º ano B' }, { id: 'k2', name: 'Ana Beatriz Lima', group: '9º ano A' }],
+      profiles: [{ id: 'resp', label: 'Responsável', icon: 'users', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'calendario', label: 'Calendário', icon: 'flag', href: 'Familia-Calendario.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', count: 2, href: 'Familia-Comunicados.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'autorizacoes', label: 'Autorizações', icon: 'key', count: 1, href: 'Familia-Autorizacoes.dc.html' }] },
+        { label: 'Acadêmico', items: [{ id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'check-circle', href: 'Familia-Frequencia.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Familia-Horarios.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Familia-Integral.dc.html' }, { id: 'inclusao', label: 'Plano individual', icon: 'star', href: 'Familia-Inclusao.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 1, href: 'Familia-Ocorrencias.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Familia-Biblioteca.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Familia-Materiais.dc.html' }] },
+        { label: 'Serviços', items: [{ id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Familia-Cardapio.dc.html' }, { id: 'saude', label: 'Saúde', icon: 'heart', href: 'Familia-Saude.dc.html' }, { id: 'documentos', label: 'Documentos', icon: 'file', href: 'Familia-Documentos.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', href: 'Familia-Atendimentos.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', count: 2, href: 'Familia-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', href: 'Familia-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', count: 1, href: 'Familia-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'financeiro', label: 'Mensalidades', icon: 'wallet', count: 1, urgent: true, href: 'Familia-Financeiro.dc.html' }, { id: 'dae', label: 'DAE', icon: 'receipt', href: 'Familia-DAE.dc.html' }, { id: 'ir', label: 'Recibo para IR', icon: 'receipt', href: 'Familia-Recibo-IR.dc.html' }, { id: 'rematricula', label: 'Rematrícula 2027', icon: 'file-text', href: 'Familia-Rematricula.dc.html' }, { id: 'matricula', label: 'Matrícula 2027', icon: 'graduation', href: 'Familia-Matricula.dc.html' }] },
+        { label: 'Conta', items: [{ id: 'prefs', label: 'Acessibilidade', icon: 'accessibility', href: 'Familia-Preferencias.dc.html' }] }]
+    };
+    const __r = Object.assign({ yes: true, no: false, tabs }, shared, {
+      
+      n2: 2, n3: 3, n4: 4, n5: 5, n6: 6,
+      go_pop_add: () => { location.hash = 'pop-add'; }, go_pop_add_ok: () => { location.hash = 'pop-add-ok'; }, go_pop_lidas: () => { location.hash = 'pop-lidas'; }, go_pop_pago: () => { location.hash = 'pop-pago'; }, go_pop_sacola: () => { location.hash = 'pop-sacola'; },
+      alunos: [{ value: 'davi', label: 'Davi · 2º B' }, { value: 'ana', label: 'Ana Beatriz · 9º A' }],
+      fCat: ['tudo'], cats: [{ value: 'tudo', label: 'Tudo' }, { value: 'unif', label: 'Uniforme' }, { value: 'mat', label: 'Material' }, { value: 'ev', label: 'Eventos e passeios' }, { value: 'foto', label: 'Fotos e lembranças' }],
+      produtos: [
+        { icon: 'user', cor: 'azul', tag: 'Mais pedido', t: 'Camiseta do uniforme', m: 'Malha fria · tamanhos 4 ao 16 e P ao GG', preco: 'R$ 64,90' },
+        { icon: 'user', cor: 'azul', tag: '', t: 'Bermuda do uniforme', m: 'Tactel · tamanhos 4 ao 16', preco: 'R$ 79,90' },
+        { icon: 'user', cor: 'ciano', tag: '', t: 'Agasalho com zíper', m: 'Moletom · tamanhos 4 ao 16 e P ao GG', preco: 'R$ 149,90' },
+        { icon: 'book', cor: 'verde', tag: '2027', t: 'Kit de material do 3º ano', m: 'Lista completa de 2027 · entregue em sala', preco: 'R$ 386,00' },
+        { icon: 'calendar', cor: 'roxo', tag: '2027', t: 'Agenda escolar 2027', m: 'Capa com o nome do aluno', preco: 'R$ 42,00' },
+        { icon: 'star', cor: 'rosa', tag: '9º ano', t: 'Convite extra da formatura', m: 'Sábado, 19/12 · até 4 por família', preco: 'R$ 60,00' },
+        { icon: 'camera', cor: 'amarelo', tag: '', t: 'Foto oficial da turma', m: 'Impressa 20x30 · 2º ano B · 2026', preco: 'R$ 35,00' },
+        { icon: 'bus', cor: 'laranja', tag: 'Até 27/11', t: 'Passeio ao Planetário', m: 'Terça, 01/12 · transporte e ingresso', preco: 'R$ 48,00' }],
+      pedidos: [
+        { nome: 'Pedido 1184 · 2 camisetas, tamanho 8', meta: 'Davi · pago por Pix em 18/11 · R$ 129,80', st: 'Retirar na secretaria', tone: 'warning', cls: 'rc-tone-warning' },
+        { nome: 'Pedido 1120 · Foto oficial da turma', meta: 'Ana Beatriz · pago em 03/11 · R$ 35,00', st: 'Entregue em sala', tone: 'success', cls: 'rc-tone-success' },
+        { nome: 'Pedido 0987 · Camisa da Feira de Ciências', meta: 'Ana Beatriz · pago em 20/10 · R$ 39,90', st: 'Entregue em sala', tone: 'success', cls: 'rc-tone-success' }],
+      pag: [{ nome: 'Pix', meta: 'Aprovado na hora', icon: 'qr', cls: 'rc-tone-success' }, { nome: 'Cartão de crédito', meta: 'Em até 3 vezes sem juros acima de R$ 150,00', icon: 'card', cls: 'rc-tone-brand' }, { nome: 'Junto com a mensalidade', meta: 'Entra no boleto do mês seguinte', icon: 'wallet', cls: 'rc-tone-neutral' }],
+      tams: [{ value: '6', label: '6' }, { value: '8', label: '8' }, { value: '10', label: '10' }, { value: '12', label: '12' }], qtdSel: [{ value: '1', label: '1' }, { value: '2', label: '2' }, { value: '3', label: '3' }],
+      sacola: [{ nome: 'Camiseta do uniforme · tamanho 8', meta: 'Davi · 2 unidades', st: 'R$ 129,80', tone: 'neutral', cls: 'rc-tone-brand', icon: 'user' }, { nome: 'Passeio ao Planetário', meta: 'Davi · terça, 01/12', st: 'R$ 48,00', tone: 'neutral', cls: 'rc-tone-brand', icon: 'bus' }],
+      pagSel: [{ value: 'pix', label: 'Pix', description: 'Aprovado na hora' }, { value: 'cartao', label: 'Cartão de crédito', description: 'Visa final 4417' }, { value: 'mens', label: 'Junto com a mensalidade de dezembro', description: 'Vence em 10/12' }]
+    });
+    return Object.assign({ s12: 12, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96 }, bell, __r);
+  }
+}
+</script><script src="vendor/runtime.js"></script></body></html>

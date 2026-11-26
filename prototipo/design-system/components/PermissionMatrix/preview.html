@@ -1,0 +1,50 @@
+<!-- @dsCard group="Plataforma" height=700 width=1120 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>PermissionMatrix</title>
+<style>body{padding:0px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    const all = ["ver", "criar", "editar", "excluir", "aprovar"];
+    return /* @__PURE__ */ React.createElement(
+      P.PermissionMatrix,
+      {
+        defaultGroup: "coord",
+        groups: [
+          { id: "dir", name: "Dire\xE7\xE3o", icon: "shield", color: "azul", description: "Acesso total, inclusive financeiro e permiss\xF5es.", members: ["L\xFAcia Menezes", "Roberto Farias", "Ana Paula Viana"] },
+          { id: "coord", name: "Coordena\xE7\xE3o", icon: "users", color: "roxo", description: "Acompanha turmas, ocorr\xEAncias e comunicados do seu segmento.", members: ["Juliana Sampaio", "Patr\xEDcia Rocha", "F\xE1bio Teles", "Lia Bastos", "Rui Martins", "Vera S\xE1"] },
+          { id: "prof", name: "Professores", icon: "book", color: "verde", description: "Lan\xE7am notas, faltas e ocorr\xEAncias das pr\xF3prias turmas.", members: ["Helena Costa", "Ricardo Albuquerque", "Marcos Vin\xEDcius Teixeira", "Luana Freitas", "Tatiane Freitas", "D\xE9bora Lins"] },
+          { id: "sec", name: "Secretaria", icon: "file-text", color: "ciano", description: "Matr\xEDculas, documentos, biblioteca e cadastro.", members: ["Renata Alencar", "Joana Paiva", "Igor Lemos"] },
+          { id: "port", name: "Portaria", icon: "gate", color: "laranja", description: "Entrada, sa\xEDda e retirada autorizada.", members: ["Francisco Ara\xFAjo", "Edson Sales", "Mara Lima", "Jos\xE9 Neto"] }
+        ],
+        modules: [
+          { id: "com", name: "Comunicados", icon: "bell", color: "azul" },
+          { id: "chat", name: "Chat", icon: "chat", color: "ciano" },
+          { id: "notas", name: "Notas e faltas", icon: "edit", color: "roxo" },
+          { id: "oco", name: "Ocorr\xEAncias", icon: "alert", color: "laranja" },
+          { id: "mat", name: "Matr\xEDcula", icon: "file-text", color: "verde" },
+          { id: "fin", name: "Financeiro", icon: "wallet", color: "verde" },
+          { id: "port", name: "Portaria", icon: "gate", color: "laranja" },
+          { id: "bib", name: "Biblioteca", icon: "book", color: "ciano" },
+          { id: "perm", name: "Permiss\xF5es", icon: "shield", color: "vermelho" }
+        ],
+        value: {
+          dir: { com: all, chat: all, notas: all, oco: all, mat: all, fin: all, port: all, bib: all, perm: all },
+          coord: { com: ["ver", "criar", "editar", "aprovar"], chat: ["ver", "criar"], notas: ["ver", "editar", "aprovar"], oco: all, mat: ["ver"], port: ["ver"], bib: ["ver"] },
+          prof: { com: ["ver", "criar"], chat: ["ver", "criar"], notas: ["ver", "criar", "editar"], oco: ["ver", "criar"], bib: ["ver"] },
+          sec: { com: ["ver"], chat: ["ver", "criar"], mat: all, bib: all, port: ["ver"], fin: ["ver"] },
+          port: { port: ["ver", "criar"], com: ["ver"] }
+        }
+      }
+    );
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!-- @dsCard group="Feedback" height=80 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>Badge</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 16, alignItems: "center" } }, /* @__PURE__ */ React.createElement(P.Badge, null, "3"), /* @__PURE__ */ React.createElement(P.Badge, { tone: "danger" }, "12"), /* @__PURE__ */ React.createElement(P.Badge, { tone: "neutral" }, "214"), /* @__PURE__ */ React.createElement(P.Badge, { tone: "accent" }, "Novo"), /* @__PURE__ */ React.createElement("span", { style: { display: "inline-flex", gap: 8, alignItems: "center" } }, /* @__PURE__ */ React.createElement(P.Badge, { dot: true, tone: "success", pulse: true, label: "Ao vivo" }), "Portaria ao vivo"));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

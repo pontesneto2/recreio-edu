@@ -1,0 +1,35 @@
+<!-- @dsCard group="Agenda" height=720 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>AgendaList</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { maxWidth: 720 } }, /* @__PURE__ */ React.createElement(P.AgendaList, { days: [
+      { day: "Quarta, 25 de novembro", today: true, items: [
+        { kind: "tarefa", subject: "Matem\xE1tica", title: "Lista 8: equa\xE7\xF5es do 2\xBA grau", meta: "Livro, p\xE1gina 142, exerc\xEDcios 1 a 12" },
+        { kind: "evento", time: "15h00", title: "Ensaio da formatura do 9\xBA ano", meta: "Audit\xF3rio \xB7 camisa branca" }
+      ] },
+      { day: "Quinta, 26 de novembro", items: [
+        { kind: "prova", time: "7h30", subject: "Ci\xEAncias", title: "Prova de Ci\xEAncias: rea\xE7\xF5es qu\xEDmicas", meta: "Cap\xEDtulos 7 e 8" },
+        { kind: "tarefa", subject: "Portugu\xEAs", title: "Resenha do livro Iracema", meta: "Entregue no portal", done: true }
+      ] },
+      { day: "Sexta, 27 de novembro", items: [
+        { kind: "passeio", time: "7h00", title: "Aula de campo no Parque do Coc\xF3", meta: "Repelente, bon\xE9 e garrafa de \xE1gua" },
+        { kind: "reuniao", time: "17h00", title: "Plant\xE3o pedag\xF3gico do 9\xBA ano", meta: "Marque hor\xE1rio na agenda online" }
+      ] },
+      { day: "Ter\xE7a, 8 de dezembro", items: [
+        { kind: "feriado", title: "Sem aula: conselho de classe", meta: "Integral funciona normalmente" }
+      ] }
+    ] }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

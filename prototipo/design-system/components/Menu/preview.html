@@ -1,0 +1,19 @@
+<!-- @dsCard group="Sobreposições" height=300 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>Menu</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "flex-start" } }, /* @__PURE__ */ React.createElement(P.Menu, { items: [{ label: "Ver ficha do aluno", icon: "user" }, { label: "Enviar mensagem \xE0 fam\xEDlia", icon: "chat" }, { label: "Emitir declara\xE7\xE3o", icon: "file-text", hint: "PDF" }, "-", { label: "Transferir de turma", icon: "arrow-right" }, { label: "Cancelar matr\xEDcula", icon: "trash", tone: "danger" }] }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

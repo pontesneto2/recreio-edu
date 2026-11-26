@@ -1,0 +1,34 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Celular: Cardápio</title>
+<link rel="stylesheet" href="vendor/tokens.css"><link rel="stylesheet" href="vendor/bundle.css"><style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+<script src="vendor/react.js"></script><script src="vendor/react-dom.js"></script><script src="vendor/bundle.js"></script></head>
+<body><div id="app"></div><template id="dc-src"><x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+<header class="rc-app-bar"><a class="rc-app-back" href="Celular-Mais.html" aria-label="Voltar"><x-import component-from-global-scope="Recreio.Icon" name="chevron-left" size="{{s22}}"></x-import></a><h1>Cardápio<small>Semana de 23 a 27/11 · Integral</small></h1><span></span></header>
+<div class="rc-app-scroll">
+<div class="rc-app-body"><x-import component-from-global-scope="Recreio.SegmentedControl" label="Dia" value="qua" options="{{dias}}" full="{{yes}}"></x-import><div class="rc-app-card is-flush"><div class="rc-app-row" style="grid-template-columns: auto minmax(0, 1fr);"><span class="rc-app-ico is-warning"><x-import component-from-global-scope="Recreio.Icon" name="utensils" size="{{s20}}"></x-import></span><span><strong>Lanche da manhã · 9h30</strong><small>Tapioca com queijo coalho e suco de caju</small></span></div><div class="rc-app-row" style="grid-template-columns: auto minmax(0, 1fr);"><span class="rc-app-ico is-warning"><x-import component-from-global-scope="Recreio.Icon" name="utensils" size="{{s20}}"></x-import></span><span><strong>Almoço · 11h50</strong><small>Peixe assado, arroz, feijão verde, salada de tomate</small><small style="color: var(--info);">Opção sem lactose disponível</small></span></div><div class="rc-app-row" style="grid-template-columns: auto minmax(0, 1fr);"><span class="rc-app-ico is-warning"><x-import component-from-global-scope="Recreio.Icon" name="utensils" size="{{s20}}"></x-import></span><span><strong>Lanche da tarde · 15h</strong><small>Salada de frutas e bolo de milho</small></span></div><div class="rc-app-row" style="grid-template-columns: auto minmax(0, 1fr);"><span class="rc-app-ico is-warning"><x-import component-from-global-scope="Recreio.Icon" name="utensils" size="{{s20}}"></x-import></span><span><strong>Jantar do integral · 17h</strong><small>Sopa de legumes com macarrão</small></span></div></div><x-import component-from-global-scope="Recreio.Alert" tone="info" title="Restrição alimentar do Davi">Sem amendoim. A cozinha recebe esse aviso em todas as refeições.</x-import><div class="rc-app-card is-flush"><div class="rc-app-row"><span class="rc-app-ico is-success"><x-import component-from-global-scope="Recreio.Icon" name="heart" size="{{s20}}"></x-import></span><span><strong>Nutricionista responsável</strong><small>Marília Castro · CRN 6 nº 4821</small></span></div><a class="rc-app-row" href="#pop-restricao"><span class="rc-app-ico"><x-import component-from-global-scope="Recreio.Icon" name="chat" size="{{s20}}"></x-import></span><span><strong>Avisar restrição ou alergia</strong><small>A cozinha e a coordenação são avisadas</small></span><x-import component-from-global-scope="Recreio.Icon" name="chevron-right" size="{{s16}}"></x-import></a></div></div>
+</div>
+
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="mais"></x-import>
+<div id="pop-restricao" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Avisar restrição alimentar"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="heart" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Avisar restrição alimentar</p><p class="rc-dialog-desc">O aviso vai para a cozinha, a enfermaria e a ficha do aluno.</p></div></div><div class="rc-dialog-body"><x-import component-from-global-scope="Recreio.TextArea" label="O que a escola precisa saber" placeholder="Ex.: alergia a camarão" rows="{{three}}"></x-import></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#"><span class="rc-btn-label">Cancelar</span></a><a class="rc-btn rc-btn-primary" href="#pop-restricao-ok"><span class="rc-btn-label">Enviar aviso</span></a></div></div></div><div id="pop-restricao-ok" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Aviso enviado"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog rc-dialog-hero"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Aviso enviado</p><p class="rc-dialog-desc">A nutricionista confirma o recebimento em até 1 dia útil.</p></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#"><span class="rc-btn-label">Concluir</span></a></div></div></div>
+</div>
+</x-import>
+</x-dc></template><script id="dc-js" type="text/plain">
+class Component extends DCLogic {
+  renderVals() {
+    return Object.assign({ yes: true, no: false, one: 1, two: 2, three: 3, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96, tabs: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Celular-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', count: 2, href: 'Celular-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Celular-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 1, href: 'Celular-Chat.dc.html' }, { id: 'mais', label: 'Mais', icon: 'menu', href: 'Celular-Mais.dc.html' }] }, {
+      dias: [{ value: 'seg', label: 'Seg' }, { value: 'ter', label: 'Ter' }, { value: 'qua', label: 'Qua' }, { value: 'qui', label: 'Qui' }, { value: 'sex', label: 'Sex' }]
+    });
+  }
+}
+</script><script src="vendor/runtime.js"></script></body></html>

@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Família: Autorizações</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" groups="{{nav}}" active="autorizacoes"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="key" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Autorizações</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Quem pode buscar, passeios e saídas</p></div></div>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar pessoa ou passeio" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Familia-Notificacoes.dc.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 14px 20px; border-radius: var(--radius-lg); background: var(--surface-1); border: 1px solid var(--line); box-shadow: var(--shadow-1);">
+<span style="font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2);">Aluno</span>
+<x-import component-from-global-scope="Recreio.SegmentedControl" label="Aluno" value="davi" options="{{alunos}}"></x-import>
+</div>
+<section aria-label="Indicadores de autorizações" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px;">
+<x-import component-from-global-scope="Recreio.StatCard" color="azul" label="Pessoas autorizadas" value="{{four}}" icon="users" hint="3 permanentes e 1 transporte escolar"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="vermelho" label="Pedidos para assinar" value="{{one}}" icon="edit" hint="Planetário do Dragão do Mar, até 27/11"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="amarelo" label="Autorização de hoje" value="{{zero}}" icon="clock" hint="Nenhuma pessoa extra para hoje"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="verde" label="Saídas em novembro" value="{{saidas}}" icon="door" hint="Todas conferidas na portaria"></x-import>
+</section>
+<x-import component-from-global-scope="Recreio.Card" title="Estou chegando" subtitle="Avise a portaria quando estiver a caminho. O Davi já espera você na saída.">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px 16px;">
+<div style="flex: 1 1 200px; max-width: 280px;"><x-import component-from-global-scope="Recreio.Select" label="Quem vai buscar" default-value="fernanda" options="{{quemBusca}}"></x-import></div>
+<div style="flex: 1 1 160px; max-width: 220px;"><x-import component-from-global-scope="Recreio.Select" label="Chego em" default-value="10" options="{{etas}}"></x-import></div>
+<a class="rc-btn rc-btn-primary" href="#pop-chegando"><x-import component-from-global-scope="Recreio.Icon" name="walk" size="{{pS18}}"></x-import>Estou chegando</a><a class="rc-btn rc-btn-ghost" href="#pop-chegando-auto">Avisar sozinho pela localização</a>
+</div>
+<p style="margin: 12px 0 0; font-size: 13px; color: var(--ink-2); line-height: 1.5;">A saída de hoje é às 17h. O aviso vale por 30 minutos, entra na fila "A caminho" da portaria e a monitora chama o Davi.</p>
+</x-import>
+<div class="rc-split" style="gap: 24px; align-items: start;">
+<div style="display: flex; flex-direction: column; gap: 24px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Quem pode buscar o Davi" subtitle="Conferido na portaria com foto, documento e QR de retirada">
+<ul style="list-style: none; margin: 0; padding: 0;">
+<sc-for list="{{pessoas}}" as="p" hint-placeholder-count="4">
+<li style="display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 0; border-top: 1px solid var(--line);">
+<x-import component-from-global-scope="Recreio.Avatar" name="{{p.nome}}" size="{{s40}}"></x-import>
+<span style="min-width: 0;"><strong style="display: block;">{{p.nome}}</strong><small style="color: var(--ink-2);">{{p.meta}}</small></span>
+<span style="display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 8px;"><x-import component-from-global-scope="Recreio.StatusPill" tone="{{p.tone}}" icon="{{p.icon}}" size="sm">{{p.status}}</x-import><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-editar">Editar</a></span>
+</li>
+</sc-for>
+</ul>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px;"><a class="rc-btn rc-btn-secondary" href="#pop-pessoa">Adicionar pessoa permanente</a><a class="rc-btn rc-btn-ghost" href="#pop-bloquear">Bloquear alguém</a></div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Passeios e atividades" subtitle="Pedidos da escola que precisam da sua assinatura">
+<ul style="list-style: none; margin: 0; padding: 0;">
+<sc-for list="{{passeios}}" as="e" hint-placeholder-count="3">
+<li style="display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 0; border-top: 1px solid var(--line);">
+<span style="display: flex; flex-direction: column; align-items: center; padding: 6px 0; border-radius: var(--radius-sm); background: var(--surface-2);"><strong style="font-size: 18px; line-height: 1;">{{e.dia}}</strong><small style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--ink-2);">{{e.mes}}</small></span>
+<span style="min-width: 0;"><strong style="display: block;">{{e.titulo}}</strong><small style="color: var(--ink-2);">{{e.meta}}</small></span>
+<span style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px;"><x-import component-from-global-scope="Recreio.StatusPill" tone="{{e.tone}}" size="sm">{{e.status}}</x-import><sc-if value="{{e.assinar}}"><a class="rc-btn rc-btn-primary rc-btn-sm" href="#pop-autorizar">Autorizar</a></sc-if></span>
+</li>
+</sc-for>
+</ul>
+</x-import>
+</div>
+<div style="display: flex; flex-direction: column; gap: 24px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Autorizar alguém só para hoje" subtitle="Vale até 23h59 de hoje e gera um QR de retirada">
+<div style="display: flex; flex-direction: column; gap: 14px;">
+<x-import component-from-global-scope="Recreio.TextField" label="Nome completo" placeholder="Como está no documento"></x-import>
+<x-import component-from-global-scope="Recreio.Select" label="Relação com o aluno" default-value="tia" options="{{relacoes}}"></x-import>
+<x-import component-from-global-scope="Recreio.TextField" label="Documento com foto" placeholder="RG ou CNH" hint="A portaria confere o documento na hora da saída"></x-import>
+<x-import component-from-global-scope="Recreio.FileDrop" label="Foto de quem vai buscar" hint="Opcional. Ajuda a portaria a reconhecer."></x-import>
+<x-import component-from-global-scope="Recreio.Checkbox" label="Enviar o QR de retirada para essa pessoa por WhatsApp" default-checked="{{yes}}"></x-import>
+<div><a class="rc-btn rc-btn-primary" href="#pop-hoje">Autorizar para hoje</a></div>
+</div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Saída antecipada" subtitle="Quando o Davi precisa sair antes do fim da aula">
+<p style="margin: 0 0 4px; font-size: 14px; color: var(--ink-2); line-height: 1.5;">A coordenação autoriza e a portaria libera no horário, conferindo quem busca.</p>
+<div>
+<sc-for list="{{antecip}}" as="r" hint-placeholder-count="2">
+<div class="rc-popup-row"><span style="display: grid; place-items: center; width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--surface-2); color: var(--brand-ink);"><x-import component-from-global-scope="Recreio.Icon" name="{{r.ic}}" size="{{s18}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{r.n}}</strong><small style="color: var(--ink-2);">{{r.m}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.st}}</x-import></div>
+</sc-for>
+</div>
+<div style="margin-top: 12px;"><a class="rc-btn rc-btn-secondary" href="#pop-antecipada">Pedir saída antecipada</a></div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Histórico de saídas" subtitle="Registrado pela portaria">
+<ul style="list-style: none; margin: 0; padding: 0;">
+<sc-for list="{{historico}}" as="h" hint-placeholder-count="5">
+<li style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line);"><span style="min-width: 0;"><strong style="display: block;">{{h.quando}}</strong><small style="color: var(--ink-2);">{{h.quem}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="success" icon="check-circle" size="sm">Conferido</x-import></li>
+</sc-for>
+</ul>
+</x-import>
+</div>
+</div>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="autorizacoes"></x-import>
+</div>
+</div>
+<div id="pop-editar" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Editar autorização de retirada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="edit" size="{{pS22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Editar autorização de retirada</p><p class="rc-dialog-desc">A portaria recebe a mudança na hora.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{pS20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;"><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px;"><x-import component-from-global-scope="Recreio.TextField" label="Parentesco" default-value="Avó materna"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Válida até" default-value="Sem data de término"></x-import></div><x-import component-from-global-scope="Recreio.Checkbox" label="Pode retirar em qualquer dia da semana" default-checked="{{pYes}}"></x-import></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#pop-remover">Remover pessoa</a><a class="rc-btn rc-btn-primary" href="#pop-salvo">Salvar</a></div>
+</div>
+</div>
+<div id="pop-salvo" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Autorização atualizada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Autorização atualizada</p><p class="rc-dialog-desc">A lista da portaria já mostra a mudança.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-remover" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Remover esta pessoa da retirada?">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-danger"><x-import component-from-global-scope="Recreio.Icon" name="trash" size="{{pS22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Remover esta pessoa da retirada?</p><p class="rc-dialog-desc">Ela deixa de poder buscar seus filhos a partir de agora.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{pS20}}"></x-import></a></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-danger" href="#pop-salvo">Remover</a></div>
+</div>
+</div>
+<div id="pop-pessoa" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Adicionar pessoa permanente">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="user" size="{{pS22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Adicionar pessoa permanente</p><p class="rc-dialog-desc">A secretaria confere o documento antes de liberar. Leva até 1 dia útil.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{pS20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;"><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px;"><x-import component-from-global-scope="Recreio.TextField" label="Nome completo"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Parentesco" placeholder="Ex.: tio, avó, babá"></x-import></div><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px;"><x-import component-from-global-scope="Recreio.TextField" label="CPF"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Celular"></x-import></div><x-import component-from-global-scope="Recreio.FileDrop" label="Foto do documento" hint="RG ou CNH, frente e verso"></x-import></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-pessoa-ok">Enviar para a secretaria</a></div>
+</div>
+</div>
+<div id="pop-pessoa-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Pedido enviado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="send" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Pedido enviado</p><p class="rc-dialog-desc">A secretaria confere o documento e avisa pelo app quando a pessoa estiver liberada.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-bloquear" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Bloquear a retirada por alguém">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-danger"><x-import component-from-global-scope="Recreio.Icon" name="shield" size="{{pS22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Bloquear a retirada por alguém</p><p class="rc-dialog-desc">A direção analisa o pedido. Com decisão judicial, o bloqueio vale na hora.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{pS20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;"><x-import component-from-global-scope="Recreio.TextField" label="Nome da pessoa"></x-import><x-import component-from-global-scope="Recreio.TextArea" label="Motivo" placeholder="Conte o que a escola precisa saber" rows="{{pS3}}"></x-import><x-import component-from-global-scope="Recreio.FileDrop" label="Documento (opcional)" hint="Decisão judicial ou boletim de ocorrência"></x-import></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-danger" href="#pop-bloqueio-ok">Enviar para a direção</a></div>
+</div>
+</div>
+<div id="pop-bloqueio-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Pedido de bloqueio enviado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="shield" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Pedido de bloqueio enviado</p><p class="rc-dialog-desc">A direção responde ainda hoje. A portaria já foi avisada para redobrar a conferência.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-autorizar" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Autorizar a participação?">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-warning"><x-import component-from-global-scope="Recreio.Icon" name="edit" size="{{pS22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Autorizar a participação?</p><p class="rc-dialog-desc">Ao assinar, você autoriza seu filho a participar e confirma que leu as orientações.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{pS20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;"><x-import component-from-global-scope="Recreio.Checkbox" label="Li as orientações e autorizo" default-checked="{{pYes}}"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Assinatura do responsável" default-value="Fernanda Lima" hint="Digite seu nome completo como no cadastro"></x-import></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-autorizado">Assinar autorização</a></div>
+</div>
+</div>
+<div id="pop-autorizado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Autorização assinada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Autorização assinada</p><p class="rc-dialog-desc">A escola recebeu sua assinatura, com data, hora e aparelho.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-hoje" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Autorizar a retirada de hoje?">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="qr" size="{{pS22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Autorizar a retirada de hoje?</p><p class="rc-dialog-desc">A pessoa recebe um QR que vale só hoje. A portaria confere o QR e o documento.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{pS20}}"></x-import></a></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-hoje-ok">Autorizar e gerar QR</a></div>
+</div>
+</div>
+<div id="pop-hoje-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Autorização criada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="qr" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Autorização criada</p><p class="rc-dialog-desc">O QR foi enviado para o celular da pessoa e já está na lista da portaria.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-chegando" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Portaria avisada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="walk" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Portaria avisada</p><p class="rc-dialog-desc">Fernanda Lima chega em cerca de 10 minutos. O Davi será chamado quando você estiver perto. Mostre o QR de retirada no portão.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-chegando-auto" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Avisar sozinho pela localização">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="pin" size="{{pS22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Avisar sozinho pela localização</p><p class="rc-dialog-desc">O app avisa a portaria quando você estiver a 500 metros da escola.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{pS20}}"></x-import></a></div>
+<div class="rc-dialog-body"><p style="margin: 0; font-size: 14px; color: var(--ink-2); line-height: 1.5;">A localização é usada só no horário de saída, das 16h30 às 18h30, e não fica guardada. Você pode desligar a qualquer momento.</p></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Agora não</a><a class="rc-btn rc-btn-primary" href="#pop-chegando-auto-ok">Ativar aviso automático</a></div>
+</div>
+</div>
+<div id="pop-chegando-auto-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Aviso automático ativado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Aviso automático ativado</p><p class="rc-dialog-desc">Nos dias de aula, a portaria recebe o aviso quando você estiver chegando. O celular pede a sua permissão de localização.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-antecipada" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Pedir saída antecipada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-md">
+<div class="rc-dialog-head"><div class="rc-dialog-titles"><p class="rc-dialog-title">Pedir saída antecipada</p><p class="rc-dialog-desc">A coordenação responde pelo app. Peça com pelo menos 1 dia de antecedência.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px;">
+<x-import component-from-global-scope="Recreio.TextField" label="Dia" placeholder="dd/mm/aaaa"></x-import>
+<x-import component-from-global-scope="Recreio.TextField" label="Horário da saída" placeholder="Ex.: 10h30"></x-import>
+</div><x-import component-from-global-scope="Recreio.Select" label="Motivo" default-value="consulta" options="{{motSaida}}"></x-import><x-import component-from-global-scope="Recreio.Select" label="Quem vai buscar" default-value="fernanda" options="{{quemBusca}}"></x-import><x-import component-from-global-scope="Recreio.TextArea" label="Observação" optional="{{yes}}" rows="{{two}}" placeholder="Ex.: volta para a aula da tarde"></x-import>
+</div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-antecipada-ok">Enviar pedido</a></div>
+</div>
+</div>
+<div id="pop-antecipada-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Pedido enviado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Pedido enviado</p><p class="rc-dialog-desc">A coordenação responde pelo app. Depois de autorizado, a portaria libera o Davi no horário, conferindo quem busca.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 3, bellNotifs: [
+      { icon: 'mail', title: 'Bilhete para assinar: aula de campo', text: 'Ana Beatriz · 9º ano A · prazo 26/11', time: 'Hoje, 11h20', unread: true, priority: 'importante' },
+      { icon: 'heart', title: 'Davi passou pela enfermaria', text: 'Dor de cabeça, já voltou para a sala', time: 'Hoje, 10h25', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: 'Mensalidade de dezembro disponível', text: 'R$ 1.406,00 · vence em 10/12', time: 'Hoje, 8h00', unread: true, priority: 'rotina' },
+      { icon: 'chart', title: 'Boletim do 3º bimestre publicado', text: 'Ana Beatriz e Davi', time: 'Ontem, 18h30', priority: 'rotina' }] };
+    const shared = {
+      tabs: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Familia-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }],
+      bellCount: 3, activeChild: 'k1', activeProfile: 'resp',
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      user: { name: 'Fernanda Lima' },
+      kids: [{ id: 'k1', name: 'Davi Lima', group: '2º ano B' }, { id: 'k2', name: 'Ana Beatriz Lima', group: '9º ano A' }],
+      profiles: [{ id: 'resp', label: 'Responsável', icon: 'users', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'calendario', label: 'Calendário', icon: 'flag', href: 'Familia-Calendario.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', count: 2, href: 'Familia-Comunicados.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'autorizacoes', label: 'Autorizações', icon: 'key', count: 1, href: 'Familia-Autorizacoes.dc.html' }] },
+        { label: 'Acadêmico', items: [{ id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'check-circle', href: 'Familia-Frequencia.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Familia-Horarios.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Familia-Integral.dc.html' }, { id: 'inclusao', label: 'Plano individual', icon: 'star', href: 'Familia-Inclusao.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 1, href: 'Familia-Ocorrencias.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Familia-Biblioteca.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Familia-Materiais.dc.html' }] },
+        { label: 'Serviços', items: [{ id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Familia-Cardapio.dc.html' }, { id: 'saude', label: 'Saúde', icon: 'heart', href: 'Familia-Saude.dc.html' }, { id: 'documentos', label: 'Documentos', icon: 'file', href: 'Familia-Documentos.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', href: 'Familia-Atendimentos.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', count: 2, href: 'Familia-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', href: 'Familia-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', count: 1, href: 'Familia-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'financeiro', label: 'Mensalidades', icon: 'wallet', count: 1, urgent: true, href: 'Familia-Financeiro.dc.html' }, { id: 'dae', label: 'DAE', icon: 'receipt', href: 'Familia-DAE.dc.html' }, { id: 'ir', label: 'Recibo para IR', icon: 'receipt', href: 'Familia-Recibo-IR.dc.html' }, { id: 'rematricula', label: 'Rematrícula 2027', icon: 'file-text', href: 'Familia-Rematricula.dc.html' }, { id: 'matricula', label: 'Matrícula 2027', icon: 'graduation', href: 'Familia-Matricula.dc.html' }] },
+        { label: 'Conta', items: [{ id: 'prefs', label: 'Acessibilidade', icon: 'accessibility', href: 'Familia-Preferencias.dc.html' }] }]
+    };
+    const __r = Object.assign({ yes: true, no: false }, shared, {
+      s40: 40, zero: 0, one: 1, four: 4, saidas: 15,
+      alunos: [{ value: 'davi', label: 'Davi · 2º B' }, { value: 'ana', label: 'Ana Beatriz · 9º A' }, { value: 'todos', label: 'Todos' }],
+      pessoas: [
+        { nome: 'Fernanda Lima', meta: 'Mãe · permanente · RG conferido', status: 'Autorizada', tone: 'success', icon: 'check-circle' },
+        { nome: 'Rodrigo Lima', meta: 'Pai · permanente · RG conferido', status: 'Autorizado', tone: 'success', icon: 'check-circle' },
+        { nome: 'Lúcia Ramos', meta: 'Avó · terças e quintas, a partir das 16h', status: 'Dias fixos', tone: 'warning', icon: 'clock' },
+        { nome: 'Marcos Araújo', meta: 'Transporte escolar · Van Escolar Aldeota · seg a sex', status: 'Transporte', tone: 'info', icon: 'bus' }],
+      passeios: [
+        { dia: '01', mes: 'dez', titulo: 'Planetário do Dragão do Mar', meta: '2º ano · saída 7h30, volta 11h30 · ônibus da escola', status: 'Assinar até 27/11', tone: 'danger', assinar: true },
+        { dia: '18', mes: 'dez', titulo: 'Festa de encerramento do integral', meta: 'Pátio da escola · 15h às 17h · família convidada', status: 'Assinada em 19/11', tone: 'success' },
+        { dia: '22', mes: 'out', titulo: 'Visita à Fazenda Escola Pindoretama', meta: '2º ano · dia inteiro · lanche incluso', status: 'Realizado', tone: 'neutral' }],
+      quemBusca: [{ value: 'fernanda', label: 'Eu, Fernanda Lima' }, { value: 'rodrigo', label: 'Rodrigo Lima · pai' }, { value: 'lucia', label: 'Lúcia Ramos · avó' }],
+      etas: [{ value: '5', label: '5 minutos' }, { value: '10', label: '10 minutos' }, { value: '15', label: '15 minutos' }, { value: '20', label: '20 minutos ou mais' }],
+      relacoes: [{ value: 'tia', label: 'Tia ou tio' }, { value: 'avos', label: 'Avó ou avô' }, { value: 'vizinho', label: 'Vizinho ou amigo da família' }, { value: 'babá', label: 'Babá' }, { value: 'outro', label: 'Outra relação' }],
+      historico: [
+        { quando: 'Terça, 24/11 · 17h43', quem: 'Davi saiu com Fernanda Lima, mãe' },
+        { quando: 'Segunda, 23/11 · 17h05', quem: 'Davi saiu com Rodrigo Lima, pai' },
+        { quando: 'Quinta, 19/11 · 16h20', quem: 'Davi saiu com Lúcia Ramos, avó' },
+        { quando: 'Quarta, 18/11 · 17h38', quem: 'Davi saiu com Fernanda Lima, mãe' },
+        { quando: 'Terça, 17/11 · 12h10', quem: 'Davi saiu na van com Marcos Araújo' }],
+      two: 2,
+      motSaida: [{ value: 'consulta', label: 'Consulta ou exame' }, { value: 'viagem', label: 'Viagem da família' }, { value: 'familia', label: 'Compromisso da família' }, { value: 'outro', label: 'Outro motivo' }],
+      antecip: [
+        { ic: 'clock', n: 'Quinta, 03/12, às 10h30', m: 'Consulta no dentista · busca Fernanda Lima, mãe · pedido ontem, 20h14', st: 'Com a coordenação', tone: 'warning' },
+        { ic: 'check-circle', n: '14/10, às 15h00', m: 'Consulta com o pediatra · buscou Lúcia Ramos, avó', st: 'Autorizada', tone: 'success' }]
+    });
+    return Object.assign({ s36: 36,  s32: 32,  s18: 18,  pS3: 3, pS16: 16, pS18: 18, pS20: 20, pS22: 22, pS32: 32, pS36: 36, pS40: 40, pYes: true, pFmt: [{ value: 'xlsx', label: 'Excel (.xlsx)' }, { value: 'csv', label: 'CSV' }, { value: 'pdf', label: 'PDF para impressão' }] }, { s22: 22 }, bell, __r);
+  }
+}
+</script>
+</body>
+</html>

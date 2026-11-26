@@ -1,0 +1,19 @@
+<!-- @dsCard group="Navegação" height=110 width=1000 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>TopBar</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement(P.TopBar, { title: "Mensalidades", subtitle: "Dezembro de 2026 \xB7 1.086 fam\xEDlias", search: /* @__PURE__ */ React.createElement(P.SearchField, { placeholder: "Buscar fam\xEDlia ou aluno" }), actions: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(P.IconButton, { icon: "bell", label: "Notifica\xE7\xF5es", badge: 3 }), /* @__PURE__ */ React.createElement(P.IconButton, { icon: "help", label: "Ajuda" })), profile: /* @__PURE__ */ React.createElement(P.ProfileSwitcher, { user: { name: "Renata Alencar" }, profiles: [{ id: "fin", label: "Financeiro" }], activeProfile: "fin" }) });
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

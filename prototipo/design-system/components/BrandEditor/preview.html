@@ -1,0 +1,17 @@
+<!-- @dsCard group="Plataforma" height=1500 width=1200 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>BrandEditor</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  const defaults = { name: "Col\xE9gio Recreio", short: "Recreio", slogan: "Educar para a vida, desde 1987", primary: "#0067CC", secondary: "#001949", accent: "#FECF04", legalName: "Col\xE9gio Recreio Ltda.", cnpj: "07.412.386/0001-52", address: "Av. Santos Dumont, 2450 \xB7 Aldeota \xB7 Fortaleza, CE", phone: "(85) 3254-1987", site: "colegiorecreio.com.br", act: "Autorizado pelo Parecer CEE/CE n\xBA 412/2019", signer: "L\xFAcia Menezes", signerRole: "Diretora geral" };
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(P.BrandEditor, { defaults })));
+})();
+</script>
+</body>
+</html>

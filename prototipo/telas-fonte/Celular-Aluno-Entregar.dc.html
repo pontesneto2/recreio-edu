@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Celular: Aluno · Enviar trabalho</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+<header class="rc-app-bar"><a class="rc-app-back" href="Celular-Aluno-Tarefas.dc.html" aria-label="Voltar"><x-import component-from-global-scope="Recreio.Icon" name="chevron-left" size="{{s22}}"></x-import></a><h1>Enviar trabalho<small>9º ano A · Manhã · até 20 MB por arquivo</small></h1><span></span></header>
+<div class="rc-app-scroll">
+<div class="rc-app-body"><x-import component-from-global-scope="Recreio.AssignmentSubmit" student="{{aluna}}" teachers="{{profs}}" assignments="{{trabalhos}}" default-teacher="{{defProf}}" default-assignment="{{defTrab}}"></x-import><div class="rc-app-card"><strong>O professor recebe na hora</strong><p style="margin: 0; color: var(--ink-2);">A entrega aparece em Tarefas do professor com data, hora e protocolo. A nota volta para esta tela e para Notas.</p></div></div>
+</div>
+
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="tarefas"></x-import>
+
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return Object.assign({ yes: true, no: false, one: 1, two: 2, three: 3, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96, tabs: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Celular-Aluno.dc.html' }, { id: 'tarefas', label: 'Tarefas', icon: 'clipboard', count: 2, href: 'Celular-Aluno-Tarefas.dc.html' }, { id: 'notas', label: 'Notas', icon: 'chart', href: 'Celular-Aluno-Notas.dc.html' }, { id: 'horario', label: 'Horário', icon: 'clock', href: 'Celular-Aluno-Horario.dc.html' }] }, {
+      /* Quem chega por Tarefas ou Hoje já cai na atividade: o endereço traz #t-<id>. */
+      defTrab: (() => { const h = (typeof location !== 'undefined' ? location.hash : '').replace('#t-', ''); return ['l8', 'res'].includes(h) ? h : null; })(),
+      defProf: (() => { const h = (typeof location !== 'undefined' ? location.hash : '').replace('#t-', ''); return { l8: 'ricardo', res: 'helena' }[h] || null; })(),
+      aluna: { name: 'Ana Beatriz Lima', klass: '9º ano A', shift: 'Manhã' },
+      profs: [{ id: 'ricardo', name: 'Prof. Ricardo Albuquerque', subject: 'Matemática' }, { id: 'helena', name: 'Profa. Helena Costa', subject: 'Língua Portuguesa e Redação' }, { id: 'marcos', name: 'Prof. Marcos Vinícius Teixeira', subject: 'Ciências' }, { id: 'marcelo', name: 'Prof. Marcelo Dias', subject: 'História' }, { id: 'paulo', name: 'Prof. Paulo Henrique Brito', subject: 'Geografia' }, { id: 'tatiane', name: 'Teacher Tatiane Freitas', subject: 'Inglês' }, { id: 'caio', name: 'Prof. Caio Bezerra', subject: 'Artes' }],
+      trabalhos: [
+        { id: 'l8', teacher: 'ricardo', title: 'Lista 8: equações do 2º grau', dueLabel: 'Entrega até sexta, 27/11', points: 'vale 1 ponto', status: 'aberta', icon: 'clipboard', desc: 'Resolva as 10 questões no caderno, mostrando o cálculo do discriminante. Envie foto das páginas ou um PDF.', attach: 'lista-8-equacoes.pdf' },
+        { id: 'l7', teacher: 'ricardo', title: 'Lista 7: fórmula de Bhaskara', dueLabel: 'Venceu hoje, 25/11, às 7h30', points: 'vale 1 ponto', status: 'entregue', closed: true, icon: 'clipboard', desc: 'Exercícios 1 a 8 da página 142.', sent: { title: 'Lista 7, Ana Beatriz', desc: 'Fiz a questão 7 de dois jeitos.', files: ['lista7-pagina1.jpg', 'lista7-pagina2.jpg'], at: 'hoje, 7h12', prot: 'TR-L7-712' } },
+        { id: 'l6', teacher: 'ricardo', title: 'Lista 6: produtos notáveis', dueLabel: 'Encerrada em 18/11', points: 'vale 1 ponto', status: 'corrigida', closed: true, grade: '1,0', feedback: 'Tudo certo. Capricho na organização das contas.', icon: 'clipboard', desc: 'Exercícios 1 a 12 da página 128.', sent: { title: 'Lista 6, Ana Beatriz', files: ['lista6.pdf'], at: '17/11, 19h40', prot: 'TR-L6-1940' } },
+        { id: 'res', teacher: 'helena', title: 'Resenha de Iracema', dueLabel: 'Entrega até segunda, 30/11', points: 'nota de trabalho', status: 'aberta', icon: 'edit', desc: 'Texto de até 2 páginas sobre o narrador e o tempo da narrativa. Entregue em PDF ou Word.', attach: 'roteiro-da-resenha.pdf' },
+        { id: 'art', teacher: 'helena', title: 'Artigo de opinião', dueLabel: 'Encerrada em 13/11', points: 'vale 2 pontos', status: 'corrigida', closed: true, grade: '8,0', feedback: 'Boa tese. Faltou retomar o argumento na conclusão.', icon: 'edit', desc: 'Artigo de 25 a 30 linhas sobre o uso do celular na escola.', sent: { title: 'Celular na escola: regra ou proibição', files: ['artigo-ana.docx'], at: '12/11, 21h05', prot: 'TR-ART-2105' } },
+        { id: 'den', teacher: 'marcos', title: 'Relatório da prática de densidade', dueLabel: 'Encerrada em 23/11', points: 'vale 2 pontos', status: 'corrigida', closed: true, grade: '9,0', feedback: 'Tabela e conclusão muito claras.', icon: 'file-text', desc: 'Relatório com objetivo, materiais, tabela de medidas e conclusão.', sent: { title: 'Prática de densidade, grupo 3', files: ['relatorio-densidade.pdf'], at: '23/11, 16h20', prot: 'TR-DEN-1620' } },
+        { id: 'map', teacher: 'paulo', title: 'Mapa: bacias hidrográficas do Ceará', dueLabel: 'Encerrada em 19/11', points: 'vale 2 pontos', status: 'corrigida', closed: true, grade: '8,0', feedback: 'Mapa completo e bem colorido. Faltou a legenda das bacias do Coreaú e do Acaraú.', icon: 'image', desc: 'Mapa com as 12 bacias, legenda e título.', sent: { title: 'Mapa das bacias', files: ['mapa-bacias.jpg'], at: '19/11, 18h02', prot: 'TR-MAP-1802' } }]
+    });
+  }
+}
+</script>
+</body>
+</html>

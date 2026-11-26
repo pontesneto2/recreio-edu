@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Celular: Comunicados</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+<header class="rc-app-bar"><a class="rc-app-back" href="Celular-Mais.dc.html" aria-label="Voltar"><x-import component-from-global-scope="Recreio.Icon" name="chevron-left" size="{{s22}}"></x-import></a><h1>Comunicados<small>2 sem leitura confirmada</small></h1><span></span></header>
+<div class="rc-app-scroll">
+<div class="rc-app-body"><x-import component-from-global-scope="Recreio.FilterChips" label="Filtrar" value="{{f}}" options="{{fo}}" single="{{yes}}"></x-import><div class="rc-app-card"><div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px;"><x-import component-from-global-scope="Recreio.StatusPill" tone="danger" size="sm">Urgente</x-import><small style="color: var(--ink-2);">Direção · hoje, 10h05</small></div><strong style="font-size: 1.0625rem; line-height: 1.3;">Aula suspensa amanhã à tarde nas duas unidades</strong><p style="margin: 0; color: var(--ink-2); line-height: 1.45;">Manutenção elétrica. Saída às 11h40 para todas as turmas, inclusive o integral.</p><div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-primary rc-btn-sm" href="#pop-lido"><x-import component-from-global-scope="Recreio.Icon" name="check" size="{{s18}}"></x-import><span class="rc-btn-label">Confirmar leitura</span></a></div></div><div class="rc-app-card"><div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px;"><x-import component-from-global-scope="Recreio.StatusPill" tone="brand" size="sm">Evento</x-import><small style="color: var(--ink-2);">Coordenação · ontem, 16h</small></div><strong style="font-size: 1.0625rem; line-height: 1.3;">Reunião de pais do 9º ano em 03/12</strong><p style="margin: 0; color: var(--ink-2); line-height: 1.45;">Quinta, às 18h30, no auditório. Pauta: formatura, recuperação e matrícula no Ensino Médio.</p><div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-primary rc-btn-sm" href="#pop-lido"><x-import component-from-global-scope="Recreio.Icon" name="check" size="{{s18}}"></x-import><span class="rc-btn-label">Confirmar leitura</span></a></div></div><div class="rc-app-card"><div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px;"><x-import component-from-global-scope="Recreio.StatusPill" tone="info" size="sm">Financeiro</x-import><small style="color: var(--ink-2);">Financeiro · 23/11</small></div><strong style="font-size: 1.0625rem; line-height: 1.3;">Rematrícula 2027 aberta até 15/12</strong><p style="margin: 0; color: var(--ink-2); line-height: 1.45;">Quem assinar o contrato até 05/12 mantém o desconto de pontualidade.</p><div style="display: flex; flex-wrap: wrap; gap: 8px;"><x-import component-from-global-scope="Recreio.StatusPill" tone="success" size="sm" icon="check-circle">Leitura confirmada</x-import></div></div><div class="rc-app-card"><div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px;"><x-import component-from-global-scope="Recreio.StatusPill" tone="neutral" size="sm">Rotina</x-import><small style="color: var(--ink-2);">Secretaria · 19/11</small></div><strong style="font-size: 1.0625rem; line-height: 1.3;">Calendário de provas finais publicado</strong><p style="margin: 0; color: var(--ink-2); line-height: 1.45;">As datas já estão no calendário escolar do app.</p><div style="display: flex; flex-wrap: wrap; gap: 8px;"><x-import component-from-global-scope="Recreio.StatusPill" tone="success" size="sm" icon="check-circle">Leitura confirmada</x-import></div></div></div>
+</div>
+
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="mais"></x-import>
+<div id="pop-lido" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Leitura confirmada"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog rc-dialog-hero"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Leitura confirmada</p><p class="rc-dialog-desc">A escola registrou que você leu este comunicado, com data e hora.</p></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#"><span class="rc-btn-label">Concluir</span></a></div></div></div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return Object.assign({ yes: true, no: false, one: 1, two: 2, three: 3, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96, tabs: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Celular-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', count: 2, href: 'Celular-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Celular-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 1, href: 'Celular-Chat.dc.html' }, { id: 'mais', label: 'Mais', icon: 'menu', href: 'Celular-Mais.dc.html' }] }, {
+      f: ['todos'], fo: [{ value: 'todos', label: 'Todos' }, { value: 'pend', label: 'Sem leitura · 2' }, { value: 'urg', label: 'Urgentes' }]
+    });
+  }
+}
+</script>
+</body>
+</html>

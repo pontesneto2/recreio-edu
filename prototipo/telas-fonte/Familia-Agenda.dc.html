@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Família: Agenda escolar</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" groups="{{nav}}" active="agenda"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="calendar" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Agenda escolar</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">O que os professores lançaram, com visto e assinatura do responsável</p></div></div>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar evento ou tarefa" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Familia-Notificacoes.dc.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding: 14px 20px; border-radius: var(--radius-lg); background: var(--surface-1); border: 1px solid var(--line); box-shadow: var(--shadow-1);">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; min-width: 0;">
+<span style="font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2);">Aluno</span>
+<x-import component-from-global-scope="Recreio.SegmentedControl" label="Aluno" value="ana" options="{{alunos}}"></x-import>
+</div>
+<div style="display: flex; align-items: center; gap: 8px;">
+<x-import component-from-global-scope="Recreio.IconButton" icon="chevron-left" label="Dia anterior" variant="secondary"></x-import>
+<p style="margin: 0; min-width: 190px; text-align: center; font-weight: 700;">Quarta, 25 de novembro</p>
+<x-import component-from-global-scope="Recreio.IconButton" icon="chevron-right" label="Próximo dia" variant="secondary"></x-import>
+<a class="rc-btn rc-btn-ghost rc-btn-sm" href="Familia-Agenda.dc.html">Hoje</a>
+</div>
+</div>
+<section aria-label="Indicadores da agenda" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px;">
+<x-import component-from-global-scope="Recreio.StatCard" color="azul" label="Lançamentos de hoje" value="{{five}}" icon="clipboard" hint="4 professores e a coordenação"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="amarelo" label="Aguardando seu visto" value="{{two}}" icon="eye" hint="Prova de Ciências e material de Artes"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="vermelho" label="Bilhetes para assinar" value="{{one}}" icon="edit" hint="Aula de campo no Parque do Cocó"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="verde" label="Assinadas no mês" value="{{assinadas}}" format="{{deDezoito}}" delta="{{dAss}}" delta-label="vs. outubro" trend="{{tAss}}" icon="checks"></x-import>
+</section>
+<div class="rc-split" style="gap: 24px; align-items: start;">
+<div style="display: flex; flex-direction: column; gap: 24px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Agenda do dia · Ana Beatriz" subtitle="9º ano A · Manhã · lançada pelos professores até 17h">
+<div style="padding: 0 0 16px;"><x-import component-from-global-scope="Recreio.FilterChips" label="Tipo de lançamento" value="{{fTodos}}" options="{{tipos}}"></x-import></div>
+<ul style="list-style: none; margin: 0; padding: 0;">
+<sc-for list="{{entries}}" as="e" hint-placeholder-count="5">
+<li style="display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; padding: 18px 0; border-top: 1px solid var(--line);">
+<span style="display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--radius-md); background: var(--brand-soft); color: var(--brand-ink);"><x-import component-from-global-scope="Recreio.Icon" name="{{e.icon}}" size="20"></x-import></span>
+<div style="display: flex; flex-direction: column; gap: 6px; min-width: 0;">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
+<x-import component-from-global-scope="Recreio.StatusPill" tone="{{e.tone}}" icon="{{e.icon}}" size="sm">{{e.tipo}}</x-import>
+<span style="font-size: 13px; color: var(--ink-2);">{{e.quem}} · lançado às {{e.hora}}</span>
+</div>
+<p style="margin: 0; font-size: 1.0625rem; font-weight: 700; letter-spacing: -0.01em;">{{e.titulo}}</p>
+<p style="margin: 0; color: var(--ink-2); line-height: 1.5;">{{e.texto}}</p>
+<sc-if value="{{e.arquivo}}"><a href="#" style="display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; padding: 6px 10px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 14px; font-weight: 600; text-decoration: none;"><x-import component-from-global-scope="Recreio.Icon" name="paperclip" size="16"></x-import>{{e.arquivo}}</a></sc-if>
+<sc-if value="{{e.resposta}}"><p style="margin: 4px 0 0; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--row-alt); font-size: 14px; color: var(--ink-2);"><strong style="color: var(--ink);">Você respondeu: </strong>{{e.resposta}}</p></sc-if>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 6px;">
+<sc-if value="{{e.visto}}"><x-import component-from-global-scope="Recreio.StatusPill" tone="success" icon="check-circle" size="sm">{{e.visto}}</x-import></sc-if>
+<sc-if value="{{e.pedeVisto}}"><a class="rc-btn rc-btn-secondary rc-btn-sm" href="#pop-visto">Dar visto</a></sc-if>
+<sc-if value="{{e.pedeAssinatura}}"><a class="rc-btn rc-btn-primary rc-btn-sm" href="#pop-bilhete">Assinar bilhete</a><x-import component-from-global-scope="Recreio.StatusPill" tone="danger" icon="alert" size="sm">Assinatura obrigatória até 26/11</x-import></sc-if>
+<a class="rc-btn rc-btn-ghost rc-btn-sm" href="#recados">Mandar recado ao professor</a>
+</div>
+</div>
+</li>
+</sc-for>
+</ul>
+</x-import>
+<div id="recados"><x-import component-from-global-scope="Recreio.Card" title="Recados com os professores" subtitle="Ana Beatriz · 9º ano A. O professor recebe na agenda da turma e responde por aqui.">
+<div style="display: flex; flex-direction: column; gap: 12px;">
+<sc-for list="{{recados}}" as="r" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-radius: var(--radius-md); border: 1px solid var(--line); background: {{r.bg}}; margin-left: {{r.ml}}; margin-right: {{r.mr}};">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px;"><strong style="font-size: 14px;">{{r.autor}}</strong><small style="color: var(--ink-2);">{{r.hora}}</small></div>
+<p style="margin: 0; line-height: 1.5;">{{r.texto}}</p>
+<sc-if value="{{r.status}}"><small style="display: inline-flex; align-items: center; gap: 4px; color: var(--success); font-weight: 600;"><x-import component-from-global-scope="Recreio.Icon" name="checks" size="{{s16}}"></x-import>{{r.status}}</small></sc-if>
+</div>
+</sc-for>
+<div style="display: flex; flex-direction: column; gap: 12px; padding-top: 12px; border-top: 1px solid var(--line);">
+<x-import component-from-global-scope="Recreio.Select" label="Para" default-value="ricardo" options="{{destinos}}"></x-import>
+<x-import component-from-global-scope="Recreio.TextArea" label="Seu recado" placeholder="Ex.: a Ana vai sair mais cedo na quinta para uma consulta." rows="{{three}}"></x-import>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-primary" href="#pop-recado-ok">Enviar recado</a></div>
+</div>
+</div>
+</x-import></div>
+<x-import component-from-global-scope="Recreio.Card" title="Assinar a agenda de hoje" subtitle="Registra que você leu tudo o que foi lançado em 25/11">
+<div style="display: flex; flex-direction: column; gap: 16px;">
+<div style="display: flex; align-items: center; gap: 16px;">
+<x-import component-from-global-scope="Recreio.ProgressRing" value="{{two}}" max="{{five}}" size="{{ring}}" tone="brand">2/5</x-import>
+<p style="margin: 0; color: var(--ink-2);">2 de 5 lançamentos com visto. Falta dar visto na prova de Ciências e no material de Artes, e assinar o bilhete da aula de campo.</p>
+</div>
+<x-import component-from-global-scope="Recreio.Checkbox" label="Li todos os lançamentos de hoje e estou ciente" description="A escola recebe data, hora, aparelho e o nome do responsável que assinou."></x-import>
+<x-import component-from-global-scope="Recreio.TextField" label="Assinatura do responsável" hint="Digite seu nome completo como no cadastro" default-value="Fernanda Lima"></x-import>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-primary" href="#pop-agenda">Assinar agenda de 25/11</a><a class="rc-btn rc-btn-ghost" href="#pop-depois">Assinar depois</a></div>
+</div>
+</x-import>
+</div>
+<div style="display: flex; flex-direction: column; gap: 24px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Calendário" subtitle="Pontos marcam provas, tarefas e eventos">
+<x-import component-from-global-scope="Recreio.MiniCalendar" year="{{y}}" month="{{m}}" today="{{d}}" selected="{{d}}" events="{{ev}}"></x-import>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Próximas avaliações" subtitle="Ana Beatriz · 9º ano A">
+<ul style="list-style: none; margin: 0; padding: 0;">
+<sc-for list="{{provas}}" as="p" hint-placeholder-count="4">
+<li style="display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line);">
+<span style="display: flex; flex-direction: column; align-items: center; padding: 6px 0; border-radius: var(--radius-sm); background: var(--surface-2);"><strong style="font-size: 18px; line-height: 1;">{{p.dia}}</strong><small style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--ink-2);">{{p.mes}}</small></span>
+<span style="min-width: 0;"><strong style="display: block;">{{p.titulo}}</strong><small style="color: var(--ink-2);">{{p.meta}}</small></span>
+</li>
+</sc-for>
+</ul>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Histórico de assinaturas" subtitle="Últimos dias letivos">
+<ul style="list-style: none; margin: 0; padding: 0;">
+<sc-for list="{{historico}}" as="h" hint-placeholder-count="4">
+<li style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line);">
+<span style="min-width: 0;"><strong style="display: block;">{{h.dia}}</strong><small style="color: var(--ink-2);">{{h.meta}}</small></span>
+<x-import component-from-global-scope="Recreio.StatusPill" tone="{{h.tone}}" size="sm">{{h.status}}</x-import>
+</li>
+</sc-for>
+</ul>
+</x-import>
+</div>
+</div>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="agenda"></x-import>
+</div>
+</div>
+<div id="pop-visto" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Visto registrado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="eye" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Visto registrado</p><p class="rc-dialog-desc">O professor vê que você leu, com a data e a hora.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-bilhete" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Assinar o bilhete da aula de campo">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-warning"><x-import component-from-global-scope="Recreio.Icon" name="edit" size="{{pS22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Assinar o bilhete da aula de campo</p><p class="rc-dialog-desc">Parque do Cocó, sexta, 27/11, das 7h às 12h. Ao assinar, você autoriza a participação da Ana Beatriz.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{pS20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;"><x-import component-from-global-scope="Recreio.Checkbox" label="Li as orientações e autorizo a participação" default-checked="{{pYes}}"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Assinatura do responsável" default-value="Fernanda Lima" hint="Digite seu nome completo como no cadastro"></x-import></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-bilhete-ok">Assinar bilhete</a></div>
+</div>
+</div>
+<div id="pop-bilhete-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Bilhete assinado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Bilhete assinado</p><p class="rc-dialog-desc">A escola recebeu sua assinatura, com data, hora e aparelho. A Ana Beatriz está na lista do ônibus.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-recado-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Recado enviado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="send" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Recado enviado</p><p class="rc-dialog-desc">O professor recebe na agenda da turma e responde por aqui.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-agenda" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Assinar a agenda de 25/11?">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="checks" size="{{pS22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Assinar a agenda de 25/11?</p><p class="rc-dialog-desc">Ainda faltam 2 vistos e o bilhete da aula de campo. Você pode assinar a agenda e resolver esses itens depois.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{pS20}}"></x-import></a></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-agenda-ok">Assinar mesmo assim</a></div>
+</div>
+</div>
+<div id="pop-agenda-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Agenda assinada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Agenda assinada</p><p class="rc-dialog-desc">A escola registrou que Fernanda Lima leu os lançamentos de 25/11.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-depois" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Lembrete marcado para as 20h">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-info"><x-import component-from-global-scope="Recreio.Icon" name="clock" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Lembrete marcado para as 20h</p><p class="rc-dialog-desc">O app avisa hoje à noite. A agenda de 25/11 fecha às 23h59.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2960}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 3, bellNotifs: [
+      { icon: 'mail', title: 'Bilhete para assinar: aula de campo', text: 'Ana Beatriz · 9º ano A · prazo 26/11', time: 'Hoje, 11h20', unread: true, priority: 'importante' },
+      { icon: 'heart', title: 'Davi passou pela enfermaria', text: 'Dor de cabeça, já voltou para a sala', time: 'Hoje, 10h25', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: 'Mensalidade de dezembro disponível', text: 'R$ 1.406,00 · vence em 10/12', time: 'Hoje, 8h00', unread: true, priority: 'rotina' },
+      { icon: 'chart', title: 'Boletim do 3º bimestre publicado', text: 'Ana Beatriz e Davi', time: 'Ontem, 18h30', priority: 'rotina' }] };
+    const tabs = [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Familia-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }];
+    const shared = {
+      bellCount: 3, activeChild: 'k1', activeProfile: 'resp',
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      user: { name: 'Fernanda Lima' },
+      kids: [{ id: 'k1', name: 'Davi Lima', group: '2º ano B' }, { id: 'k2', name: 'Ana Beatriz Lima', group: '9º ano A' }],
+      profiles: [{ id: 'resp', label: 'Responsável', icon: 'users', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'calendario', label: 'Calendário', icon: 'flag', href: 'Familia-Calendario.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', count: 2, href: 'Familia-Comunicados.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'autorizacoes', label: 'Autorizações', icon: 'key', count: 1, href: 'Familia-Autorizacoes.dc.html' }] },
+        { label: 'Acadêmico', items: [{ id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'check-circle', href: 'Familia-Frequencia.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Familia-Horarios.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Familia-Integral.dc.html' }, { id: 'inclusao', label: 'Plano individual', icon: 'star', href: 'Familia-Inclusao.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 1, href: 'Familia-Ocorrencias.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Familia-Biblioteca.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Familia-Materiais.dc.html' }] },
+        { label: 'Serviços', items: [{ id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Familia-Cardapio.dc.html' }, { id: 'saude', label: 'Saúde', icon: 'heart', href: 'Familia-Saude.dc.html' }, { id: 'documentos', label: 'Documentos', icon: 'file', href: 'Familia-Documentos.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', href: 'Familia-Atendimentos.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', count: 2, href: 'Familia-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', href: 'Familia-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', count: 1, href: 'Familia-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'financeiro', label: 'Mensalidades', icon: 'wallet', count: 1, urgent: true, href: 'Familia-Financeiro.dc.html' }, { id: 'dae', label: 'DAE', icon: 'receipt', href: 'Familia-DAE.dc.html' }, { id: 'ir', label: 'Recibo para IR', icon: 'receipt', href: 'Familia-Recibo-IR.dc.html' }, { id: 'rematricula', label: 'Rematrícula 2027', icon: 'file-text', href: 'Familia-Rematricula.dc.html' }, { id: 'matricula', label: 'Matrícula 2027', icon: 'graduation', href: 'Familia-Matricula.dc.html' }] },
+        { label: 'Conta', items: [{ id: 'prefs', label: 'Acessibilidade', icon: 'accessibility', href: 'Familia-Preferencias.dc.html' }] }]
+    };
+    const __r = Object.assign({ yes: true, no: false, tabs }, shared, {
+      y: 2026, m: 10, d: 25, one: 1, two: 2, three: 3, five: 5, ring: 56,
+      assinadas: 14, dAss: 2, tAss: [11, 12, 13, 12, 14], deDezoito: (v) => Math.round(v) + ' de 16',
+      ev: { 25: ['brand', 'accent'], 26: ['danger'], 27: ['success', 'brand'], 30: ['brand'] },
+      alunos: [{ value: 'davi', label: 'Davi · 2º B' }, { value: 'ana', label: 'Ana Beatriz · 9º A' }, { value: 'todos', label: 'Todos' }],
+      fTodos: ['todos'],
+      tipos: [{ value: 'todos', label: 'Tudo', count: 5 }, { value: 'tarefa', label: 'Tarefas', count: 1 }, { value: 'prova', label: 'Provas', count: 1 }, { value: 'bilhete', label: 'Bilhetes', count: 1 }, { value: 'material', label: 'Materiais', count: 1 }, { value: 'recado', label: 'Recados', count: 1 }],
+      s16: 16,
+      destinos: [{ value: 'ricardo', label: 'Prof. Ricardo Albuquerque · Matemática' }, { value: 'helena', label: 'Profa. Helena Costa · Português' }, { value: 'marcos', label: 'Prof. Marcos Vinícius Teixeira · Ciências' }, { value: 'caio', label: 'Prof. Caio Bezerra · Artes' }, { value: 'coord', label: 'Juliana Sampaio · Coordenação' }],
+      recados: [
+        { autor: 'Profa. Helena Costa · Português', hora: 'Seg, 23/11, 15h10', texto: 'A Ana Beatriz esqueceu o livro Iracema hoje. Lembrar de trazer na quarta, dia do debate.', status: 'Você deu visto às 18h02', bg: 'var(--surface-2)', ml: '0', mr: '48px' },
+        { autor: 'Você', hora: 'Hoje, 12h40', texto: 'Professor Ricardo, a Ana Beatriz ficou com dúvida na questão 7 da Lista 8. Ela tentou, mas não conseguiu montar a equação. Pode rever com ela amanhã?', status: 'Lido pelo professor às 12h58', bg: 'var(--brand-soft)', ml: '48px', mr: '0' },
+        { autor: 'Prof. Ricardo Albuquerque · Matemática', hora: 'Hoje, 13h05', texto: 'Claro, Fernanda. Amanhã, no início da aula, reviso a questão 7 com ela e com quem tiver a mesma dúvida.', bg: 'var(--surface-2)', ml: '0', mr: '48px' }],
+      entries: [
+        { tipo: 'Bilhete', tone: 'danger', icon: 'mail', quem: 'Juliana Sampaio · Coordenação do Fundamental II', hora: '11h20', titulo: 'Aula de campo no Parque do Cocó na sexta, 27/11', texto: 'Saída às 7h e retorno às 12h, com professores de Ciências e Geografia. Mandar repelente, boné e garrafa de água. Sem custo para a família.', arquivo: 'roteiro-aula-de-campo.pdf', pedeAssinatura: true },
+        { tipo: 'Prova', tone: 'warning', icon: 'flag', quem: 'Prof. Marcos Vinícius Teixeira · Ciências', hora: '10h40', titulo: 'Prova amanhã às 7h30: reações químicas', texto: 'Conteúdo dos capítulos 7 e 8. Pode levar calculadora simples. Quem faltar faz a segunda chamada em 03/12.', pedeVisto: true },
+        { tipo: 'Tarefa de casa', tone: 'info', icon: 'edit', quem: 'Prof. Ricardo Albuquerque · Matemática', hora: '10h05', titulo: 'Lista 8: equações do 2º grau', texto: 'Livro, página 142, exercícios 1 a 12. Entregar na sexta, 27/11. Vale 1 ponto na média do bimestre.', visto: 'Visto às 12h35' },
+        { tipo: 'Material', tone: 'neutral', icon: 'bookmark', quem: 'Prof. Caio Bezerra · Artes', hora: '9h15', titulo: 'Trazer revistas velhas e cola branca na terça', texto: 'Material para a colagem do projeto Cores do Ceará, aula de terça, 01/12.', pedeVisto: true },
+        { tipo: 'Recado', tone: 'success', icon: 'star', quem: 'Profa. Helena Costa · Português', hora: '8h50', titulo: 'Ana Beatriz foi muito bem no debate sobre Iracema', texto: 'Participou com argumentos e ajudou a turma a organizar as falas. Parabéns à família pelo incentivo à leitura.', visto: 'Visto às 12h38', resposta: 'Obrigada, professora! Ela adorou o livro.' }],
+      provas: [
+        { dia: '26', mes: 'nov', titulo: 'Ciências: reações químicas', meta: 'Prova · 7h30 · capítulos 7 e 8' },
+        { dia: '27', mes: 'nov', titulo: 'Matemática: lista 8', meta: 'Entrega de trabalho · vale 1 ponto' },
+        { dia: '30', mes: 'nov', titulo: 'Português: resenha de Iracema', meta: 'Entrega pelo portal até 23h59' },
+        { dia: '10', mes: 'dez', titulo: 'Matemática: recuperação final', meta: 'Prova · plano de estudo no portal' }],
+      historico: [
+        { dia: 'Terça, 24/11', meta: 'Assinada por Fernanda Lima às 19h12 · 4 lançamentos', status: 'Assinada', tone: 'success' },
+        { dia: 'Segunda, 23/11', meta: 'Assinada por Rodrigo Lima às 20h03 · 3 lançamentos', status: 'Assinada', tone: 'success' },
+        { dia: 'Quinta, 19/11', meta: 'Assinada por Fernanda Lima às 18h55 · 2 lançamentos', status: 'Assinada', tone: 'success' },
+        { dia: 'Quarta, 18/11', meta: '1 bilhete sem assinatura · a coordenação foi avisada', status: 'Sem assinatura', tone: 'danger' }]
+    });
+    return Object.assign({ pS3: 3, pS16: 16, pS18: 18, pS20: 20, pS22: 22, pS32: 32, pS36: 36, pS40: 40, pYes: true, pFmt: [{ value: 'xlsx', label: 'Excel (.xlsx)' }, { value: 'csv', label: 'CSV' }, { value: 'pdf', label: 'PDF para impressão' }] }, { s22: 22 }, bell, __r);
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!-- @dsCard group="Comunicação" height=640 width=1040 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>AnnouncementComposer</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    const [sent, setSent] = React.useState(null);
+    const { show } = P.useToast();
+    return /* @__PURE__ */ React.createElement(
+      P.AnnouncementComposer,
+      {
+        defaultAudience: ["9a"],
+        onSend: (d) => show({ tone: "success", title: "Comunicado enviado", message: "Chegou para os respons\xE1veis selecionados." }),
+        onSchedule: (d) => show({ tone: "info", title: "Comunicado agendado", message: "Sai em " + d.when + "." }),
+        audiences: [{ id: "escola", label: "Toda a escola", count: 2184 }, { id: "f1", label: "Fundamental I", count: 612 }, { id: "f2", label: "Fundamental II", count: 798 }, { id: "9ano", label: "9\xBA ano", count: 186 }, { id: "9a", label: "9\xBA ano A", count: 62 }, { id: "integral", label: "Tempo integral", count: 254 }, { id: "fin", label: "Respons\xE1veis financeiros", count: 1086 }]
+      }
+    );
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

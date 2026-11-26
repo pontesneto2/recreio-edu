@@ -1,0 +1,17 @@
+<!-- @dsCard group="Pedagógico" height=560 width=420 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>GradeList</title>
+<style>body{padding:16px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  const students = [{ id: "s1", name: "Ana Beatriz Lima" }, { id: "s2", name: "Arthur Nogueira" }, { id: "s3", name: "Bruno Sales" }, { id: "s4", name: "Caio Reis", note: "Prova ampliada" }, { id: "s5", name: "Davi Martins" }];
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(P.GradeList, { assessment: "Simulado", students, values: { s1: 8, s2: 5.5 } })));
+})();
+</script>
+</body>
+</html>

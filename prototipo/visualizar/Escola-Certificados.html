@@ -1,0 +1,303 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Secretaria: Certificados e diplomas</title>
+<link rel="stylesheet" href="vendor/tokens.css"><link rel="stylesheet" href="vendor/bundle.css"><link rel="stylesheet" href="vendor/telas.css"><style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+<script src="vendor/react.js"></script><script src="vendor/react-dom.js"></script><script src="vendor/bundle.js"></script></head>
+<body><div id="app"></div><template id="dc-src"><x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" units="{{units}}" groups="{{nav}}" active="certificados"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="graduation" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Certificados e diplomas</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Secretaria · emissão, livro de registro e 2ª via</p></div></div>
+<a class="rc-btn rc-btn-ghost rc-btn-sm" href="Escola-Boletins.html">Boletins</a>
+<a class="rc-btn rc-btn-ghost rc-btn-sm" href="Escola-Solicitacoes.html">Solicitações</a>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar aluno, registro ou turma" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Escola-Notificacoes.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 16px;">
+<x-import component-from-global-scope="Recreio.StatCard" color="azul" label="Concluintes de 2026" value="{{c1}}" icon="graduation" hint="91 do 9º ano · 56 da 3ª série"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="verde" label="Emitidos" value="{{c2}}" icon="check-circle" hint="Todos da 3ª série A · o 9º ano fecha em 11/12"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="laranja" label="Esperando assinatura" href="#pop-lembrar" value="{{c3}}" icon="edit" hint="Com a diretora Lúcia Menezes desde 24/11"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="roxo" label="2ª via pedida" href="#segunda-via" value="{{c4}}" icon="copy" hint="2 de ex-alunos · 1 de 2026"></x-import>
+</div>
+<x-import component-from-global-scope="Recreio.Card" title="Turmas concluintes" subtitle="9º ano do Fundamental e 3ª série do Médio · a emissão em lote só inclui aluno apto">
+<div role="table" aria-label="Turmas concluintes">
+<div role="row" class="rc-rows-row rc-rows-head" style="--cols: minmax(0, 1.5fr) 110px 90px 110px minmax(0, 1.4fr) 170px 150px; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);"><span role="columnheader">Turma</span><span role="columnheader">Concluintes</span><span role="columnheader">Aptos</span><span role="columnheader">Pendências</span><span role="columnheader">Emitidos</span><span role="columnheader">Situação</span><span role="columnheader"></span></div>
+<sc-for list="{{turmas}}" as="r" hint-placeholder-count="5">
+<div role="row" class="rc-rows-row" style="--cols: minmax(0, 1.5fr) 110px 90px 110px minmax(0, 1.4fr) 170px 150px; padding: 12px; align-items: center; border-bottom: 1px solid var(--line);"><span role="cell" style="min-width: 0;"><strong style="display: block; font-weight: 600;">{{r.n}}</strong><small style="color: var(--ink-2);">{{r.m}}</small></span><span role="cell" style="min-width: 0;" data-label="Concluintes"><strong style="font-weight: 600; font-variant-numeric: tabular-nums;">{{r.c}}</strong></span><span role="cell" style="min-width: 0;" data-label="Aptos"><strong style="font-weight: 600; font-variant-numeric: tabular-nums;">{{r.a}}</strong></span><span role="cell" style="min-width: 0;" data-label="Pendências"><strong style="font-weight: 600; font-variant-numeric: tabular-nums;">{{r.p}}</strong></span><span role="cell" style="min-width: 0;" data-label="Emitidos"><x-import component-from-global-scope="Recreio.ProgressBar" value="{{r.v}}" max="{{r.c}}" label="{{r.vt}}" tone="{{r.bt}}" size="sm"></x-import></span><span role="cell" style="min-width: 0;" data-label="Situação"><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.st}}</x-import></span><span role="cell" style="min-width: 0;"><a class="rc-btn rc-btn-{{r.bv}} rc-btn-sm" href="{{r.href}}">{{r.bl}}</a></span></div>
+</sc-for>
+</div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Alunos da 3ª série A" subtitle="Resultado final fechado em 19/11 · 30 alunos">
+<div style="display: flex; flex-direction: column; gap: 16px;">
+<div data-nosave style="display: flex; flex-wrap: wrap; gap: 12px; align-items: end;"><x-import component-from-global-scope="Recreio.Select" label="Turma" default-value="3a" options="{{turmasSel}}"></x-import><x-import component-from-global-scope="Recreio.Select" label="Situação" default-value="todas" options="{{sitsSel}}"></x-import><span style="flex: 1 1 220px;"><x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar aluno ou matrícula" shortcut="{{nada}}"></x-import></span></div>
+<div role="table" aria-label="Alunos da 3ª série A">
+<div role="row" class="rc-rows-row rc-rows-head" style="--cols: minmax(0, 1.7fr) 100px 100px minmax(0, 1.5fr) 190px 130px; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);"><span role="columnheader">Aluno</span><span role="columnheader">Média final</span><span role="columnheader">Frequência</span><span role="columnheader">Registro</span><span role="columnheader">Situação</span><span role="columnheader"></span></div>
+<sc-for list="{{alunos}}" as="r" hint-placeholder-count="8">
+<div role="row" class="rc-rows-row" style="--cols: minmax(0, 1.7fr) 100px 100px minmax(0, 1.5fr) 190px 130px; padding: 12px; align-items: center; border-bottom: 1px solid var(--line);"><span role="cell" style="min-width: 0;"><span style="display: flex; align-items: center; gap: 10px; min-width: 0;"><x-import component-from-global-scope="Recreio.Avatar" name="{{r.n}}" size="{{s36}}"></x-import><span style="min-width: 0;"><strong style="display: block;">{{r.n}}</strong><small style="color: var(--ink-2);">{{r.m}}</small></span></span></span><span role="cell" style="min-width: 0;" data-label="Média final"><strong style="font-weight: 600; font-variant-numeric: tabular-nums;">{{r.md}}</strong></span><span role="cell" style="min-width: 0;" data-label="Frequência"><strong style="font-weight: 600; font-variant-numeric: tabular-nums;">{{r.fr}}</strong></span><span role="cell" style="min-width: 0;" data-label="Registro"><small style="color: var(--ink-2);">{{r.rg}}</small></span><span role="cell" style="min-width: 0;" data-label="Situação"><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.st}}</x-import></span><span role="cell" style="min-width: 0;"><a class="rc-btn rc-btn-{{r.bv}} rc-btn-sm" href="{{r.href}}">{{r.bl}}</a></span></div>
+</sc-for>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-primary" href="#pop-lote">Emitir os 4 aptos em lote</a><a class="rc-btn rc-btn-secondary" href="Escola-Boletins.html">Conferir boletins</a><a class="rc-btn rc-btn-ghost" href="#pop-lembrar">Lembrar a diretora das 4 assinaturas</a></div>
+</div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Modelo do documento" subtitle="Vale para toda emissão nova. Documento já emitido não muda.">
+<x-import component-from-global-scope="Recreio.SaveGuard" label="Salvar modelo" hint="Mude o modelo para liberar o botão Salvar">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 24px; align-items: start;"><div style="display: flex; flex-direction: column; gap: 16px;">
+<x-import component-from-global-scope="Recreio.Select" label="Documento" default-value="medio" options="{{docs}}"></x-import>
+<x-import component-from-global-scope="Recreio.TextArea" label="Texto do certificado" hint="Nome, nascimento, matrícula, série, média e frequência entram sozinhos." default-value="Certificamos que [aluno], nascido em [nascimento], natural de [cidade], matrícula [matrícula], concluiu o [série] no ano letivo de [ano], com média final [média] e frequência de [frequência]." rows="{{four}}"></x-import>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px;">
+<x-import component-from-global-scope="Recreio.TextField" label="Assina pela direção" default-value="Lúcia Menezes"></x-import>
+<x-import component-from-global-scope="Recreio.TextField" label="Cargo" default-value="Diretora"></x-import>
+<x-import component-from-global-scope="Recreio.TextField" label="Assina pela secretaria" default-value="Renata Alencar"></x-import>
+<x-import component-from-global-scope="Recreio.TextField" label="Cargo na secretaria" default-value="Secretária escolar"></x-import>
+</div>
+<x-import component-from-global-scope="Recreio.Switch" label="Marca da escola no topo" description="Logo, razão social, CNPJ e endereço vêm de Módulos e marca." default-checked="{{yes}}"></x-import>
+<x-import component-from-global-scope="Recreio.Switch" label="QR de verificação no rodapé" description="Quem recebe o documento confere a autenticidade pelo código." default-checked="{{yes}}"></x-import>
+<x-import component-from-global-scope="Recreio.Switch" label="Histórico escolar no verso" description="Notas e carga horária de cada ano cursado."></x-import>
+</div><div class="tl-folha"><div class="tl-folha-topo"><x-import component-from-global-scope="Recreio.SchoolMark" name="Colégio Recreio" size="{{s48}}"></x-import><div style="min-width: 0;"><strong style="display: block; font-size: 1.0625rem;">Colégio Recreio Ltda.</strong><small style="color: var(--ink-2);">CNPJ 07.412.386/0001-52 · Av. Santos Dumont, 2450 · Aldeota · Fortaleza, CE</small></div></div><h3>Certificado de conclusão</h3><p style="margin: 0;">Certificamos que <strong>Beatriz Furtado Lopes</strong>, nascida em 14/03/2009, natural de Fortaleza, CE, matrícula 2015-0203, concluiu a <strong>3ª série do Ensino Médio</strong> no ano letivo de 2026, com média final 8,7 e frequência de 95%.</p><p style="margin: 0;">Fortaleza, 24 de novembro de 2026.</p><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); gap: 16px; align-items: end;"><div style="border-top: 1px solid var(--ink-2); padding-top: 6px;"><strong style="display: block;">Lúcia Menezes</strong><small style="color: var(--ink-2);">Diretora · assinatura digital</small></div><div style="border-top: 1px solid var(--ink-2); padding-top: 6px;"><strong style="display: block;">Renata Alencar</strong><small style="color: var(--ink-2);">Secretária escolar · assinatura digital</small></div></div><small style="color: var(--ink-2);">Registro, livro, folha e QR de verificação entram na emissão.</small></div></div>
+</x-import>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Livro de registro" subtitle="Livro 7 de 2026 · cada emissão ganha número, folha e data">
+<div role="table" aria-label="Livro de registro">
+<div role="row" class="rc-rows-row rc-rows-head" style="--cols: 110px 130px minmax(0, 1.5fr) minmax(0, 1.5fr) 110px 150px 90px; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);"><span role="columnheader">Registro</span><span role="columnheader">Livro e folha</span><span role="columnheader">Aluno</span><span role="columnheader">Documento</span><span role="columnheader">Data</span><span role="columnheader">Situação</span><span role="columnheader"></span></div>
+<sc-for list="{{livro}}" as="r" hint-placeholder-count="6">
+<div role="row" class="rc-rows-row" style="--cols: 110px 130px minmax(0, 1.5fr) minmax(0, 1.5fr) 110px 150px 90px; padding: 12px; align-items: center; border-bottom: 1px solid var(--line);"><span role="cell" style="min-width: 0;"><strong style="font-weight: 600; font-variant-numeric: tabular-nums;">{{r.rg}}</strong></span><span role="cell" style="min-width: 0;" data-label="Livro e folha">{{r.lf}}</span><span role="cell" style="min-width: 0;" data-label="Aluno"><strong style="display: block; font-weight: 600;">{{r.n}}</strong><small style="color: var(--ink-2);">{{r.m}}</small></span><span role="cell" style="min-width: 0;" data-label="Documento">{{r.d}}</span><span role="cell" style="min-width: 0;" data-label="Data">{{r.dt}}</span><span role="cell" style="min-width: 0;" data-label="Situação"><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.st}}</x-import></span><span role="cell" style="min-width: 0;"><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-previa">Ver</a></span></div>
+</sc-for>
+</div>
+</x-import>
+<div class="rc-split" style="gap: 24px; align-items: start; --split: minmax(0, 3fr) minmax(0, 2fr);">
+<div style="display: flex; flex-direction: column; gap: 24px; min-width: 0;">
+<div id="segunda-via"><x-import component-from-global-scope="Recreio.Card" title="2ª via" subtitle="Mesmo número de registro, com a data da nova emissão">
+<div>
+<sc-for list="{{vias}}" as="r" hint-placeholder-count="3">
+<div class="rc-popup-row"><x-import component-from-global-scope="Recreio.Avatar" name="{{r.n}}" size="{{s36}}"></x-import><span style="min-width: 0;"><strong style="display: block;">{{r.n}}</strong><small style="color: var(--ink-2);">{{r.m}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.st}}</x-import><a class="rc-btn rc-btn-{{r.bv}} rc-btn-sm" href="{{r.href}}">{{r.bl}}</a></div>
+</sc-for>
+</div>
+<div style="margin-top: 12px;"><a class="rc-btn rc-btn-ghost rc-btn-sm" href="Escola-Solicitacoes.html">Ver todas as solicitações</a></div>
+</x-import></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 24px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Alert" tone="info" title="Quem pode emitir">A secretaria emite e registra. O documento só vale depois da assinatura da direção. Pendência de nota se resolve em Boletins.</x-import>
+</div>
+</div>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="certificados"></x-import>
+</div>
+</div>
+<div id="pop-previa" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Prévia do certificado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><div class="rc-dialog-titles"><p class="rc-dialog-title">Prévia do certificado</p><p class="rc-dialog-desc">Beatriz Furtado · 3ª série A · registro 2026/0118</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;">
+<div class="tl-folha"><div class="tl-folha-topo"><x-import component-from-global-scope="Recreio.SchoolMark" name="Colégio Recreio" size="{{s48}}"></x-import><div style="min-width: 0;"><strong style="display: block; font-size: 1.0625rem;">Colégio Recreio Ltda.</strong><small style="color: var(--ink-2);">CNPJ 07.412.386/0001-52 · Av. Santos Dumont, 2450 · Aldeota · Fortaleza, CE</small></div></div><h3>Certificado de conclusão do Ensino Médio</h3><p style="margin: 0;">Certificamos que <strong>Beatriz Furtado Lopes</strong>, nascida em 14/03/2009, natural de Fortaleza, CE, matrícula 2015-0203, concluiu a <strong>3ª série do Ensino Médio</strong> no ano letivo de 2026, com média final 8,7 e frequência de 95%.</p><p style="margin: 0;">Fortaleza, 24 de novembro de 2026.</p><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); gap: 16px; align-items: end;"><div style="border-top: 1px solid var(--ink-2); padding-top: 6px;"><strong style="display: block;">Lúcia Menezes</strong><small style="color: var(--ink-2);">Diretora · assinatura digital</small></div><div style="border-top: 1px solid var(--ink-2); padding-top: 6px;"><strong style="display: block;">Renata Alencar</strong><small style="color: var(--ink-2);">Secretária escolar · assinatura digital</small></div></div><div style="display: flex; align-items: center; gap: 12px; padding-top: 12px; border-top: 1px solid var(--line);"><x-import component-from-global-scope="Recreio.FakeQR" seed="RC-CERT-2026-0118" size="{{s72}}" label="QR de verificação do certificado"></x-import><small style="color: var(--ink-2);">Registro 2026/0118 · Livro 7 · Folha 12<br>Confira em recreio.app/verificar<br>Código RC-CERT-2026-0118</small></div></div>
+</div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Fechar</a><a class="rc-btn rc-btn-secondary" href="#pop-baixado">Baixar PDF</a><a class="rc-btn rc-btn-primary" href="#pop-emitido">Emitir e enviar para assinatura</a></div>
+</div>
+</div>
+<div id="pop-emitido" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Certificado emitido">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Certificado emitido</p><p class="rc-dialog-desc">O registro entrou no Livro 7. A diretora Lúcia Menezes recebeu o documento para assinar e a família vê no app assim que ela assinar.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-baixado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="PDF baixado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">PDF baixado</p><p class="rc-dialog-desc">O arquivo tem o QR de verificação e o número do registro. A impressão sai em papel A4 paisagem.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-lote" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Emitir em lote">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-md">
+<div class="rc-dialog-head"><div class="rc-dialog-titles"><p class="rc-dialog-title">Emitir em lote</p><p class="rc-dialog-desc">3ª série A · 4 alunos aptos sem certificado</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;">
+<p style="margin: 0; line-height: 1.5;"><strong>Vítor Camurça, Yasmin Diógenes, Samuel Arruda e Clara Bezerril.</strong> Os 4 alunos com pendência ficam fora do lote.</p><p style="margin: 0; line-height: 1.5; color: var(--ink-2);">Registros 2026/0142 a 2026/0145 · Livro 7 · Folhas 15 e 16.</p><x-import component-from-global-scope="Recreio.Select" label="Modelo" default-value="medio" options="{{docs}}"></x-import><x-import component-from-global-scope="Recreio.Checkbox" label="Enviar para a assinatura da direção" description="Lúcia Menezes assina os 4 de uma vez." default-checked="{{yes}}"></x-import><x-import component-from-global-scope="Recreio.Checkbox" label="Registrar no livro" description="Número, folha e data de hoje, 25/11/2026." default-checked="{{yes}}"></x-import><x-import component-from-global-scope="Recreio.Checkbox" label="Avisar as famílias quando estiver assinado" description="O certificado aparece em Documentos, no app." default-checked="{{yes}}"></x-import>
+</div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-lote-ok">Emitir 4 certificados</a></div>
+</div>
+</div>
+<div id="pop-lote-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="4 certificados emitidos">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">4 certificados emitidos</p><p class="rc-dialog-desc">Os registros 2026/0142 a 2026/0145 entraram no Livro 7. Agora são 8 documentos esperando a assinatura da direção.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-lembrar" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Lembrar a diretora">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-md">
+<div class="rc-dialog-head"><div class="rc-dialog-titles"><p class="rc-dialog-title">Lembrar a diretora</p><p class="rc-dialog-desc">4 certificados esperam assinatura desde 24/11.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;">
+<p style="margin: 0; line-height: 1.5;">Os 4 são da 3ª série A. A diretora assina todos de uma vez pelo painel dela.</p><x-import component-from-global-scope="Recreio.TextArea" label="Recado" default-value="Lúcia, as famílias da 3ª série A precisam do certificado para a matrícula na faculdade até 04/12." rows="{{two}}"></x-import>
+</div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-lembrada">Enviar lembrete</a></div>
+</div>
+</div>
+<div id="pop-lembrada" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Lembrete enviado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Lembrete enviado</p><p class="rc-dialog-desc">Lúcia Menezes recebeu o aviso com a lista dos 4 certificados.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-avisar" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Avisar a família da pendência">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-md">
+<div class="rc-dialog-head"><div class="rc-dialog-titles"><p class="rc-dialog-title">Avisar a família da pendência</p><p class="rc-dialog-desc">Érica Gadelha · 3ª série A</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;">
+<p style="margin: 0; line-height: 1.5;">Falta o histórico escolar do 9º ano, cursado em outra escola. Sem ele o certificado não pode ser emitido.</p><x-import component-from-global-scope="Recreio.TextArea" label="Mensagem para Simone Gadelha" default-value="Olá, Simone. Para emitir o certificado da Érica precisamos do histórico do 9º ano, da escola anterior. Pode enviar pelo app até 04/12?" rows="{{two}}"></x-import>
+</div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-avisada">Enviar mensagem</a></div>
+</div>
+</div>
+<div id="pop-avisada" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Família avisada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Família avisada</p><p class="rc-dialog-desc">A mensagem foi para o app da responsável. A pendência segue na lista até o documento chegar.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-segunda" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Emitir 2ª via">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-md">
+<div class="rc-dialog-head"><div class="rc-dialog-titles"><p class="rc-dialog-title">Emitir 2ª via</p><p class="rc-dialog-desc">Isadora Fontenele · concluiu o 9º ano em 2023</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px;">
+<x-import component-from-global-scope="Recreio.TextField" label="Registro original" default-value="2023/0087 · Livro 4 · Folha 29"></x-import>
+<x-import component-from-global-scope="Recreio.Select" label="Motivo" default-value="perda" options="{{motVia}}"></x-import>
+<x-import component-from-global-scope="Recreio.Select" label="Entrega" default-value="pdf" options="{{entrega}}"></x-import>
+<x-import component-from-global-scope="Recreio.TextField" label="Taxa" default-value="R$ 35,00 · paga em 23/11"></x-import>
+</div><p style="margin: 0; line-height: 1.5; color: var(--ink-2);">A 2ª via sai com o mesmo número de registro, a anotação de 2ª via e as assinaturas atuais da direção e da secretaria.</p>
+</div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-segunda-ok">Emitir 2ª via</a></div>
+</div>
+</div>
+<div id="pop-segunda-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="2ª via emitida">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">2ª via emitida</p><p class="rc-dialog-desc">A anotação entrou no Livro 4, folha 29. O documento foi para a assinatura da direção e a família é avisada quando ficar pronto.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc></template><script id="dc-js" type="text/plain">
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 5, bellNotifs: [
+      { icon: 'clipboard', title: '5 justificativas para analisar', text: 'Frequência · Fundamental II', time: 'Hoje, 11h05', unread: true, priority: 'importante' },
+      { icon: 'chat', title: 'Fernanda Lima respondeu no chat', text: 'Ana Beatriz · 9º ano A', time: 'Hoje, 10h12', unread: true, priority: 'rotina' },
+      { icon: 'edit', title: 'História 9º B: faltam 4 notas', text: 'Fechamento do 4º bimestre', time: 'Hoje, 9h00', unread: true, priority: 'importante' },
+      { icon: 'alert', title: 'Ocorrência sem resposta da família', text: 'Mateus Holanda · 9º ano C · há 7 dias', time: 'Hoje, 8h30', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: '63 mensalidades vencidas', text: '41 famílias · a régua de cobrança enviou lembretes', time: 'Hoje, 7h00', unread: true, priority: 'rotina' }] };
+    const tabs = [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'comunicados', label: 'Avisos', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }];
+    const shared = {
+      bellCount: 5, activeChild: undefined, activeProfile: 'dir', kids: [],
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      units: [{ id: 'aldeota', label: 'Unidade Aldeota', meta: '1.248 alunos · Infantil ao Médio', href: 'Escola-Painel.dc.html', current: true }, { id: 'eusebio', label: 'Unidade Eusébio', meta: '936 alunos · Infantil e Fundamental I', href: 'Escola-Painel.dc.html' }, { id: 'rede', label: 'Todas as unidades', meta: 'Visão consolidada da rede', href: 'Escola-Painel.dc.html' }],
+      user: { name: 'Lúcia Menezes' },
+      profiles: [{ id: 'dir', label: 'Direção', icon: 'shield', school: 'Colégio Recreio' }, { id: 'prof', label: 'Professora', icon: 'book', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'chat', label: 'Chat com famílias', icon: 'chat', count: 4, href: 'Escola-Chat.dc.html' }] },
+        { label: 'Pedagógico', items: [{ id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Escola-Horarios.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'clipboard', count: 5, href: 'Escola-Frequencia.dc.html' }, { id: 'boletins', label: 'Fechamento e boletins', icon: 'chart', href: 'Escola-Boletins.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 3, href: 'Escola-Ocorrencias.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Escola-Integral.dc.html' }, { id: 'saude', label: 'Saúde e enfermaria', icon: 'heart', href: 'Escola-Saude.dc.html' }, { id: 'inclusao', label: 'Inclusão e AEE', icon: 'accessibility', href: 'Escola-Inclusao.dc.html' }, { id: 'medidas', label: 'Medidas disciplinares', icon: 'flag', href: 'Escola-Medidas.dc.html' }, { id: 'extras', label: 'Pontos extras', icon: 'star', href: 'Escola-Pontos-extras.dc.html' }, { id: 'eja', label: 'EJA', icon: 'moon', href: 'Escola-EJA.dc.html' }] },
+        { label: 'Secretaria', items: [{ id: 'alunos', label: 'Alunos', icon: 'users', href: 'Escola-Alunos.dc.html' }, { id: 'equipe', label: 'Equipe', icon: 'user', href: 'Escola-Equipe.dc.html' }, { id: 'captacao', label: 'Captação', icon: 'filter', count: 9, href: 'Escola-Captacao.dc.html' }, { id: 'matriculas', label: 'Matrículas', icon: 'file-text', count: 12, href: 'Escola-Matriculas.dc.html' }, { id: 'contratos', label: 'Contratos', icon: 'edit', count: 200, href: 'Escola-Contratos.dc.html' }, { id: 'solicitacoes', label: 'Solicitações', icon: 'file', count: 6, href: 'Escola-Solicitacoes.dc.html' }, { id: 'certificados', label: 'Certificados e diplomas', icon: 'graduation', href: 'Escola-Certificados.dc.html' }, { id: 'transferencias', label: 'Transferências', icon: 'sync', href: 'Escola-Transferencias.dc.html' }, { id: 'fotos', label: 'Fotos de alunos', icon: 'camera', href: 'Escola-Fotos.dc.html' }, { id: 'importacao', label: 'Migração de dados', icon: 'upload', href: 'Escola-Importacao.dc.html' }, { id: 'calendario', label: 'Calendário letivo', icon: 'flag', href: 'Escola-Calendario.dc.html' }, { id: 'autorizacoes', label: 'Passeios e autorizações', icon: 'key', href: 'Escola-Autorizacoes.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Escola-Biblioteca.dc.html' }] },
+        { label: 'Família e serviços', items: [{ id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 4, href: 'Escola-Atendimentos.dc.html' }, { id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Escola-Cardapio.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', href: 'Escola-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', count: 9, href: 'Escola-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', href: 'Escola-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'mensalidades', label: 'Mensalidades', icon: 'wallet', count: 41, urgent: true, href: 'Escola-Mensalidades.dc.html' }, { id: 'fiscal', label: 'Notas fiscais e IR', icon: 'receipt', count: 3, href: 'Escola-Fiscal.dc.html' }, { id: 'dae', label: 'DAE SEFAZ-CE', icon: 'receipt', href: 'Escola-DAE.dc.html' }, { id: 'caixa', label: 'Caixa e contas a pagar', icon: 'card', href: 'Escola-Caixa.dc.html' }] },
+        { label: 'Gestão', items: [{ id: 'relatorios', label: 'Relatórios e censo', icon: 'sparkline', href: 'Escola-Relatorios.dc.html' }, { id: 'permissoes', label: 'Grupos e permissões', icon: 'shield', href: 'Escola-Permissoes.dc.html' }, { id: 'modulos', label: 'Módulos e marca', icon: 'modules', href: 'Escola-Modulos.dc.html' }] }]
+    };
+    const m = Object.assign({ name: 'Colégio Recreio', legalName: 'Colégio Recreio Ltda.', cnpj: '07.412.386/0001-52', address: 'Av. Santos Dumont, 2450 · Aldeota · Fortaleza, CE', phone: '(85) 3254-1987', signer: 'Lúcia Menezes', signerRole: 'Diretora geral' }, (window.Recreio.loadBrand && window.Recreio.loadBrand()) || {});
+    const __r = Object.assign({ yes: true, no: false, tabs }, shared, {
+      user: { name: 'Renata Alencar' }, activeProfile: 'sec', profiles: [{ id: 'sec', label: 'Secretaria', icon: 'file-text', school: 'Colégio Recreio' }],
+      m, c1: 147, c2: 22, c3: 4, c4: 3, two: 2, four: 4, nada: null,
+      docs: [{ value: 'fund', label: 'Certificado de conclusão do Ensino Fundamental' }, { value: 'medio', label: 'Certificado de conclusão do Ensino Médio' }, { value: 'tec', label: 'Diploma de curso técnico' }],
+      turmasSel: [{ value: '9a', label: '9º ano A' }, { value: '9b', label: '9º ano B' }, { value: '9c', label: '9º ano C' }, { value: '3a', label: '3ª série A' }, { value: '3b', label: '3ª série B' }],
+      sitsSel: [{ value: 'todas', label: 'Todas' }, { value: 'apto', label: 'Apto' }, { value: 'nota', label: 'Pendência de nota' }, { value: 'doc', label: 'Pendência de documento' }, { value: 'emitido', label: 'Emitido' }],
+      motVia: [{ value: 'perda', label: 'Perda ou extravio' }, { value: 'dano', label: 'Documento danificado' }, { value: 'nome', label: 'Mudança de nome' }],
+      entrega: [{ value: 'pdf', label: 'PDF no app e por e-mail' }, { value: 'papel', label: 'Via impressa, retirada no balcão' }],
+      turmas: [
+        { n: '9º ano A', m: 'Fundamental II · Manhã · resultado fecha em 11/12', c: 31, a: 0, p: 0, v: 0, vt: 'Nenhum emitido', bt: 'brand', st: 'Esperando resultado', tone: 'neutral', bl: 'Ver boletins', bv: 'ghost', href: 'Escola-Boletins.dc.html' },
+        { n: '9º ano B', m: 'Fundamental II · Manhã · resultado fecha em 11/12', c: 31, a: 0, p: 0, v: 0, vt: 'Nenhum emitido', bt: 'brand', st: 'Esperando resultado', tone: 'neutral', bl: 'Ver boletins', bv: 'ghost', href: 'Escola-Boletins.dc.html' },
+        { n: '9º ano C', m: 'Fundamental II · Manhã · resultado fecha em 11/12', c: 29, a: 0, p: 0, v: 0, vt: 'Nenhum emitido', bt: 'brand', st: 'Esperando resultado', tone: 'neutral', bl: 'Ver boletins', bv: 'ghost', href: 'Escola-Boletins.dc.html' },
+        { n: '3ª série A', m: 'Ensino Médio · Manhã · resultado fechado em 19/11', c: 30, a: 26, p: 4, v: 22, vt: '22 de 30 emitidos', bt: 'brand', st: 'Em emissão', tone: 'info', bl: 'Emitir em lote', bv: 'primary', href: '#pop-lote' },
+        { n: '3ª série B', m: 'Ensino Médio · Tarde · conselho final em 27/11', c: 26, a: 0, p: 0, v: 0, vt: 'Nenhum emitido', bt: 'brand', st: 'Esperando conselho', tone: 'neutral', bl: 'Ver boletins', bv: 'ghost', href: 'Escola-Boletins.dc.html' }],
+      alunos: [
+        { n: 'Beatriz Furtado', m: 'Matrícula 2015-0203', md: '8,7', fr: '95%', rg: '2026/0118 · Livro 7 · Folha 12', st: 'Emitido', tone: 'success', bl: 'Ver', bv: 'ghost', href: '#pop-previa' },
+        { n: 'Henrique Bastos', m: 'Matrícula 2014-0062', md: '9,1', fr: '96%', rg: '2026/0119 · Livro 7 · Folha 12', st: 'Emitido', tone: 'success', bl: 'Ver', bv: 'ghost', href: '#pop-previa' },
+        { n: 'Tainá Rebouças', m: 'Matrícula 2016-0087', md: '8,2', fr: '93%', rg: '2026/0137 · Livro 7 · Folha 14', st: 'Esperando assinatura', tone: 'info', bl: 'Ver', bv: 'ghost', href: '#pop-previa' },
+        { n: 'Vítor Camurça', m: 'Matrícula 2013-0098', md: '7,4', fr: '97%', rg: 'Sem registro', st: 'Apto', tone: 'brand', bl: 'Emitir', bv: 'primary', href: '#pop-previa' },
+        { n: 'Yasmin Diógenes', m: 'Matrícula 2020-0145', md: '7,9', fr: '100%', rg: 'Sem registro', st: 'Apto', tone: 'brand', bl: 'Emitir', bv: 'primary', href: '#pop-previa' },
+        { n: 'Murilo Sabóia', m: 'Matrícula 2015-0176', md: '5,8', fr: '88%', rg: 'Recuperação de Matemática em 01/12', st: 'Pendência de nota', tone: 'warning', bl: 'Ver boletim', bv: 'secondary', href: 'Escola-Boletins.dc.html' },
+        { n: 'Otávio Leitão', m: 'Matrícula 2015-0377', md: '5,6', fr: '91%', rg: 'Recuperação de Química em 01/12', st: 'Pendência de nota', tone: 'warning', bl: 'Ver boletim', bv: 'secondary', href: 'Escola-Boletins.dc.html' },
+        { n: 'Érica Gadelha', m: 'Matrícula 2024-0188', md: '7,2', fr: '82%', rg: 'Falta o histórico do 9º ano, de outra escola', st: 'Pendência de documento', tone: 'danger', bl: 'Avisar família', bv: 'secondary', href: '#pop-avisar' }],
+      livro: [
+        { rg: '2026/0141', lf: 'Livro 7 · Folha 14', n: 'Letícia Pontes', m: '3ª série A', d: 'Certificado do Ensino Médio', dt: '24/11/2026', st: 'Para assinar', tone: 'info' },
+        { rg: '2026/0137', lf: 'Livro 7 · Folha 14', n: 'Tainá Rebouças', m: '3ª série A', d: 'Certificado do Ensino Médio', dt: '24/11/2026', st: 'Para assinar', tone: 'info' },
+        { rg: '2026/0119', lf: 'Livro 7 · Folha 12', n: 'Henrique Bastos', m: '3ª série A', d: 'Certificado do Ensino Médio', dt: '24/11/2026', st: 'Assinado', tone: 'success' },
+        { rg: '2026/0118', lf: 'Livro 7 · Folha 12', n: 'Beatriz Furtado', m: '3ª série A', d: 'Certificado do Ensino Médio', dt: '24/11/2026', st: 'Assinado', tone: 'success' },
+        { rg: '2025/0162', lf: 'Livro 6 · Folha 33', n: 'Rafael Monteiro', m: 'Concluiu a 3ª série em 2025', d: '2ª via do certificado do Médio', dt: '18/11/2026', st: '2ª via', tone: 'neutral' }],
+      vias: [
+        { n: 'Isadora Fontenele', m: 'Concluiu o 9º ano em 2023 · registro 2023/0087 · pedido em 23/11 · taxa paga', st: 'Na fila', tone: 'warning', bl: 'Emitir', bv: 'primary', href: '#pop-segunda' },
+        { n: 'Gustavo Peixoto', m: 'Concluiu a 3ª série em 2021 · registro 2021/0140 · pedido em 24/11 · taxa paga', st: 'Na fila', tone: 'warning', bl: 'Emitir', bv: 'primary', href: '#pop-segunda' },
+        { n: 'Letícia Pontes', m: '3ª série A · registro 2026/0141 · nome corrigido a pedido da família', st: 'Para assinar', tone: 'info', bl: 'Ver', bv: 'ghost', href: '#pop-previa' }]
+    });
+    /* Controle de acesso: cada perfil vê só os módulos liberados em Grupos e permissões. */
+    const ACESSO = { prof: ['comunicados', 'notas', 'chamada', 'agenda', 'frequencia', 'ocorrencias', 'inicio', 'diario', 'horarios', 'materiais', 'atendimentos', 'tarefas'], coord: ['painel', 'comunicados', 'chat', 'notas', 'chamada', 'agenda', 'frequencia', 'boletins', 'ocorrencias', 'integral', 'alunos', 'autorizacoes', 'equipe', 'horarios', 'calendario', 'atendimentos', 'cardapio', 'galeria', 'pesquisas', 'saude', 'inclusao', 'relatorios', 'biblioteca', 'portaria', 'medidas', 'extras', 'eja', 'certificados'], sec: ['comunicados', 'alunos', 'matriculas', 'contratos', 'autorizacoes', 'portaria', 'equipe', 'solicitacoes', 'calendario', 'horarios', 'loja', 'pesquisas', 'captacao', 'certificados', 'transferencias', 'fotos', 'importacao'], fin: ['comunicados', 'alunos', 'contratos', 'mensalidades', 'loja', 'fiscal', 'caixa', 'dae'], bib: ['comunicados', 'biblioteca'], port: ['comunicados', 'portaria', 'autorizacoes'], int: ['comunicados', 'chamada', 'integral', 'ocorrencias'], nutri: ['comunicados', 'cardapio'], enf: ['comunicados', 'saude'], aee: ['comunicados', 'inclusao', 'atendimentos', 'ocorrencias'] };
+    const permitidos = ACESSO[__r.activeProfile];
+    if (permitidos) {
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.filter((i) => permitidos.includes(i.id)) })).filter((g) => g.items.length);
+      __r.tabs = (__r.tabs || []).filter((t) => permitidos.includes(t.id));
+      __r.units = null;
+    }
+    /* Biblioteca e portaria: direção e coordenação entram pela visão de gestão. A operação fica com a bibliotecária e a portaria. */
+    if (['dir', 'coord'].includes(__r.activeProfile)) {
+      const GESTAO = { biblioteca: 'Escola-Biblioteca-Gestao.dc.html', portaria: 'Escola-Portaria-Gestao.dc.html' };
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.map((i) => (GESTAO[i.id] ? Object.assign({}, i, { href: GESTAO[i.id] }) : i)) }));
+      __r.tabs = (__r.tabs || []).map((t) => (GESTAO[t.id] ? Object.assign({}, t, { href: GESTAO[t.id] }) : t));
+    }
+    /* Portal do professor: quem entra como professor vê o próprio menu, com as turmas e o planejamento. */
+    if (__r.activeProfile === 'prof') {
+      __r.nav = [
+        { items: [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }] },
+        { label: 'Minhas turmas', items: [{ id: 'diario', label: 'Diário de classe', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'tarefas', label: 'Tarefas', icon: 'list', count: 6, href: 'Professor-Tarefas.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', href: 'Escola-Ocorrencias.dc.html' }] },
+        { label: 'Planejamento', items: [{ id: 'horarios', label: 'Meus horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Professor-Materiais.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 2, href: 'Escola-Atendimentos.dc.html' }] }];
+      __r.tabs = [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'diario', label: 'Diário', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }];
+    }
+    return Object.assign({ s12: 12, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96 }, bell, __r);
+  }
+}
+</script><script src="vendor/runtime.js"></script></body></html>

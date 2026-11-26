@@ -1,0 +1,26 @@
+<!-- @dsCard group="Pedagógico" height=1570 width=900 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>AssignmentSubmit</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio; const h = React.createElement;
+  const teachers = [
+    { id: "ricardo", name: "Prof. Ricardo Albuquerque", subject: "Matem\xE1tica" },
+    { id: "helena", name: "Profa. Helena Costa", subject: "L\xEDngua Portuguesa" },
+    { id: "paulo", name: "Prof. Paulo Henrique Brito", subject: "Geografia" }];
+  const assignments = [
+    { id: "l8", teacher: "ricardo", title: "Lista 8: equa\xE7\xF5es do 2\xBA grau", dueLabel: "Entrega at\xE9 sexta, 27/11", points: "vale 1 ponto", status: "aberta", icon: "clipboard", desc: "Resolva as 10 quest\xF5es no caderno, mostrando o c\xE1lculo do discriminante. Envie foto das p\xE1ginas ou um PDF.", attach: "lista-8-equacoes.pdf" },
+    { id: "l7", teacher: "ricardo", title: "Lista 7: f\xF3rmula de Bhaskara", dueLabel: "Venceu hoje, 25/11, \xE0s 7h30", points: "vale 1 ponto", status: "entregue", closed: true, icon: "clipboard", desc: "Exerc\xEDcios 1 a 8 da p\xE1gina 142.", sent: { title: "Lista 7, Ana Beatriz", files: ["lista7-pagina1.jpg", "lista7-pagina2.jpg"], at: "hoje, 7h12", prot: "TR-L7-712" } },
+    { id: "l6", teacher: "ricardo", title: "Lista 6: produtos not\xE1veis", dueLabel: "Encerrada em 18/11", points: "vale 1 ponto", status: "corrigida", closed: true, grade: "1,0", feedback: "Tudo certo. Capricho na organiza\xE7\xE3o das contas.", icon: "clipboard", desc: "Exerc\xEDcios 1 a 12 da p\xE1gina 128.", sent: { title: "Lista 6, Ana Beatriz", files: ["lista6.pdf"], at: "17/11, 19h40", prot: "TR-L6-1940" } },
+    { id: "res", teacher: "helena", title: "Resenha de Iracema", dueLabel: "Entrega at\xE9 segunda, 30/11", points: "nota de trabalho", status: "aberta", icon: "edit", desc: "Texto de at\xE9 2 p\xE1ginas sobre o narrador e o tempo da narrativa." },
+    { id: "map", teacher: "paulo", title: "Mapa: bacias hidrogr\xE1ficas do Cear\xE1", dueLabel: "Refazer at\xE9 segunda, 30/11", points: "vale 2 pontos", status: "refazer", icon: "image", desc: "Mapa com as 12 bacias, legenda e t\xEDtulo.", feedback: "Faltou a legenda das bacias do Corea\xFA e do Acara\xFA. Corrija e envie de novo.", sent: { title: "Mapa das bacias", files: ["mapa-bacias.jpg"], at: "20/11, 18h02", prot: "TR-MAP-1802" } }];
+  ReactDOM.createRoot(document.getElementById("root")).render(h(P.RecreioProvider, null, h(P.AssignmentSubmit, { student: { name: "Ana Beatriz Lima", klass: "9\xBA ano A", shift: "Manh\xE3" }, teachers: teachers, assignments: assignments, defaultTeacher: "ricardo", defaultAssignment: "l8" })));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!-- @dsCard group="Fundamentos" height=200 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>SchoolTheme</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    const seeds = [["Col\xE9gio Recreio", "#0067CC"], ["Escola Cajueiro", "#B45309"], ["Instituto Carna\xFAba", "#4D7C0F"], ["Escola Sol Nascente", "#FACC15"]];
+    return /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: 12 } }, seeds.map(([n, s]) => /* @__PURE__ */ React.createElement(P.SchoolTheme, { key: n, seed: s }, /* @__PURE__ */ React.createElement("div", { className: "rc-card", style: { padding: 16, display: "flex", flexDirection: "column", gap: 10 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, alignItems: "center" } }, /* @__PURE__ */ React.createElement(P.SchoolMark, { name: n, size: 28 }), /* @__PURE__ */ React.createElement("strong", { style: { fontSize: 14 } }, n)), /* @__PURE__ */ React.createElement(P.Button, { variant: "primary", size: "sm" }, "Pagar com Pix"), /* @__PURE__ */ React.createElement("span", { style: { color: "var(--brand-ink)", fontWeight: 600, fontSize: 14 } }, "Ver boletim")))));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

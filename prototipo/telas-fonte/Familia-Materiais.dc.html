@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Materiais de aula</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" groups="{{nav}}" active="materiais"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="paperclip" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Materiais de aula</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">O que os professores publicaram para os seus filhos</p></div></div>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar material" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Familia-Notificacoes.dc.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding: 14px 20px; border-radius: var(--radius-lg); background: var(--surface-1); border: 1px solid var(--line); box-shadow: var(--shadow-1);"><div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; min-width: 0;"><span style="font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2);">Aluno</span><x-import component-from-global-scope="Recreio.SegmentedControl" label="Aluno" value="ana" options="{{alunos}}"></x-import></div><small style="color: var(--ink-2);">Os professores publicam. Você e seu filho veem o mesmo material.</small></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 16px;">
+<x-import component-from-global-scope="Recreio.StatCard" color="azul" label="Novos na semana" value="{{f1}}" icon="paperclip" hint="De 23 a 25/11 · 3 disciplinas"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="laranja" label="Não vistos pela Ana" value="{{f2}}" icon="eye" hint="Lista 8 e Slides: Era Vargas"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="vermelho" label="Para prova" value="{{f3}}" icon="flag" hint="Ciências amanhã · Matemática em 02/12"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="verde" label="Publicados no bimestre" value="{{f4}}" icon="book" hint="9º ano A · 7 professores"></x-import>
+</div>
+<x-import component-from-global-scope="Recreio.Card" title="Materiais da Ana Beatriz" subtitle="9º ano A · por disciplina · toque em Abrir para ver ou baixar">
+<div style="display: flex; flex-direction: column; gap: 14px;"><div data-nosave><x-import component-from-global-scope="Recreio.FilterChips" label="Disciplina" value="{{fDisc}}" options="{{discs}}" single="{{yes}}"></x-import></div><div role="table" aria-label="Materiais da Ana Beatriz">
+<div role="row" class="rc-rows-row rc-rows-head" style="--cols: minmax(0, 2.4fr) 90px 80px minmax(0, 1fr) 120px 84px; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);"><span role="columnheader">Material, disciplina e professor</span><span role="columnheader">Tipo</span><span role="columnheader">Data</span><span role="columnheader">Tamanho</span><span role="columnheader">Situação</span><span role="columnheader"></span></div>
+<sc-for list="{{mats}}" as="r" hint-placeholder-count="9">
+<div role="row" class="rc-rows-row" style="--cols: minmax(0, 2.4fr) 90px 80px minmax(0, 1fr) 120px 84px; padding: 12px; align-items: center; border-bottom: 1px solid var(--line);"><span role="cell" style="min-width: 0;"><span style="display: flex; align-items: center; gap: 12px; min-width: 0;"><span style="display: grid; place-items: center; width: 36px; height: 36px; flex: none; border-radius: var(--radius-md); background: var(--surface-2); color: var(--brand-ink);"><x-import component-from-global-scope="Recreio.Icon" name="{{r.ic}}" size="{{s18}}"></x-import></span><span style="min-width: 0;"><strong style="display: block; font-weight: 600;">{{r.n}}</strong><small style="color: var(--ink-2);">{{r.m}}</small></span></span></span><span role="cell" style="min-width: 0;" data-label="Tipo"><x-import component-from-global-scope="Recreio.StatusPill" tone="neutral" size="sm">{{r.tp}}</x-import></span><span role="cell" style="min-width: 0;" data-label="Data">{{r.dt}}</span><span role="cell" style="min-width: 0;" data-label="Tamanho"><small style="color: var(--ink-2);">{{r.tm}}</small></span><span role="cell" style="min-width: 0;" data-label="Situação"><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.st}}</x-import></span><span role="cell" style="min-width: 0;"><a class="rc-btn rc-btn-secondary rc-btn-sm" href="#pop-material">Abrir</a></span></div>
+</sc-for>
+</div></div>
+</x-import>
+<div class="rc-split" style="gap: 24px; align-items: start; --split: minmax(0, 1fr) minmax(0, 1fr);">
+<div style="display: flex; flex-direction: column; gap: 24px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="O que cai na próxima prova" subtitle="Marcado pelo professor da disciplina">
+<div>
+<sc-for list="{{prova}}" as="r" hint-placeholder-count="3">
+<div class="rc-popup-row"><span style="display: grid; place-items: center; width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--surface-2); color: var(--brand-ink);"><x-import component-from-global-scope="Recreio.Icon" name="{{r.ic}}" size="{{s18}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{r.n}}</strong><small style="color: var(--ink-2);">{{r.m}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.st}}</x-import><a class="rc-btn rc-btn-{{r.bv}} rc-btn-sm" href="{{r.href}}">{{r.bl}}</a></div>
+</sc-for>
+</div>
+</x-import>
+</div>
+<div style="display: flex; flex-direction: column; gap: 24px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Materiais do Davi" subtitle="2º ano B · Profa. Luana Freitas">
+<div>
+<sc-for list="{{davi}}" as="r" hint-placeholder-count="3">
+<div class="rc-popup-row"><span style="display: grid; place-items: center; width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--surface-2); color: var(--brand-ink);"><x-import component-from-global-scope="Recreio.Icon" name="{{r.ic}}" size="{{s18}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{r.n}}</strong><small style="color: var(--ink-2);">{{r.m}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.st}}</x-import><a class="rc-btn rc-btn-{{r.bv}} rc-btn-sm" href="{{r.href}}">{{r.bl}}</a></div>
+</sc-for>
+</div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Alert" tone="info" title="Sem internet">O que você baixar fica no aparelho. Vídeo e link precisam de conexão.</x-import>
+</div>
+</div>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="materiais"></x-import>
+</div>
+</div>
+<div id="pop-material" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Slides: fórmula de Bhaskara">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-md">
+<div class="rc-dialog-head"><div class="rc-dialog-titles"><p class="rc-dialog-title">Slides: fórmula de Bhaskara</p><p class="rc-dialog-desc">Matemática · 18 slides · material de apoio da turma.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;">
+<dl class="rc-fields">
+<sc-for list="{{material}}" as="f" hint-placeholder-count="4"><div class="rc-field"><dt>{{f.l}}</dt><dd>{{f.v}}</dd></div></sc-for>
+</dl><p style="margin: 0; line-height: 1.5; color: var(--ink-2);">Use junto com o Vídeo: de onde vem a fórmula. Os dois preparam para a prova de 02/12.</p>
+</div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Fechar</a><a class="rc-btn rc-btn-primary" href="#pop-baixado"><x-import component-from-global-scope="Recreio.Icon" name="download" size="{{s18}}"></x-import>Baixar</a></div>
+</div>
+</div>
+<div id="pop-baixado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Arquivo baixado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Arquivo baixado</p><p class="rc-dialog-desc">slides-bhaskara.pdf foi salvo no aparelho e fica disponível sem internet.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-lembrado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Lembrete enviado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Lembrete enviado</p><p class="rc-dialog-desc">A Ana Beatriz recebeu o aviso no portal do aluno para abrir o material antes da prova.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 3, bellNotifs: [
+      { icon: 'mail', title: 'Bilhete para assinar: aula de campo', text: 'Ana Beatriz · 9º ano A · prazo 26/11', time: 'Hoje, 11h20', unread: true, priority: 'importante' },
+      { icon: 'heart', title: 'Davi passou pela enfermaria', text: 'Dor de cabeça, já voltou para a sala', time: 'Hoje, 10h25', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: 'Mensalidade de dezembro disponível', text: 'R$ 1.406,00 · vence em 10/12', time: 'Hoje, 8h00', unread: true, priority: 'rotina' },
+      { icon: 'chart', title: 'Boletim do 3º bimestre publicado', text: 'Ana Beatriz e Davi', time: 'Ontem, 18h30', priority: 'rotina' }] };
+    const tabs = [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Familia-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }];
+    const shared = {
+      bellCount: 3, activeChild: 'k1', activeProfile: 'resp',
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      user: { name: 'Fernanda Lima' },
+      kids: [{ id: 'k1', name: 'Davi Lima', group: '2º ano B' }, { id: 'k2', name: 'Ana Beatriz Lima', group: '9º ano A' }],
+      profiles: [{ id: 'resp', label: 'Responsável', icon: 'users', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'calendario', label: 'Calendário', icon: 'flag', href: 'Familia-Calendario.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', count: 2, href: 'Familia-Comunicados.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'autorizacoes', label: 'Autorizações', icon: 'key', count: 1, href: 'Familia-Autorizacoes.dc.html' }] },
+        { label: 'Acadêmico', items: [{ id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'check-circle', href: 'Familia-Frequencia.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Familia-Horarios.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Familia-Integral.dc.html' }, { id: 'inclusao', label: 'Plano individual', icon: 'star', href: 'Familia-Inclusao.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 1, href: 'Familia-Ocorrencias.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Familia-Biblioteca.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Familia-Materiais.dc.html' }] },
+        { label: 'Serviços', items: [{ id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Familia-Cardapio.dc.html' }, { id: 'saude', label: 'Saúde', icon: 'heart', href: 'Familia-Saude.dc.html' }, { id: 'documentos', label: 'Documentos', icon: 'file', href: 'Familia-Documentos.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', href: 'Familia-Atendimentos.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', count: 2, href: 'Familia-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', href: 'Familia-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', count: 1, href: 'Familia-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'financeiro', label: 'Mensalidades', icon: 'wallet', count: 1, urgent: true, href: 'Familia-Financeiro.dc.html' }, { id: 'dae', label: 'DAE', icon: 'receipt', href: 'Familia-DAE.dc.html' }, { id: 'ir', label: 'Recibo para IR', icon: 'receipt', href: 'Familia-Recibo-IR.dc.html' }, { id: 'rematricula', label: 'Rematrícula 2027', icon: 'file-text', href: 'Familia-Rematricula.dc.html' }, { id: 'matricula', label: 'Matrícula 2027', icon: 'graduation', href: 'Familia-Matricula.dc.html' }] },
+        { label: 'Conta', items: [{ id: 'prefs', label: 'Acessibilidade', icon: 'accessibility', href: 'Familia-Preferencias.dc.html' }] }]
+    };
+    const __r = Object.assign({ yes: true, no: false, tabs }, shared, {
+      activeChild: 'k2', zero: 0, one: 1, lidos: 14, dLidos: 3, tLidos: [8, 9, 11, 12, 13, 14], s20: 20, s22: 22, s32: 32, brl: (v) => window.Recreio.brl(v),
+      f1: 5, f2: 2, f3: 3, f4: 27,
+      alunos: [{ value: 'davi', label: 'Davi · 2º B' }, { value: 'ana', label: 'Ana Beatriz · 9º A' }],
+      discs: [{ value: 'todas', label: 'Todas', count: 9 }, { value: 'mat', label: 'Matemática', count: 3 }, { value: 'pt', label: 'Português', count: 2 }, { value: 'ci', label: 'Ciências', count: 2 }, { value: 'his', label: 'História', count: 1 }, { value: 'geo', label: 'Geografia', count: 1 }],
+      fDisc: ['todas'],
+      mats: [
+        { ic: 'file-text', n: 'Lista 8: equações do 2º grau', m: 'Matemática · Prof. Ricardo Albuquerque', tp: 'PDF', dt: '24/11', tm: '2 páginas · 380 KB', st: 'Novo', tone: 'info', fav: 'Favoritar' },
+        { ic: 'file-text', n: 'Slides: fórmula de Bhaskara', m: 'Matemática · Prof. Ricardo Albuquerque', tp: 'Slides', dt: '23/11', tm: '18 slides · 2,1 MB', st: 'Visto', tone: 'success', fav: 'Favorito' },
+        { ic: 'video', n: 'Vídeo: de onde vem a fórmula', m: 'Matemática · Prof. Ricardo Albuquerque', tp: 'Vídeo', dt: '23/11', tm: '9 minutos', st: 'Visto', tone: 'success', fav: 'Favoritar' },
+        { ic: 'file-text', n: 'Roteiro da resenha', m: 'Português · Profa. Helena Costa', tp: 'PDF', dt: '19/11', tm: '1 página · 120 KB', st: 'Visto', tone: 'success', fav: 'Favorito' },
+        { ic: 'external', n: 'Iracema: texto integral', m: 'Português · Profa. Helena Costa', tp: 'Link', dt: '05/10', tm: 'Domínio Público', st: 'Visto', tone: 'success', fav: 'Favoritar' },
+        { ic: 'file-text', n: 'Resumo dos capítulos 7 e 8', m: 'Ciências · Prof. Marcos Vinícius Teixeira', tp: 'PDF', dt: '24/11', tm: '4 páginas · 640 KB', st: 'Para a prova', tone: 'warning', fav: 'Favorito' },
+        { ic: 'file-text', n: 'Slides: densidade e pressão', m: 'Ciências · Prof. Marcos Vinícius Teixeira', tp: 'Slides', dt: '19/11', tm: '22 slides · 3,4 MB', st: 'Para a prova', tone: 'warning', fav: 'Favoritar' },
+        { ic: 'file-text', n: 'Slides: Era Vargas', m: 'História · Prof. Marcelo Dias', tp: 'Slides', dt: '25/11', tm: '26 slides · 4,0 MB', st: 'Novo', tone: 'info', fav: 'Favoritar' },
+        { ic: 'external', n: 'Mapa interativo: bacias do Ceará', m: 'Geografia · Prof. Paulo Henrique Brito', tp: 'Link', dt: '18/11', tm: 'Site da Cogerh', st: 'Visto', tone: 'success', fav: 'Favorito' }],
+      material: [{ l: 'Publicado por', v: 'Prof. Ricardo Albuquerque' }, { l: 'Em', v: '23/11/2026' }, { l: 'Arquivo', v: 'slides-bhaskara.pdf · 2,1 MB' }, { l: 'Serve para', v: 'Lista 7 e Lista 8' }],
+      prova: [
+        { ic: 'flag', n: 'Prova de Ciências · amanhã, 26/11, 7h30', m: 'Capítulos 7 e 8 · Resumo dos capítulos e Slides: densidade e pressão', st: '2 materiais', tone: 'warning', bl: 'Abrir', bv: 'secondary', href: '#pop-material' },
+        { ic: 'flag', n: 'Prova de Matemática · quarta, 02/12', m: 'Equações do 2º grau · Slides: fórmula de Bhaskara · a revisão sai em 27/11', st: '1 material', tone: 'info', bl: 'Abrir', bv: 'secondary', href: '#pop-material' },
+        { ic: 'eye', n: 'A Ana ainda não abriu a Lista 8', m: 'Matemática · entrega até sexta, 27/11 · vale 1 ponto', st: 'Não visto', tone: 'warning', bl: 'Lembrar', bv: 'primary', href: '#pop-lembrado' }],
+      davi: [
+        { ic: 'file-text', n: 'Ficha de leitura: A Arca de Noé', m: 'Português · PDF · 2 páginas · 23/11', st: 'Novo', tone: 'info', bl: 'Abrir', bv: 'secondary', href: '#pop-material' },
+        { ic: 'video', n: 'Vídeo: a tabuada do 3', m: 'Matemática · 5 minutos · 19/11', st: 'Visto', tone: 'success', bl: 'Abrir', bv: 'ghost', href: '#pop-material' },
+        { ic: 'image', n: 'Moldes para a maquete do bairro', m: 'Artes · PDF · 3 páginas · 18/11', st: 'Visto', tone: 'success', bl: 'Abrir', bv: 'ghost', href: '#pop-material' }]
+    });
+    return Object.assign({ s36: 36,  s18: 18,  pS3: 3, pS16: 16, pS18: 18, pS20: 20, pS22: 22, pS32: 32, pS36: 36, pS40: 40, pYes: true, pFmt: [{ value: 'xlsx', label: 'Excel (.xlsx)' }, { value: 'csv', label: 'CSV' }, { value: 'pdf', label: 'PDF para impressão' }] }, {}, bell, __r);
+  }
+}
+</script>
+</body>
+</html>

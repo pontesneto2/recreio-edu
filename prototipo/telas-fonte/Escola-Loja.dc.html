@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Secretaria: Loja da escola</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<link rel="stylesheet" href="telas.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" units="{{units}}" groups="{{nav}}" active="loja"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="tag" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Loja da escola</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Secretaria · pedidos, estoque e entrega de uniforme, material e ingressos</p></div></div>
+<a class="rc-btn rc-btn-ghost rc-btn-sm" href="Familia-Loja.dc.html">Ver como a família vê</a>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar pedido, família ou produto" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Escola-Notificacoes.dc.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px; padding: 16px 20px; border-radius: var(--radius-lg); background: var(--surface-1); border: 1px solid var(--line); box-shadow: var(--shadow-1);">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; min-width: 0; max-width: 100%;">
+<div style="display: flex; flex-direction: column; gap: 6px;"><span style="font-size: 14px; font-weight: 600;">Ver</span><x-import component-from-global-scope="Recreio.SegmentedControl" label="Ver" value="pedidos" options="{{verSeg}}"></x-import></div><x-import component-from-global-scope="Recreio.Select" label="Entrega" default-value="todas" options="{{entSel}}"></x-import>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-secondary" href="#pop-exportado"><x-import component-from-global-scope="Recreio.Icon" name="download" size="{{s18}}"></x-import>Exportar vendas</a><a class="rc-btn rc-btn-primary" href="#pop-produto"><x-import component-from-global-scope="Recreio.Icon" name="plus" size="{{s18}}"></x-import>Novo produto</a></div>
+</div>
+<section aria-label="Indicadores da loja" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px;">
+<x-import component-from-global-scope="Recreio.StatCard" color="azul" label="Pedidos para separar" value="{{sep}}" icon="tag" hint="3 de uniforme · 6 de passeio"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="verde" label="Vendas em novembro" value="{{vendas}}" icon="wallet" hint="212 pedidos · tíquete médio R$ 86,90" format="{{brl}}"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="amarelo" label="Esperando retirada" value="{{ret}}" icon="door" hint="Na secretaria · 4 há mais de 7 dias"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="vermelho" label="Estoque baixo" value="{{baixo}}" icon="alert" hint="Camiseta 8 e 10 · agasalho M" href="#estoque"></x-import>
+</section>
+<x-import component-from-global-scope="Recreio.Card" title="Pedidos" subtitle="Do mais antigo para o mais novo · quem paga é avisado em cada etapa">
+<div role="table" aria-label="Pedidos da loja">
+<div role="row" class="rc-rows-row rc-rows-head" style="--cols: minmax(90px, 0.7fr) minmax(180px, 1.5fr) minmax(170px, 1.5fr) 100px 120px 150px 90px; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);"><span role="columnheader">Pedido</span><span role="columnheader">Família</span><span role="columnheader">Itens</span><span role="columnheader">Total</span><span role="columnheader">Pagamento</span><span role="columnheader">Situação</span><span></span></div>
+<sc-for list="{{pedidos}}" as="r" hint-placeholder-count="6">
+<div role="row" class="rc-rows-row" style="--cols: minmax(90px, 0.7fr) minmax(180px, 1.5fr) minmax(170px, 1.5fr) 100px 120px 150px 90px; align-items: center; padding: 12px; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none;"><span role="cell" style="min-width: 0;"><strong style="display: block; font-weight: 600;">{{r.n}}</strong><small style="color: var(--ink-2);">{{r.em}}</small></span><span role="cell" style="min-width: 0; display: flex; align-items: center; gap: 12px;" data-label="Família"><x-import component-from-global-scope="Recreio.Avatar" name="{{r.resp}}" size="{{s36}}"></x-import><span style="min-width: 0;"><strong style="display: block;">{{r.resp}}</strong><small style="color: var(--ink-2);">{{r.aluno}}</small></span></span><span role="cell" style="min-width: 0;" data-label="Itens"><small style="color: var(--ink-2);">{{r.itens}}</small></span><span role="cell" style="min-width: 0;" data-label="Total"><strong>{{r.total}}</strong></span><span role="cell" style="min-width: 0;" data-label="Pagamento"><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.pTone}}" size="sm">{{r.pag}}</x-import></span><span role="cell" style="min-width: 0;" data-label="Situação"><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.st}}</x-import></span><span role="cell" style="min-width: 0;"><a class="rc-btn rc-btn-{{r.bv}} rc-btn-sm" href="{{r.href}}">{{r.bl}}</a></span></div>
+</sc-for>
+</div>
+</x-import>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 24px; align-items: start;">
+<div id="estoque"><x-import component-from-global-scope="Recreio.Card" title="Estoque baixo" subtitle="Avisa quando sobra menos de 10">
+<div>
+<sc-for list="{{estoque}}" as="p" hint-placeholder-count="3">
+<div class="rc-popup-row" style="grid-template-columns: 36px minmax(0, 1fr) auto;"><span class="rc-dialog-icon {{p.cls}}" style="width: 36px; height: 36px; border-radius: var(--radius-sm);"><x-import component-from-global-scope="Recreio.Icon" name="tag" size="{{s18}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{p.nome}}</strong><small style="color: var(--ink-2);">{{p.meta}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{p.tone}}" size="sm">{{p.st}}</x-import></div>
+</sc-for>
+</div>
+</x-import></div>
+<x-import component-from-global-scope="Recreio.Card" title="Mais vendidos no mês" subtitle="Em quantidade">
+<div style="display: flex; flex-direction: column; gap: 14px;"><sc-for list="{{top}}" as="u" hint-placeholder-count="4"><div><div style="display: flex; justify-content: space-between; gap: 12px; margin-bottom: 6px;"><strong style="font-weight: 600;">{{u.t}}</strong><small style="color: var(--ink-2); white-space: nowrap;">{{u.m}}</small></div><x-import component-from-global-scope="Recreio.ProgressBar" value="{{u.v}}" tone="{{u.tone}}" size="sm" label="{{u.t}}" hide-label="{{yes}}"></x-import></div></sc-for></div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Alert" tone="info" title="Ligado ao financeiro">Compra junto com a mensalidade entra no boleto do mês seguinte. Passeio pago já marca o aluno na lista da portaria.</x-import>
+</div>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="painel"></x-import>
+</div>
+</div>
+<div id="pop-separar" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Separar o pedido 1203">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="tag" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Separar o pedido 1203</p><p class="rc-dialog-desc">Fernanda Lima · Davi Lima · 2º ano B · pago por Pix.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: flex; flex-direction: column; gap: 10px;"><x-import component-from-global-scope="Recreio.Checkbox" label="2 camisetas do uniforme, tamanho 8" description="Prateleira B3 · sobram 4 depois deste pedido" default-checked="{{yes}}"></x-import><x-import component-from-global-scope="Recreio.Checkbox" label="Passeio ao Planetário" description="Davi entra na lista da portaria. Falta a autorização assinada." default-checked="{{yes}}"></x-import></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-separado">Enviar para a sala</a></div>
+</div>
+</div>
+<div id="pop-separado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Pedido a caminho da sala">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Pedido a caminho da sala</p><p class="rc-dialog-desc">A Profa. Luana Freitas entrega ao Davi na saída. Fernanda Lima foi avisada.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-lembrar" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Lembrete enviado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Lembrete enviado</p><p class="rc-dialog-desc">Fernanda Lima recebeu o aviso de retirada. O pedido 1184 fica guardado até 18/12.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-cancelado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Pedido cancelado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Pedido cancelado</p><p class="rc-dialog-desc">O item voltou para o estoque e a família foi avisada.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-produto" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Novo produto">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="plus" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Novo produto</p><p class="rc-dialog-desc">O produto aparece para as famílias do público escolhido.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: flex; flex-direction: column; gap: 14px;"><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px 16px;"><x-import component-from-global-scope="Recreio.TextField" label="Nome" default-value="Camisa da cantata de Natal"></x-import><x-import component-from-global-scope="Recreio.Select" label="Categoria" default-value="ev" options="{{catSel}}"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Preço" default-value="R$ 39,90"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Estoque" default-value="120"></x-import></div><x-import component-from-global-scope="Recreio.FilterChips" label="Quem pode comprar" value="{{fPub}}" options="{{pubs}}"></x-import><x-import component-from-global-scope="Recreio.Switch" label="Permitir pagar junto com a mensalidade" default-checked="{{yes}}"></x-import></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-produto-ok">Publicar produto</a></div>
+</div>
+</div>
+<div id="pop-produto-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Produto publicado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Produto publicado</p><p class="rc-dialog-desc">Ele já aparece na loja das famílias do Fundamental I.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-exportado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Vendas exportadas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="download" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Vendas exportadas</p><p class="rc-dialog-desc">loja-novembro-2026.xlsx foi gerado com 212 pedidos.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Baixar arquivo</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1640}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 5, bellNotifs: [
+      { icon: 'clipboard', title: '5 justificativas para analisar', text: 'Frequência · Fundamental II', time: 'Hoje, 11h05', unread: true, priority: 'importante' },
+      { icon: 'chat', title: 'Fernanda Lima respondeu no chat', text: 'Ana Beatriz · 9º ano A', time: 'Hoje, 10h12', unread: true, priority: 'rotina' },
+      { icon: 'edit', title: 'História 9º B: faltam 4 notas', text: 'Fechamento do 4º bimestre', time: 'Hoje, 9h00', unread: true, priority: 'importante' },
+      { icon: 'alert', title: 'Ocorrência sem resposta da família', text: 'Mateus Holanda · 9º ano C · há 7 dias', time: 'Hoje, 8h30', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: '63 mensalidades vencidas', text: '41 famílias · a régua de cobrança enviou lembretes', time: 'Hoje, 7h00', unread: true, priority: 'rotina' }] };
+    const tabs = [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'comunicados', label: 'Avisos', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }];
+    const shared = {
+      bellCount: 5, activeChild: undefined, activeProfile: 'dir', kids: [],
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      units: [{ id: 'aldeota', label: 'Unidade Aldeota', meta: '1.248 alunos · Infantil ao Médio', href: 'Escola-Painel.dc.html', current: true }, { id: 'eusebio', label: 'Unidade Eusébio', meta: '936 alunos · Infantil e Fundamental I', href: 'Escola-Painel.dc.html' }, { id: 'rede', label: 'Todas as unidades', meta: 'Visão consolidada da rede', href: 'Escola-Painel.dc.html' }],
+      user: { name: 'Lúcia Menezes' },
+      profiles: [{ id: 'dir', label: 'Direção', icon: 'shield', school: 'Colégio Recreio' }, { id: 'prof', label: 'Professora', icon: 'book', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'chat', label: 'Chat com famílias', icon: 'chat', count: 4, href: 'Escola-Chat.dc.html' }] },
+        { label: 'Pedagógico', items: [{ id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Escola-Horarios.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'clipboard', count: 5, href: 'Escola-Frequencia.dc.html' }, { id: 'boletins', label: 'Fechamento e boletins', icon: 'chart', href: 'Escola-Boletins.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 3, href: 'Escola-Ocorrencias.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Escola-Integral.dc.html' }, { id: 'saude', label: 'Saúde e enfermaria', icon: 'heart', href: 'Escola-Saude.dc.html' }, { id: 'inclusao', label: 'Inclusão e AEE', icon: 'accessibility', href: 'Escola-Inclusao.dc.html' }, { id: 'medidas', label: 'Medidas disciplinares', icon: 'flag', href: 'Escola-Medidas.dc.html' }, { id: 'extras', label: 'Pontos extras', icon: 'star', href: 'Escola-Pontos-extras.dc.html' }, { id: 'eja', label: 'EJA', icon: 'moon', href: 'Escola-EJA.dc.html' }] },
+        { label: 'Secretaria', items: [{ id: 'alunos', label: 'Alunos', icon: 'users', href: 'Escola-Alunos.dc.html' }, { id: 'equipe', label: 'Equipe', icon: 'user', href: 'Escola-Equipe.dc.html' }, { id: 'captacao', label: 'Captação', icon: 'filter', count: 9, href: 'Escola-Captacao.dc.html' }, { id: 'matriculas', label: 'Matrículas', icon: 'file-text', count: 12, href: 'Escola-Matriculas.dc.html' }, { id: 'contratos', label: 'Contratos', icon: 'edit', count: 200, href: 'Escola-Contratos.dc.html' }, { id: 'solicitacoes', label: 'Solicitações', icon: 'file', count: 6, href: 'Escola-Solicitacoes.dc.html' }, { id: 'certificados', label: 'Certificados e diplomas', icon: 'graduation', href: 'Escola-Certificados.dc.html' }, { id: 'transferencias', label: 'Transferências', icon: 'sync', href: 'Escola-Transferencias.dc.html' }, { id: 'fotos', label: 'Fotos de alunos', icon: 'camera', href: 'Escola-Fotos.dc.html' }, { id: 'importacao', label: 'Migração de dados', icon: 'upload', href: 'Escola-Importacao.dc.html' }, { id: 'calendario', label: 'Calendário letivo', icon: 'flag', href: 'Escola-Calendario.dc.html' }, { id: 'autorizacoes', label: 'Passeios e autorizações', icon: 'key', href: 'Escola-Autorizacoes.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Escola-Biblioteca.dc.html' }] },
+        { label: 'Família e serviços', items: [{ id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 4, href: 'Escola-Atendimentos.dc.html' }, { id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Escola-Cardapio.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', href: 'Escola-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', count: 9, href: 'Escola-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', href: 'Escola-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'mensalidades', label: 'Mensalidades', icon: 'wallet', count: 41, urgent: true, href: 'Escola-Mensalidades.dc.html' }, { id: 'fiscal', label: 'Notas fiscais e IR', icon: 'receipt', count: 3, href: 'Escola-Fiscal.dc.html' }, { id: 'dae', label: 'DAE SEFAZ-CE', icon: 'receipt', href: 'Escola-DAE.dc.html' }, { id: 'caixa', label: 'Caixa e contas a pagar', icon: 'card', href: 'Escola-Caixa.dc.html' }] },
+        { label: 'Gestão', items: [{ id: 'relatorios', label: 'Relatórios e censo', icon: 'sparkline', href: 'Escola-Relatorios.dc.html' }, { id: 'permissoes', label: 'Grupos e permissões', icon: 'shield', href: 'Escola-Permissoes.dc.html' }, { id: 'modulos', label: 'Módulos e marca', icon: 'modules', href: 'Escola-Modulos.dc.html' }] }]
+    };
+    const __r = Object.assign({ yes: true, no: false, tabs }, shared, {
+      user: { name: 'Renata Alencar' }, activeProfile: 'sec', profiles: [{ id: 'sec', label: 'Secretaria', icon: 'file-text', school: 'Colégio Recreio' }],
+      n2: 2, n3: 3, n4: 4, n5: 5, n6: 6,
+      go_pop_cancelado: () => { location.hash = 'pop-cancelado'; }, go_pop_exportado: () => { location.hash = 'pop-exportado'; }, go_pop_lembrar: () => { location.hash = 'pop-lembrar'; }, go_pop_lidas: () => { location.hash = 'pop-lidas'; }, go_pop_produto: () => { location.hash = 'pop-produto'; }, go_pop_produto_ok: () => { location.hash = 'pop-produto-ok'; }, go_pop_separado: () => { location.hash = 'pop-separado'; }, go_pop_separar: () => { location.hash = 'pop-separar'; },
+      sep: 9, vendas: 18420, ret: 14, baixo: 3, brl: (v) => window.Recreio.brl(v),
+      verSeg: [{ value: 'pedidos', label: 'Pedidos' }, { value: 'produtos', label: 'Produtos' }, { value: 'estoque', label: 'Estoque' }], entSel: [{ value: 'todas', label: 'Todas' }, { value: 'sala', label: 'Entrega em sala' }, { value: 'sec', label: 'Retirada na secretaria' }],
+      pedidos: [
+        { n: '1203', em: 'Hoje, 9h52', resp: 'Fernanda Lima', aluno: 'Davi Lima · 2º ano B', itens: '2 camisetas tam. 8 · Passeio ao Planetário', total: 'R$ 177,80', pag: 'Pix', pTone: 'success', st: 'Separar', tone: 'warning', bl: 'Separar', bv: 'primary', href: '#pop-separar' },
+        { n: '1202', em: 'Hoje, 8h31', resp: 'Marina Prado', aluno: 'Helena Prado · 5º ano A', itens: 'Agasalho tam. 10', total: 'R$ 149,90', pag: 'Cartão 3x', pTone: 'success', st: 'Separar', tone: 'warning', bl: 'Separar', bv: 'primary', href: '#pop-separar' },
+        { n: '1201', em: 'Ontem', resp: 'Sérgio Andrade', aluno: 'Lucas Andrade · 9º ano A', itens: '2 convites extras da formatura', total: 'R$ 120,00', pag: 'Na mensalidade', pTone: 'info', st: 'Ingresso enviado', tone: 'success', bl: 'Ver', bv: 'ghost', href: '#pop-separar' },
+        { n: '1198', em: '23/11', resp: 'Paulo Menezes', aluno: 'Laura Menezes · Infantil V', itens: 'Kit de material do 1º ano', total: 'R$ 352,00', pag: 'Pix', pTone: 'success', st: 'Entrega em 02/02', tone: 'neutral', bl: 'Ver', bv: 'ghost', href: '#pop-separar' },
+        { n: '1184', em: '18/11', resp: 'Fernanda Lima', aluno: 'Davi Lima · 2º ano B', itens: '2 camisetas tam. 8', total: 'R$ 129,80', pag: 'Pix', pTone: 'success', st: 'Retirada há 7 dias', tone: 'danger', bl: 'Lembrar', bv: 'secondary', href: '#pop-lembrar' },
+        { n: '1179', em: '17/11', resp: 'Cláudia Nogueira', aluno: 'Arthur Nogueira · 9º ano A', itens: 'Bermuda tam. 14', total: 'R$ 79,90', pag: 'Aguardando Pix', pTone: 'warning', st: 'Sem pagamento', tone: 'neutral', bl: 'Cancelar', bv: 'ghost', href: '#pop-cancelado' }],
+      estoque: [{ nome: 'Camiseta do uniforme · tamanho 8', meta: '6 unidades · reposição pedida em 19/11', st: '6', tone: 'danger', cls: 'rc-tone-danger' }, { nome: 'Camiseta do uniforme · tamanho 10', meta: '9 unidades', st: '9', tone: 'warning', cls: 'rc-tone-warning' }, { nome: 'Agasalho com zíper · tamanho M', meta: '4 unidades', st: '4', tone: 'danger', cls: 'rc-tone-danger' }],
+      top: [{ t: 'Passeio ao Planetário', m: '54 vendas', v: 100, tone: 'brand' }, { t: 'Camiseta do uniforme', m: '48 vendas', v: 89, tone: 'brand' }, { t: 'Convite extra da formatura', m: '37 vendas', v: 68, tone: 'brand' }, { t: 'Foto oficial da turma', m: '29 vendas', v: 54, tone: 'brand' }],
+      catSel: [{ value: 'unif', label: 'Uniforme' }, { value: 'mat', label: 'Material' }, { value: 'ev', label: 'Eventos e passeios' }], fPub: ['f1'], pubs: [{ value: 'todos', label: 'Toda a escola' }, { value: 'f1', label: 'Fundamental I' }, { value: '9', label: '9º ano' }]
+    });
+    /* Controle de acesso: cada perfil vê só os módulos liberados em Grupos e permissões. */
+    const ACESSO = { prof: ['comunicados', 'notas', 'chamada', 'agenda', 'frequencia', 'ocorrencias', 'inicio', 'diario', 'horarios', 'materiais', 'atendimentos', 'tarefas'], coord: ['painel', 'comunicados', 'chat', 'notas', 'chamada', 'agenda', 'frequencia', 'boletins', 'ocorrencias', 'integral', 'alunos', 'autorizacoes', 'equipe', 'horarios', 'calendario', 'atendimentos', 'cardapio', 'galeria', 'pesquisas', 'saude', 'inclusao', 'relatorios', 'biblioteca', 'portaria', 'medidas', 'extras', 'eja', 'certificados'], sec: ['comunicados', 'alunos', 'matriculas', 'contratos', 'autorizacoes', 'portaria', 'equipe', 'solicitacoes', 'calendario', 'horarios', 'loja', 'pesquisas', 'captacao', 'certificados', 'transferencias', 'fotos', 'importacao'], fin: ['comunicados', 'alunos', 'contratos', 'mensalidades', 'loja', 'fiscal', 'caixa', 'dae'], bib: ['comunicados', 'biblioteca'], port: ['comunicados', 'portaria', 'autorizacoes'], int: ['comunicados', 'chamada', 'integral', 'ocorrencias'], nutri: ['comunicados', 'cardapio'], enf: ['comunicados', 'saude'], aee: ['comunicados', 'inclusao', 'atendimentos', 'ocorrencias'] };
+    const permitidos = ACESSO[__r.activeProfile];
+    if (permitidos) {
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.filter((i) => permitidos.includes(i.id)) })).filter((g) => g.items.length);
+      __r.tabs = (__r.tabs || []).filter((t) => permitidos.includes(t.id));
+      __r.units = null;
+    }
+    /* Biblioteca e portaria: direção e coordenação entram pela visão de gestão. A operação fica com a bibliotecária e a portaria. */
+    if (['dir', 'coord'].includes(__r.activeProfile)) {
+      const GESTAO = { biblioteca: 'Escola-Biblioteca-Gestao.dc.html', portaria: 'Escola-Portaria-Gestao.dc.html' };
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.map((i) => (GESTAO[i.id] ? Object.assign({}, i, { href: GESTAO[i.id] }) : i)) }));
+      __r.tabs = (__r.tabs || []).map((t) => (GESTAO[t.id] ? Object.assign({}, t, { href: GESTAO[t.id] }) : t));
+    }
+    /* Portal do professor: quem entra como professor vê o próprio menu, com as turmas e o planejamento. */
+    if (__r.activeProfile === 'prof') {
+      __r.nav = [
+        { items: [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }] },
+        { label: 'Minhas turmas', items: [{ id: 'diario', label: 'Diário de classe', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'tarefas', label: 'Tarefas', icon: 'list', count: 6, href: 'Professor-Tarefas.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', href: 'Escola-Ocorrencias.dc.html' }] },
+        { label: 'Planejamento', items: [{ id: 'horarios', label: 'Meus horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Professor-Materiais.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 2, href: 'Escola-Atendimentos.dc.html' }] }];
+      __r.tabs = [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'diario', label: 'Diário', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }];
+    }
+    return Object.assign({ s12: 12, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96 }, bell, __r);
+  }
+}
+</script>
+</body>
+</html>

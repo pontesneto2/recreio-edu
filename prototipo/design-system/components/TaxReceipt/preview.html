@@ -1,0 +1,28 @@
+<!-- @dsCard group="Financeiro" height=680 width=900 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>TaxReceipt</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement(
+      P.TaxReceipt,
+      {
+        year: 2026,
+        code: "RCR-2026-7F3A-91C2",
+        school: { name: "Col\xE9gio Recreio", cnpj: "11.222.333/0001-81", address: "Av. das Escolas, 1000, Aldeota, Fortaleza/CE" },
+        payer: { name: "Fernanda Lima", cpf: "***.482.193-**" },
+        dependents: [{ name: "Davi Lima", cpf: "***.715.208-**", course: "Ensino Fundamental \xB7 2\xBA ano", total: 16946 }, { name: "Ana Beatriz Lima", cpf: "***.903.641-**", course: "Ensino Fundamental \xB7 9\xBA ano", total: 18662.4 }]
+      }
+    );
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>App: Entrar</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+<header class="rc-app-bar"><a class="rc-app-back" href="App-Abertura.dc.html" aria-label="Voltar"><x-import component-from-global-scope="Recreio.Icon" name="chevron-left" size="{{s22}}"></x-import></a><h1>Entrar</h1><span></span></header>
+<div class="rc-app-scroll"><div class="rc-nat-body"><div style="display: grid; justify-items: center; gap: 6px; text-align: center;"><x-import component-from-global-scope="Recreio.SchoolMark" name="Colégio Recreio" size="{{s64}}"></x-import><strong style="font-size: 1.375rem;">Entre na sua conta</strong><p style="margin: 0; color: var(--ink-2);">Use o CPF ou o e-mail cadastrado na secretaria.</p></div><x-import component-from-global-scope="Recreio.TextField" label="CPF ou e-mail" default-value="fernanda.lima@email.com" icon="user"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Senha" type="password" default-value="recreio2026" icon="lock"></x-import><a href="#pop-senha" style="align-self: flex-end; font-weight: 600;">Esqueci a senha</a><a class="rc-nat-face" href="App-Perfil-Escolha.dc.html"><i><x-import component-from-global-scope="Recreio.Icon" name="scan" size="{{s32}}"></x-import></i><strong>Entrar com Face ID</strong></a><section><div class="rc-nat-list"><a class="rc-nat-item" href="#pop-primeiro"><span class="rc-nat-ico rc-c-laranja"><x-import component-from-global-scope="Recreio.Icon" name="key" size="{{s18}}"></x-import></span><span><strong>Primeiro acesso</strong><small>Código por SMS para criar a senha</small></span><span class="rc-nat-end"><x-import component-from-global-scope="Recreio.Icon" name="chevron-right" size="{{s18}}"></x-import></span></a></div></section></div></div>
+<div class="rc-app-cta"><a class="rc-btn rc-btn-primary rc-btn-full" href="App-Perfil-Escolha.dc.html"><span class="rc-btn-label">Entrar</span></a></div>
+<div class="rc-app-home"></div>
+<div id="pop-senha" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Recuperar a senha"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="key" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Recuperar a senha</p><p class="rc-dialog-desc">Enviamos um link para criar uma nova senha.</p></div></div><div class="rc-dialog-body"><div style="display: grid; gap: 12px;"><x-import component-from-global-scope="Recreio.TextField" label="CPF ou e-mail" placeholder="Seu CPF ou e-mail"></x-import></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-secondary" href="#"><span class="rc-btn-label">Cancelar</span></a><a class="rc-btn rc-btn-primary" href="#pop-senha-ok"><span class="rc-btn-label">Enviar link</span></a></div></div></div>
+<div id="pop-senha-ok" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Link enviado"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog rc-dialog-hero"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Link enviado</p><p class="rc-dialog-desc">Confira o e-mail fernanda.lima@email.com. O link vale por 30 minutos.</p></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#"><span class="rc-btn-label">Concluir</span></a></div></div></div>
+<div id="pop-primeiro" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Primeiro acesso"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="phone" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Primeiro acesso</p><p class="rc-dialog-desc">Digite o código de 6 números enviado por SMS.</p></div></div><div class="rc-dialog-body"><div style="display: grid; gap: 12px;"><x-import component-from-global-scope="Recreio.CodeInput" hint="Enviado para (85) 9****-4521"></x-import><a href="#pop-primeiro">Reenviar código em 60 s</a></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-secondary" href="#"><span class="rc-btn-label">Cancelar</span></a><a class="rc-btn rc-btn-primary" href="#pop-primeiro-ok"><span class="rc-btn-label">Confirmar</span></a></div></div></div>
+<div id="pop-primeiro-ok" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Conta ativada"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog rc-dialog-hero"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Conta ativada</p><p class="rc-dialog-desc">Agora escolha com qual perfil quer entrar.</p></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="App-Perfil-Escolha.dc.html"><span class="rc-btn-label">Concluir</span></a></div></div></div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return Object.assign({ yes: true, no: false, one: 1, two: 2, three: 3, four: 4, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96, s120: 120, s168: 168 }, {
+
+    });
+  }
+}
+</script>
+</body>
+</html>

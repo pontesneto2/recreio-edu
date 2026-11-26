@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Pontos extras</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" units="{{units}}" groups="{{nav}}" active="extras"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="star" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Pontos extras</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Pedidos dos professores, lançamento, regras e efeito na média</p></div></div>
+<a class="rc-btn rc-btn-ghost rc-btn-sm" href="Escola-Notas-e-faltas.dc.html">Notas e faltas</a>
+<a class="rc-btn rc-btn-ghost rc-btn-sm" href="Escola-Boletins.dc.html">Boletins</a>
+<a class="rc-btn rc-btn-secondary rc-btn-sm" href="#pop-exportado">Exportar relatório</a>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Escola-Notificacoes.dc.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 16px;">
+<x-import component-from-global-scope="Recreio.StatCard" color="laranja" label="Esperando aprovação" href="#pedidos" value="{{e1}}" icon="clock" hint="O mais antigo é de 23/11"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="azul" label="Pontos lançados no bimestre" value="{{e2}}" format="{{dec}}" icon="star" hint="71 lançamentos aprovados"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="verde" label="Alunos com ponto extra" value="{{e3}}" icon="users" hint="Em 9 turmas do Fundamental II"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="vermelho" label="Barrados pelo teto" value="{{e4}}" icon="alert" hint="Passariam de 1,0 na disciplina"></x-import>
+</div>
+<div id="pedidos"><x-import component-from-global-scope="Recreio.Card" title="Pedidos esperando aprovação" subtitle="Lançados pelos professores. O ponto só vale depois da sua decisão.">
+<div role="table" aria-label="Pedidos de ponto extra">
+<div role="row" class="rc-rows-row rc-rows-head" style="--cols: minmax(0, 1.3fr) minmax(0, 1.2fr) minmax(0, 1.3fr) 70px minmax(0, 1.6fr) 176px; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);"><span role="columnheader">Aluno</span><span role="columnheader">Disciplina</span><span role="columnheader">Atividade</span><span role="columnheader">Pontos</span><span role="columnheader">Justificativa</span><span role="columnheader"></span></div>
+<sc-for list="{{pedidos}}" as="r" hint-placeholder-count="5">
+<div role="row" class="rc-rows-row" style="--cols: minmax(0, 1.3fr) minmax(0, 1.2fr) minmax(0, 1.3fr) 70px minmax(0, 1.6fr) 176px; padding: 12px; align-items: center; border-bottom: 1px solid var(--line);"><span role="cell" style="min-width: 0;"><strong style="display: block; font-weight: 600;">{{r.n}}</strong><small style="color: var(--ink-2);">{{r.m}}</small></span><span role="cell" style="min-width: 0;" data-label="Disciplina"><strong style="display: block; font-weight: 600;">{{r.d}}</strong><small style="color: var(--ink-2);">{{r.p}}</small></span><span role="cell" style="min-width: 0;" data-label="Atividade">{{r.at}}</span><span role="cell" style="min-width: 0;" data-label="Pontos"><strong style="font-weight: 600; font-variant-numeric: tabular-nums;">{{r.pt}}</strong></span><span role="cell" style="min-width: 0;" data-label="Justificativa"><small style="color: var(--ink-2);">{{r.j}}</small></span><span role="cell" style="min-width: 0;"><span style="display: flex; flex-wrap: wrap; gap: 6px;"><a class="rc-btn rc-btn-primary rc-btn-sm" href="#pop-aprovado">Aprovar</a><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-negar">Negar</a></span></span></div>
+</sc-for>
+</div>
+</x-import></div>
+<div class="rc-split" style="gap: 24px; align-items: start; --split: minmax(0, 1fr) minmax(0, 1fr);">
+<div style="display: flex; flex-direction: column; gap: 24px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Lançar ponto extra" subtitle="Direto pela coordenação, para um aluno">
+<x-import component-from-global-scope="Recreio.SaveGuard" label="Lançar ponto extra" hint="Preencha o lançamento para liberar o botão" saved-title="Ponto extra lançado" saved-message="O aluno e a família veem o ponto no boletim.">
+<div style="display: flex; flex-direction: column; gap: 14px;"><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px;">
+<x-import component-from-global-scope="Recreio.Select" label="Turma" default-value="a9" options="{{turmasSel}}"></x-import>
+<x-import component-from-global-scope="Recreio.Select" label="Disciplina" default-value="mat" options="{{discSel}}"></x-import>
+<x-import component-from-global-scope="Recreio.Select" label="Aluno" default-value="sel" options="{{alunosSel}}"></x-import>
+<x-import component-from-global-scope="Recreio.Select" label="Pontos" default-value="05" options="{{ptsSel}}"></x-import>
+</div><x-import component-from-global-scope="Recreio.TextField" label="Atividade" placeholder="Ex.: Olimpíada de Matemática, 2ª fase"></x-import><x-import component-from-global-scope="Recreio.TextArea" label="Justificativa" placeholder="O que o aluno fez para ganhar o ponto" rows="{{two}}"></x-import><p style="margin: 0; line-height: 1.5; color: var(--ink-2);">Lançamento da coordenação entra aprovado. O teto de 1,0 ponto por disciplina no bimestre é conferido ao salvar.</p></div>
+</x-import>
+</x-import>
+</div>
+<div style="display: flex; flex-direction: column; gap: 24px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Regras de ponto extra" subtitle="Valem para todos os professores e aparecem no boletim">
+<x-import component-from-global-scope="Recreio.SaveGuard" label="Salvar regras de ponto extra" hint="Mude uma regra para liberar o botão Salvar">
+<div style="display: flex; flex-direction: column; gap: 14px;"><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px;">
+<x-import component-from-global-scope="Recreio.Select" label="Teto por disciplina no bimestre" default-value="10" options="{{tetoSel}}"></x-import>
+<x-import component-from-global-scope="Recreio.Select" label="Como o ponto entra" default-value="soma" options="{{entraSel}}"></x-import>
+<x-import component-from-global-scope="Recreio.Select" label="Quem aprova" default-value="coord" options="{{aprovaSel}}"></x-import>
+<x-import component-from-global-scope="Recreio.TextField" label="Nota máxima com ponto extra" default-value="10,0"></x-import>
+</div><x-import component-from-global-scope="Recreio.Switch" label="Professor lança, coordenação aprova" description="O ponto só aparece para o aluno depois da aprovação." default-checked="{{yes}}"></x-import><x-import component-from-global-scope="Recreio.Switch" label="Família vê o ponto extra no boletim" description="Em linha separada, com a atividade." default-checked="{{yes}}"></x-import><x-import component-from-global-scope="Recreio.Switch" label="Ponto extra vale na recuperação" description="Desligado, a nota de recuperação fica sem ponto extra."></x-import></div>
+</x-import>
+</x-import>
+</div>
+</div>
+<x-import component-from-global-scope="Recreio.Card" title="Efeito na média" subtitle="9º ano · 4º bimestre · média mínima 6,0 · o ponto soma depois da média">
+<div role="table" aria-label="Efeito na média">
+<div role="row" class="rc-rows-row rc-rows-head" style="--cols: minmax(0, 1.5fr) minmax(0, 1.2fr) 100px 100px 100px 180px; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);"><span role="columnheader">Aluno</span><span role="columnheader">Disciplina</span><span role="columnheader">Média antes</span><span role="columnheader">Ponto extra</span><span role="columnheader">Média depois</span><span role="columnheader">Situação</span></div>
+<sc-for list="{{efeito}}" as="r" hint-placeholder-count="6">
+<div role="row" class="rc-rows-row" style="--cols: minmax(0, 1.5fr) minmax(0, 1.2fr) 100px 100px 100px 180px; padding: 12px; align-items: center; border-bottom: 1px solid var(--line);"><span role="cell" style="min-width: 0;"><strong style="display: block; font-weight: 600;">{{r.n}}</strong><small style="color: var(--ink-2);">{{r.m}}</small></span><span role="cell" style="min-width: 0;" data-label="Disciplina">{{r.d}}</span><span role="cell" style="min-width: 0;" data-label="Média antes"><strong style="font-weight: 600; font-variant-numeric: tabular-nums;">{{r.a}}</strong></span><span role="cell" style="min-width: 0;" data-label="Ponto extra"><strong style="font-weight: 600; font-variant-numeric: tabular-nums;">{{r.x}}</strong></span><span role="cell" style="min-width: 0;" data-label="Média depois"><strong style="font-weight: 600; font-variant-numeric: tabular-nums;">{{r.dp}}</strong></span><span role="cell" style="min-width: 0;" data-label="Situação"><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.st}}</x-import></span></div>
+</sc-for>
+</div><div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;"><a class="rc-btn rc-btn-secondary rc-btn-sm" href="Escola-Notas-e-faltas.dc.html">Abrir notas e faltas</a><a class="rc-btn rc-btn-ghost rc-btn-sm" href="Escola-Boletins.dc.html">Ver nos boletins</a></div>
+</x-import>
+<div class="rc-split" style="gap: 24px; align-items: start; --split: minmax(0, 3fr) minmax(0, 2fr);">
+<div style="display: flex; flex-direction: column; gap: 24px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Histórico" subtitle="Decisões e lançamentos mais recentes">
+<div>
+<sc-for list="{{hist}}" as="r" hint-placeholder-count="5">
+<div class="rc-popup-row"><span style="display: grid; place-items: center; width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--surface-2); color: var(--brand-ink);"><x-import component-from-global-scope="Recreio.Icon" name="{{r.ic}}" size="{{s18}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{r.n}}</strong><small style="color: var(--ink-2);">{{r.m}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.st}}</x-import></div>
+</sc-for>
+</div>
+</x-import>
+</div>
+<div style="display: flex; flex-direction: column; gap: 24px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Pontos por disciplina" subtitle="Lançados no 4º bimestre">
+<div style="display: flex; flex-direction: column; gap: 14px;">
+<sc-for list="{{porDisc}}" as="r" hint-placeholder-count="5">
+<x-import component-from-global-scope="Recreio.ProgressBar" value="{{r.v}}" max="{{r.max}}" label="{{r.t}}" tone="{{r.tone}}" size="sm"></x-import>
+</sc-for>
+</div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Alert" tone="info" title="Como o ponto aparece">No boletim o ponto extra fica em linha própria, com a atividade. A média do bimestre nunca passa de 10,0.</x-import>
+</div>
+</div>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="extras"></x-import>
+</div>
+</div>
+<div id="pop-aprovado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Ponto extra aprovado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Ponto extra aprovado</p><p class="rc-dialog-desc">O professor foi avisado. O ponto já soma na média do aluno e aparece no boletim.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-negar" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Negar o pedido">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-md">
+<div class="rc-dialog-head"><div class="rc-dialog-titles"><p class="rc-dialog-title">Negar o pedido</p><p class="rc-dialog-desc">O professor recebe o motivo. O aluno não vê o pedido negado.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;">
+<x-import component-from-global-scope="Recreio.Select" label="Motivo" default-value="teto" options="{{motNegar}}"></x-import><x-import component-from-global-scope="Recreio.TextArea" label="Recado para o professor" default-value="O aluno já tem 1,0 ponto extra em Matemática neste bimestre. O teto foi atingido." rows="{{two}}"></x-import>
+</div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-negado">Negar o pedido</a></div>
+</div>
+</div>
+<div id="pop-negado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Pedido negado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Pedido negado</p><p class="rc-dialog-desc">O professor recebeu a decisão com o seu recado. Nada muda na média do aluno.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-exportado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Relatório gerado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Relatório gerado</p><p class="rc-dialog-desc">O relatório de pontos extras do 4º bimestre está em Relatórios e censo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 5, bellNotifs: [
+      { icon: 'clipboard', title: '5 justificativas para analisar', text: 'Frequência · Fundamental II', time: 'Hoje, 11h05', unread: true, priority: 'importante' },
+      { icon: 'chat', title: 'Fernanda Lima respondeu no chat', text: 'Ana Beatriz · 9º ano A', time: 'Hoje, 10h12', unread: true, priority: 'rotina' },
+      { icon: 'edit', title: 'História 9º B: faltam 4 notas', text: 'Fechamento do 4º bimestre', time: 'Hoje, 9h00', unread: true, priority: 'importante' },
+      { icon: 'alert', title: 'Ocorrência sem resposta da família', text: 'Mateus Holanda · 9º ano C · há 7 dias', time: 'Hoje, 8h30', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: '63 mensalidades vencidas', text: '41 famílias · a régua de cobrança enviou lembretes', time: 'Hoje, 7h00', unread: true, priority: 'rotina' }] };
+    const tabs = [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'comunicados', label: 'Avisos', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }];
+    const shared = {
+      bellCount: 5, activeChild: undefined, activeProfile: 'dir', kids: [],
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      units: [{ id: 'aldeota', label: 'Unidade Aldeota', meta: '1.248 alunos · Infantil ao Médio', href: 'Escola-Painel.dc.html', current: true }, { id: 'eusebio', label: 'Unidade Eusébio', meta: '936 alunos · Infantil e Fundamental I', href: 'Escola-Painel.dc.html' }, { id: 'rede', label: 'Todas as unidades', meta: 'Visão consolidada da rede', href: 'Escola-Painel.dc.html' }],
+      user: { name: 'Lúcia Menezes' },
+      profiles: [{ id: 'dir', label: 'Direção', icon: 'shield', school: 'Colégio Recreio' }, { id: 'prof', label: 'Professora', icon: 'book', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'chat', label: 'Chat com famílias', icon: 'chat', count: 4, href: 'Escola-Chat.dc.html' }] },
+        { label: 'Pedagógico', items: [{ id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Escola-Horarios.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'clipboard', count: 5, href: 'Escola-Frequencia.dc.html' }, { id: 'boletins', label: 'Fechamento e boletins', icon: 'chart', href: 'Escola-Boletins.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 3, href: 'Escola-Ocorrencias.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Escola-Integral.dc.html' }, { id: 'saude', label: 'Saúde e enfermaria', icon: 'heart', href: 'Escola-Saude.dc.html' }, { id: 'inclusao', label: 'Inclusão e AEE', icon: 'accessibility', href: 'Escola-Inclusao.dc.html' }, { id: 'medidas', label: 'Medidas disciplinares', icon: 'flag', href: 'Escola-Medidas.dc.html' }, { id: 'extras', label: 'Pontos extras', icon: 'star', href: 'Escola-Pontos-extras.dc.html' }, { id: 'eja', label: 'EJA', icon: 'moon', href: 'Escola-EJA.dc.html' }] },
+        { label: 'Secretaria', items: [{ id: 'alunos', label: 'Alunos', icon: 'users', href: 'Escola-Alunos.dc.html' }, { id: 'equipe', label: 'Equipe', icon: 'user', href: 'Escola-Equipe.dc.html' }, { id: 'captacao', label: 'Captação', icon: 'filter', count: 9, href: 'Escola-Captacao.dc.html' }, { id: 'matriculas', label: 'Matrículas', icon: 'file-text', count: 12, href: 'Escola-Matriculas.dc.html' }, { id: 'contratos', label: 'Contratos', icon: 'edit', count: 200, href: 'Escola-Contratos.dc.html' }, { id: 'solicitacoes', label: 'Solicitações', icon: 'file', count: 6, href: 'Escola-Solicitacoes.dc.html' }, { id: 'certificados', label: 'Certificados e diplomas', icon: 'graduation', href: 'Escola-Certificados.dc.html' }, { id: 'transferencias', label: 'Transferências', icon: 'sync', href: 'Escola-Transferencias.dc.html' }, { id: 'fotos', label: 'Fotos de alunos', icon: 'camera', href: 'Escola-Fotos.dc.html' }, { id: 'importacao', label: 'Migração de dados', icon: 'upload', href: 'Escola-Importacao.dc.html' }, { id: 'calendario', label: 'Calendário letivo', icon: 'flag', href: 'Escola-Calendario.dc.html' }, { id: 'autorizacoes', label: 'Passeios e autorizações', icon: 'key', href: 'Escola-Autorizacoes.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Escola-Biblioteca.dc.html' }] },
+        { label: 'Família e serviços', items: [{ id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 4, href: 'Escola-Atendimentos.dc.html' }, { id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Escola-Cardapio.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', href: 'Escola-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', count: 9, href: 'Escola-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', href: 'Escola-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'mensalidades', label: 'Mensalidades', icon: 'wallet', count: 41, urgent: true, href: 'Escola-Mensalidades.dc.html' }, { id: 'fiscal', label: 'Notas fiscais e IR', icon: 'receipt', count: 3, href: 'Escola-Fiscal.dc.html' }, { id: 'dae', label: 'DAE SEFAZ-CE', icon: 'receipt', href: 'Escola-DAE.dc.html' }, { id: 'caixa', label: 'Caixa e contas a pagar', icon: 'card', href: 'Escola-Caixa.dc.html' }] },
+        { label: 'Gestão', items: [{ id: 'relatorios', label: 'Relatórios e censo', icon: 'sparkline', href: 'Escola-Relatorios.dc.html' }, { id: 'permissoes', label: 'Grupos e permissões', icon: 'shield', href: 'Escola-Permissoes.dc.html' }, { id: 'modulos', label: 'Módulos e marca', icon: 'modules', href: 'Escola-Modulos.dc.html' }] }]
+    };
+    const wk = (r) => ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'].map((d, i) => ({ day: d, today: i === 2, text: r[i] }));
+    const __r = Object.assign({ yes: true, no: false, tabs }, shared, {
+      user: { name: 'Juliana Sampaio' }, activeProfile: 'coord', profiles: [{ id: 'coord', label: 'Coordenação', icon: 'shield', school: 'Colégio Recreio' }],
+      e1: 5, e2: 38.5, e3: 64, e4: 1, two: 2, dec: (v) => v.toFixed(1).replace('.', ','),
+      turmasSel: [{ value: 'a9', label: '9º ano A' }, { value: 'b9', label: '9º ano B' }, { value: 'c9', label: '9º ano C' }, { value: 'a8', label: '8º ano A' }],
+      discSel: [{ value: 'mat', label: 'Matemática' }, { value: 'pt', label: 'Língua Portuguesa' }, { value: 'ci', label: 'Ciências' }, { value: 'his', label: 'História' }, { value: 'geo', label: 'Geografia' }, { value: 'ing', label: 'Inglês' }, { value: 'art', label: 'Artes' }],
+      alunosSel: [{ value: 'sel', label: 'Escolha o aluno' }, { value: 'ana', label: 'Ana Beatriz Lima' }, { value: 'art', label: 'Arthur Nogueira' }, { value: 'bru', label: 'Bruno Sales' }, { value: 'cai', label: 'Caio Reis' }, { value: 'dav', label: 'Davi Martins' }, { value: 'joa', label: 'João Pedro Cavalcante' }, { value: 'luc', label: 'Lucas Andrade' }, { value: 'mar', label: 'Marina Teixeira' }],
+      ptsSel: [{ value: '03', label: '0,3 ponto' }, { value: '05', label: '0,5 ponto' }, { value: '10', label: '1,0 ponto' }],
+      tetoSel: [{ value: '05', label: '0,5 ponto' }, { value: '10', label: '1,0 ponto' }, { value: '15', label: '1,5 ponto' }, { value: '20', label: '2,0 pontos' }],
+      entraSel: [{ value: 'soma', label: 'Soma depois da média' }, { value: 'media', label: 'Entra na média como nota' }],
+      aprovaSel: [{ value: 'coord', label: 'Coordenação' }, { value: 'dir', label: 'Direção' }, { value: 'prof', label: 'O próprio professor, sem aprovação' }],
+      motNegar: [{ value: 'teto', label: 'Teto da disciplina atingido' }, { value: 'just', label: 'Justificativa fraca' }, { value: 'dupla', label: 'Atividade já pontuada' }],
+      pedidos: [
+        { n: 'Ana Beatriz Lima', m: '9º ano A', d: 'Matemática', p: 'Prof. Ricardo Albuquerque', at: 'Olimpíada de Matemática, 2ª fase', pt: '0,5', j: 'Classificada para a 2ª fase. Pedido em 24/11.' },
+        { n: 'Lucas Andrade', m: '9º ano A', d: 'Língua Portuguesa', p: 'Profa. Helena Costa', at: 'Sarau de leitura', pt: '0,5', j: 'Leu um conto próprio no sarau de 19/11. Pedido em 23/11.' },
+        { n: 'Marina Teixeira', m: '9º ano A', d: 'Ciências', p: 'Prof. Marcos Vinícius Teixeira', at: 'Feira de ciências', pt: '1,0', j: 'Projeto do filtro de água, 2º lugar. Pedido em 23/11.' },
+        { n: 'Isabela Rocha', m: '9º ano C', d: 'História', p: 'Prof. Marcelo Dias', at: 'Seminário da Era Vargas', pt: '0,5', j: 'Apresentou no lugar de colega que faltou. Pedido em 24/11.' },
+        { n: 'Davi Martins', m: '9º ano A', d: 'Matemática', p: 'Prof. Ricardo Albuquerque', at: 'Monitoria da Lista 7', pt: '0,5', j: 'Já tem 1,0 em Matemática. Passa do teto. Pedido em 25/11.' }],
+      efeito: [
+        { n: 'Arthur Nogueira', m: '9º ano A', d: 'Matemática', a: '5,3', x: '+ 0,5', dp: '5,8', st: 'Segue em recuperação', tone: 'warning' },
+        { n: 'Davi Martins', m: '9º ano A', d: 'Ciências', a: '5,2', x: '+ 0,5', dp: '5,7', st: 'Segue em recuperação', tone: 'warning' },
+        { n: 'Davi Martins', m: '9º ano A', d: 'Matemática', a: '6,6', x: '+ 1,0', dp: '7,6', st: 'Teto atingido', tone: 'info' },
+        { n: 'Caio Reis', m: '9º ano A', d: 'Geografia', a: '7,8', x: '+ 0,5', dp: '8,3', st: 'Acima da média', tone: 'success' },
+        { n: 'Mateus Holanda', m: '9º ano C', d: 'História', a: '5,8', x: '+ 0,3', dp: '6,1', st: 'Passou a ter média', tone: 'success' },
+        { n: 'João Pedro Cavalcante', m: '9º ano A', d: 'Inglês', a: '9,7', x: '+ 0,5', dp: '10,0', st: 'Limitado a 10,0', tone: 'neutral' }],
+      hist: [
+        { ic: 'check-circle', n: 'Arthur Nogueira · Matemática · 0,5 ponto', m: 'Refez a Lista 6 em monitoria · aprovado por você em 23/11, 16h12', st: 'Aprovado', tone: 'success' },
+        { ic: 'check-circle', n: 'Caio Reis · Geografia · 0,5 ponto', m: 'Maquete das bacias do Ceará · aprovado por você em 21/11, 10h40', st: 'Aprovado', tone: 'success' },
+        { ic: 'x-circle', n: 'Davi Martins · Artes · 1,0 ponto', m: 'Sem atividade ligada · negado por você em 19/11, 9h05', st: 'Negado', tone: 'neutral' },
+        { ic: 'star', n: 'João Pedro Cavalcante · Inglês · 0,5 ponto', m: 'Lançado pela coordenação em 18/11 · concurso de soletração', st: 'Lançado', tone: 'info' },
+        { ic: 'sliders', n: 'Regra alterada: teto de 1,5 para 1,0 ponto', m: 'Por Lúcia Menezes, diretora, em 05/10 · vale desde o 4º bimestre', st: 'Regra', tone: 'warning' }],
+      porDisc: [{ t: 'Matemática · 11,5 pontos', v: 11.5, max: 12, tone: 'brand' }, { t: 'Ciências · 9,0 pontos', v: 9, max: 12, tone: 'brand' }, { t: 'Língua Portuguesa · 7,5 pontos', v: 7.5, max: 12, tone: 'brand' }, { t: 'História e Geografia · 6,5 pontos', v: 6.5, max: 12, tone: 'brand' }, { t: 'Inglês e Artes · 4,0 pontos', v: 4, max: 12, tone: 'brand' }]
+    });
+    /* Controle de acesso: cada perfil vê só os módulos liberados em Grupos e permissões. */
+    const ACESSO = { prof: ['comunicados', 'notas', 'chamada', 'agenda', 'frequencia', 'ocorrencias', 'inicio', 'diario', 'horarios', 'materiais', 'atendimentos', 'tarefas'], coord: ['painel', 'comunicados', 'chat', 'notas', 'chamada', 'agenda', 'frequencia', 'boletins', 'ocorrencias', 'integral', 'alunos', 'autorizacoes', 'equipe', 'horarios', 'calendario', 'atendimentos', 'cardapio', 'galeria', 'pesquisas', 'saude', 'inclusao', 'relatorios', 'biblioteca', 'portaria', 'medidas', 'extras', 'eja', 'certificados'], sec: ['comunicados', 'alunos', 'matriculas', 'contratos', 'autorizacoes', 'portaria', 'equipe', 'solicitacoes', 'calendario', 'horarios', 'loja', 'pesquisas', 'captacao', 'certificados', 'transferencias', 'fotos', 'importacao'], fin: ['comunicados', 'alunos', 'contratos', 'mensalidades', 'loja', 'fiscal', 'caixa', 'dae'], bib: ['comunicados', 'biblioteca'], port: ['comunicados', 'portaria', 'autorizacoes'], int: ['comunicados', 'chamada', 'integral', 'ocorrencias'], nutri: ['comunicados', 'cardapio'], enf: ['comunicados', 'saude'], aee: ['comunicados', 'inclusao', 'atendimentos', 'ocorrencias'] };
+    const permitidos = ACESSO[__r.activeProfile];
+    if (permitidos) {
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.filter((i) => permitidos.includes(i.id)) })).filter((g) => g.items.length);
+      __r.tabs = (__r.tabs || []).filter((t) => permitidos.includes(t.id));
+      __r.units = null;
+    }
+    /* Biblioteca e portaria: direção e coordenação entram pela visão de gestão. A operação fica com a bibliotecária e a portaria. */
+    if (['dir', 'coord'].includes(__r.activeProfile)) {
+      const GESTAO = { biblioteca: 'Escola-Biblioteca-Gestao.dc.html', portaria: 'Escola-Portaria-Gestao.dc.html' };
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.map((i) => (GESTAO[i.id] ? Object.assign({}, i, { href: GESTAO[i.id] }) : i)) }));
+      __r.tabs = (__r.tabs || []).map((t) => (GESTAO[t.id] ? Object.assign({}, t, { href: GESTAO[t.id] }) : t));
+    }
+    /* Portal do professor: quem entra como professor vê o próprio menu, com as turmas e o planejamento. */
+    if (__r.activeProfile === 'prof') {
+      __r.nav = [
+        { items: [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }] },
+        { label: 'Minhas turmas', items: [{ id: 'diario', label: 'Diário de classe', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'tarefas', label: 'Tarefas', icon: 'list', count: 6, href: 'Professor-Tarefas.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', href: 'Escola-Ocorrencias.dc.html' }] },
+        { label: 'Planejamento', items: [{ id: 'horarios', label: 'Meus horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Professor-Materiais.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 2, href: 'Escola-Atendimentos.dc.html' }] }];
+      __r.tabs = [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'diario', label: 'Diário', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }];
+    }
+    return Object.assign({ s36: 36,  s32: 32,  pS3: 3, pS16: 16, pS18: 18, pS20: 20, pS22: 22, pS32: 32, pS36: 36, pS40: 40, pYes: true, pFmt: [{ value: 'xlsx', label: 'Excel (.xlsx)' }, { value: 'csv', label: 'CSV' }, { value: 'pdf', label: 'PDF para impressão' }] }, { s22: 22, s18: 18 }, bell, __r);
+  }
+}
+</script>
+</body>
+</html>

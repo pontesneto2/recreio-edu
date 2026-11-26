@@ -1,0 +1,19 @@
+<!-- @dsCard group="Ações" height=90 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>IconButton</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, alignItems: "center" } }, /* @__PURE__ */ React.createElement(P.IconButton, { icon: "bell", label: "Notifica\xE7\xF5es", badge: 3 }), /* @__PURE__ */ React.createElement(P.IconButton, { icon: "chat", label: "Mensagens", badge: true }), /* @__PURE__ */ React.createElement(P.IconButton, { icon: "volume", label: "Ouvir comunicado", variant: "secondary" }), /* @__PURE__ */ React.createElement(P.IconButton, { icon: "more", label: "Mais a\xE7\xF5es" }), /* @__PURE__ */ React.createElement(P.IconButton, { icon: "send", label: "Enviar", variant: "primary" }), /* @__PURE__ */ React.createElement(P.IconButton, { icon: "x", label: "Fechar", size: "sm" }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

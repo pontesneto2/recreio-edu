@@ -1,0 +1,19 @@
+<!-- @dsCard group="Portaria e biblioteca" height=470 width=1040 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>PickupCard</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, alignItems: "start" } }, /* @__PURE__ */ React.createElement(P.PickupCard, { qr: "davi-fernanda", student: { name: "Davi Lima", group: "2\xBA ano B \xB7 Integral" }, person: { name: "Fernanda Lima", relation: "M\xE3e", doc: "RG final 482" }, validity: "Autoriza\xE7\xE3o permanente desde 02/02/2026" }), /* @__PURE__ */ React.createElement(P.PickupCard, { qr: "davi-carlos", status: "bloqueado", student: { name: "Davi Lima", group: "2\xBA ano B \xB7 Integral" }, person: { name: "Carlos Mendes", relation: "Motorista de aplicativo", doc: "CNH final 117", note: "N\xE3o est\xE1 na lista de autorizados e a fam\xEDlia n\xE3o enviou autoriza\xE7\xE3o para hoje." } }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

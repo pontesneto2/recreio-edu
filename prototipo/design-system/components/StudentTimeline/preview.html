@@ -1,0 +1,29 @@
+<!-- @dsCard group="Pedagógico" height=900 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>StudentTimeline</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { maxWidth: 640, paddingLeft: 24 } }, /* @__PURE__ */ React.createElement(P.StudentTimeline, { events: [
+      { month: "Novembro de 2026", date: "24/11", kind: "nota", title: "Prova 2 de Matem\xE1tica: 9,0", meta: "A m\xE9dia do bimestre subiu para 8,4." },
+      { month: "Novembro de 2026", date: "19/11", kind: "elogio", title: "Destaque na Feira de Ci\xEAncias", meta: "Projeto: dessalinizador solar." },
+      { month: "Novembro de 2026", date: "12/11", kind: "atendimento", title: "Plant\xE3o com a coordena\xE7\xE3o", meta: "Orienta\xE7\xE3o sobre a 1\xAA s\xE9rie do Ensino M\xE9dio." },
+      { month: "Novembro de 2026", date: "10/11", kind: "financeiro", title: "Mensalidade paga com 2 dias de atraso", meta: "Multa de R$ 32,40." },
+      { month: "Novembro de 2026", date: "05/11", kind: "falta", title: "Falta justificada", meta: "Atestado m\xE9dico enviado pela fam\xEDlia." },
+      { month: "Outubro de 2026", date: "28/10", kind: "nota", title: "Boletim do 3\xBA bimestre publicado", meta: "M\xE9dia geral 8,1 e frequ\xEAncia de 95%." },
+      { month: "Outubro de 2026", date: "15/10", kind: "ocorrencia", title: "Atraso na entrada", meta: "7h18, port\xE3o da Av. das Escolas." },
+      { month: "Outubro de 2026", date: "02/10", kind: "saude", title: "Atendimento na enfermaria", meta: "Dor de cabe\xE7a, voltou para a aula." },
+      { month: "Setembro de 2026", date: "20/09", kind: "matricula", title: "Rematr\xEDcula 2027 aberta", meta: "Contrato enviado para Fernanda Lima." }
+    ] }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

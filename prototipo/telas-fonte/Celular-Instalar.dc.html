@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Celular: Instalar o app</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+<header class="rc-app-bar"><a class="rc-app-back" href="Celular-Mais.dc.html" aria-label="Voltar"><x-import component-from-global-scope="Recreio.Icon" name="chevron-left" size="{{s22}}"></x-import></a><h1>Instalar o app</h1><span></span></header>
+<div class="rc-app-scroll">
+
+<div class="rc-app-body" style="gap: 18px;">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 18px 0 6px; text-align: center;">
+<span style="display: grid; place-items: center; width: 96px; height: 96px; border-radius: 24px; background: var(--brand); box-shadow: var(--shadow-2);"><x-import component-from-global-scope="Recreio.SchoolMark" name="Colégio Recreio" size="{{s64}}"></x-import></span>
+<div><p class="rc-app-big" style="margin: 0; font-size: 1.5rem;">Colégio Recreio na tela inicial</p><p style="margin: 6px 0 0; color: var(--ink-2); line-height: 1.5;">Instala em segundos, sem loja de aplicativos e sem ocupar memória.</p></div>
+</div>
+<div class="rc-app-card is-flush"><div class="rc-app-row"><span class="rc-app-ico"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import></span><span><strong>Avisos na hora</strong><small>Falta, recado, boleto e autorização chegam como notificação</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="success" size="sm">Ativo</x-import></div><div class="rc-app-row"><span class="rc-app-ico is-warning"><x-import component-from-global-scope="Recreio.Icon" name="wifi-off" size="{{s20}}"></x-import></span><span><strong>Funciona sem internet</strong><small>Agenda, boletim e QR de retirada ficam salvos no aparelho</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="success" size="sm">Pronto</x-import></div><div class="rc-app-row"><span class="rc-app-ico is-success"><x-import component-from-global-scope="Recreio.Icon" name="scan" size="{{s20}}"></x-import></span><span><strong>Entra com biometria</strong><small>Rosto ou digital, sem digitar a senha toda vez</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="neutral" size="sm">Opcional</x-import></div><div class="rc-app-row"><span class="rc-app-ico is-neutral"><x-import component-from-global-scope="Recreio.Icon" name="download" size="{{s20}}"></x-import></span><span><strong>Atualiza sozinho</strong><small>Sempre a versão mais nova, sem baixar nada</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="success" size="sm">Ativo</x-import></div></div><div class="rc-app-card"><strong>Espaço usado neste aparelho</strong><div class="rc-app-meter"><i style="width: 12%;"></i></div><small style="color: var(--ink-2);">3,1 MB de dados salvos para uso sem internet · sincronizado há 2 min</small></div></div>
+</div>
+<div class="rc-app-cta"><a class="rc-btn rc-btn-ghost" href="Celular-Mais.dc.html"><span class="rc-btn-label">Agora não</span></a><a class="rc-btn rc-btn-primary" href="#pop-instalar"><x-import component-from-global-scope="Recreio.Icon" name="download" size="{{s18}}"></x-import><span class="rc-btn-label">Instalar agora</span></a></div>
+<div class="rc-app-home"></div>
+<div id="pop-instalar" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Adicionar à Tela de Início"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="download" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Adicionar à Tela de Início</p><p class="rc-dialog-desc">No iPhone, o Safari pede dois toques.</p></div></div><div class="rc-dialog-body"><div class="rc-app-card is-flush"><div class="rc-app-row"><span class="rc-app-ico is-neutral"><x-import component-from-global-scope="Recreio.Icon" name="upload" size="{{s20}}"></x-import></span><span><strong>1. Toque em Compartilhar</strong><small>O quadrado com a seta, na barra do navegador</small></span></div><div class="rc-app-row"><span class="rc-app-ico is-neutral"><x-import component-from-global-scope="Recreio.Icon" name="plus" size="{{s20}}"></x-import></span><span><strong>2. Adicionar à Tela de Início</strong><small>Role a lista e toque nesta opção</small></span></div><div class="rc-app-row"><span class="rc-app-ico is-success"><x-import component-from-global-scope="Recreio.Icon" name="check" size="{{s20}}"></x-import></span><span><strong>3. Toque em Adicionar</strong><small>O ícone do colégio aparece junto dos outros apps</small></span></div></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#"><span class="rc-btn-label">Fechar</span></a><a class="rc-btn rc-btn-primary" href="#pop-notif"><span class="rc-btn-label">Já instalei</span></a></div></div></div><div id="pop-notif" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Receber avisos do colégio?"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Receber avisos do colégio?</p><p class="rc-dialog-desc">Falta, recado da professora, boleto e pedido de autorização. Você escolhe o que recebe em Preferências.</p></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#"><span class="rc-btn-label">Agora não</span></a><a class="rc-btn rc-btn-primary" href="#pop-pronto"><span class="rc-btn-label">Permitir avisos</span></a></div></div></div><div id="pop-pronto" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Tudo pronto"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog rc-dialog-hero"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Tudo pronto</p><p class="rc-dialog-desc">O app está instalado e os avisos estão ativos neste aparelho.</p></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="Celular-Hoje.dc.html"><span class="rc-btn-label">Abrir o app</span></a></div></div></div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return Object.assign({ yes: true, no: false, one: 1, two: 2, three: 3, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96, tabs: [] }, {
+
+    });
+  }
+}
+</script>
+</body>
+</html>

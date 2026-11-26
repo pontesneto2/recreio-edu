@@ -1,0 +1,19 @@
+<!-- @dsCard group="Feedback" height=90 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>StatusPill</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement(P.StatusPill, { tone: "success" }, "Pago"), /* @__PURE__ */ React.createElement(P.StatusPill, { tone: "warning" }, "Vence em 3 dias"), /* @__PURE__ */ React.createElement(P.StatusPill, { tone: "danger" }, "Vencida"), /* @__PURE__ */ React.createElement(P.StatusPill, { tone: "info", icon: "sync" }, "Compensando"), /* @__PURE__ */ React.createElement(P.StatusPill, { tone: "neutral", icon: "file-text" }, "Rascunho"), /* @__PURE__ */ React.createElement(P.StatusPill, { tone: "brand", icon: "star" }, "Bolsista"));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

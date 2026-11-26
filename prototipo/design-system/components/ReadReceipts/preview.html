@@ -1,0 +1,26 @@
+<!-- @dsCard group="Comunicação" height=600 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>ReadReceipts</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { maxWidth: 640 } }, /* @__PURE__ */ React.createElement(P.ReadReceipts, { title: "Feira de Ci\xEAncias: hor\xE1rios de apresenta\xE7\xE3o", total: 186, read: 151, confirmed: 138, pending: [
+      { name: "Carlos Nogueira", child: "Pai de Arthur Nogueira", group: "9\xBA ano A" },
+      { name: "Sandra Moreira", child: "M\xE3e de Gabriela Moreira", group: "1\xAA s\xE9rie EM" },
+      { name: "M\xE1rcio Cavalcante", child: "Pai de Jo\xE3o Pedro Cavalcante", group: "9\xBA ano A" },
+      { name: "Cl\xE1udia Ara\xFAjo", child: "M\xE3e de Sofia Ara\xFAjo", group: "9\xBA ano B" },
+      { name: "Paulo Reis", child: "Pai de Caio Reis", group: "9\xBA ano A" },
+      { name: "Denise Holanda", child: "M\xE3e de Mateus Holanda", group: "9\xBA ano C" }
+    ] }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

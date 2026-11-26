@@ -1,0 +1,38 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Celular: Hoje</title>
+<link rel="stylesheet" href="vendor/tokens.css"><link rel="stylesheet" href="vendor/bundle.css"><style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+<script src="vendor/react.js"></script><script src="vendor/react-dom.js"></script><script src="vendor/bundle.js"></script></head>
+<body><div id="app"></div><template id="dc-src"><x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status is-nav" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+<header class="rc-app-head"><div class="rc-app-headrow"><x-import component-from-global-scope="Recreio.SchoolMark" name="Colégio Recreio" size="{{s32}}"></x-import><strong>Colégio Recreio</strong><a class="rc-app-bell" href="Celular-Notificacoes.html" aria-label="Notificações, 3 novas"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span>3</span></a><x-import component-from-global-scope="Recreio.Avatar" name="Fernanda Lima" size="{{s32}}"></x-import></div><p class="rc-app-kicker">Boa tarde, Fernanda</p><h1 class="rc-app-h1">3 coisas pedem você hoje</h1><div class="rc-app-kids"><a class="rc-app-kid is-on" href="#">Davi · 2º B</a><a class="rc-app-kid" href="#">Ana Beatriz · 9º A</a></div></header>
+<div class="rc-app-scroll">
+<div class="rc-app-body"><div class="rc-app-card is-flush"><div class="rc-app-row"><span class="rc-app-ico is-danger"><x-import component-from-global-scope="Recreio.Icon" name="key" size="{{s20}}"></x-import></span><span><strong>Visita ao Planetário</strong><small>Davi · 2º ano B · assinar até sexta, 27/11</small></span><a class="rc-btn rc-btn-primary rc-btn-sm" href="Celular-Autorizacoes.html"><span class="rc-btn-label">Autorizar</span></a></div><div class="rc-app-row"><span class="rc-app-ico is-warning"><x-import component-from-global-scope="Recreio.Icon" name="wallet" size="{{s20}}"></x-import></span><span><strong>Mensalidade de novembro</strong><small>Ana Beatriz · R$ 1.652,40 · venceu em 10/11</small></span><a class="rc-btn rc-btn-secondary rc-btn-sm" href="Celular-Pix.html"><span class="rc-btn-label">Pagar</span></a></div><div class="rc-app-row"><span class="rc-app-ico"><x-import component-from-global-scope="Recreio.Icon" name="eye" size="{{s20}}"></x-import></span><span><strong>2 lançamentos sem visto</strong><small>Agenda da Ana Beatriz · prova e material</small></span><a class="rc-btn rc-btn-secondary rc-btn-sm" href="Celular-Agenda.html"><span class="rc-btn-label">Ver</span></a></div></div><div class="rc-app-sec"><h2>Atalhos</h2><a href="Celular-Mais.html">Ver tudo</a></div><div class="rc-app-grid"><a class="rc-app-tile rc-c-azul" href="Celular-Agenda.html"><span class="rc-app-tileico"><x-import component-from-global-scope="Recreio.Icon" name="calendar" size="{{s24}}"></x-import><em>2</em></span>Agenda</a><a class="rc-app-tile rc-c-roxo" href="Celular-Boletim.html"><span class="rc-app-tileico"><x-import component-from-global-scope="Recreio.Icon" name="chart" size="{{s24}}"></x-import></span>Boletim</a><a class="rc-app-tile rc-c-verde" href="Celular-Frequencia.html"><span class="rc-app-tileico"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s24}}"></x-import></span>Frequência</a><a class="rc-app-tile rc-c-verde" href="Celular-Financeiro.html"><span class="rc-app-tileico"><x-import component-from-global-scope="Recreio.Icon" name="wallet" size="{{s24}}"></x-import><em>1</em></span>Financeiro</a><a class="rc-app-tile rc-c-laranja" href="Celular-Autorizacoes.html"><span class="rc-app-tileico"><x-import component-from-global-scope="Recreio.Icon" name="key" size="{{s24}}"></x-import><em>1</em></span>Autorizações</a><a class="rc-app-tile rc-c-ciano" href="Celular-Biblioteca.html"><span class="rc-app-tileico"><x-import component-from-global-scope="Recreio.Icon" name="book" size="{{s24}}"></x-import></span>Biblioteca</a><a class="rc-app-tile rc-c-amarelo" href="Celular-Integral.html"><span class="rc-app-tileico"><x-import component-from-global-scope="Recreio.Icon" name="sun-moon" size="{{s24}}"></x-import></span>Integral</a><a class="rc-app-tile rc-c-rosa" href="Celular-Cardapio.html"><span class="rc-app-tileico"><x-import component-from-global-scope="Recreio.Icon" name="utensils" size="{{s24}}"></x-import></span>Cardápio</a></div><x-import component-from-global-scope="Recreio.Card" title="Agora com o Davi" subtitle="Integral · 13h30" padding="sm"><x-import component-from-global-scope="Recreio.Timeline" now-index="{{one}}" items="{{day}}"></x-import></x-import><div class="rc-app-sec"><h2>Próximos dias</h2><a href="Celular-Calendario.html">Calendário</a></div><div class="rc-app-card is-flush"><a class="rc-app-row" href="Celular-Agenda.html"><span class="rc-app-ico is-warning"><x-import component-from-global-scope="Recreio.Icon" name="flag" size="{{s20}}"></x-import></span><span><strong>Prova de Ciências</strong><small>Ana Beatriz · amanhã, 7h30 · reações químicas</small></span><x-import component-from-global-scope="Recreio.Icon" name="chevron-right" size="{{s16}}"></x-import></a><a class="rc-app-row" href="Celular-Autorizacoes.html"><span class="rc-app-ico"><x-import component-from-global-scope="Recreio.Icon" name="bus" size="{{s20}}"></x-import></span><span><strong>Planetário do Dragão do Mar</strong><small>Davi · terça, 01/12 · 7h30 às 11h30</small></span><x-import component-from-global-scope="Recreio.Icon" name="chevron-right" size="{{s16}}"></x-import></a><a class="rc-app-row" href="Celular-Calendario.html"><span class="rc-app-ico is-neutral"><x-import component-from-global-scope="Recreio.Icon" name="users" size="{{s20}}"></x-import></span><span><strong>Reunião de pais do 9º ano</strong><small>Quinta, 03/12 · 18h30 · auditório</small></span><x-import component-from-global-scope="Recreio.Icon" name="chevron-right" size="{{s16}}"></x-import></a></div></div>
+</div>
+
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="hoje"></x-import>
+
+</div>
+</x-import>
+</x-dc></template><script id="dc-js" type="text/plain">
+class Component extends DCLogic {
+  renderVals() {
+    return Object.assign({ yes: true, no: false, one: 1, two: 2, three: 3, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96, tabs: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Celular-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', count: 2, href: 'Celular-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Celular-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 1, href: 'Celular-Chat.dc.html' }, { id: 'mais', label: 'Mais', icon: 'menu', href: 'Celular-Mais.dc.html' }] }, {
+      day: [
+        { time: '11h50', kind: 'refeicao', title: 'Almoço: peixe assado', meta: 'Comeu quase tudo', done: true },
+        { time: '13h30', kind: 'tarefa', title: 'Estudo dirigido de Matemática', meta: 'Monitora Camila Rocha', tone: 'brand' },
+        { time: '14h40', kind: 'aula', title: 'Reforço de leitura', meta: 'Profa. Débora Lins' },
+        { time: '17h00', kind: 'saida', title: 'Saída prevista', meta: 'Você está autorizada' }]
+    });
+  }
+}
+</script><script src="vendor/runtime.js"></script></body></html>

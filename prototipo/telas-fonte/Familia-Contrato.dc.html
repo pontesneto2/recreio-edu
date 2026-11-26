@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Família: Contrato 2027 (assinatura)</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" groups="{{nav}}" active="rematricula"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="file-text" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Contrato de 2027</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Davi Lima · leia e assine sem sair do app</p></div></div>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar no contrato" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Familia-Notificacoes.dc.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;">
+<a class="rc-btn rc-btn-ghost rc-btn-sm" href="Familia-Rematricula.dc.html" style="gap: 6px;"><x-import component-from-global-scope="Recreio.Icon" name="chevron-left" size="{{s20}}"></x-import>Voltar para a Rematrícula 2027</a>
+<x-import component-from-global-scope="Recreio.StatusPill" tone="warning" icon="clock">Assinar até 15/12</x-import>
+</div>
+<x-import component-from-global-scope="Recreio.Stepper" steps="{{passos}}" current="{{one}}"></x-import>
+<div class="rc-split" style="gap: 24px; align-items: start; --split: minmax(0, 3fr) minmax(320px, 2fr);">
+<div style="display: flex; flex-direction: column; gap: 12px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.ProgressBar" value="{{lido}}" label="Leitura do contrato" show-value="{{yes}}" tone="success" size="sm"></x-import>
+<div style="max-height: 980px; overflow: auto; padding: 4px; border-radius: var(--radius-lg); background: var(--surface-2);">
+<article style="max-width: 780px; margin: 0 auto; padding: 36px 40px; background: #FFFFFF; color: #0A1A3A; border: 1px solid var(--line); border-radius: var(--radius-md); box-shadow: var(--shadow-1); font-size: 14.5px;">
+<header style="display: flex; align-items: center; gap: 12px; padding-bottom: 14px; margin-bottom: 18px; border-bottom: 2px solid var(--brand);"><x-import component-from-global-scope="Recreio.SchoolMark" name="Colégio Recreio" size="{{s40}}"></x-import><div><p style="margin: 0; font-weight: 800;">Colégio Recreio</p><p style="margin: 0; font-size: 12px; color: #3D4B66;">CNPJ 07.412.386/0001-52 · Av. Santos Dumont, 2450 · Aldeota · Fortaleza, CE</p></div></header>
+<h3 style="margin: 0 0 14px; font-size: 18px; font-weight: 800; text-align: center; letter-spacing: .02em;">CONTRATO DE PRESTAÇÃO DE SERVIÇOS EDUCACIONAIS · ANO LETIVO <strong>2027</strong></h3>
+<p style="margin: 0 0 12px; line-height: 1.65;">De um lado, COLÉGIO RECREIO, doravante CONTRATADA, e de outro <strong>FERNANDA LIMA</strong>, CPF <strong>***.482.193-**</strong>, doravante CONTRATANTE, responsável financeira pelo aluno <strong>DAVI LIMA</strong>, matrícula <strong>2024-0318</strong>, ajustam o seguinte:</p>
+<h4 style="margin: 18px 0 8px; font-size: 15px; font-weight: 800; letter-spacing: .02em;">1. Do objeto</h4>
+<p style="margin: 0 0 12px; line-height: 1.65;">Prestação de serviços educacionais ao aluno no <strong>3º ano do Ensino Fundamental, turma B, turno manhã, com tempo integral</strong>, conforme o calendário e o regimento escolar de <strong>2027</strong>.</p>
+<h4 style="margin: 18px 0 8px; font-size: 15px; font-weight: 800; letter-spacing: .02em;">2. Do valor e da forma de pagamento</h4>
+<p style="margin: 0 0 12px; line-height: 1.65;">A anuidade é de <strong>R$ 18.720,00</strong>, paga em <strong>12</strong> parcelas mensais de <strong>R$ 1.560,00</strong>, com vencimento todo dia <strong>10</strong>, de janeiro a dezembro, por Pix, boleto ou cartão, nos termos da Lei nº 9.870/1999.</p>
+<p style="margin: 0 0 12px; line-height: 1.65;">Pagamento até o vencimento tem desconto de pontualidade de <strong>5%</strong>, e a parcela fica em <strong>R$ 1.482,00</strong>. Por ter dois filhos matriculados, a CONTRATANTE recebe desconto de irmãos de <strong>10%</strong> na segunda mensalidade.</p>
+<h4 style="margin: 18px 0 8px; font-size: 15px; font-weight: 800; letter-spacing: .02em;">3. Do atraso</h4>
+<p style="margin: 0 0 12px; line-height: 1.65;">A parcela paga após o vencimento perde o desconto de pontualidade e tem multa de 2% e juros de 1% ao mês, calculados por dia de atraso.</p>
+<h4 style="margin: 18px 0 8px; font-size: 15px; font-weight: 800; letter-spacing: .02em;">4. Da desistência e do cancelamento</h4>
+<p style="margin: 0 0 12px; line-height: 1.65;">O cancelamento pode ser pedido a qualquer momento no app ou na secretaria, com 30 dias de antecedência. São devidas apenas as parcelas vencidas até a data de saída.</p>
+<h4 style="margin: 18px 0 8px; font-size: 15px; font-weight: 800; letter-spacing: .02em;">5. Dos dados pessoais</h4>
+<p style="margin: 0 0 12px; line-height: 1.65;">Os dados do aluno e dos responsáveis são tratados apenas para a prestação do serviço educacional e para obrigações legais, conforme a Lei nº 13.709/2018 (LGPD).</p>
+<p style="margin: 18px 0 0; color: #3D4B66;">Fortaleza, <strong>data da assinatura eletrônica</strong>.</p>
+</article>
+</div>
+<small style="color: var(--ink-2);">Você chegou ao fim do contrato. As cláusulas de valor, cancelamento e dados pessoais estão resumidas ao lado.</small>
+</div>
+<div style="display: flex; flex-direction: column; gap: 24px; min-width: 0; position: sticky; top: 96px;">
+<x-import component-from-global-scope="Recreio.Card" title="Resumo do que você vai assinar">
+<x-import component-from-global-scope="Recreio.DescriptionList" columns="{{one}}" items="{{resumo}}"></x-import>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Assinatura" subtitle="Desenhe com o dedo, a caneta ou o mouse. Fica registrado com data, hora, aparelho e código.">
+<div style="display: flex; flex-direction: column; gap: 14px;">
+<x-import component-from-global-scope="Recreio.Checkbox" label="Li o contrato inteiro" default-checked="{{yes}}"></x-import>
+<x-import component-from-global-scope="Recreio.Checkbox" label="Concordo com valores, descontos e regras de atraso" default-checked="{{yes}}"></x-import>
+<x-import component-from-global-scope="Recreio.Checkbox" label="Concordo com o tratamento dos dados pela escola (LGPD)" default-checked="{{yes}}"></x-import>
+<x-import component-from-global-scope="Recreio.SegmentedControl" label="Forma de assinar" value="desenhar" options="{{formas}}"></x-import>
+<div style="position: relative; height: 150px; border: 2px dashed var(--line-strong); border-radius: var(--radius-lg); background: var(--surface-1);">
+<svg viewBox="0 0 320 110" width="100%" height="110" aria-hidden="true" style="position: absolute; left: 0; top: 8px;"><path d="M24 76 C 40 30, 58 28, 60 60 S 72 98, 86 56 C 96 26, 104 30, 108 62 C 112 86, 122 84, 132 58 C 140 38, 150 40, 152 62 C 154 82, 168 80, 176 54 C 182 36, 194 40, 192 64 C 190 84, 206 80, 216 58 L 228 34 C 234 58, 242 78, 262 60 C 276 48, 286 52, 300 46" fill="none" stroke="#0A1A3A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<div style="position: absolute; left: 20px; right: 20px; bottom: 30px; border-top: 1px solid var(--line-strong);"></div>
+<small style="position: absolute; left: 20px; bottom: 8px; color: var(--ink-2);">Fernanda Lima</small>
+<button type="button" class="rc-btn rc-btn-ghost rc-btn-sm" style="position: absolute; right: 8px; top: 8px;">Limpar</button>
+</div>
+<x-import component-from-global-scope="Recreio.CodeInput" label="Código enviado por SMS" hint="Enviado para (85) 9****-4400"></x-import>
+<a class="rc-btn rc-btn-primary rc-btn-full" href="#pop-assinar">Assinar contrato</a>
+<small style="color: var(--ink-2); line-height: 1.5;">Depois de assinar você recebe o PDF com a assinatura e o código de verificação por e-mail. A cópia fica também em Rematrícula 2027.</small>
+</div>
+</x-import>
+</div>
+</div>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="rematricula"></x-import>
+</div>
+</div>
+<div id="pop-assinar" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Assinar o contrato de 2027?">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="edit" size="{{pS22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Assinar o contrato de 2027?</p><p class="rc-dialog-desc">A assinatura eletrônica tem o mesmo valor da assinatura no papel. Você recebe uma cópia em PDF.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{pS20}}"></x-import></a></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Revisar</a><a class="rc-btn rc-btn-primary" href="#pop-assinado">Assinar agora</a></div>
+</div>
+</div>
+<div id="pop-assinado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Contrato assinado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Contrato assinado</p><p class="rc-dialog-desc">A rematrícula de 2027 está confirmada. A cópia em PDF foi para o seu e-mail e fica em Rematrícula.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Fechar</a><a class="rc-btn rc-btn-primary" href="Familia-Rematricula.dc.html">Ver rematrícula</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1440}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 3, bellNotifs: [
+      { icon: 'mail', title: 'Bilhete para assinar: aula de campo', text: 'Ana Beatriz · 9º ano A · prazo 26/11', time: 'Hoje, 11h20', unread: true, priority: 'importante' },
+      { icon: 'heart', title: 'Davi passou pela enfermaria', text: 'Dor de cabeça, já voltou para a sala', time: 'Hoje, 10h25', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: 'Mensalidade de dezembro disponível', text: 'R$ 1.406,00 · vence em 10/12', time: 'Hoje, 8h00', unread: true, priority: 'rotina' },
+      { icon: 'chart', title: 'Boletim do 3º bimestre publicado', text: 'Ana Beatriz e Davi', time: 'Ontem, 18h30', priority: 'rotina' }] };
+    const shared = {
+      tabs: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Familia-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }],
+      activeChild: 'k1', activeProfile: 'resp',
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      user: { name: 'Fernanda Lima' },
+      kids: [{ id: 'k1', name: 'Davi Lima', group: '2º ano B' }, { id: 'k2', name: 'Ana Beatriz Lima', group: '9º ano A' }],
+      profiles: [{ id: 'resp', label: 'Responsável', icon: 'users', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'calendario', label: 'Calendário', icon: 'flag', href: 'Familia-Calendario.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', count: 2, href: 'Familia-Comunicados.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'autorizacoes', label: 'Autorizações', icon: 'key', count: 1, href: 'Familia-Autorizacoes.dc.html' }] },
+        { label: 'Acadêmico', items: [{ id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'check-circle', href: 'Familia-Frequencia.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Familia-Horarios.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Familia-Integral.dc.html' }, { id: 'inclusao', label: 'Plano individual', icon: 'star', href: 'Familia-Inclusao.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 1, href: 'Familia-Ocorrencias.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Familia-Biblioteca.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Familia-Materiais.dc.html' }] },
+        { label: 'Serviços', items: [{ id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Familia-Cardapio.dc.html' }, { id: 'saude', label: 'Saúde', icon: 'heart', href: 'Familia-Saude.dc.html' }, { id: 'documentos', label: 'Documentos', icon: 'file', href: 'Familia-Documentos.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', href: 'Familia-Atendimentos.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', count: 2, href: 'Familia-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', href: 'Familia-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', count: 1, href: 'Familia-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'financeiro', label: 'Mensalidades', icon: 'wallet', count: 1, urgent: true, href: 'Familia-Financeiro.dc.html' }, { id: 'dae', label: 'DAE', icon: 'receipt', href: 'Familia-DAE.dc.html' }, { id: 'ir', label: 'Recibo para IR', icon: 'receipt', href: 'Familia-Recibo-IR.dc.html' }, { id: 'rematricula', label: 'Rematrícula 2027', icon: 'file-text', href: 'Familia-Rematricula.dc.html' }, { id: 'matricula', label: 'Matrícula 2027', icon: 'graduation', href: 'Familia-Matricula.dc.html' }] },
+        { label: 'Conta', items: [{ id: 'prefs', label: 'Acessibilidade', icon: 'accessibility', href: 'Familia-Preferencias.dc.html' }] }]
+    };
+    return Object.assign({ pS3: 3, pS16: 16, pS18: 18, pS20: 20, pS22: 22, pS32: 32, pS36: 36, pS40: 40, pYes: true, pFmt: [{ value: 'xlsx', label: 'Excel (.xlsx)' }, { value: 'csv', label: 'CSV' }, { value: 'pdf', label: 'PDF para impressão' }] }, { yes: true, no: false, s22: 22 }, typeof bell !== 'undefined' ? bell : {}, shared, {
+      s20: 20, s40: 40, one: 1, lido: 100,
+      passos: [{ label: 'Ler o contrato' }, { label: 'Assinar' }, { label: 'Pronto' }],
+      formas: [{ value: 'desenhar', label: 'Desenhar' }, { value: 'digitar', label: 'Digitar o nome' }],
+      resumo: [{ label: 'Aluno', value: 'Davi Lima · 3º ano B · integral' }, { label: 'Anuidade 2027', value: 'R$ 18.720,00 em 12 parcelas' }, { label: 'Mensalidade', value: 'R$ 1.560,00 · R$ 1.482,00 até o dia 10' }, { label: 'Desconto de irmãos', value: '10% na segunda mensalidade' }, { label: 'Cancelamento', value: 'Aviso de 30 dias, sem multa' }]
+    });
+  }
+}
+</script>
+</body>
+</html>

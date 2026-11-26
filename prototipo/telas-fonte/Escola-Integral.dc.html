@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Integral: Rotina de hoje</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" units="{{units}}" groups="{{nav}}" active="integral"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="sun-moon" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Integral e reforço</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Integral Fund I · Tarde · Monitora Camila Rocha · quarta, 25/11</p></div></div>
+<a class="rc-btn rc-btn-ghost rc-btn-sm" href="Familia-Integral.dc.html">Ver como a família vê</a>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Escola-Notificacoes.dc.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<nav class="rc-tabs rc-tabs-links" aria-label="Integral e reforço">
+<a class="rc-tab is-on" href="Escola-Integral.dc.html" aria-current="page"><x-import component-from-global-scope="Recreio.Icon" name="clipboard" size="{{s18}}"></x-import>Rotina de hoje</a>
+<a class="rc-tab" href="Escola-Integral-Grade.dc.html"><x-import component-from-global-scope="Recreio.Icon" name="calendar" size="{{s18}}"></x-import>Grade e grupos</a>
+</nav>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 16px;">
+<x-import component-from-global-scope="Recreio.StatCard" color="verde" label="Tempo integral hoje" href="#pop-integral" value="{{a}}" icon="sun-moon" hint="{{aHint}}"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="amarelo" label="Semi-integral" href="#pop-semi" value="{{b}}" icon="sun" hint="{{bHint}}"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="roxo" label="No reforço hoje" href="#pop-reforco" value="{{c}}" icon="target" hint="{{cHint}}"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="azul" label="Lançamentos feitos" href="#pop-lanc" value="{{d}}" format="{{pct}}" icon="check-circle" hint="{{dHint}}"></x-import>
+</div>
+<x-import component-from-global-scope="Recreio.IntegralBoard" students="{{students}}" scope="{{scope}}" groups="{{groups}}" by="{{by}}" family-href="Familia-Integral.dc.html" record-href="Escola-Ficha-do-aluno.dc.html"></x-import>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="integral"></x-import>
+</div>
+</div>
+<div id="pop-integral" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Tempo integral hoje">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-md">
+<div class="rc-dialog-head"><div class="rc-dialog-titles"><p class="rc-dialog-title">Tempo integral hoje</p><p class="rc-dialog-desc">{{popA}}</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body">
+<div>
+<sc-for list="{{listaA}}" as="r" hint-placeholder-count="4">
+<div class="rc-popup-row"><x-import component-from-global-scope="Recreio.Avatar" name="{{r.nome}}" size="{{pS36}}"></x-import><span style="min-width: 0;"><strong style="display: block;">{{r.nome}}</strong><small style="color: var(--ink-2);">{{r.meta}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.pill}}</x-import></div>
+</sc-for>
+</div>
+</div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Fechar</a></div>
+</div>
+</div>
+<div id="pop-semi" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Semi-integral hoje">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-md">
+<div class="rc-dialog-head"><div class="rc-dialog-titles"><p class="rc-dialog-title">Semi-integral hoje</p><p class="rc-dialog-desc">{{popB}}</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body">
+<div>
+<sc-for list="{{listaB}}" as="r" hint-placeholder-count="4">
+<div class="rc-popup-row"><x-import component-from-global-scope="Recreio.Avatar" name="{{r.nome}}" size="{{pS36}}"></x-import><span style="min-width: 0;"><strong style="display: block;">{{r.nome}}</strong><small style="color: var(--ink-2);">{{r.meta}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.pill}}</x-import></div>
+</sc-for>
+</div>
+</div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Fechar</a></div>
+</div>
+</div>
+<div id="pop-reforco" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Reforço de hoje">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-md">
+<div class="rc-dialog-head"><div class="rc-dialog-titles"><p class="rc-dialog-title">Reforço de hoje</p><p class="rc-dialog-desc">{{popC}}</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body">
+<div>
+<sc-for list="{{listaC}}" as="r" hint-placeholder-count="4">
+<div class="rc-popup-row"><x-import component-from-global-scope="Recreio.Avatar" name="{{r.nome}}" size="{{pS36}}"></x-import><span style="min-width: 0;"><strong style="display: block;">{{r.nome}}</strong><small style="color: var(--ink-2);">{{r.meta}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.pill}}</x-import></div>
+</sc-for>
+</div>
+<p style="margin: 12px 0 0; font-size: 14px; color: var(--ink-2);">Os grupos de reforço são montados pela coordenação em Grade e grupos.</p>
+</div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Fechar</a></div>
+</div>
+</div>
+<div id="pop-lanc" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Lançamentos do dia por atividade">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-md">
+<div class="rc-dialog-head"><div class="rc-dialog-titles"><p class="rc-dialog-title">Lançamentos do dia por atividade</p><p class="rc-dialog-desc">{{popD}}</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body">
+<div>
+<sc-for list="{{listaD}}" as="r" hint-placeholder-count="4">
+<div style="padding: 12px 0; border-top: 1px solid var(--line);"><x-import component-from-global-scope="Recreio.ProgressBar" value="{{r.v}}" max="{{r.max}}" label="{{r.rotulo}}" tone="{{r.tone}}" size="sm"></x-import></div>
+</sc-for>
+</div>
+<p style="margin: 12px 0 0; font-size: 14px; color: var(--ink-2);">A família vê cada lançamento no app assim que ele é salvo.</p>
+</div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Fechar</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1480}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 5, bellNotifs: [
+      { icon: 'clipboard', title: '5 justificativas para analisar', text: 'Frequência · Fundamental II', time: 'Hoje, 11h05', unread: true, priority: 'importante' },
+      { icon: 'chat', title: 'Fernanda Lima respondeu no chat', text: 'Ana Beatriz · 9º ano A', time: 'Hoje, 10h12', unread: true, priority: 'rotina' },
+      { icon: 'edit', title: 'História 9º B: faltam 4 notas', text: 'Fechamento do 4º bimestre', time: 'Hoje, 9h00', unread: true, priority: 'importante' },
+      { icon: 'alert', title: 'Ocorrência sem resposta da família', text: 'Mateus Holanda · 9º ano C · há 7 dias', time: 'Hoje, 8h30', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: '63 mensalidades vencidas', text: '41 famílias · a régua de cobrança enviou lembretes', time: 'Hoje, 7h00', unread: true, priority: 'rotina' }] };
+    const tabs = [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'comunicados', label: 'Avisos', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }];
+    const shared = {
+      bellCount: 5, activeChild: undefined, activeProfile: 'dir', kids: [],
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      units: [{ id: 'aldeota', label: 'Unidade Aldeota', meta: '1.248 alunos · Infantil ao Médio', href: 'Escola-Painel.dc.html', current: true }, { id: 'eusebio', label: 'Unidade Eusébio', meta: '936 alunos · Infantil e Fundamental I', href: 'Escola-Painel.dc.html' }, { id: 'rede', label: 'Todas as unidades', meta: 'Visão consolidada da rede', href: 'Escola-Painel.dc.html' }],
+      user: { name: 'Lúcia Menezes' },
+      profiles: [{ id: 'dir', label: 'Direção', icon: 'shield', school: 'Colégio Recreio' }, { id: 'prof', label: 'Professora', icon: 'book', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'chat', label: 'Chat com famílias', icon: 'chat', count: 4, href: 'Escola-Chat.dc.html' }] },
+        { label: 'Pedagógico', items: [{ id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Escola-Horarios.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'clipboard', count: 5, href: 'Escola-Frequencia.dc.html' }, { id: 'boletins', label: 'Fechamento e boletins', icon: 'chart', href: 'Escola-Boletins.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 3, href: 'Escola-Ocorrencias.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Escola-Integral.dc.html' }, { id: 'saude', label: 'Saúde e enfermaria', icon: 'heart', href: 'Escola-Saude.dc.html' }, { id: 'inclusao', label: 'Inclusão e AEE', icon: 'accessibility', href: 'Escola-Inclusao.dc.html' }, { id: 'medidas', label: 'Medidas disciplinares', icon: 'flag', href: 'Escola-Medidas.dc.html' }, { id: 'extras', label: 'Pontos extras', icon: 'star', href: 'Escola-Pontos-extras.dc.html' }, { id: 'eja', label: 'EJA', icon: 'moon', href: 'Escola-EJA.dc.html' }] },
+        { label: 'Secretaria', items: [{ id: 'alunos', label: 'Alunos', icon: 'users', href: 'Escola-Alunos.dc.html' }, { id: 'equipe', label: 'Equipe', icon: 'user', href: 'Escola-Equipe.dc.html' }, { id: 'captacao', label: 'Captação', icon: 'filter', count: 9, href: 'Escola-Captacao.dc.html' }, { id: 'matriculas', label: 'Matrículas', icon: 'file-text', count: 12, href: 'Escola-Matriculas.dc.html' }, { id: 'contratos', label: 'Contratos', icon: 'edit', count: 200, href: 'Escola-Contratos.dc.html' }, { id: 'solicitacoes', label: 'Solicitações', icon: 'file', count: 6, href: 'Escola-Solicitacoes.dc.html' }, { id: 'certificados', label: 'Certificados e diplomas', icon: 'graduation', href: 'Escola-Certificados.dc.html' }, { id: 'transferencias', label: 'Transferências', icon: 'sync', href: 'Escola-Transferencias.dc.html' }, { id: 'fotos', label: 'Fotos de alunos', icon: 'camera', href: 'Escola-Fotos.dc.html' }, { id: 'importacao', label: 'Migração de dados', icon: 'upload', href: 'Escola-Importacao.dc.html' }, { id: 'calendario', label: 'Calendário letivo', icon: 'flag', href: 'Escola-Calendario.dc.html' }, { id: 'autorizacoes', label: 'Passeios e autorizações', icon: 'key', href: 'Escola-Autorizacoes.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Escola-Biblioteca.dc.html' }] },
+        { label: 'Família e serviços', items: [{ id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 4, href: 'Escola-Atendimentos.dc.html' }, { id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Escola-Cardapio.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', href: 'Escola-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', count: 9, href: 'Escola-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', href: 'Escola-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'mensalidades', label: 'Mensalidades', icon: 'wallet', count: 41, urgent: true, href: 'Escola-Mensalidades.dc.html' }, { id: 'fiscal', label: 'Notas fiscais e IR', icon: 'receipt', count: 3, href: 'Escola-Fiscal.dc.html' }, { id: 'dae', label: 'DAE SEFAZ-CE', icon: 'receipt', href: 'Escola-DAE.dc.html' }, { id: 'caixa', label: 'Caixa e contas a pagar', icon: 'card', href: 'Escola-Caixa.dc.html' }] },
+        { label: 'Gestão', items: [{ id: 'relatorios', label: 'Relatórios e censo', icon: 'sparkline', href: 'Escola-Relatorios.dc.html' }, { id: 'permissoes', label: 'Grupos e permissões', icon: 'shield', href: 'Escola-Permissoes.dc.html' }, { id: 'modulos', label: 'Módulos e marca', icon: 'modules', href: 'Escola-Modulos.dc.html' }] }]
+    };
+    const wk = (r) => ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'].map((d, i) => ({ day: d, today: i === 2, text: r[i] }));
+    const __r = Object.assign({ yes: true, no: false, tabs }, shared, {
+      user: { name: 'Camila Rocha' }, activeProfile: 'int', profiles: [{ id: 'int', label: 'Monitora do integral', icon: 'sun-moon', school: 'Colégio Recreio' }],
+      scope: 'meus', by: 'Camila Rocha', groups: [{ value: 'f1-tarde', label: 'Integral Fund I · Tarde' }],
+      a: 9, aHint: 'de 12 alunos do seu grupo', b: 3, bHint: 'saem até 14h30', c: 4, cHint: 'Leitura e Matemática, às 14h40', d: 56, dHint: '34 de 61 lançamentos do dia', pct: (v) => v + '%',
+      popA: '9 alunos ficam até o fim da tarde. Todos chegaram.', popB: '3 alunos almoçam, estudam e saem até 14h30.', popC: '4 alunos em 2 grupos, às 14h40.', popD: '34 de 61 lançamentos feitos até agora.',
+      listaA: [{ nome: 'Davi Lima', meta: '2º ano B · saída às 17h00', pill: 'Presente', tone: 'success' }, { nome: 'Heitor Paiva', meta: '2º ano B · saída às 17h30', pill: 'Presente', tone: 'success' }, { nome: 'Lara Menezes', meta: '2º ano A · saída às 16h30', pill: 'Presente', tone: 'success' }, { nome: 'Miguel Fontes', meta: '3º ano A · saída às 18h00', pill: 'Presente', tone: 'success' }, { nome: 'Alice Cordeiro', meta: '1º ano A · saída às 17h00', pill: 'Presente', tone: 'success' }, { nome: 'Théo Bastos', meta: '3º ano A · saída às 17h45', pill: 'Presente', tone: 'success' }, { nome: 'Helena Dias', meta: '2º ano A · saída às 17h15', pill: 'Presente', tone: 'success' }, { nome: 'Rafael Queiroz', meta: '4º ano A · saída às 17h30', pill: 'Sem lançamento', tone: 'warning' }, { nome: 'Caio Vasconcelos', meta: '5º ano A · saída às 18h00', pill: 'Presente', tone: 'success' }],
+      listaB: [{ nome: 'Sofia Nogueira', meta: '1º ano A · saiu às 14h28 com a mãe', pill: 'Saiu', tone: 'neutral' }, { nome: 'Bento Farias', meta: '3º ano B · transporte escolar às 14h30', pill: 'Na escola', tone: 'brand' }, { nome: 'Isis Carvalho', meta: '4º ano A · saiu às 14h31 com o pai', pill: 'Saiu', tone: 'neutral' }],
+      listaC: [{ nome: 'Davi Lima', meta: 'Leitura · nível 3 · Profa. Débora Lins · sala 4', pill: 'Às 14h40', tone: 'brand' }, { nome: 'Théo Bastos', meta: 'Leitura · nível 2 · Profa. Débora Lins · sala 4', pill: 'Às 14h40', tone: 'brand' }, { nome: 'Lara Menezes', meta: 'Matemática · nível 2 · Prof. Igor Barros · sala 6', pill: 'Às 14h40', tone: 'brand' }, { nome: 'Rafael Queiroz', meta: 'Matemática · nível 3 · Prof. Igor Barros · sala 6', pill: 'Às 14h40', tone: 'brand' }],
+      listaD: [{ rotulo: 'Almoço · 11 de 12', v: 11, max: 12, tone: 'success' }, { rotulo: 'Descanso · 10 de 12', v: 10, max: 12, tone: 'success' }, { rotulo: 'Estudo dirigido · 11 de 12', v: 11, max: 12, tone: 'success' }, { rotulo: 'Reforço · 0 de 4, começa às 14h40', v: 0, max: 4, tone: 'brand' }, { rotulo: 'Oficina · 0 de 9, começa às 15h30', v: 0, max: 9, tone: 'brand' }, { rotulo: 'Saída · 2 de 12', v: 2, max: 12, tone: 'brand' }],
+      students: [
+        { id: 1, name: 'Davi Lima', klass: '2º ano B', shift: 'Integral', group: 'f1-tarde', programs: ['integral', 'reforco'], exit: '17h00', pickups: ['Fernanda Lima (mãe)', 'Rodrigo Lima (pai)', 'Lúcia Ramos (avó)'], week: wk(['Regular, integral e reforço', 'Regular e integral', 'Regular, integral e reforço', 'Previsto', 'Previsto']), log: { almoco: { v: 'quase', at: '12h22', note: 'Comeu o peixe, o arroz e o feijão verde. Deixou o purê.' }, descanso: { v: 'descansou', at: '13h25', note: '40 minutos' }, estudo: { v: 'fazendo', at: '13h42', subject: 'Matemática', note: 'Dezenas e unidades.' } }, workshop: 'Robótica', alert: 'Alergia grave a amendoim. O prato dele sai sem castanhas. Em caso de reação, chame a enfermaria.', reforco: { group: 'Leitura', level: 3, max: 4, note: 'Subiu do nível 2 para o 3 em novembro.' } },
+        { id: 2, name: 'Heitor Paiva', klass: '2º ano B', shift: 'Integral', group: 'f1-tarde', programs: ['integral'], exit: '17h30', pickups: ['Patrícia Paiva (mãe)', 'Transporte escolar'], week: wk(['Regular e integral', 'Regular e integral', 'Regular e integral', 'Previsto', 'Previsto']), log: { almoco: { v: 'tudo', at: '12h20' }, descanso: { v: 'dormiu', at: '13h25' }, estudo: { v: 'concluida', at: '14h10', subject: 'Português' } }, workshop: 'Robótica' },
+        { id: 3, name: 'Lara Menezes', klass: '2º ano A', shift: 'Integral', group: 'f1-tarde', programs: ['integral', 'reforco'], exit: '16h30', pickups: ['Aline Menezes (mãe)'], week: wk(['Regular, integral e reforço', 'Regular e integral', 'Regular, integral e reforço', 'Previsto', 'Previsto']), log: { almoco: { v: 'pouco', at: '12h24', note: 'Não quis o peixe.' }, descanso: { v: 'descansou', at: '13h25' }, estudo: { v: 'concluida', at: '14h05', subject: 'Tarefa de casa' } }, workshop: 'Teatro', reforco: { group: 'Matemática', level: 2, max: 4, note: 'Ainda conta nos dedos na subtração.' } },
+        { id: 4, name: 'Miguel Fontes', klass: '3º ano A', shift: 'Integral', group: 'f1-tarde', programs: ['integral'], exit: '18h00', pickups: ['Sérgio Fontes (pai)'], week: wk(['Regular e integral', 'Regular e integral', 'Regular e integral', 'Previsto', 'Previsto']), log: { almoco: { v: 'tudo', at: '12h21' }, descanso: { v: 'nao', at: '13h25' }, estudo: { v: 'fazendo', at: '13h44', subject: 'Ciências' } }, workshop: 'Robótica' },
+        { id: 5, name: 'Alice Cordeiro', klass: '1º ano A', shift: 'Integral', group: 'f1-tarde', programs: ['integral'], exit: '17h00', pickups: ['Bruna Cordeiro (mãe)', 'Ivo Cordeiro (avô)'], week: wk(['Regular e integral', 'Regular e integral', 'Regular e integral', 'Previsto', 'Previsto']), log: { almoco: { v: 'tudo', at: '12h19' }, descanso: { v: 'dormiu', at: '13h25' }, estudo: { v: 'concluida', at: '14h02', subject: 'Português' } }, workshop: 'Teatro' },
+        { id: 6, name: 'Théo Bastos', klass: '3º ano A', shift: 'Integral', group: 'f1-tarde', programs: ['integral', 'reforco'], exit: '17h45', pickups: ['Larissa Bastos (mãe)'], week: wk(['Regular, integral e reforço', 'Regular e integral', 'Regular, integral e reforço', 'Previsto', 'Previsto']), log: { almoco: { v: 'quase', at: '12h23' }, descanso: { v: 'descansou', at: '13h25' }, estudo: { v: 'nao', at: '13h50', subject: 'Matemática', note: 'Esqueceu o livro em casa.' } }, workshop: 'Xadrez', reforco: { group: 'Leitura', level: 2, max: 4, note: 'Lê palavras simples sem ajuda.' } },
+        { id: 7, name: 'Sofia Nogueira', klass: '1º ano A', shift: 'Integral', group: 'f1-tarde', programs: ['semi'], exit: '14h30', pickups: ['Camila Nogueira (mãe)'], week: wk(['Regular e semi', 'Regular e semi', 'Regular e semi', 'Previsto', 'Previsto']), log: { almoco: { v: 'tudo', at: '12h18' }, descanso: { v: 'descansou', at: '13h20' }, estudo: { v: 'concluida', at: '14h00', subject: 'Tarefa de casa' }, saida: { v: 'saiu', at: '14h28', pickup: 'Camila Nogueira (mãe)' } } },
+        { id: 8, name: 'Bento Farias', klass: '3º ano B', shift: 'Integral', group: 'f1-tarde', programs: ['semi'], exit: '14h30', pickups: ['Transporte escolar', 'Júlia Farias (mãe)'], week: wk(['Regular e semi', 'Regular e semi', 'Regular e semi', 'Previsto', 'Previsto']), log: { almoco: { v: 'quase', at: '12h25' }, estudo: { v: 'fazendo', at: '13h46', subject: 'Matemática' } } },
+        { id: 9, name: 'Helena Dias', klass: '2º ano A', shift: 'Integral', group: 'f1-tarde', programs: ['integral'], exit: '17h15', pickups: ['Marcos Dias (pai)'], week: wk(['Regular e integral', 'Regular e integral', 'Regular e integral', 'Previsto', 'Previsto']), log: { almoco: { v: 'tudo', at: '12h20' }, descanso: { v: 'dormiu', at: '13h25' }, estudo: { v: 'concluida', at: '14h08', subject: 'Português' } }, workshop: 'Teatro' },
+        { id: 10, name: 'Rafael Queiroz', klass: '4º ano A', shift: 'Integral', group: 'f1-tarde', programs: ['integral', 'reforco'], exit: '17h30', alert: 'Asma. A bombinha fica na enfermaria. Em crise, chame a enfermaria.', pickups: ['Débora Queiroz (mãe)'], week: wk(['Regular, integral e reforço', 'Regular e integral', 'Regular, integral e reforço', 'Previsto', 'Previsto']), log: {}, workshop: 'Xadrez', reforco: { group: 'Matemática', level: 3, max: 4, note: 'Domina a tabuada até o 6.' } },
+        { id: 11, name: 'Isis Carvalho', klass: '4º ano A', shift: 'Integral', group: 'f1-tarde', programs: ['semi'], exit: '14h30', alert: 'Diabetes tipo 1. Mede a glicemia às 10h e antes do almoço, com a enfermaria.', pickups: ['Renato Carvalho (pai)'], week: wk(['Regular e semi', 'Regular e semi', 'Regular e semi', 'Previsto', 'Previsto']), log: { almoco: { v: 'tudo', at: '12h17' }, descanso: { v: 'descansou', at: '13h20' }, estudo: { v: 'concluida', at: '13h58', subject: 'Inglês' }, saida: { v: 'saiu', at: '14h31', pickup: 'Renato Carvalho (pai)' } } },
+        { id: 12, name: 'Caio Vasconcelos', klass: '5º ano A', shift: 'Integral', group: 'f1-tarde', programs: ['integral'], exit: '18h00', pickups: ['Transporte escolar'], week: wk(['Regular e integral', 'Regular e integral', 'Regular e integral', 'Previsto', 'Previsto']), log: { almoco: { v: 'quase', at: '12h26' }, descanso: { v: 'descansou', at: '13h25' }, estudo: { v: 'fazendo', at: '13h48', subject: 'História' } }, workshop: 'Robótica' }]
+    });
+    /* Controle de acesso: cada perfil vê só os módulos liberados em Grupos e permissões. */
+    const ACESSO = { prof: ['comunicados', 'notas', 'chamada', 'agenda', 'frequencia', 'ocorrencias', 'inicio', 'diario', 'horarios', 'materiais', 'atendimentos', 'tarefas'], coord: ['painel', 'comunicados', 'chat', 'notas', 'chamada', 'agenda', 'frequencia', 'boletins', 'ocorrencias', 'integral', 'alunos', 'autorizacoes', 'equipe', 'horarios', 'calendario', 'atendimentos', 'cardapio', 'galeria', 'pesquisas', 'saude', 'inclusao', 'relatorios', 'biblioteca', 'portaria', 'medidas', 'extras', 'eja', 'certificados'], sec: ['comunicados', 'alunos', 'matriculas', 'contratos', 'autorizacoes', 'portaria', 'equipe', 'solicitacoes', 'calendario', 'horarios', 'loja', 'pesquisas', 'captacao', 'certificados', 'transferencias', 'fotos', 'importacao'], fin: ['comunicados', 'alunos', 'contratos', 'mensalidades', 'loja', 'fiscal', 'caixa', 'dae'], bib: ['comunicados', 'biblioteca'], port: ['comunicados', 'portaria', 'autorizacoes'], int: ['comunicados', 'chamada', 'integral', 'ocorrencias'], nutri: ['comunicados', 'cardapio'], enf: ['comunicados', 'saude'], aee: ['comunicados', 'inclusao', 'atendimentos', 'ocorrencias'] };
+    const permitidos = ACESSO[__r.activeProfile];
+    if (permitidos) {
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.filter((i) => permitidos.includes(i.id)) })).filter((g) => g.items.length);
+      __r.tabs = (__r.tabs || []).filter((t) => permitidos.includes(t.id));
+      __r.units = null;
+    }
+    /* Biblioteca e portaria: direção e coordenação entram pela visão de gestão. A operação fica com a bibliotecária e a portaria. */
+    if (['dir', 'coord'].includes(__r.activeProfile)) {
+      const GESTAO = { biblioteca: 'Escola-Biblioteca-Gestao.dc.html', portaria: 'Escola-Portaria-Gestao.dc.html' };
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.map((i) => (GESTAO[i.id] ? Object.assign({}, i, { href: GESTAO[i.id] }) : i)) }));
+      __r.tabs = (__r.tabs || []).map((t) => (GESTAO[t.id] ? Object.assign({}, t, { href: GESTAO[t.id] }) : t));
+    }
+    /* Portal do professor: quem entra como professor vê o próprio menu, com as turmas e o planejamento. */
+    if (__r.activeProfile === 'prof') {
+      __r.nav = [
+        { items: [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }] },
+        { label: 'Minhas turmas', items: [{ id: 'diario', label: 'Diário de classe', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'tarefas', label: 'Tarefas', icon: 'list', count: 6, href: 'Professor-Tarefas.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', href: 'Escola-Ocorrencias.dc.html' }] },
+        { label: 'Planejamento', items: [{ id: 'horarios', label: 'Meus horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Professor-Materiais.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 2, href: 'Escola-Atendimentos.dc.html' }] }];
+      __r.tabs = [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'diario', label: 'Diário', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }];
+    }
+    return Object.assign({ pS3: 3, pS16: 16, pS18: 18, pS20: 20, pS22: 22, pS32: 32, pS36: 36, pS40: 40, pYes: true, pFmt: [{ value: 'xlsx', label: 'Excel (.xlsx)' }, { value: 'csv', label: 'CSV' }, { value: 'pdf', label: 'PDF para impressão' }] }, { s22: 22, s18: 18 }, bell, __r);
+  }
+}
+</script>
+</body>
+</html>

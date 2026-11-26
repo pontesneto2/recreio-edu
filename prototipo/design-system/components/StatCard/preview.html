@@ -1,0 +1,19 @@
+<!-- @dsCard group="Dados" height=400 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>StatCard</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 16 } }, /* @__PURE__ */ React.createElement(P.StatCard, { variant: "hero", label: "Recebido em novembro", value: 1924380, format: (v) => P.brl(v, { maximumFractionDigits: 0 }), delta: 6.1, deltaSuffix: "%", deltaLabel: "vs. outubro", trend: [1610, 1680, 1702, 1755, 1810, 1868, 1924], icon: "wallet", href: "#" }), /* @__PURE__ */ React.createElement(P.StatCard, { color: "laranja", label: "Inadimpl\xEAncia", value: 5.8, format: (v) => P.num(v, 1) + "%", delta: -0.9, deltaSuffix: " p.p.", goodWhen: "down", deltaLabel: "vs. outubro", trend: [8.1, 7.6, 7.2, 6.9, 6.7, 6.2, 5.8], icon: "alert" }), /* @__PURE__ */ React.createElement(P.StatCard, { color: "verde", label: "Frequ\xEAncia hoje", value: 96.8, format: (v) => P.num(v, 1) + "%", delta: 1.2, deltaSuffix: " p.p.", deltaLabel: "vs. ontem", icon: "check-circle" }), /* @__PURE__ */ React.createElement(P.StatCard, { color: "roxo", label: "Notas lan\xE7adas no 4\xBA bimestre", loading: true }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

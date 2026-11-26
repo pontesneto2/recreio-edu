@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Família: Cardápio</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<link rel="stylesheet" href="telas.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" groups="{{nav}}" active="cardapio"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="utensils" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Cardápio</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">O que seu filho come na escola, publicado pela nutricionista</p></div></div>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar prato ou ingrediente" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Familia-Notificacoes.dc.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px; padding: 16px 20px; border-radius: var(--radius-lg); background: var(--surface-1); border: 1px solid var(--line); box-shadow: var(--shadow-1);">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; min-width: 0; max-width: 100%;">
+<div style="display: flex; flex-direction: column; gap: 6px;"><span style="font-size: 14px; font-weight: 600;">Semana</span><x-import component-from-global-scope="Recreio.SegmentedControl" label="Semana" value="esta" options="{{semanas}}"></x-import></div><div style="display: flex; flex-direction: column; gap: 6px;"><span style="font-size: 14px; font-weight: 600;">Refeição</span><x-import component-from-global-scope="Recreio.SegmentedControl" label="Refeição" value="todas" options="{{refs}}"></x-import></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-secondary" href="#pop-pdf"><x-import component-from-global-scope="Recreio.Icon" name="download" size="{{s18}}"></x-import>Baixar em PDF</a><a class="rc-btn rc-btn-primary" href="#pop-restricao"><x-import component-from-global-scope="Recreio.Icon" name="alert" size="{{s18}}"></x-import>Avisar restrição ou alergia</a></div>
+</div>
+<x-import component-from-global-scope="Recreio.Alert" tone="warning" title="Davi: sem amendoim">A cozinha recebe esse aviso em todas as refeições. Pratos com castanhas saem com substituição para ele.</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Cardápio da semana" subtitle="Integral e lanche do Fundamental I · 23 a 27 de novembro · publicado em 19/11, véspera do feriado">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 12px;"><sc-for list="{{dias}}" as="d" hint-placeholder-count="5"><div class="tl-dia {{d.cls}}"><div class="tl-dia-head"><strong>{{d.dia}}</strong><small style="color: var(--ink-2);">{{d.data}}</small></div><sc-for list="{{d.ref}}" as="r" hint-placeholder-count="3"><div class="tl-dia-ref"><x-import component-from-global-scope="Recreio.Icon" name="{{r.i}}" size="{{s18}}"></x-import><strong style="font-weight: 600;">{{r.t}}</strong><small>{{r.m}}</small></div></sc-for><sc-if value="{{d.nota}}"><div><x-import component-from-global-scope="Recreio.StatusPill" tone="{{d.tone}}" size="sm">{{d.nota}}</x-import></div></sc-if></div></sc-for></div>
+</x-import>
+<div class="rc-split" style="gap: 24px; align-items: start; --split: minmax(0, 1fr) minmax(0, 1fr);">
+<x-import component-from-global-scope="Recreio.Card" title="Como o Davi comeu" subtitle="Registro da monitora do integral, depois de cada almoço" actions="{{verIntegral}}">
+<div>
+<sc-for list="{{comeu}}" as="p" hint-placeholder-count="3">
+<div class="rc-popup-row" style="grid-template-columns: 36px minmax(0, 1fr) auto;"><span class="rc-dialog-icon {{p.cls}}" style="width: 36px; height: 36px; border-radius: var(--radius-sm);"><x-import component-from-global-scope="Recreio.Icon" name="utensils" size="{{s18}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{p.nome}}</strong><small style="color: var(--ink-2);">{{p.meta}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{p.tone}}" size="sm">{{p.st}}</x-import></div>
+</sc-for>
+</div>
+</x-import>
+<div style="display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Nutricionista responsável">
+<div style="display: flex; align-items: center; gap: 12px;"><x-import component-from-global-scope="Recreio.Avatar" name="Marília Castro" size="{{s48}}"></x-import><div style="min-width: 0;"><strong style="display: block;">Marília Castro</strong><small style="color: var(--ink-2);">CRN 6 nº 4821 · monta e publica o cardápio toda sexta</small></div></div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Restrições do Davi" subtitle="Vêm da ficha de saúde e valem para cozinha e cantina">
+<div>
+<sc-for list="{{restr}}" as="p" hint-placeholder-count="1">
+<div class="rc-popup-row" style="grid-template-columns: 36px minmax(0, 1fr) auto;"><span class="rc-dialog-icon {{p.cls}}" style="width: 36px; height: 36px; border-radius: var(--radius-sm);"><x-import component-from-global-scope="Recreio.Icon" name="shield" size="{{s18}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{p.nome}}</strong><small style="color: var(--ink-2);">{{p.meta}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{p.tone}}" size="sm">{{p.st}}</x-import></div>
+</sc-for>
+</div>
+</x-import>
+</div>
+</div>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="hoje"></x-import>
+</div>
+</div>
+<div id="pop-restricao" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Avisar restrição alimentar">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-warning"><x-import component-from-global-scope="Recreio.Icon" name="alert" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Avisar restrição alimentar</p><p class="rc-dialog-desc">O aviso vai para a cozinha, a enfermaria e a ficha do aluno.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: flex; flex-direction: column; gap: 14px;"><x-import component-from-global-scope="Recreio.RadioGroup" legend="Tipo" value="alergia" options="{{tiposR}}"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Alimento" default-value="Castanha de caju"></x-import><x-import component-from-global-scope="Recreio.TextArea" label="O que acontece e o que fazer" default-value="Coceira e inchaço nos lábios. Tem antialérgico na enfermaria." rows="{{n2}}"></x-import><x-import component-from-global-scope="Recreio.FileDrop" label="Anexe o laudo, se tiver"></x-import></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-restricao-ok">Enviar aviso</a></div>
+</div>
+</div>
+<div id="pop-restricao-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Aviso enviado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Aviso enviado</p><p class="rc-dialog-desc">A nutricionista confirma o recebimento em até 1 dia útil. Até lá, a cozinha já trata como restrição.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-pdf" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Cardápio baixado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="download" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Cardápio baixado</p><p class="rc-dialog-desc">cardapio-23-a-27-11.pdf foi salvo no aparelho.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1480}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 3, bellNotifs: [
+      { icon: 'mail', title: 'Bilhete para assinar: aula de campo', text: 'Ana Beatriz · 9º ano A · prazo 26/11', time: 'Hoje, 11h20', unread: true, priority: 'importante' },
+      { icon: 'heart', title: 'Davi passou pela enfermaria', text: 'Dor de cabeça, já voltou para a sala', time: 'Hoje, 10h25', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: 'Mensalidade de dezembro disponível', text: 'R$ 1.406,00 · vence em 10/12', time: 'Hoje, 8h00', unread: true, priority: 'rotina' },
+      { icon: 'chart', title: 'Boletim do 3º bimestre publicado', text: 'Ana Beatriz e Davi', time: 'Ontem, 18h30', priority: 'rotina' }] };
+    const tabs = [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Familia-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }];
+    const shared = {
+      bellCount: 3, activeChild: 'k1', activeProfile: 'resp',
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      user: { name: 'Fernanda Lima' },
+      kids: [{ id: 'k1', name: 'Davi Lima', group: '2º ano B' }, { id: 'k2', name: 'Ana Beatriz Lima', group: '9º ano A' }],
+      profiles: [{ id: 'resp', label: 'Responsável', icon: 'users', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'calendario', label: 'Calendário', icon: 'flag', href: 'Familia-Calendario.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', count: 2, href: 'Familia-Comunicados.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'autorizacoes', label: 'Autorizações', icon: 'key', count: 1, href: 'Familia-Autorizacoes.dc.html' }] },
+        { label: 'Acadêmico', items: [{ id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'check-circle', href: 'Familia-Frequencia.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Familia-Horarios.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Familia-Integral.dc.html' }, { id: 'inclusao', label: 'Plano individual', icon: 'star', href: 'Familia-Inclusao.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 1, href: 'Familia-Ocorrencias.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Familia-Biblioteca.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Familia-Materiais.dc.html' }] },
+        { label: 'Serviços', items: [{ id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Familia-Cardapio.dc.html' }, { id: 'saude', label: 'Saúde', icon: 'heart', href: 'Familia-Saude.dc.html' }, { id: 'documentos', label: 'Documentos', icon: 'file', href: 'Familia-Documentos.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', href: 'Familia-Atendimentos.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', count: 2, href: 'Familia-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', href: 'Familia-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', count: 1, href: 'Familia-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'financeiro', label: 'Mensalidades', icon: 'wallet', count: 1, urgent: true, href: 'Familia-Financeiro.dc.html' }, { id: 'dae', label: 'DAE', icon: 'receipt', href: 'Familia-DAE.dc.html' }, { id: 'ir', label: 'Recibo para IR', icon: 'receipt', href: 'Familia-Recibo-IR.dc.html' }, { id: 'rematricula', label: 'Rematrícula 2027', icon: 'file-text', href: 'Familia-Rematricula.dc.html' }, { id: 'matricula', label: 'Matrícula 2027', icon: 'graduation', href: 'Familia-Matricula.dc.html' }] },
+        { label: 'Conta', items: [{ id: 'prefs', label: 'Acessibilidade', icon: 'accessibility', href: 'Familia-Preferencias.dc.html' }] }]
+    };
+    const __r = Object.assign({ yes: true, no: false, tabs }, shared, {
+      
+      n2: 2, n3: 3, n4: 4, n5: 5, n6: 6,
+      go_pop_lidas: () => { location.hash = 'pop-lidas'; }, go_pop_pdf: () => { location.hash = 'pop-pdf'; }, go_pop_restricao: () => { location.hash = 'pop-restricao'; }, go_pop_restricao_ok: () => { location.hash = 'pop-restricao-ok'; },
+      dias: [
+        { dia: 'Segunda', data: '23/11', cls: '', nota: 'Davi comeu tudo', tone: 'success', ref: [{ i: 'utensils', t: 'Almoço', m: 'Frango grelhado, arroz, feijão, cenoura refogada · melancia' }, { i: 'sun', t: 'Lanche · 15h', m: 'Tapioca com queijo coalho · suco de caju' }, { i: 'moon', t: 'Integral · 17h', m: 'Vitamina de banana com aveia' }] },
+        { dia: 'Terça', data: '24/11', cls: '', nota: 'Davi comeu bem', tone: 'success', ref: [{ i: 'utensils', t: 'Almoço', m: 'Carne moída com legumes, macarrão, salada de alface · laranja' }, { i: 'sun', t: 'Lanche · 15h', m: 'Pão integral com ovo mexido · suco de goiaba' }, { i: 'moon', t: 'Integral · 17h', m: 'Cuscuz com leite' }] },
+        { dia: 'Quarta · hoje', data: '25/11', cls: 'is-hoje', nota: 'Davi comeu quase tudo', tone: 'success', ref: [{ i: 'utensils', t: 'Almoço', m: 'Peixe assado, arroz, feijão verde, purê de jerimum · abacaxi' }, { i: 'sun', t: 'Lanche · 15h', m: 'Bolo de milho · suco de acerola' }, { i: 'moon', t: 'Integral · 17h', m: 'Sopa de legumes com macarrão' }] },
+        { dia: 'Quinta', data: '26/11', cls: '', nota: '', tone: 'neutral', ref: [{ i: 'utensils', t: 'Almoço', m: 'Baião de dois, carne de sol desfiada, vinagrete · banana' }, { i: 'sun', t: 'Lanche · 15h', m: 'Iogurte natural com granola sem castanhas' }, { i: 'moon', t: 'Integral · 17h', m: 'Sanduíche de frango desfiado' }] },
+        { dia: 'Sexta', data: '27/11', cls: '', nota: '', tone: 'neutral', ref: [{ i: 'utensils', t: 'Almoço', m: 'Strogonoff de frango, arroz, batata assada · mamão' }, { i: 'sun', t: 'Lanche · 15h', m: 'Salada de frutas' }, { i: 'moon', t: 'Integral · 17h', m: 'Mingau de aveia' }] }],
+
+      semanas: [{ value: 'esta', label: 'Esta semana' }, { value: 'prox', label: 'Próxima' }], refs: [{ value: 'todas', label: 'Todas' }, { value: 'almoco', label: 'Almoço' }, { value: 'lanche', label: 'Lanches' }],
+      verIntegral: React.createElement('a', { className: 'rc-btn rc-btn-ghost rc-btn-sm', href: 'Familia-Integral.dc.html' }, 'Ver o integral'),
+      comeu: [{ nome: 'Quarta, 25/11 · peixe assado', meta: 'Comeu quase tudo · deixou o purê', st: 'Quase tudo', tone: 'success', cls: 'rc-tone-success' }, { nome: 'Terça, 24/11 · carne moída', meta: 'Comeu bem · repetiu a salada', st: 'Bem', tone: 'success', cls: 'rc-tone-success' }, { nome: 'Segunda, 23/11 · frango grelhado', meta: 'Comeu tudo', st: 'Tudo', tone: 'success', cls: 'rc-tone-success' }],
+      restr: [{ nome: 'Alergia a amendoim', meta: 'Informada em 02/02/2026 · confirmada pela nutricionista', st: 'Ativa', tone: 'warning', cls: 'rc-tone-warning' }],
+      tiposR: [{ value: 'alergia', label: 'Alergia' }, { value: 'intol', label: 'Intolerância' }, { value: 'dieta', label: 'Dieta ou escolha da família' }]
+    });
+    return Object.assign({ s12: 12, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96 }, bell, __r);
+  }
+}
+</script>
+</body>
+</html>

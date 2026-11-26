@@ -1,0 +1,33 @@
+<!-- @dsCard group="Comunicação" height=560 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>MessageThread</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { height: 540, maxWidth: 640 } }, /* @__PURE__ */ React.createElement(
+      P.MessageThread,
+      {
+        subject: "Financeiro: segunda via com desconto",
+        participants: "Voc\xEA e Financeiro do Col\xE9gio Recreio",
+        sla: "Resposta em at\xE9 1 dia \xFAtil",
+        typing: "Renata",
+        messages: [
+          { id: 1, from: "me", text: "Bom dia. Paguei a mensalidade de novembro com atraso de 2 dias. Consigo manter o desconto?", time: "8h02", status: "lida" },
+          { id: 2, from: "escola", author: "Renata Alencar \xB7 Financeiro", text: "Bom dia, Fernanda. Consegue sim, por ser o primeiro atraso do ano. J\xE1 ajustei a cobran\xE7a de dezembro.", time: "8h40" },
+          { id: 3, from: "escola", author: "Renata Alencar \xB7 Financeiro", text: "Segue o demonstrativo atualizado.", file: "demonstrativo-dezembro.pdf", time: "8h41" },
+          { id: 4, from: "me", text: "Perfeito, muito obrigada!", time: "8h45", status: "enviada" }
+        ]
+      }
+    ));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

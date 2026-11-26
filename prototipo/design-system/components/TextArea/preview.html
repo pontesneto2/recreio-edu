@@ -1,0 +1,19 @@
+<!-- @dsCard group="Campos" height=220 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>TextArea</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { maxWidth: 520 } }, /* @__PURE__ */ React.createElement(P.TextArea, { label: "Mensagem para a coordena\xE7\xE3o", maxLength: 600, hint: "Descreva o que aconteceu e quando.", defaultValue: "Bom dia. O Davi voltou da aula de educa\xE7\xE3o f\xEDsica com o joelho ralado e n\xE3o recebemos aviso." }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

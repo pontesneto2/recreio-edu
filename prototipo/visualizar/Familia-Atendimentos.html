@@ -1,0 +1,161 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Família: Atendimentos</title>
+<link rel="stylesheet" href="vendor/tokens.css"><link rel="stylesheet" href="vendor/bundle.css"><link rel="stylesheet" href="vendor/telas.css"><style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+<script src="vendor/react.js"></script><script src="vendor/react-dom.js"></script><script src="vendor/bundle.js"></script></head>
+<body><div id="app"></div><template id="dc-src"><x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" groups="{{nav}}" active="atendimentos"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="hand" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Atendimentos</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Marque uma conversa com professor ou coordenação e confirme reuniões</p></div></div>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar professor ou reunião" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Familia-Notificacoes.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<x-import component-from-global-scope="Recreio.Alert" tone="info" title="Reunião de pais do 9º ano">Quinta, 03/12, às 18h30, no auditório. Pauta: formatura, recuperação e matrícula no Ensino Médio. Confirme sua presença abaixo.</x-import>
+<div class="rc-split" style="gap: 24px; align-items: start; --split: minmax(0, 3fr) minmax(320px, 2fr);">
+<div style="display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+<div><p class="rc-section-title">Marcar atendimento sobre a Ana Beatriz</p><x-import component-from-global-scope="Recreio.AppointmentPicker" people="{{pessoas}}" days="{{diasA}}"></x-import></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Seus atendimentos" subtitle="Marcados e já feitos">
+<div>
+<sc-for list="{{meus}}" as="a" hint-placeholder-count="3">
+<div class="tl-linha " style="--cols: 48px minmax(0, 1fr) auto;"><span class="tl-ic rc-c-{{a.cor}}" style="width: 48px; height: 48px; flex-direction: column; line-height: 1.1;"><strong>{{a.d}}</strong><small style="font-size: 11px; color: inherit;">{{a.mes}}</small></span><span style="min-width: 0;"><strong style="display: block;">{{a.t}}</strong><small>{{a.m}}</small></span><span class="tl-linha-fim"><x-import component-from-global-scope="Recreio.StatusPill" tone="{{a.tone}}" size="sm">{{a.st}}</x-import><a class="rc-btn rc-btn-ghost rc-btn-sm" href="{{a.href}}">{{a.bl}}</a></span></div>
+</sc-for>
+</div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Reunião de pais">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;"><span><strong style="display: block;">Quinta, 03/12 · 18h30</strong><small style="color: var(--ink-2);">Auditório · 60 de 91 famílias confirmaram</small></span><span style="display: flex; gap: 8px;"><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-ausente">Não vou</a><a class="rc-btn rc-btn-primary rc-btn-sm" href="#pop-presenca"><x-import component-from-global-scope="Recreio.Icon" name="check" size="{{s18}}"></x-import>Confirmar presença</a></span></div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Alert" tone="info" title="Quem abre os horários">A coordenação e os professores liberam os horários. Você escolhe, e os dois lados recebem lembrete na véspera.</x-import>
+</div>
+</div>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="hoje"></x-import>
+</div>
+</div>
+<div id="pop-presenca" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Presença confirmada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Presença confirmada</p><p class="rc-dialog-desc">A coordenação conta com você na quinta, 03/12, às 18h30. O lembrete chega na véspera.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-ausente" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Não vai poder ir?">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="calendar" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Não vai poder ir?</p><p class="rc-dialog-desc">A coordenação envia o resumo da reunião e pode marcar um atendimento individual.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Voltar</a><a class="rc-btn rc-btn-primary" href="#pop-ausente-ok">Avisar que não vou</a></div>
+</div>
+</div>
+<div id="pop-ausente-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Aviso enviado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Aviso enviado</p><p class="rc-dialog-desc">Você recebe o resumo da reunião no dia seguinte.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-remarcar" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Remarcar o atendimento">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="sync" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Remarcar o atendimento</p><p class="rc-dialog-desc">Sexta, 27/11, às 12h30, com o Prof. Ricardo Albuquerque.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Escolha outro horário no quadro ao lado. O horário atual fica livre para outra família.</p></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Manter</a><a class="rc-btn rc-btn-danger" href="#pop-cancelado">Cancelar o atendimento</a></div>
+</div>
+</div>
+<div id="pop-cancelado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Atendimento cancelado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Atendimento cancelado</p><p class="rc-dialog-desc">O professor foi avisado e o horário voltou a ficar livre.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-ata" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Ata do atendimento de 14/10">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="file-text" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Ata do atendimento de 14/10</p><p class="rc-dialog-desc">O registro fica na ficha da Ana Beatriz, visível para você e para a coordenação.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><dl class="rc-fields" style="grid-template-columns: minmax(0, 1fr);">
+<sc-for list="{{ata}}" as="f" hint-placeholder-count="4"><div class="rc-field {{f.cls}}"><dt>{{f.l}}</dt><dd>{{f.v}}</dd></div></sc-for>
+</dl></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Fechar</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc></template><script id="dc-js" type="text/plain">
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 3, bellNotifs: [
+      { icon: 'mail', title: 'Bilhete para assinar: aula de campo', text: 'Ana Beatriz · 9º ano A · prazo 26/11', time: 'Hoje, 11h20', unread: true, priority: 'importante' },
+      { icon: 'heart', title: 'Davi passou pela enfermaria', text: 'Dor de cabeça, já voltou para a sala', time: 'Hoje, 10h25', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: 'Mensalidade de dezembro disponível', text: 'R$ 1.406,00 · vence em 10/12', time: 'Hoje, 8h00', unread: true, priority: 'rotina' },
+      { icon: 'chart', title: 'Boletim do 3º bimestre publicado', text: 'Ana Beatriz e Davi', time: 'Ontem, 18h30', priority: 'rotina' }] };
+    const tabs = [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Familia-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }];
+    const shared = {
+      bellCount: 3, activeChild: 'k1', activeProfile: 'resp',
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      user: { name: 'Fernanda Lima' },
+      kids: [{ id: 'k1', name: 'Davi Lima', group: '2º ano B' }, { id: 'k2', name: 'Ana Beatriz Lima', group: '9º ano A' }],
+      profiles: [{ id: 'resp', label: 'Responsável', icon: 'users', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'calendario', label: 'Calendário', icon: 'flag', href: 'Familia-Calendario.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', count: 2, href: 'Familia-Comunicados.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'autorizacoes', label: 'Autorizações', icon: 'key', count: 1, href: 'Familia-Autorizacoes.dc.html' }] },
+        { label: 'Acadêmico', items: [{ id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'check-circle', href: 'Familia-Frequencia.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Familia-Horarios.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Familia-Integral.dc.html' }, { id: 'inclusao', label: 'Plano individual', icon: 'star', href: 'Familia-Inclusao.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 1, href: 'Familia-Ocorrencias.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Familia-Biblioteca.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Familia-Materiais.dc.html' }] },
+        { label: 'Serviços', items: [{ id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Familia-Cardapio.dc.html' }, { id: 'saude', label: 'Saúde', icon: 'heart', href: 'Familia-Saude.dc.html' }, { id: 'documentos', label: 'Documentos', icon: 'file', href: 'Familia-Documentos.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', href: 'Familia-Atendimentos.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', count: 2, href: 'Familia-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', href: 'Familia-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', count: 1, href: 'Familia-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'financeiro', label: 'Mensalidades', icon: 'wallet', count: 1, urgent: true, href: 'Familia-Financeiro.dc.html' }, { id: 'dae', label: 'DAE', icon: 'receipt', href: 'Familia-DAE.dc.html' }, { id: 'ir', label: 'Recibo para IR', icon: 'receipt', href: 'Familia-Recibo-IR.dc.html' }, { id: 'rematricula', label: 'Rematrícula 2027', icon: 'file-text', href: 'Familia-Rematricula.dc.html' }, { id: 'matricula', label: 'Matrícula 2027', icon: 'graduation', href: 'Familia-Matricula.dc.html' }] },
+        { label: 'Conta', items: [{ id: 'prefs', label: 'Acessibilidade', icon: 'accessibility', href: 'Familia-Preferencias.dc.html' }] }]
+    };
+    const __r = Object.assign({ yes: true, no: false, tabs }, shared, {
+      activeChild: 'k2',
+      n2: 2, n3: 3, n4: 4, n5: 5, n6: 6,
+      go_pop_ata: () => { location.hash = 'pop-ata'; }, go_pop_ausente: () => { location.hash = 'pop-ausente'; }, go_pop_ausente_ok: () => { location.hash = 'pop-ausente-ok'; }, go_pop_cancelado: () => { location.hash = 'pop-cancelado'; }, go_pop_lidas: () => { location.hash = 'pop-lidas'; }, go_pop_presenca: () => { location.hash = 'pop-presenca'; }, go_pop_remarcar: () => { location.hash = 'pop-remarcar'; },
+      pessoas: [{ id: 'ra', name: 'Ricardo Albuquerque', role: 'Matemática', icon: 'book' }, { id: 'js', name: 'Juliana Sampaio', role: 'Coordenação', icon: 'users' }, { id: 'hc', name: 'Helena Costa', role: 'Português', icon: 'book' }],
+      diasA: [
+        { id: 'd26', week: 'Qui', num: '26', label: 'quinta, 26/11', slots: [{ time: '12h10', free: false }, { time: '12h30', free: false }, { time: '12h50', free: false }] },
+        { id: 'd27', week: 'Sex', num: '27', label: 'sexta, 27/11', slots: [{ time: '12h10', free: false }, { time: '12h30', free: false }] },
+        { id: 'd30', week: 'Seg', num: '30', label: 'segunda, 30/11', slots: [{ time: '12h10', free: true }, { time: '12h30', free: true }, { time: '17h40', free: true }, { time: '18h00', free: false }] },
+        { id: 'd01', week: 'Ter', num: '01', label: 'terça, 01/12', slots: [{ time: '15h00', free: true }, { time: '15h20', free: true }, { time: '15h40', free: true }] },
+        { id: 'd02', week: 'Qua', num: '02', label: 'quarta, 02/12', slots: [{ time: '12h10', free: true }, { time: '12h30', free: false }] }],
+      meus: [
+        { d: '27', mes: 'nov', cor: 'verde', t: 'Prof. Ricardo Albuquerque', m: 'Sexta, 12h30 · sala 12 · recuperação de Matemática', st: 'Confirmado', tone: 'success', bl: 'Remarcar', href: '#pop-remarcar' },
+        { d: '14', mes: 'out', cor: 'roxo', t: 'Juliana Sampaio · Coordenação', m: 'Feito · plano de estudo de Matemática · ata disponível', st: 'Feito', tone: 'neutral', bl: 'Ver ata', href: '#pop-ata' },
+        { d: '02', mes: 'set', cor: 'azul', t: 'Profa. Luana Freitas · Davi', m: 'Feito por vídeo · adaptação ao integral', st: 'Feito', tone: 'neutral', bl: 'Ver ata', href: '#pop-ata' }],
+      ata: [{ l: 'Presentes', v: 'Fernanda Lima e Juliana Sampaio' }, { l: 'Assunto', v: 'Nota 5,4 em Matemática no 3º bimestre' }, { l: 'Combinado', v: 'Plantão às terças e quintas, lista semanal com entrega e novo atendimento em novembro' }, { l: 'Registrado por', v: 'Juliana Sampaio em 14/10/2026' }]
+    });
+    return Object.assign({ s12: 12, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96 }, bell, __r);
+  }
+}
+</script><script src="vendor/runtime.js"></script></body></html>

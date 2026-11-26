@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Escola: Avisos e confirmações</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+.av-wrap{min-height:100vh;box-sizing:border-box;padding:40px 48px 56px;background:linear-gradient(var(--scrim),var(--scrim)),var(--surface-0);font-family:var(--font-sans);color:var(--ink)}
+.av-head{max-width:820px;margin:0 0 28px;color:#fff}
+.av-head h1{margin:0 0 6px;font-size:1.75rem;font-weight:750;letter-spacing:-0.025em}
+.av-head p{margin:0;font-size:15px;opacity:.88;line-height:1.5}
+.av-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,400px),1fr));gap:28px;align-items:start}
+.av-tag{display:inline-block;margin:0 0 8px;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.16);color:#fff;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.av-x{margin-left:auto}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="av-wrap">
+<div class="av-head"><h1>Avisos e confirmações</h1><p>Pop-ups no centro da tela, com o fundo escurecido. Cada tipo tem cor, ícone e botões próprios. O botão principal diz exatamente o que vai acontecer, e o Esc ou o X fecham, exceto durante um processamento.</p></div>
+<div class="av-grid">
+
+<div><span class="av-tag">Confirmação</span>
+<div class="rc-dialog rc-dialog-static" role="dialog" aria-label="Publicar lançamento">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="send" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Publicar no 9º ano A · Manhã?</p><p class="rc-dialog-desc">A tarefa "Lista 9" vai para a agenda de 31 famílias, com aviso no celular agora.</p></div><span class="rc-iconbtn av-x" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></span></div>
+<div class="rc-dialog-foot"><button type="button" class="rc-btn rc-btn-ghost">Revisar</button><button type="button" class="rc-btn rc-btn-primary">Publicar agora</button></div>
+</div></div>
+
+<div><span class="av-tag">Ação destrutiva</span>
+<div class="rc-dialog rc-dialog-static" role="dialog" aria-label="Excluir lançamento">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-danger"><x-import component-from-global-scope="Recreio.Icon" name="trash" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Excluir o lançamento "Lista 8"?</p><p class="rc-dialog-desc">Some da agenda de 31 famílias e perde os 24 vistos já dados. Não dá para desfazer.</p></div><span class="rc-iconbtn av-x" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></span></div>
+<div class="rc-dialog-body"><x-import component-from-global-scope="Recreio.TextField" label="Para confirmar, digite EXCLUIR" placeholder="EXCLUIR"></x-import></div>
+<div class="rc-dialog-foot"><button type="button" class="rc-btn rc-btn-ghost">Cancelar</button><button type="button" class="rc-btn rc-btn-danger">Excluir lançamento</button></div>
+</div></div>
+
+<div><span class="av-tag">Alterações não salvas</span>
+<div class="rc-dialog rc-dialog-static" role="dialog" aria-label="Sair sem salvar">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-warning"><x-import component-from-global-scope="Recreio.Icon" name="alert" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Sair sem salvar a chamada?</p><p class="rc-dialog-desc">Você marcou 1 falta e 1 atraso na 2ª aula. Se sair agora, as famílias não recebem o aviso.</p></div><span class="rc-iconbtn av-x" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></span></div>
+<div class="rc-dialog-foot"><button type="button" class="rc-btn rc-btn-ghost">Sair sem salvar</button><button type="button" class="rc-btn rc-btn-primary">Salvar e sair</button></div>
+</div></div>
+
+<div><span class="av-tag">Sucesso</span>
+<div class="rc-dialog rc-dialog-static rc-dialog-hero" role="dialog" aria-label="Chamada salva">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Chamada salva</p><p class="rc-dialog-desc">29 presentes, 1 falta e 1 atraso. A família do Bruno Sales recebe o aviso de falta às 10h.</p></div></div>
+<div class="rc-dialog-foot"><button type="button" class="rc-btn rc-btn-ghost">Ver chamada</button><button type="button" class="rc-btn rc-btn-primary">Próxima aula</button></div>
+</div></div>
+
+<div><span class="av-tag">Erro</span>
+<div class="rc-dialog rc-dialog-static" role="alertdialog" aria-label="Falha no envio">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-danger"><x-import component-from-global-scope="Recreio.Icon" name="wifi-off" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Não foi possível publicar</p><p class="rc-dialog-desc">A conexão caiu durante o envio. O lançamento ficou salvo como rascunho neste aparelho.</p></div><span class="rc-iconbtn av-x" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></span></div>
+<div class="rc-dialog-body"><p style="margin: 0; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 13px; color: var(--ink-2);">Código do erro: AG-503 · 25/11, 10h05 · informe ao suporte se repetir</p></div>
+<div class="rc-dialog-foot"><button type="button" class="rc-btn rc-btn-ghost">Fechar</button><button type="button" class="rc-btn rc-btn-primary">Tentar de novo</button></div>
+</div></div>
+
+<div><span class="av-tag">Sessão expirando</span>
+<div class="rc-dialog rc-dialog-static" role="alertdialog" aria-label="Sessão expirando">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-warning"><x-import component-from-global-scope="Recreio.Icon" name="clock" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Sua sessão termina em 01:45</p><p class="rc-dialog-desc">Por segurança, o sistema sai depois de 30 minutos sem uso. As notas lançadas já estão salvas.</p></div></div>
+<div class="rc-dialog-body"><x-import component-from-global-scope="Recreio.ProgressBar" value="{{s105}}" max="{{s300}}" label="Tempo restante" tone="warning" size="sm"></x-import></div>
+<div class="rc-dialog-foot"><button type="button" class="rc-btn rc-btn-ghost">Sair agora</button><button type="button" class="rc-btn rc-btn-primary">Continuar conectado</button></div>
+</div></div>
+
+<div><span class="av-tag">Processando</span>
+<div class="rc-dialog rc-dialog-static" role="dialog" aria-label="Enviando contratos" aria-busy="true">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Spinner" size="{{s22}}" label="Enviando"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Enviando 200 contratos de rematrícula</p><p class="rc-dialog-desc">Não feche esta janela. Cada família recebe o contrato por e-mail e no app.</p></div></div>
+<div class="rc-dialog-body"><x-import component-from-global-scope="Recreio.ProgressBar" value="{{s128}}" max="{{s200}}" label="128 de 200 enviados" show-value="{{yes}}" size="md"></x-import></div>
+<div class="rc-dialog-foot"><button type="button" class="rc-btn rc-btn-ghost">Continuar em segundo plano</button></div>
+</div></div>
+
+<div><span class="av-tag">Confirmação com motivo</span>
+<div class="rc-dialog rc-dialog-static" role="dialog" aria-label="Reabrir diário">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-info"><x-import component-from-global-scope="Recreio.Icon" name="lock" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Reabrir o diário do 3º bimestre?</p><p class="rc-dialog-desc">Matemática · 9º ano A. O professor volta a editar as notas por 48 horas, e o boletim fica em revisão.</p></div><span class="rc-iconbtn av-x" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></span></div>
+<div class="rc-dialog-body"><x-import component-from-global-scope="Recreio.TextArea" label="Motivo (fica no histórico)" placeholder="Ex.: correção da nota da Prova 2 do aluno Arthur Nogueira" rows="{{three}}"></x-import></div>
+<div class="rc-dialog-foot"><button type="button" class="rc-btn rc-btn-ghost">Cancelar</button><button type="button" class="rc-btn rc-btn-primary">Reabrir por 48 horas</button></div>
+</div></div>
+
+<div><span class="av-tag">Informação da família</span>
+<div class="rc-dialog rc-dialog-static rc-dialog-hero" role="dialog" aria-label="Pagamento confirmado">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="receipt" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Pagamento confirmado</p><p class="rc-dialog-desc">Mensalidade de novembro da Ana Beatriz, R$ 1.652,40 via Pix. O recibo já está em Mensalidades.</p></div></div>
+<div class="rc-dialog-foot"><button type="button" class="rc-btn rc-btn-ghost">Baixar recibo</button><button type="button" class="rc-btn rc-btn-primary">Concluir</button></div>
+</div></div>
+
+</div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1400}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { yes: true, s20: 20, s22: 22, s32: 32, s105: 105, s300: 300, s128: 128, s200: 200, three: 3 };
+  }
+}
+</script>
+</body>
+</html>

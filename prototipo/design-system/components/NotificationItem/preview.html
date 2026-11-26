@@ -1,0 +1,19 @@
+<!-- @dsCard group="Comunicação" height=340 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>NotificationItem</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("ul", { style: { margin: 0, padding: 0, maxWidth: 520 } }, /* @__PURE__ */ React.createElement(P.NotificationItem, { index: 0, unread: true, priority: "urgente", icon: "alert", title: "Aula suspensa amanh\xE3 \xE0 tarde", text: "Manuten\xE7\xE3o el\xE9trica. Sa\xEDda \xE0s 11h40 para todas as turmas.", time: "h\xE1 5 min" }), /* @__PURE__ */ React.createElement(P.NotificationItem, { index: 1, unread: true, icon: "wallet", title: "Pagamento recebido", text: "Mensalidade de novembro do Davi, R$ 1.406,00.", time: "h\xE1 2 h" }), /* @__PURE__ */ React.createElement(P.NotificationItem, { index: 2, icon: "image", title: "12 fotos novas na galeria", text: "Feira de Ci\xEAncias do 9\xBA ano", time: "ontem" }), /* @__PURE__ */ React.createElement(P.NotificationItem, { index: 3, icon: "gate", title: "Davi saiu com Fernanda Lima", text: "Portaria da Unidade Aldeota, 17h43.", time: "ontem" }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!-- @dsCard group="Feedback" height=220 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>ToastProvider</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    const t = P.useToast();
+    return /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement(P.Button, { onClick: () => t.show({ tone: "success", title: "Chamada salva", message: "28 presentes, 2 faltas no 5\xBA ano B." }) }, "Chamada salva"), /* @__PURE__ */ React.createElement(P.Button, { onClick: () => t.show({ tone: "neutral", title: "Comunicado arquivado", action: { label: "Desfazer", onClick: () => {
+    } } }) }, "Com desfazer"), /* @__PURE__ */ React.createElement(P.Button, { onClick: () => t.show({ tone: "danger", title: "Sem conex\xE3o", message: "A nota foi guardada no aparelho e sobe quando a internet voltar." }) }, "Erro"));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

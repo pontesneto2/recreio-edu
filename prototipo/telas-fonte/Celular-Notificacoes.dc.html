@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Celular: Notificações</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+<header class="rc-app-bar"><a class="rc-app-back" href="Celular-Hoje.dc.html" aria-label="Voltar"><x-import component-from-global-scope="Recreio.Icon" name="chevron-left" size="{{s22}}"></x-import></a><h1>Notificações<small>3 novas</small></h1><span><a class="rc-app-back" href="Familia-Preferencias.dc.html" aria-label="Preferências de aviso"><x-import component-from-global-scope="Recreio.Icon" name="sliders" size="{{s20}}"></x-import></a></span></header>
+<div class="rc-app-scroll">
+<div class="rc-app-body"><x-import component-from-global-scope="Recreio.FilterChips" label="Filtrar" value="{{f}}" options="{{fo}}" single="{{yes}}"></x-import><div class="rc-app-sec"><h2>Hoje</h2><a href="#pop-lidas">Marcar como lidas</a></div><div class="rc-app-card is-flush"><ul style="list-style: none; margin: 0; padding: 0;"><sc-for list="{{hoje}}" as="n" hint-placeholder-count="4"><x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import></sc-for></ul></div><div class="rc-app-sec"><h2>Esta semana</h2></div><div class="rc-app-card is-flush"><ul style="list-style: none; margin: 0; padding: 0;"><sc-for list="{{semana}}" as="n" hint-placeholder-count="4"><x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import></sc-for></ul></div></div>
+</div>
+
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="hoje"></x-import>
+<div id="pop-lidas" class="rc-overlay rc-popup is-sheet" role="dialog" aria-modal="true" aria-label="Tudo lido"><a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a><div class="rc-dialog rc-dialog-hero"><div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Tudo lido</p><p class="rc-dialog-desc">As 3 notificações novas foram marcadas como lidas.</p></div></div><div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#"><span class="rc-btn-label">Concluir</span></a></div></div></div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return Object.assign({ yes: true, no: false, one: 1, two: 2, three: 3, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96, tabs: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Celular-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', count: 2, href: 'Celular-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Celular-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 1, href: 'Celular-Chat.dc.html' }, { id: 'mais', label: 'Mais', icon: 'menu', href: 'Celular-Mais.dc.html' }] }, {
+      f: ['todas'], fo: [{ value: 'todas', label: 'Todas' }, { value: 'urgentes', label: 'Urgentes · 1' }, { value: 'financeiro', label: 'Financeiro' }, { value: 'pedagogico', label: 'Pedagógico' }],
+      hoje: [
+        { icon: 'chat', title: 'Prof. Ricardo respondeu seu recado', text: 'Amanhã reviso a questão 7 com ela', time: '13h05', unread: true, priority: 'rotina' },
+        { icon: 'utensils', title: 'Davi almoçou bem', text: 'Peixe assado · comeu quase tudo', time: '12h10', priority: 'rotina' },
+        { icon: 'calendar', title: '5 lançamentos na agenda da Ana Beatriz', text: '2 pedem visto e 1 pede assinatura', time: '11h20', unread: true, priority: 'importante' },
+        { icon: 'key', title: 'Autorização do Planetário vence sexta', text: 'Davi · 2º ano B · falta a sua assinatura', time: '9h20', unread: true, priority: 'urgente' }],
+      semana: [
+        { icon: 'wallet', title: 'Mensalidade de novembro em aberto', text: 'Ana Beatriz · R$ 1.652,40 · venceu em 10/11', time: 'Ter', priority: 'importante' },
+        { icon: 'chart', title: 'Nota de Matemática lançada', text: 'Ana Beatriz · Prova 2: 9,0', time: 'Ter', priority: 'rotina' },
+        { icon: 'book', title: 'Livro para devolver em 02/12', text: 'Iracema · Ana Beatriz', time: 'Seg', priority: 'rotina' },
+        { icon: 'check-circle', title: 'Falta de 04/11 justificada', text: 'A coordenação aceitou a declaração', time: 'Seg', priority: 'rotina' }]
+    });
+  }
+}
+</script>
+</body>
+</html>

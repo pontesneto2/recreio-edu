@@ -1,0 +1,22 @@
+<!-- @dsCard group="Dados" height=260 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>List</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { maxWidth: 480 } }, /* @__PURE__ */ React.createElement(P.List, { label: "Respons\xE1veis" }, /* @__PURE__ */ React.createElement(P.ListItem, { index: 0, leading: /* @__PURE__ */ React.createElement(P.Avatar, { name: "Fernanda Lima", size: 40 }), title: "Fernanda Lima", meta: "M\xE3e \xB7 respons\xE1vel financeira", trailing: /* @__PURE__ */ React.createElement(P.StatusPill, { size: "sm", tone: "success" }, "App ativo"), onClick: () => {
+    } }), /* @__PURE__ */ React.createElement(P.ListItem, { index: 1, leading: /* @__PURE__ */ React.createElement(P.Avatar, { name: "Rodrigo Lima", size: 40 }), title: "Rodrigo Lima", meta: "Pai \xB7 respons\xE1vel pedag\xF3gico", trailing: /* @__PURE__ */ React.createElement(P.StatusPill, { size: "sm", tone: "warning", icon: "mail" }, "Convite enviado"), onClick: () => {
+    } }), /* @__PURE__ */ React.createElement(P.ListItem, { index: 2, leading: /* @__PURE__ */ React.createElement(P.Avatar, { name: "L\xFAcia Ramos", size: 40 }), title: "L\xFAcia Ramos", meta: "Av\xF3 \xB7 autorizada a buscar", trailing: /* @__PURE__ */ React.createElement(P.Icon, { name: "chevron-right" }), onClick: () => {
+    } })));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

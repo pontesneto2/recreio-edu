@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>App: Tela bloqueada</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status is-nav" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+
+<div class="rc-nat-lock"><div class="rc-nat-clock"><small>Quarta, 25 de novembro</small><strong>9:41</strong></div><a class="rc-nat-push" href="App-Familia-Agenda.dc.html" style="text-decoration: none;"><b>CR</b><div><strong>Recreio</strong><span>Bilhete para assinar: aula de campo no Parque do Cocó. Ana Beatriz, prazo 26/11.</span></div><small>agora</small></a><a class="rc-nat-push" href="App-Familia-Portaria.dc.html" style="text-decoration: none;"><b>CR</b><div><strong>Recreio</strong><span>Davi entrou na escola às 7h02 pelo portão principal.</span></div><small>7h02</small></a><a class="rc-nat-push" href="App-Familia-Financeiro.dc.html" style="text-decoration: none;"><b>CR</b><div><strong>Recreio</strong><span>Mensalidade de dezembro do Davi: R$ 1.406,00 até 10/12.</span></div><small>8h00</small></a><a class="rc-nat-push" href="App-Familia-Boletim.dc.html" style="text-decoration: none;"><b>CR</b><div><strong>Recreio</strong><span>Nova nota: Prova 2 de Matemática. Ana Beatriz tirou 9,0.</span></div><small>ontem</small></a></div>
+
+<div class="rc-app-home"></div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return Object.assign({ yes: true, no: false, one: 1, two: 2, three: 3, four: 4, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96, s120: 120, s168: 168 }, {
+
+    });
+  }
+}
+</script>
+</body>
+</html>

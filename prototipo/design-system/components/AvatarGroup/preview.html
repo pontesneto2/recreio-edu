@@ -1,0 +1,19 @@
+<!-- @dsCard group="Dados" height=80 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>AvatarGroup</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement(P.AvatarGroup, { people: [{ name: "Ana Beatriz Lima" }, { name: "Bruno Sales" }, { name: "Caio Reis" }, { name: "Duda Melo" }, { name: "Eva Rios" }, { name: "F\xE1bio Luz" }, { name: "Gil Paz" }] });
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

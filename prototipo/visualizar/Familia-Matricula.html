@@ -1,0 +1,290 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Matrícula de aluno novo</title>
+<link rel="stylesheet" href="vendor/tokens.css"><link rel="stylesheet" href="vendor/bundle.css"><style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+<script src="vendor/react.js"></script><script src="vendor/react-dom.js"></script><script src="vendor/bundle.js"></script></head>
+<body><div id="app"></div><template id="dc-src"><x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" groups="{{nav}}" active="matricula"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="graduation" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Matrícula 2027</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Aluno novo · Miguel Lima · Infantil V</p></div></div>
+<a class="rc-btn rc-btn-ghost rc-btn-sm" href="Familia-Rematricula.html">Rematrícula 2027</a>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar documento" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Familia-Notificacoes.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 16px;">
+<x-import component-from-global-scope="Recreio.StatCard" color="azul" label="Etapa atual" value="{{m1}}" format="{{de6}}" icon="list" hint="Documentos · faltam 4 etapas"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="verde" label="Documentos enviados" value="{{m2}}" format="{{de5}}" icon="file-text" hint="Faltam a vacinação e o comprovante de residência"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="laranja" label="Vaga reservada por" value="{{m3}}" format="{{dias}}" icon="clock" hint="Infantil V A · Manhã · até 30/11"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="roxo" label="1ª parcela" value="{{m4}}" format="{{brl}}" icon="wallet" hint="Paga na etapa 6, depois do contrato"></x-import>
+</div>
+<x-import component-from-global-scope="Recreio.Card" title="Matrícula de Miguel Lima" subtitle="Aluno novo · Infantil V em 2027 · protocolo MAT-2027-0184 · tudo pelo portal ou pelo app, sem ir à secretaria">
+<x-import component-from-global-scope="Recreio.Stepper" steps="{{etapas}}" current="{{etapaAtual}}"></x-import>
+</x-import>
+<div class="rc-split" style="gap: 24px; align-items: start; --split: minmax(0, 3fr) minmax(0, 2fr);">
+<div style="display: flex; flex-direction: column; gap: 24px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Etapa 3 · Documentos" subtitle="Foto do aluno, certidão e mais 3 documentos. O que a escola já tem da família foi reaproveitado.">
+<x-import component-from-global-scope="Recreio.SaveGuard" label="Salvar documentos" hint="Envie ou troque um documento para liberar o botão Salvar" saved-title="Documentos salvos" saved-message="Você pode continuar depois, de onde parou.">
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0;">
+<div>
+<sc-for list="{{docs}}" as="r" hint-placeholder-count="5">
+<div class="rc-popup-row"><span style="display: grid; place-items: center; width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--surface-2); color: var(--brand-ink);"><x-import component-from-global-scope="Recreio.Icon" name="{{r.ic}}" size="{{s18}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{r.n}}</strong><small style="color: var(--ink-2);">{{r.m}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.st}}</x-import></div>
+</sc-for>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px;">
+<x-import component-from-global-scope="Recreio.Select" label="Documento que você vai enviar agora" default-value="vacina" options="{{tiposDoc}}"></x-import>
+<x-import component-from-global-scope="Recreio.Select" label="De quem é o documento" default-value="miguel" options="{{donos}}"></x-import>
+</div>
+<x-import component-from-global-scope="Recreio.FileDrop" label="Arraste a foto, a certidão ou outro documento" hint="Foto 3x4 em JPG ou PNG. Certidão e demais documentos em PDF, JPG ou PNG de até 10 MB." files="{{arquivos}}"></x-import>
+<x-import component-from-global-scope="Recreio.TextArea" label="Recado para a secretaria" optional="{{yes}}" default-value="A carteira de vacinação está com a página de 2026 atualizada." rows="{{two}}"></x-import>
+<x-import component-from-global-scope="Recreio.Checkbox" label="Declaro que os documentos são verdadeiros" description="A secretaria confere os originais no primeiro dia de aula." default-checked="{{yes}}"></x-import>
+</div>
+</x-import>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin-top: 16px;"><a class="rc-btn rc-btn-ghost" href="#pop-resp">Voltar para Responsáveis</a><a class="rc-btn rc-btn-primary" href="#pop-enviar">Enviar e continuar para Turma e turno</a></div>
+</x-import>
+</div>
+<div style="display: flex; flex-direction: column; gap: 24px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Resumo das etapas" subtitle="Toque para ver ou corrigir">
+<div>
+<sc-for list="{{resumo}}" as="r" hint-placeholder-count="6">
+<div class="rc-popup-row"><span style="display: grid; place-items: center; width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--surface-2); color: var(--brand-ink);"><x-import component-from-global-scope="Recreio.Icon" name="{{r.ic}}" size="{{s18}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{r.n}}</strong><small style="color: var(--ink-2);">{{r.m}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.st}}</x-import><a class="rc-btn rc-btn-{{r.bv}} rc-btn-sm" href="{{r.href}}">{{r.bl}}</a></div>
+</sc-for>
+</div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Alert" tone="success" title="Irmãos na escola">Miguel é irmão de Ana Beatriz e Davi. A família tem prioridade na vaga e 10% de desconto na terceira mensalidade.</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Outros processos da família">
+<p style="margin: 0; line-height: 1.5; color: var(--ink-2);">A rematrícula de Ana Beatriz e Davi para 2027 segue aberta até 15/12.</p>
+<div style="margin-top: 12px;"><div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-secondary rc-btn-sm" href="Familia-Rematricula.html">Abrir Rematrícula 2027</a><a class="rc-btn rc-btn-ghost rc-btn-sm" href="Familia-Contrato.html">Ler o contrato</a></div></div>
+</x-import>
+</div>
+</div>
+<x-import component-from-global-scope="Recreio.Card" title="Etapa 4 · Turma e turno com vagas" subtitle="Infantil V em 2027, para quem faz 5 anos até 31/03/2027. A vaga fica reservada por 5 dias.">
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0;">
+<div role="table" aria-label="Turmas com vaga">
+<div role="row" class="rc-rows-row rc-rows-head" style="--cols: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1.4fr) 150px 130px; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);"><span role="columnheader">Turma em 2027</span><span role="columnheader">Turno</span><span role="columnheader">Professora</span><span role="columnheader">Vagas</span><span role="columnheader">Mensalidade</span><span role="columnheader"></span></div>
+<sc-for list="{{turmas}}" as="r" hint-placeholder-count="3">
+<div role="row" class="rc-rows-row" style="--cols: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1.4fr) 150px 130px; padding: 12px; align-items: center; border-bottom: 1px solid var(--line);"><span role="cell" style="min-width: 0;"><strong style="display: block; font-weight: 600;">{{r.n}}</strong><small style="color: var(--ink-2);">{{r.m}}</small></span><span role="cell" style="min-width: 0;" data-label="Turno">{{r.t}}</span><span role="cell" style="min-width: 0;" data-label="Professora">{{r.p}}</span><span role="cell" style="min-width: 0;" data-label="Vagas"><x-import component-from-global-scope="Recreio.ProgressBar" value="{{r.oc}}" max="{{r.max}}" label="{{r.vg}}" tone="{{r.bt}}" size="sm"></x-import></span><span role="cell" style="min-width: 0;" data-label="Mensalidade"><strong style="font-weight: 600; font-variant-numeric: tabular-nums;">{{r.v}}</strong></span><span role="cell" style="min-width: 0;"><a class="rc-btn rc-btn-{{r.bv}} rc-btn-sm" href="{{r.href}}">{{r.bl}}</a></span></div>
+</sc-for>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-secondary" href="#pop-turma">Trocar turma ou turno</a></div>
+</div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Protocolo da matrícula" subtitle="Guarde o número. Ele identifica o pedido na secretaria e no financeiro.">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px;"><div style="flex: 1 1 320px; min-width: 0;"><x-import component-from-global-scope="Recreio.DescriptionList" columns="{{two}}" items="{{protocolo}}"></x-import></div><div style="display: flex; flex-direction: column; gap: 8px; flex: 0 1 260px;"><x-import component-from-global-scope="Recreio.CopyButton" text="MAT-2027-0184" label="Copiar protocolo" copied-label="Protocolo copiado" full="{{yes}}"></x-import><a class="rc-btn rc-btn-secondary" href="#pop-comprovante">Baixar comprovante</a><a class="rc-btn rc-btn-ghost" href="Familia-Chat.html">Falar com a secretaria</a></div></div>
+</x-import>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="matricula"></x-import>
+</div>
+</div>
+<div id="pop-aluno" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Etapa 1 · Dados do aluno">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-md">
+<div class="rc-dialog-head"><div class="rc-dialog-titles"><p class="rc-dialog-title">Etapa 1 · Dados do aluno</p><p class="rc-dialog-desc">Concluída em 24/11. Corrija se precisar.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;">
+<x-import component-from-global-scope="Recreio.TextField" label="Nome completo" default-value="Miguel Lima"></x-import><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px;">
+<x-import component-from-global-scope="Recreio.TextField" label="Data de nascimento" default-value="18/08/2021"></x-import>
+<x-import component-from-global-scope="Recreio.Select" label="Sexo" default-value="m" options="{{sexos}}"></x-import>
+<x-import component-from-global-scope="Recreio.TextField" label="CPF" default-value="***.615.203-**"></x-import>
+<x-import component-from-global-scope="Recreio.TextField" label="Naturalidade" default-value="Fortaleza, CE"></x-import>
+<x-import component-from-global-scope="Recreio.Select" label="Cor ou raça" default-value="parda" options="{{cores}}"></x-import>
+<x-import component-from-global-scope="Recreio.TextField" label="Escola anterior" default-value="Creche Sementinha"></x-import>
+</div><x-import component-from-global-scope="Recreio.TextArea" label="Saúde e alimentação" default-value="Alergia a amendoim. Sem medicação de uso contínuo." rows="{{two}}"></x-import>
+</div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Fechar</a><a class="rc-btn rc-btn-primary" href="#pop-salvo">Salvar dados</a></div>
+</div>
+</div>
+<div id="pop-resp" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Etapa 2 · Responsáveis">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-md">
+<div class="rc-dialog-head"><div class="rc-dialog-titles"><p class="rc-dialog-title">Etapa 2 · Responsáveis</p><p class="rc-dialog-desc">Concluída em 24/11. Dados copiados do cadastro da família.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;">
+<div>
+<sc-for list="{{resps}}" as="r" hint-placeholder-count="2">
+<div class="rc-popup-row"><x-import component-from-global-scope="Recreio.Avatar" name="{{r.n}}" size="{{s36}}"></x-import><span style="min-width: 0;"><strong style="display: block;">{{r.n}}</strong><small style="color: var(--ink-2);">{{r.m}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.st}}</x-import></div>
+</sc-for>
+</div><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px;">
+<x-import component-from-global-scope="Recreio.Select" label="Responsável financeiro" default-value="fernanda" options="{{respsSel}}"></x-import>
+<x-import component-from-global-scope="Recreio.Select" label="Quem assina o contrato" default-value="fernanda" options="{{respsSel}}"></x-import>
+<x-import component-from-global-scope="Recreio.TextField" label="Celular para avisos" default-value="(85) 9 9812-4400"></x-import>
+<x-import component-from-global-scope="Recreio.TextField" label="E-mail" default-value="fernanda.lima@email.com"></x-import>
+</div><x-import component-from-global-scope="Recreio.Checkbox" label="Mesmo endereço de Ana Beatriz e Davi" description="Rua Silva Paulet, 1200, apto 802, Aldeota." default-checked="{{yes}}"></x-import>
+</div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Fechar</a><a class="rc-btn rc-btn-primary" href="#pop-salvo">Salvar responsáveis</a></div>
+</div>
+</div>
+<div id="pop-salvo" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Dados salvos">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Dados salvos</p><p class="rc-dialog-desc">A etapa segue concluída. A secretaria vê a mudança no protocolo MAT-2027-0184.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-enviar" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Enviar os documentos?">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-md">
+<div class="rc-dialog-head"><div class="rc-dialog-titles"><p class="rc-dialog-title">Enviar os documentos?</p><p class="rc-dialog-desc">A secretaria analisa em até 2 dias úteis.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;">
+<p style="margin: 0; line-height: 1.5;"><strong>Vão agora: foto do aluno, certidão de nascimento e carteira de vacinação.</strong> RG e CPF vêm do cadastro da família. O comprovante de residência espera a declaração do titular.</p><p style="margin: 0; line-height: 1.5; color: var(--ink-2);">Você já pode escolher a turma. Se um documento for recusado, o app avisa o que corrigir.</p>
+</div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Voltar</a><a class="rc-btn rc-btn-primary" href="#pop-enviado">Enviar documentos</a></div>
+</div>
+</div>
+<div id="pop-enviado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Documentos enviados">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Documentos enviados</p><p class="rc-dialog-desc">Etapa 3 concluída. Protocolo MAT-2027-0184. Próxima etapa: escolher a turma e o turno.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-turma" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Etapa 4 · Turma e turno">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-md">
+<div class="rc-dialog-head"><div class="rc-dialog-titles"><p class="rc-dialog-title">Etapa 4 · Turma e turno</p><p class="rc-dialog-desc">Escolha entre as turmas de Infantil V com vaga em 2027.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;">
+<x-import component-from-global-scope="Recreio.Select" label="Turma e turno" default-value="a" options="{{turmasSel}}"></x-import><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px;">
+<x-import component-from-global-scope="Recreio.Select" label="Período integral" default-value="nao" options="{{integrais}}"></x-import>
+<x-import component-from-global-scope="Recreio.Select" label="Almoço na escola" default-value="nao" options="{{almocos}}"></x-import>
+</div><p style="margin: 0; line-height: 1.5; color: var(--ink-2);">A reserva vale por 5 dias. Sem contrato assinado até lá, a vaga volta para a fila.</p>
+</div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-vaga">Reservar vaga</a></div>
+</div>
+</div>
+<div id="pop-vaga" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Vaga reservada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Vaga reservada</p><p class="rc-dialog-desc">Infantil V A, Manhã, reservada para Miguel até 30/11. Falta assinar o contrato e pagar a 1ª parcela.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-contrato" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Etapa 5 · Contrato e assinatura">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-md">
+<div class="rc-dialog-head"><div class="rc-dialog-titles"><p class="rc-dialog-title">Etapa 5 · Contrato e assinatura</p><p class="rc-dialog-desc">Liberada quando a secretaria aprovar os documentos.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;">
+<x-import component-from-global-scope="Recreio.DescriptionList" columns="{{two}}" items="{{contrato}}"></x-import><p style="margin: 0; line-height: 1.5; color: var(--ink-2);">A assinatura é eletrônica, com código enviado ao celular da responsável financeira.</p>
+</div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Fechar</a><a class="rc-btn rc-btn-primary" href="Familia-Contrato.html">Ler o contrato</a></div>
+</div>
+</div>
+<div id="pop-pagamento" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Etapa 6 · Pagamento da 1ª parcela">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-md">
+<div class="rc-dialog-head"><div class="rc-dialog-titles"><p class="rc-dialog-title">Etapa 6 · Pagamento da 1ª parcela</p><p class="rc-dialog-desc">A matrícula fica confirmada quando o pagamento compensa.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;">
+<x-import component-from-global-scope="Recreio.DescriptionList" columns="{{two}}" items="{{parcela}}"></x-import><x-import component-from-global-scope="Recreio.Select" label="Forma de pagamento" default-value="pix" options="{{formas}}"></x-import><p style="margin: 0; line-height: 1.5; color: var(--ink-2);">Liberado depois da assinatura do contrato. O comprovante final sai com o protocolo e a turma.</p>
+</div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Fechar</a><a class="rc-btn rc-btn-secondary" href="Familia-Financeiro.html">Ver Mensalidades</a><a class="rc-btn rc-btn-primary" href="#pop-confirmada">Simular pagamento</a></div>
+</div>
+</div>
+<div id="pop-confirmada" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Matrícula confirmada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Matrícula confirmada</p><p class="rc-dialog-desc">Miguel Lima está matriculado no Infantil V A, Manhã, em 2027. Protocolo MAT-2027-0184. O comprovante está em Documentos.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-comprovante" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Comprovante baixado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Comprovante baixado</p><p class="rc-dialog-desc">O comprovante do pedido de matrícula, com o protocolo MAT-2027-0184, está nos downloads do aparelho.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc></template><script id="dc-js" type="text/plain">
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 3, bellNotifs: [
+      { icon: 'mail', title: 'Bilhete para assinar: aula de campo', text: 'Ana Beatriz · 9º ano A · prazo 26/11', time: 'Hoje, 11h20', unread: true, priority: 'importante' },
+      { icon: 'heart', title: 'Davi passou pela enfermaria', text: 'Dor de cabeça, já voltou para a sala', time: 'Hoje, 10h25', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: 'Mensalidade de dezembro disponível', text: 'R$ 1.406,00 · vence em 10/12', time: 'Hoje, 8h00', unread: true, priority: 'rotina' },
+      { icon: 'chart', title: 'Boletim do 3º bimestre publicado', text: 'Ana Beatriz e Davi', time: 'Ontem, 18h30', priority: 'rotina' }] };
+    const tabs = [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Familia-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }];
+    const shared = {
+      bellCount: 3, activeChild: 'k1', activeProfile: 'resp',
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      user: { name: 'Fernanda Lima' },
+      kids: [{ id: 'k1', name: 'Davi Lima', group: '2º ano B' }, { id: 'k2', name: 'Ana Beatriz Lima', group: '9º ano A' }],
+      profiles: [{ id: 'resp', label: 'Responsável', icon: 'users', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Familia-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', href: 'Familia-Agenda.dc.html' }, { id: 'calendario', label: 'Calendário', icon: 'flag', href: 'Familia-Calendario.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', count: 2, href: 'Familia-Comunicados.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 3, href: 'Familia-Chat.dc.html' }, { id: 'autorizacoes', label: 'Autorizações', icon: 'key', count: 1, href: 'Familia-Autorizacoes.dc.html' }] },
+        { label: 'Acadêmico', items: [{ id: 'boletim', label: 'Boletim', icon: 'chart', href: 'Familia-Boletim.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'check-circle', href: 'Familia-Frequencia.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Familia-Horarios.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Familia-Integral.dc.html' }, { id: 'inclusao', label: 'Plano individual', icon: 'star', href: 'Familia-Inclusao.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 1, href: 'Familia-Ocorrencias.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Familia-Biblioteca.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Familia-Materiais.dc.html' }] },
+        { label: 'Serviços', items: [{ id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Familia-Cardapio.dc.html' }, { id: 'saude', label: 'Saúde', icon: 'heart', href: 'Familia-Saude.dc.html' }, { id: 'documentos', label: 'Documentos', icon: 'file', href: 'Familia-Documentos.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', href: 'Familia-Atendimentos.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', count: 2, href: 'Familia-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', href: 'Familia-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', count: 1, href: 'Familia-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'financeiro', label: 'Mensalidades', icon: 'wallet', count: 1, urgent: true, href: 'Familia-Financeiro.dc.html' }, { id: 'dae', label: 'DAE', icon: 'receipt', href: 'Familia-DAE.dc.html' }, { id: 'ir', label: 'Recibo para IR', icon: 'receipt', href: 'Familia-Recibo-IR.dc.html' }, { id: 'rematricula', label: 'Rematrícula 2027', icon: 'file-text', href: 'Familia-Rematricula.dc.html' }, { id: 'matricula', label: 'Matrícula 2027', icon: 'graduation', href: 'Familia-Matricula.dc.html' }] },
+        { label: 'Conta', items: [{ id: 'prefs', label: 'Acessibilidade', icon: 'accessibility', href: 'Familia-Preferencias.dc.html' }] }]
+    };
+    const __r = Object.assign({ yes: true, no: false, tabs }, shared, {
+      one: 1, two: 2,
+      m1: 3, m2: 3, m3: 5, m4: 1206, etapaAtual: 2, de6: (v) => v + ' de 6', de5: (v) => v + ' de 5', dias: (v) => v + ' dias', brl: (v) => 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2 }),
+      etapas: [{ label: 'Dados do aluno', hint: 'Concluída' }, { label: 'Responsáveis', hint: 'Concluída' }, { label: 'Documentos', hint: 'Você está aqui' }, { label: 'Turma e turno', hint: 'Vaga reservada' }, { label: 'Contrato', hint: 'Assinatura' }, { label: '1ª parcela', hint: 'A fazer' }],
+      tiposDoc: [{ value: 'vacina', label: 'Carteira de vacinação' }, { value: 'foto', label: 'Foto do aluno 3x4' }, { value: 'certidao', label: 'Certidão de nascimento' }, { value: 'laudo', label: 'Laudo ou relatório médico' }, { value: 'outro', label: 'Outro documento' }],
+      donos: [{ value: 'miguel', label: 'Miguel Lima, aluno' }, { value: 'fernanda', label: 'Fernanda Lima, mãe' }, { value: 'rodrigo', label: 'Rodrigo Lima, pai' }],
+      sexos: [{ value: 'm', label: 'Masculino' }, { value: 'f', label: 'Feminino' }],
+      cores: [{ value: 'parda', label: 'Parda' }, { value: 'branca', label: 'Branca' }, { value: 'preta', label: 'Preta' }, { value: 'amarela', label: 'Amarela' }, { value: 'indigena', label: 'Indígena' }, { value: 'nd', label: 'Não declarada' }],
+      respsSel: [{ value: 'fernanda', label: 'Fernanda Lima, mãe' }, { value: 'rodrigo', label: 'Rodrigo Lima, pai' }],
+      turmasSel: [{ value: 'a', label: 'Infantil V A · Manhã · 6 vagas' }, { value: 'b', label: 'Infantil V B · Tarde · 11 vagas' }],
+      integrais: [{ value: 'nao', label: 'Sem integral' }, { value: 'sim', label: 'Com integral até 17h30 · 4 vagas' }],
+      almocos: [{ value: 'nao', label: 'Não almoça na escola' }, { value: 'sim', label: 'Almoça na escola' }],
+      formas: [{ value: 'pix', label: 'Pix' }, { value: 'boleto', label: 'Boleto' }, { value: 'cartao', label: 'Cartão de crédito' }],
+      docs: [
+        { ic: 'camera', n: 'Foto do aluno 3x4', m: 'foto-miguel.jpg · enviada hoje, 10h02', st: 'Enviada', tone: 'info' },
+        { ic: 'file-text', n: 'Certidão de nascimento', m: 'certidao-miguel.pdf · enviada hoje, 10h04', st: 'Enviada', tone: 'info' },
+        { ic: 'heart', n: 'Carteira de vacinação', m: 'Página das vacinas, frente e verso · envio em andamento', st: 'Enviando', tone: 'warning' },
+        { ic: 'home', n: 'Comprovante de residência', m: 'O mesmo do Davi · a secretaria pediu a declaração do titular', st: 'Pendente', tone: 'warning' },
+        { ic: 'user', n: 'RG e CPF dos responsáveis', m: 'Fernanda Lima e Rodrigo Lima · já no cadastro', st: 'Reaproveitado', tone: 'success' }],
+      arquivos: [{ name: 'foto-miguel.jpg', progress: 100, size: '1,2 MB' }, { name: 'certidao-miguel.pdf', progress: 100, size: '640 KB' }, { name: 'carteira-vacinacao-miguel.pdf', progress: 60 }],
+      resumo: [
+        { ic: 'user', n: '1. Dados do aluno', m: 'Miguel Lima · nascido em 18/08/2021 · 5 anos · alergia a amendoim', st: 'Concluída', tone: 'success', bl: 'Ver', bv: 'ghost', href: '#pop-aluno' },
+        { ic: 'users', n: '2. Responsáveis', m: 'Fernanda Lima, mãe e responsável financeira · Rodrigo Lima, pai', st: 'Concluída', tone: 'success', bl: 'Ver', bv: 'ghost', href: '#pop-resp' },
+        { ic: 'file-text', n: '3. Documentos', m: '3 de 5 enviados · faltam a vacinação e o comprovante de residência', st: 'Você está aqui', tone: 'info', bl: 'Enviar', bv: 'primary', href: '#pop-enviar' },
+        { ic: 'school', n: '4. Turma e turno', m: 'Infantil V A · Manhã · vaga reservada até 30/11', st: 'Reservada', tone: 'warning', bl: 'Trocar', bv: 'ghost', href: '#pop-turma' },
+        { ic: 'edit', n: '5. Contrato e assinatura', m: '12 parcelas de R$ 1.340,00 · assinatura eletrônica', st: 'A fazer', tone: 'neutral', bl: 'Ver', bv: 'ghost', href: '#pop-contrato' },
+        { ic: 'wallet', n: '6. Pagamento da 1ª parcela', m: 'R$ 1.206,00 com desconto de irmãos · Pix, boleto ou cartão', st: 'A fazer', tone: 'neutral', bl: 'Ver', bv: 'ghost', href: '#pop-pagamento' }],
+      turmas: [
+        { n: 'Infantil V A', m: 'Sala 3 · 20 alunos por turma', t: 'Manhã · 7h20 às 11h40', p: 'Bianca Moura', oc: 14, max: 20, vg: '6 vagas de 20', bt: 'brand', v: 'R$ 1.340,00', bl: 'Reservada', bv: 'primary', href: '#pop-turma' },
+        { n: 'Infantil V A com integral', m: 'Almoço, descanso e oficinas até 17h30', t: 'Manhã e tarde', p: 'Bianca Moura e monitoras', oc: 16, max: 20, vg: '4 vagas de 20', bt: 'warning', v: 'R$ 2.050,00', bl: 'Escolher', bv: 'secondary', href: '#pop-turma' },
+        { n: 'Infantil V B', m: 'Sala 4 · 20 alunos por turma', t: 'Tarde · 13h20 às 17h40', p: 'Larissa Pontes', oc: 9, max: 20, vg: '11 vagas de 20', bt: 'success', v: 'R$ 1.340,00', bl: 'Escolher', bv: 'secondary', href: '#pop-turma' }],
+      resps: [{ n: 'Fernanda Lima', m: 'Mãe · responsável financeira · CPF ***.482.193-**', st: 'Assina o contrato', tone: 'info' }, { n: 'Rodrigo Lima', m: 'Pai · autorizado a buscar · CPF ***.207.553-**', st: 'Responsável', tone: 'neutral' }],
+      contrato: [{ label: 'Curso', value: 'Infantil V · ano letivo de 2027' }, { label: 'Anuidade', value: '12 parcelas de R$ 1.340,00' }, { label: 'Desconto de irmãos', value: '10% na terceira mensalidade' }, { label: 'Vencimento', value: 'Dia 10 de cada mês' }],
+      parcela: [{ label: '1ª parcela', value: 'R$ 1.340,00' }, { label: 'Desconto de irmãos', value: 'R$ 134,00' }, { label: 'Total a pagar', value: 'R$ 1.206,00' }, { label: 'Vencimento', value: '30/11/2026' }],
+      protocolo: [{ label: 'Protocolo', value: 'MAT-2027-0184' }, { label: 'Aberto em', value: '24/11/2026, 20h15, pelo app' }, { label: 'Aluno', value: 'Miguel Lima · Infantil V A · Manhã' }, { label: 'Situação', value: 'Etapa 3 de 6 · documentos em envio' }, { label: 'Vaga reservada até', value: '30/11/2026' }, { label: 'Comprovante final', value: 'Sai depois da 1ª parcela paga' }]
+    });
+    return Object.assign({ s36: 36,  s32: 32,  s18: 18,  pS3: 3, pS16: 16, pS18: 18, pS20: 20, pS22: 22, pS32: 32, pS36: 36, pS40: 40, pYes: true, pFmt: [{ value: 'xlsx', label: 'Excel (.xlsx)' }, { value: 'csv', label: 'CSV' }, { value: 'pdf', label: 'PDF para impressão' }] }, { s22: 22 }, bell, __r);
+  }
+}
+</script><script src="vendor/runtime.js"></script></body></html>

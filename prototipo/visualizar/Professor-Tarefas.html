@@ -1,0 +1,249 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Professor: Tarefas</title>
+<link rel="stylesheet" href="vendor/tokens.css"><link rel="stylesheet" href="vendor/bundle.css"><link rel="stylesheet" href="vendor/telas.css"><style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+<script src="vendor/react.js"></script><script src="vendor/react-dom.js"></script><script src="vendor/bundle.js"></script></head>
+<body><div id="app"></div><template id="dc-src"><x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" units="{{units}}" groups="{{nav}}" active="tarefas"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="list" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Tarefas</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Portal do professor · lançar tarefa, receber entregas e corrigir</p></div></div>
+<a class="rc-btn rc-btn-ghost rc-btn-sm" href="Aluno-Entregar.html">Ver como o aluno envia</a>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar tarefa, aluno ou turma" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Escola-Notificacoes.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px; padding: 16px 20px; border-radius: var(--radius-lg); background: var(--surface-1); border: 1px solid var(--line); box-shadow: var(--shadow-1);">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; min-width: 0; max-width: 100%;">
+<x-import component-from-global-scope="Recreio.Select" label="Turma" default-value="9a" options="{{turmasP}}"></x-import><x-import component-from-global-scope="Recreio.Select" label="Disciplina" default-value="mat" options="{{discP}}"></x-import><div style="display: flex; flex-direction: column; gap: 6px;"><span style="font-size: 14px; font-weight: 600;">Mostrar</span><x-import component-from-global-scope="Recreio.SegmentedControl" label="Mostrar" value="abertas" options="{{verP}}"></x-import></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-ghost" href="Aluno-Tarefas.html"><x-import component-from-global-scope="Recreio.Icon" name="eye" size="{{s18}}"></x-import>Ver como o aluno vê</a><a class="rc-btn rc-btn-primary" href="#pop-nova"><x-import component-from-global-scope="Recreio.Icon" name="plus" size="{{s18}}"></x-import>Nova tarefa</a></div>
+</div>
+<section aria-label="Indicadores das tarefas" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px;">
+<x-import component-from-global-scope="Recreio.StatCard" color="azul" label="Tarefas abertas" value="{{nAb}}" icon="list" hint="2 no 9º ano A · vencem até segunda"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="amarelo" label="Entregas para corrigir" value="{{nCor}}" icon="edit" hint="23 da Lista 7 · 9º ano A" href="#entregas"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="verde" label="Entregas no prazo" value="{{prazo}}" icon="check-circle" hint="Média das suas turmas em novembro" format="{{pct}}"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="vermelho" label="Sem entrega na Lista 8" value="{{nSem}}" icon="alert" hint="Prazo na sexta, 27/11" href="#pop-sem"></x-import>
+</section>
+<div class="rc-split" style="gap: 24px; align-items: start; --split: minmax(0, 3fr) minmax(340px, 2fr);">
+<div style="display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Tarefas do 9º ano A" subtitle="Matemática · a que vence primeiro fica em cima">
+<div style="display: flex; flex-direction: column; gap: 12px;"><sc-for list="{{tarefas}}" as="t" hint-placeholder-count="4"><div class="tl-item rc-c-{{t.cor}}" style="padding: 16px; gap: 10px;"><div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px;"><span style="display: flex; align-items: center; gap: 12px; min-width: 0;"><span class="tl-ic"><x-import component-from-global-scope="Recreio.Icon" name="{{t.icon}}" size="{{s20}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{t.t}}</strong><small style="color: var(--ink-2);">{{t.m}}</small></span></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{t.tone}}" size="sm">{{t.st}}</x-import></div><x-import component-from-global-scope="Recreio.ProgressBar" value="{{t.v}}" max="{{t.max}}" label="{{t.rot}}" tone="{{t.bar}}" size="sm"></x-import><div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-{{t.bv}} rc-btn-sm" href="{{t.href}}">{{t.bl}}</a><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-editar">Editar</a></div></div></sc-for></div>
+</x-import>
+<div id="entregas"><x-import component-from-global-scope="Recreio.Card" title="Entregas da Lista 7: fórmula de Bhaskara" subtitle="29 de 31 alunos entregaram · 23 esperam correção">
+<div role="table" aria-label="Entregas da Lista 7">
+<div role="row" class="rc-rows-row rc-rows-head" style="--cols: minmax(0, 2.4fr) minmax(136px, 1fr) minmax(84px, auto); padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);"><span role="columnheader">Aluno e entrega</span><span role="columnheader">Situação</span><span></span></div>
+<sc-for list="{{entregas}}" as="r" hint-placeholder-count="7">
+<div role="row" class="rc-rows-row" style="--cols: minmax(0, 2.4fr) minmax(136px, 1fr) minmax(84px, auto); align-items: center; padding: 12px; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none;"><span role="cell" style="min-width: 0; display: flex; align-items: center; gap: 12px;"><x-import component-from-global-scope="Recreio.Avatar" name="{{r.nome}}" size="{{s36}}"></x-import><span style="min-width: 0;"><strong style="display: block;">{{r.nome}}</strong><small style="color: var(--ink-2);">{{r.quando}} · {{r.anexo}}</small></span></span><span role="cell" style="min-width: 0;" data-label="Situação"><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.st}}</x-import></span><span role="cell" style="min-width: 0;"><a class="rc-btn rc-btn-{{r.bv}} rc-btn-sm" href="{{r.href}}">{{r.bl}}</a></span></div>
+</sc-for>
+</div><div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px;"><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#entregas">Ver as 29 entregas</a></div>
+</x-import></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+<div id="correcao"><x-import component-from-global-scope="Recreio.Card" title="Corrigir: Ana Beatriz Lima" subtitle="Lista 7 · entregue hoje, 7h12 · foto do caderno, 2 páginas">
+<x-import component-from-global-scope="Recreio.SaveGuard" label="Salvar correção" hint="Mude a nota ou a devolutiva para liberar o botão Salvar">
+<div style="display: flex; flex-direction: column; gap: 14px;"><div class="tl-foto is-larga rc-c-verde"><x-import component-from-global-scope="Recreio.Icon" name="image" size="{{s32}}"></x-import><span class="tl-foto-tag">Foto do caderno · página 1 de 2</span><span class="tl-foto-qtd">2 fotos</span></div><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 14px 16px;"><x-import component-from-global-scope="Recreio.TextField" label="Nota" default-value="1,0" hint="De 0 a 1,0 · vale 1 ponto na média"></x-import><x-import component-from-global-scope="Recreio.Select" label="Situação" default-value="ok" options="{{sitCorr}}"></x-import></div><x-import component-from-global-scope="Recreio.TextArea" label="Devolutiva para a aluna" default-value="Muito bem, Ana. Todas as contas certas. Na questão 7, escreva o cálculo do discriminante antes da resposta." rows="{{n3}}"></x-import><x-import component-from-global-scope="Recreio.Checkbox" label="Liberar a nota para a aluna e a família" description="Aparece em Tarefas e em Notas assim que salvar." default-checked="{{yes}}"></x-import><x-import component-from-global-scope="Recreio.Checkbox" label="Pedir reenvio" description="A aluna recebe o pedido com o novo prazo."></x-import></div>
+</x-import>
+</x-import></div>
+<x-import component-from-global-scope="Recreio.Card" title="Resumo da Lista 7" subtitle="9º ano A · 31 alunos">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 130px), 1fr)); gap: 10px;"><sc-for list="{{resumoL7}}" as="k" hint-placeholder-count="4"><div class="tl-num {{k.cls}}"><small>{{k.l}}</small><strong>{{k.v}}</strong></div></sc-for></div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Quem ainda não entregou a Lista 8" subtitle="14 de 31 entregaram · prazo na sexta">
+<div>
+<sc-for list="{{semEntrega}}" as="p" hint-placeholder-count="3">
+<div class="rc-popup-row" style="grid-template-columns: 40px minmax(0, 1fr) auto;"><x-import component-from-global-scope="Recreio.Avatar" name="{{p.nome}}" size="{{s40}}"></x-import><span style="min-width: 0;"><strong style="display: block;">{{p.nome}}</strong><small style="color: var(--ink-2);">{{p.meta}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{p.tone}}" size="sm">{{p.st}}</x-import></div>
+</sc-for>
+</div><div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px;"><a class="rc-btn rc-btn-secondary rc-btn-sm" href="#pop-lembrar"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s18}}"></x-import>Lembrar os 17 alunos</a></div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Alert" tone="info" title="De onde vem a nota">A nota da tarefa entra em Notas e faltas, na coluna Trabalho. O aluno e a família veem a devolutiva junto.</x-import>
+</div>
+</div>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="inicio"></x-import>
+</div>
+</div>
+<div id="pop-nova" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Nova tarefa">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="plus" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Nova tarefa</p><p class="rc-dialog-desc">Os alunos recebem no portal e no celular. A família vê o prazo na agenda.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: flex; flex-direction: column; gap: 14px;"><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px 16px;"><x-import component-from-global-scope="Recreio.TextField" label="Título" default-value="Lista 9: sistemas de equações"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Prazo" default-value="sexta, 04/12/2026 · 7h30" icon="calendar"></x-import><x-import component-from-global-scope="Recreio.Select" label="Vale nota em" default-value="trab" options="{{colunas}}"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Pontos" default-value="1,0"></x-import></div><x-import component-from-global-scope="Recreio.FilterChips" label="Turmas" value="{{fTurmas}}" options="{{turmasChips}}"></x-import><x-import component-from-global-scope="Recreio.TextArea" label="O que fazer" default-value="Resolva as 8 questões no caderno, mostrando o método da substituição. Envie foto das páginas ou um PDF." rows="{{n3}}"></x-import><x-import component-from-global-scope="Recreio.FileDrop" label="Anexo da tarefa" hint="PDF, imagem ou link até 10 MB"></x-import><x-import component-from-global-scope="Recreio.Switch" label="Aceitar entrega depois do prazo" description="Fica marcada como fora do prazo."></x-import><x-import component-from-global-scope="Recreio.Switch" label="Lançar também na agenda da turma" default-checked="{{yes}}"></x-import></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-nova-ok">Publicar tarefa</a></div>
+</div>
+</div>
+<div id="pop-nova-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Tarefa publicada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Tarefa publicada</p><p class="rc-dialog-desc">31 alunos do 9º ano A e as famílias foram avisados. As entregas aparecem nesta tela.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-editar" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Editar tarefa">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="edit" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Editar tarefa</p><p class="rc-dialog-desc">Lista 8: equações do 2º grau. Mudança de prazo avisa os alunos.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: flex; flex-direction: column; gap: 14px;"><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px 16px;"><x-import component-from-global-scope="Recreio.TextField" label="Prazo" default-value="sexta, 27/11/2026 · 7h30" icon="calendar"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Pontos" default-value="1,0"></x-import></div><x-import component-from-global-scope="Recreio.Switch" label="Aceitar entrega depois do prazo"></x-import></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-editar-ok">Salvar tarefa</a></div>
+</div>
+</div>
+<div id="pop-editar-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Tarefa atualizada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Tarefa atualizada</p><p class="rc-dialog-desc">Os alunos foram avisados da mudança.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-atraso" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Aceitar entrega fora do prazo">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-warning"><x-import component-from-global-scope="Recreio.Icon" name="clock" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Aceitar entrega fora do prazo</p><p class="rc-dialog-desc">Lucas Andrade entregou hoje, às 7h41, 11 minutos depois do prazo.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Aceitando, a entrega entra na fila de correção marcada como fora do prazo.</p></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#pop-recusada">Recusar</a><a class="rc-btn rc-btn-primary" href="#pop-aceita">Aceitar entrega</a></div>
+</div>
+</div>
+<div id="pop-aceita" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Entrega aceita">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Entrega aceita</p><p class="rc-dialog-desc">A entrega do Lucas entrou na fila de correção.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-recusada" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Entrega recusada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-warning"><x-import component-from-global-scope="Recreio.Icon" name="x-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Entrega recusada</p><p class="rc-dialog-desc">O Lucas foi avisado. A tarefa fica como Sem entrega.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-sem" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Sem entrega na Lista 8">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-danger"><x-import component-from-global-scope="Recreio.Icon" name="alert" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Sem entrega na Lista 8</p><p class="rc-dialog-desc">17 de 31 alunos. O prazo é sexta, 27/11, às 7h30.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div>
+<sc-for list="{{semLista}}" as="p" hint-placeholder-count="3">
+<div class="rc-popup-row" style="grid-template-columns: 40px minmax(0, 1fr) auto;"><x-import component-from-global-scope="Recreio.Avatar" name="{{p.nome}}" size="{{s40}}"></x-import><span style="min-width: 0;"><strong style="display: block;">{{p.nome}}</strong><small style="color: var(--ink-2);">{{p.meta}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{p.tone}}" size="sm">{{p.st}}</x-import></div>
+</sc-for>
+</div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Fechar</a><a class="rc-btn rc-btn-primary" href="#pop-lembrar">Lembrar os 17 alunos</a></div>
+</div>
+</div>
+<div id="pop-lembrar" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Lembrete enviado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Lembrete enviado</p><p class="rc-dialog-desc">Os 17 alunos receberam o aviso no portal e no celular.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc></template><script id="dc-js" type="text/plain">
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 5, bellNotifs: [
+      { icon: 'clipboard', title: '5 justificativas para analisar', text: 'Frequência · Fundamental II', time: 'Hoje, 11h05', unread: true, priority: 'importante' },
+      { icon: 'chat', title: 'Fernanda Lima respondeu no chat', text: 'Ana Beatriz · 9º ano A', time: 'Hoje, 10h12', unread: true, priority: 'rotina' },
+      { icon: 'edit', title: 'História 9º B: faltam 4 notas', text: 'Fechamento do 4º bimestre', time: 'Hoje, 9h00', unread: true, priority: 'importante' },
+      { icon: 'alert', title: 'Ocorrência sem resposta da família', text: 'Mateus Holanda · 9º ano C · há 7 dias', time: 'Hoje, 8h30', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: '63 mensalidades vencidas', text: '41 famílias · a régua de cobrança enviou lembretes', time: 'Hoje, 7h00', unread: true, priority: 'rotina' }] };
+    const tabs = [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'comunicados', label: 'Avisos', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }];
+    const shared = {
+      bellCount: 5, activeChild: undefined, activeProfile: 'dir', kids: [],
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      units: [{ id: 'aldeota', label: 'Unidade Aldeota', meta: '1.248 alunos · Infantil ao Médio', href: 'Escola-Painel.dc.html', current: true }, { id: 'eusebio', label: 'Unidade Eusébio', meta: '936 alunos · Infantil e Fundamental I', href: 'Escola-Painel.dc.html' }, { id: 'rede', label: 'Todas as unidades', meta: 'Visão consolidada da rede', href: 'Escola-Painel.dc.html' }],
+      user: { name: 'Lúcia Menezes' },
+      profiles: [{ id: 'dir', label: 'Direção', icon: 'shield', school: 'Colégio Recreio' }, { id: 'prof', label: 'Professora', icon: 'book', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'chat', label: 'Chat com famílias', icon: 'chat', count: 4, href: 'Escola-Chat.dc.html' }] },
+        { label: 'Pedagógico', items: [{ id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Escola-Horarios.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'clipboard', count: 5, href: 'Escola-Frequencia.dc.html' }, { id: 'boletins', label: 'Fechamento e boletins', icon: 'chart', href: 'Escola-Boletins.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 3, href: 'Escola-Ocorrencias.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Escola-Integral.dc.html' }, { id: 'saude', label: 'Saúde e enfermaria', icon: 'heart', href: 'Escola-Saude.dc.html' }, { id: 'inclusao', label: 'Inclusão e AEE', icon: 'accessibility', href: 'Escola-Inclusao.dc.html' }, { id: 'medidas', label: 'Medidas disciplinares', icon: 'flag', href: 'Escola-Medidas.dc.html' }, { id: 'extras', label: 'Pontos extras', icon: 'star', href: 'Escola-Pontos-extras.dc.html' }, { id: 'eja', label: 'EJA', icon: 'moon', href: 'Escola-EJA.dc.html' }] },
+        { label: 'Secretaria', items: [{ id: 'alunos', label: 'Alunos', icon: 'users', href: 'Escola-Alunos.dc.html' }, { id: 'equipe', label: 'Equipe', icon: 'user', href: 'Escola-Equipe.dc.html' }, { id: 'captacao', label: 'Captação', icon: 'filter', count: 9, href: 'Escola-Captacao.dc.html' }, { id: 'matriculas', label: 'Matrículas', icon: 'file-text', count: 12, href: 'Escola-Matriculas.dc.html' }, { id: 'contratos', label: 'Contratos', icon: 'edit', count: 200, href: 'Escola-Contratos.dc.html' }, { id: 'solicitacoes', label: 'Solicitações', icon: 'file', count: 6, href: 'Escola-Solicitacoes.dc.html' }, { id: 'certificados', label: 'Certificados e diplomas', icon: 'graduation', href: 'Escola-Certificados.dc.html' }, { id: 'transferencias', label: 'Transferências', icon: 'sync', href: 'Escola-Transferencias.dc.html' }, { id: 'fotos', label: 'Fotos de alunos', icon: 'camera', href: 'Escola-Fotos.dc.html' }, { id: 'importacao', label: 'Migração de dados', icon: 'upload', href: 'Escola-Importacao.dc.html' }, { id: 'calendario', label: 'Calendário letivo', icon: 'flag', href: 'Escola-Calendario.dc.html' }, { id: 'autorizacoes', label: 'Passeios e autorizações', icon: 'key', href: 'Escola-Autorizacoes.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Escola-Biblioteca.dc.html' }] },
+        { label: 'Família e serviços', items: [{ id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 4, href: 'Escola-Atendimentos.dc.html' }, { id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Escola-Cardapio.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', href: 'Escola-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', count: 9, href: 'Escola-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', href: 'Escola-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'mensalidades', label: 'Mensalidades', icon: 'wallet', count: 41, urgent: true, href: 'Escola-Mensalidades.dc.html' }, { id: 'fiscal', label: 'Notas fiscais e IR', icon: 'receipt', count: 3, href: 'Escola-Fiscal.dc.html' }, { id: 'dae', label: 'DAE SEFAZ-CE', icon: 'receipt', href: 'Escola-DAE.dc.html' }, { id: 'caixa', label: 'Caixa e contas a pagar', icon: 'card', href: 'Escola-Caixa.dc.html' }] },
+        { label: 'Gestão', items: [{ id: 'relatorios', label: 'Relatórios e censo', icon: 'sparkline', href: 'Escola-Relatorios.dc.html' }, { id: 'permissoes', label: 'Grupos e permissões', icon: 'shield', href: 'Escola-Permissoes.dc.html' }, { id: 'modulos', label: 'Módulos e marca', icon: 'modules', href: 'Escola-Modulos.dc.html' }] }]
+    };
+    const __r = Object.assign({ yes: true, no: false, tabs }, shared, {
+      user: { name: 'Ricardo Albuquerque' }, activeProfile: 'prof', profiles: [{ id: 'prof', label: 'Professor', icon: 'book', school: 'Colégio Recreio' }],
+      n2: 2, n3: 3, n4: 4, n5: 5, n6: 6,
+      go_pop_aceita: () => { location.hash = 'pop-aceita'; }, go_pop_atraso: () => { location.hash = 'pop-atraso'; }, go_pop_editar: () => { location.hash = 'pop-editar'; }, go_pop_editar_ok: () => { location.hash = 'pop-editar-ok'; }, go_pop_lembrar: () => { location.hash = 'pop-lembrar'; }, go_pop_lidas: () => { location.hash = 'pop-lidas'; }, go_pop_nova: () => { location.hash = 'pop-nova'; }, go_pop_nova_ok: () => { location.hash = 'pop-nova-ok'; }, go_pop_recusada: () => { location.hash = 'pop-recusada'; }, go_pop_sem: () => { location.hash = 'pop-sem'; },
+brl: (v) => window.Recreio.brl(v), brl0: (v) => window.Recreio.brl(v, { maximumFractionDigits: 0 }), pct: (v) => window.Recreio.num(v, 0) + '%', pct1: (v) => window.Recreio.num(v, 1) + '%', um1: (v) => window.Recreio.num(v, 1),
+      nAb: 4, nCor: 23, prazo: 87, nSem: 17,
+      turmasP: [{ value: '9a', label: '9º ano A' }, { value: '9b', label: '9º ano B' }, { value: '8a', label: '8º ano A' }, { value: 'em', label: '1ª série EM' }],
+      discP: [{ value: 'mat', label: 'Matemática' }, { value: 'fis', label: 'Física' }],
+      verP: [{ value: 'abertas', label: 'Abertas' }, { value: 'corrigir', label: 'Para corrigir' }, { value: 'enc', label: 'Encerradas' }],
+      tarefas: [
+        { icon: 'clipboard', cor: 'verde', t: 'Lista 8: equações do 2º grau', m: 'Vence sexta, 27/11 · vale 1 ponto · anexo lista-8-equacoes.pdf', st: 'Aberta', tone: 'info', v: 14, max: 31, rot: '14 de 31 entregaram', bar: 'brand', bl: 'Ver entregas', bv: 'secondary', href: '#entregas' },
+        { icon: 'clipboard', cor: 'amarelo', t: 'Lista 7: fórmula de Bhaskara', m: 'Venceu hoje, 25/11, às 7h30 · vale 1 ponto', st: '23 para corrigir', tone: 'warning', v: 29, max: 31, rot: '29 de 31 entregaram', bar: 'success', bl: 'Corrigir', bv: 'primary', href: '#entregas' },
+        { icon: 'file-text', cor: 'azul', t: 'Problemas de Bhaskara no cotidiano', m: 'Para segunda, 07/12 · trabalho em dupla · vale 2 pontos', st: 'Agendada', tone: 'neutral', v: 0, max: 31, rot: 'Abre em 30/11', bar: 'brand', bl: 'Ver tarefa', bv: 'secondary', href: '#pop-editar' },
+        { icon: 'check-circle', cor: 'roxo', t: 'Lista 6: produtos notáveis', m: 'Encerrada em 18/11 · média da turma 0,8 de 1,0', st: 'Corrigida', tone: 'success', v: 30, max: 31, rot: '30 de 31 entregaram', bar: 'success', bl: 'Ver notas', bv: 'ghost', href: 'Escola-Notas-e-faltas.dc.html' }],
+      entregas: [
+        { nome: 'Ana Beatriz Lima', turma: '9º ano A', quando: 'Hoje, 7h12', anexo: 'Foto do caderno · 2 páginas', st: 'Para corrigir', tone: 'warning', bl: 'Corrigir', href: '#correcao', bv: 'primary' },
+        { nome: 'Arthur Nogueira', turma: '9º ano A', quando: 'Hoje, 7h28', anexo: 'Foto do caderno · 3 páginas', st: 'Para corrigir', tone: 'warning', bl: 'Corrigir', href: '#correcao', bv: 'secondary' },
+        { nome: 'Bruno Sales', turma: '9º ano A', quando: 'Ontem, 21h40', anexo: 'lista7-bruno.pdf', st: 'Para corrigir', tone: 'warning', bl: 'Corrigir', href: '#correcao', bv: 'secondary' },
+        { nome: 'Isabela Fontenele', turma: '9º ano A', quando: 'Ontem, 19h05', anexo: 'Foto do caderno · 2 páginas', st: 'Nota 1,0', tone: 'success', bl: 'Ver', href: '#correcao', bv: 'ghost' },
+        { nome: 'Larissa Bezerra', turma: '9º ano A', quando: 'Segunda, 18h22', anexo: 'lista7.pdf', st: 'Nota 0,9', tone: 'success', bl: 'Ver', href: '#correcao', bv: 'ghost' },
+        { nome: 'Lucas Andrade', turma: '9º ano A', quando: 'Hoje, 7h41', anexo: 'Foto do caderno · 1 página', st: 'Fora do prazo', tone: 'danger', bl: 'Aceitar', href: '#pop-atraso', bv: 'secondary' },
+        { nome: 'João Pedro Cavalcante', turma: '9º ano A', quando: 'Não entregou', anexo: 'Sem anexo', st: 'Sem entrega', tone: 'neutral', bl: 'Lembrar', href: '#pop-lembrar', bv: 'ghost' }],
+      resumoL7: [{ l: 'Entregaram', v: '29' }, { l: 'No prazo', v: '28', cls: 'is-bom' }, { l: 'Corrigidas', v: '6' }, { l: 'Média parcial', v: '0,9' }],
+      sitCorr: [{ value: 'ok', label: 'Corrigida' }, { value: 'refazer', label: 'Refazer' }, { value: 'parcial', label: 'Entrega incompleta' }],
+      semEntrega: [{ nome: 'João Pedro Cavalcante', meta: 'Também não entregou a Lista 7 · 12 faltas no bimestre', st: '2 seguidas', tone: 'danger' }, { nome: 'Davi Martins', meta: 'Entregou a Lista 7 no prazo', st: 'Falta esta', tone: 'neutral' }, { nome: 'Marina Teixeira', meta: 'Entregou a Lista 7 no prazo', st: 'Falta esta', tone: 'neutral' }],
+      turmasChips: [{ value: '9a', label: '9º ano A' }, { value: '9b', label: '9º ano B' }], fTurmas: ['9a'],
+      colunas: [{ value: 'trab', label: 'Trabalho' }, { value: 'p2', label: 'Prova 2' }, { value: 'nenhuma', label: 'Não vale nota' }],
+      semLista: [{ nome: 'João Pedro Cavalcante', meta: 'Sem entrega nas Listas 7 e 8', st: 'Avisar a família', tone: 'danger' }, { nome: 'Davi Martins', meta: 'Abriu a tarefa ontem, 20h10', st: 'Viu', tone: 'info' }, { nome: 'Marina Teixeira', meta: 'Ainda não abriu a tarefa', st: 'Não viu', tone: 'warning' }]
+    });
+    /* Controle de acesso: cada perfil vê só os módulos liberados em Grupos e permissões. */
+    const ACESSO = { prof: ['comunicados', 'notas', 'chamada', 'agenda', 'frequencia', 'ocorrencias', 'inicio', 'diario', 'horarios', 'materiais', 'atendimentos', 'tarefas'], coord: ['painel', 'comunicados', 'chat', 'notas', 'chamada', 'agenda', 'frequencia', 'boletins', 'ocorrencias', 'integral', 'alunos', 'autorizacoes', 'equipe', 'horarios', 'calendario', 'atendimentos', 'cardapio', 'galeria', 'pesquisas', 'saude', 'inclusao', 'relatorios', 'biblioteca', 'portaria', 'medidas', 'extras', 'eja', 'certificados'], sec: ['comunicados', 'alunos', 'matriculas', 'contratos', 'autorizacoes', 'portaria', 'equipe', 'solicitacoes', 'calendario', 'horarios', 'loja', 'pesquisas', 'captacao', 'certificados', 'transferencias', 'fotos', 'importacao'], fin: ['comunicados', 'alunos', 'contratos', 'mensalidades', 'loja', 'fiscal', 'caixa', 'dae'], bib: ['comunicados', 'biblioteca'], port: ['comunicados', 'portaria', 'autorizacoes'], int: ['comunicados', 'chamada', 'integral', 'ocorrencias'], nutri: ['comunicados', 'cardapio'], enf: ['comunicados', 'saude'], aee: ['comunicados', 'inclusao', 'atendimentos', 'ocorrencias'] };
+    const permitidos = ACESSO[__r.activeProfile];
+    if (permitidos) {
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.filter((i) => permitidos.includes(i.id)) })).filter((g) => g.items.length);
+      __r.tabs = (__r.tabs || []).filter((t) => permitidos.includes(t.id));
+      __r.units = null;
+    }
+    /* Biblioteca e portaria: direção e coordenação entram pela visão de gestão. A operação fica com a bibliotecária e a portaria. */
+    if (['dir', 'coord'].includes(__r.activeProfile)) {
+      const GESTAO = { biblioteca: 'Escola-Biblioteca-Gestao.dc.html', portaria: 'Escola-Portaria-Gestao.dc.html' };
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.map((i) => (GESTAO[i.id] ? Object.assign({}, i, { href: GESTAO[i.id] }) : i)) }));
+      __r.tabs = (__r.tabs || []).map((t) => (GESTAO[t.id] ? Object.assign({}, t, { href: GESTAO[t.id] }) : t));
+    }
+    /* Portal do professor: quem entra como professor vê o próprio menu, com as turmas e o planejamento. */
+    if (__r.activeProfile === 'prof') {
+      __r.nav = [
+        { items: [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }] },
+        { label: 'Minhas turmas', items: [{ id: 'diario', label: 'Diário de classe', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'tarefas', label: 'Tarefas', icon: 'list', count: 6, href: 'Professor-Tarefas.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', href: 'Escola-Ocorrencias.dc.html' }] },
+        { label: 'Planejamento', items: [{ id: 'horarios', label: 'Meus horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Professor-Materiais.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 2, href: 'Escola-Atendimentos.dc.html' }] }];
+      __r.tabs = [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'diario', label: 'Diário', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }];
+    }
+    return Object.assign({ s12: 12, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96 }, bell, __r);
+  }
+}
+</script><script src="vendor/runtime.js"></script></body></html>

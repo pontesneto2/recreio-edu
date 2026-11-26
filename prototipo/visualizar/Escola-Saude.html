@@ -1,0 +1,251 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Enfermaria: Saúde</title>
+<link rel="stylesheet" href="vendor/tokens.css"><link rel="stylesheet" href="vendor/bundle.css"><link rel="stylesheet" href="vendor/telas.css"><style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+<script src="vendor/react.js"></script><script src="vendor/react-dom.js"></script><script src="vendor/bundle.js"></script></head>
+<body><div id="app"></div><template id="dc-src"><x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" units="{{units}}" groups="{{nav}}" active="saude"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="heart" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Saúde e enfermaria</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Enfermaria · atendimentos do dia, medicações e fichas de saúde</p></div></div>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar aluno ou turma" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Escola-Notificacoes.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<x-import component-from-global-scope="Recreio.Alert" tone="info" title="Quem vê esta tela">Dado de saúde aparece só para quem tem a regra "Ver dados de saúde" em Grupos e permissões. Hoje são Enfermaria, Coordenação e Direção. Professores e cozinha veem só o aviso do aluno, sem diagnóstico.</x-import>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px; padding: 16px 20px; border-radius: var(--radius-lg); background: var(--surface-1); border: 1px solid var(--line); box-shadow: var(--shadow-1);">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; min-width: 0; max-width: 100%;">
+<x-import component-from-global-scope="Recreio.Select" label="Sede" default-value="aldeota" options="{{sedes}}"></x-import><x-import component-from-global-scope="Recreio.Select" label="Turno" default-value="todos" options="{{turnos}}"></x-import><x-import component-from-global-scope="Recreio.Select" label="Segmento" default-value="todos" options="{{segs}}"></x-import>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-secondary" href="#pop-lembrar"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s18}}"></x-import>Lembrar fichas pendentes</a><a class="rc-btn rc-btn-primary" href="#pop-atender"><x-import component-from-global-scope="Recreio.Icon" name="plus" size="{{s18}}"></x-import>Registrar atendimento</a></div>
+</div>
+<section aria-label="Indicadores da enfermaria" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px;">
+<x-import component-from-global-scope="Recreio.StatCard" color="azul" label="Atendimentos hoje" value="{{nAt}}" icon="heart" hint="1 em atendimento agora" href="#atendimentos"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="amarelo" label="Medicações de hoje" value="{{nMed}}" icon="clock" hint="2 ainda para dar" href="#medicacoes"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="vermelho" label="Alergias graves" value="{{nAlg}}" icon="alert" hint="Aviso na chamada e no cardápio" href="#pop-alergias"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="roxo" label="Fichas pendentes" value="{{nFichas}}" icon="file-text" hint="De 1.248 fichas de saúde" href="#pop-fichas"></x-import>
+</section>
+<div class="rc-split" style="gap: 24px; align-items: start; --split: minmax(0, 3fr) minmax(340px, 2fr);">
+<div style="display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+<div id="atendimentos"><x-import component-from-global-scope="Recreio.Card" title="Atendimentos de hoje" subtitle="Quarta, 25 de novembro · cada registro avisa a família e entra na ficha do aluno">
+<div>
+<sc-for list="{{atend}}" as="a" hint-placeholder-count="5">
+<div class="tl-linha " style="--cols: 72px minmax(0, 1fr) auto;"><span class="tl-linha-hora"><strong style="display: block;">{{a.h}}</strong><small>{{a.n}}</small></span><span style="min-width: 0;"><strong style="display: block;">{{a.t}}</strong><small>{{a.m}}</small></span><span class="tl-linha-fim"><x-import component-from-global-scope="Recreio.StatusPill" tone="{{a.tone}}" size="sm">{{a.st}}</x-import><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-ver">Ver</a></span></div>
+</sc-for>
+</div>
+</x-import></div>
+<div id="medicacoes"><x-import component-from-global-scope="Recreio.Card" title="Medicações autorizadas para hoje" subtitle="Só com receita válida e autorização da família na ficha de saúde">
+<div>
+<sc-for list="{{medic}}" as="a" hint-placeholder-count="4">
+<div class="tl-linha " style="--cols: 92px minmax(0, 1fr) auto;"><span class="tl-linha-hora"><strong style="display: block;">{{a.h}}</strong><small>{{a.n}}</small></span><span style="min-width: 0;"><strong style="display: block;">{{a.t}}</strong><small>{{a.m}}</small></span><span class="tl-linha-fim"><x-import component-from-global-scope="Recreio.StatusPill" tone="{{a.tone}}" size="sm">{{a.st}}</x-import><a class="rc-btn rc-btn-{{a.bv}} rc-btn-sm" href="{{a.href}}">{{a.bl}}</a></span></div>
+</sc-for>
+</div>
+</x-import></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Alunos que pedem atenção" subtitle="Vem da ficha de saúde preenchida pela família">
+<div>
+<sc-for list="{{alertas}}" as="p" hint-placeholder-count="4">
+<div class="rc-popup-row" style="grid-template-columns: 40px minmax(0, 1fr) auto;"><x-import component-from-global-scope="Recreio.Avatar" name="{{p.nome}}" size="{{s40}}"></x-import><span style="min-width: 0;"><strong style="display: block;">{{p.nome}}</strong><small style="color: var(--ink-2);">{{p.meta}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{p.tone}}" size="sm">{{p.st}}</x-import></div>
+</sc-for>
+</div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Fichas de saúde por segmento" subtitle="1.210 de 1.248 preenchidas">
+<div style="display: flex; flex-direction: column; gap: 14px;"><sc-for list="{{fichasBars}}" as="u" hint-placeholder-count="4"><div><div style="display: flex; justify-content: space-between; gap: 12px; margin-bottom: 6px;"><strong style="font-weight: 600;">{{u.t}}</strong><small style="color: var(--ink-2); white-space: nowrap;">{{u.m}}</small></div><x-import component-from-global-scope="Recreio.ProgressBar" value="{{u.v}}" tone="{{u.tone}}" size="sm" label="{{u.t}}" hide-label="{{yes}}"></x-import></div></sc-for></div><div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px;"><a class="rc-btn rc-btn-secondary" href="#pop-lembrar"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s18}}"></x-import>Lembrar as 38 famílias</a></div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Alert" tone="warning" title="Emergência">Ligue 192 e avise a direção. O sistema mostra os contatos de emergência e o plano de saúde do aluno na ficha.</x-import>
+</div>
+</div>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="painel"></x-import>
+</div>
+</div>
+<div id="pop-atender" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Registrar atendimento">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="heart" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Registrar atendimento</p><p class="rc-dialog-desc">O registro entra na ficha do aluno. A família recebe o aviso na hora.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: flex; flex-direction: column; gap: 14px;"><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px 16px;"><x-import component-from-global-scope="Recreio.TextField" label="Aluno" default-value="Vicente Lacerda · 6º ano B" icon="search"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Hora" default-value="11h20" icon="clock"></x-import><x-import component-from-global-scope="Recreio.Select" label="Motivo" default-value="alergia" options="{{motivosS}}"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Temperatura" default-value="36,7 °C"></x-import></div><x-import component-from-global-scope="Recreio.Alert" tone="warning" title="Vicente tem alergia grave a camarão">Sem medicação autorizada. Se piorar, ligue para a família e siga o plano de emergência.</x-import><x-import component-from-global-scope="Recreio.TextArea" label="O que foi feito" default-value="Coceira no braço esquerdo. Sem inchaço e sem falta de ar. Lavou o local e ficou em observação por 20 minutos." rows="{{n3}}"></x-import><x-import component-from-global-scope="Recreio.RadioGroup" legend="Desfecho" value="obs" options="{{desfechos}}"></x-import><x-import component-from-global-scope="Recreio.Checkbox" label="Avisar a família agora" description="A responsável recebe no celular." default-checked="{{yes}}"></x-import><x-import component-from-global-scope="Recreio.Checkbox" label="Abrir também uma ocorrência de saúde" description="A coordenação acompanha."></x-import></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-atender-ok">Salvar atendimento</a></div>
+</div>
+</div>
+<div id="pop-atender-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Atendimento registrado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Atendimento registrado</p><p class="rc-dialog-desc">A mãe do Vicente foi avisada às 11h42. O registro aparece em Saúde, no app da família.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-dose" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Registrar dose">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="clock" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Registrar dose</p><p class="rc-dialog-desc">Théo Bastos · metilfenidato 10 mg · depois do almoço.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: flex; flex-direction: column; gap: 14px;"><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px 16px;"><x-import component-from-global-scope="Recreio.TextField" label="Hora da dose" default-value="12h04" icon="clock"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Quem deu" default-value="Tereza Maciel"></x-import></div><x-import component-from-global-scope="Recreio.Checkbox" label="O aluno tomou na minha frente" default-checked="{{yes}}"></x-import><x-import component-from-global-scope="Recreio.TextArea" label="Observação" default-value="" rows="{{n2}}"></x-import></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-dose-ok">Registrar dose</a></div>
+</div>
+</div>
+<div id="pop-dose-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Dose registrada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Dose registrada</p><p class="rc-dialog-desc">A família vê a hora da dose em Saúde. A próxima é amanhã, às 12h.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-ver" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Atendimento das 10h05">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="heart" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Atendimento das 10h05</p><p class="rc-dialog-desc">Registro completo, como fica na ficha do aluno.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><dl class="rc-fields" style="grid-template-columns: minmax(0, 1fr);">
+<sc-for list="{{detAt}}" as="f" hint-placeholder-count="7"><div class="rc-field {{f.cls}}"><dt>{{f.l}}</dt><dd>{{f.v}}</dd></div></sc-for>
+</dl></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="Escola-Ficha-do-aluno.html">Abrir a ficha</a><a class="rc-btn rc-btn-primary" href="#">Fechar</a></div>
+</div>
+</div>
+<div id="pop-alergias" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Alergias graves">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-danger"><x-import component-from-global-scope="Recreio.Icon" name="alert" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Alergias graves</p><p class="rc-dialog-desc">9 alunos. O aviso aparece na chamada, no cardápio e no passeio.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div>
+<sc-for list="{{graves}}" as="p" hint-placeholder-count="3">
+<div class="rc-popup-row" style="grid-template-columns: 40px minmax(0, 1fr) auto;"><x-import component-from-global-scope="Recreio.Avatar" name="{{p.nome}}" size="{{s40}}"></x-import><span style="min-width: 0;"><strong style="display: block;">{{p.nome}}</strong><small style="color: var(--ink-2);">{{p.meta}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{p.tone}}" size="sm">{{p.st}}</x-import></div>
+</sc-for>
+</div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Fechar</a></div>
+</div>
+</div>
+<div id="pop-fichas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Fichas de saúde pendentes">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="file-text" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Fichas de saúde pendentes</p><p class="rc-dialog-desc">38 alunos sem ficha ou com ficha antiga.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div>
+<sc-for list="{{pendFichas}}" as="p" hint-placeholder-count="3">
+<div class="rc-popup-row" style="grid-template-columns: 40px minmax(0, 1fr) auto;"><x-import component-from-global-scope="Recreio.Avatar" name="{{p.nome}}" size="{{s40}}"></x-import><span style="min-width: 0;"><strong style="display: block;">{{p.nome}}</strong><small style="color: var(--ink-2);">{{p.meta}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{p.tone}}" size="sm">{{p.st}}</x-import></div>
+</sc-for>
+</div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Fechar</a><a class="rc-btn rc-btn-primary" href="#pop-lembrar">Lembrar as 38 famílias</a></div>
+</div>
+</div>
+<div id="pop-lembrar" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Lembrete enviado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Lembrete enviado</p><p class="rc-dialog-desc">38 famílias receberam o pedido para preencher a ficha de saúde no app.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc></template><script id="dc-js" type="text/plain">
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 5, bellNotifs: [
+      { icon: 'clipboard', title: '5 justificativas para analisar', text: 'Frequência · Fundamental II', time: 'Hoje, 11h05', unread: true, priority: 'importante' },
+      { icon: 'chat', title: 'Fernanda Lima respondeu no chat', text: 'Ana Beatriz · 9º ano A', time: 'Hoje, 10h12', unread: true, priority: 'rotina' },
+      { icon: 'edit', title: 'História 9º B: faltam 4 notas', text: 'Fechamento do 4º bimestre', time: 'Hoje, 9h00', unread: true, priority: 'importante' },
+      { icon: 'alert', title: 'Ocorrência sem resposta da família', text: 'Mateus Holanda · 9º ano C · há 7 dias', time: 'Hoje, 8h30', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: '63 mensalidades vencidas', text: '41 famílias · a régua de cobrança enviou lembretes', time: 'Hoje, 7h00', unread: true, priority: 'rotina' }] };
+    const tabs = [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'comunicados', label: 'Avisos', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }];
+    const shared = {
+      bellCount: 5, activeChild: undefined, activeProfile: 'dir', kids: [],
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      units: [{ id: 'aldeota', label: 'Unidade Aldeota', meta: '1.248 alunos · Infantil ao Médio', href: 'Escola-Painel.dc.html', current: true }, { id: 'eusebio', label: 'Unidade Eusébio', meta: '936 alunos · Infantil e Fundamental I', href: 'Escola-Painel.dc.html' }, { id: 'rede', label: 'Todas as unidades', meta: 'Visão consolidada da rede', href: 'Escola-Painel.dc.html' }],
+      user: { name: 'Lúcia Menezes' },
+      profiles: [{ id: 'dir', label: 'Direção', icon: 'shield', school: 'Colégio Recreio' }, { id: 'prof', label: 'Professora', icon: 'book', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'chat', label: 'Chat com famílias', icon: 'chat', count: 4, href: 'Escola-Chat.dc.html' }] },
+        { label: 'Pedagógico', items: [{ id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Escola-Horarios.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'clipboard', count: 5, href: 'Escola-Frequencia.dc.html' }, { id: 'boletins', label: 'Fechamento e boletins', icon: 'chart', href: 'Escola-Boletins.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 3, href: 'Escola-Ocorrencias.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Escola-Integral.dc.html' }, { id: 'saude', label: 'Saúde e enfermaria', icon: 'heart', href: 'Escola-Saude.dc.html' }, { id: 'inclusao', label: 'Inclusão e AEE', icon: 'accessibility', href: 'Escola-Inclusao.dc.html' }, { id: 'medidas', label: 'Medidas disciplinares', icon: 'flag', href: 'Escola-Medidas.dc.html' }, { id: 'extras', label: 'Pontos extras', icon: 'star', href: 'Escola-Pontos-extras.dc.html' }, { id: 'eja', label: 'EJA', icon: 'moon', href: 'Escola-EJA.dc.html' }] },
+        { label: 'Secretaria', items: [{ id: 'alunos', label: 'Alunos', icon: 'users', href: 'Escola-Alunos.dc.html' }, { id: 'equipe', label: 'Equipe', icon: 'user', href: 'Escola-Equipe.dc.html' }, { id: 'captacao', label: 'Captação', icon: 'filter', count: 9, href: 'Escola-Captacao.dc.html' }, { id: 'matriculas', label: 'Matrículas', icon: 'file-text', count: 12, href: 'Escola-Matriculas.dc.html' }, { id: 'contratos', label: 'Contratos', icon: 'edit', count: 200, href: 'Escola-Contratos.dc.html' }, { id: 'solicitacoes', label: 'Solicitações', icon: 'file', count: 6, href: 'Escola-Solicitacoes.dc.html' }, { id: 'certificados', label: 'Certificados e diplomas', icon: 'graduation', href: 'Escola-Certificados.dc.html' }, { id: 'transferencias', label: 'Transferências', icon: 'sync', href: 'Escola-Transferencias.dc.html' }, { id: 'fotos', label: 'Fotos de alunos', icon: 'camera', href: 'Escola-Fotos.dc.html' }, { id: 'importacao', label: 'Migração de dados', icon: 'upload', href: 'Escola-Importacao.dc.html' }, { id: 'calendario', label: 'Calendário letivo', icon: 'flag', href: 'Escola-Calendario.dc.html' }, { id: 'autorizacoes', label: 'Passeios e autorizações', icon: 'key', href: 'Escola-Autorizacoes.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Escola-Biblioteca.dc.html' }] },
+        { label: 'Família e serviços', items: [{ id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 4, href: 'Escola-Atendimentos.dc.html' }, { id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Escola-Cardapio.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', href: 'Escola-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', count: 9, href: 'Escola-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', href: 'Escola-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'mensalidades', label: 'Mensalidades', icon: 'wallet', count: 41, urgent: true, href: 'Escola-Mensalidades.dc.html' }, { id: 'fiscal', label: 'Notas fiscais e IR', icon: 'receipt', count: 3, href: 'Escola-Fiscal.dc.html' }, { id: 'dae', label: 'DAE SEFAZ-CE', icon: 'receipt', href: 'Escola-DAE.dc.html' }, { id: 'caixa', label: 'Caixa e contas a pagar', icon: 'card', href: 'Escola-Caixa.dc.html' }] },
+        { label: 'Gestão', items: [{ id: 'relatorios', label: 'Relatórios e censo', icon: 'sparkline', href: 'Escola-Relatorios.dc.html' }, { id: 'permissoes', label: 'Grupos e permissões', icon: 'shield', href: 'Escola-Permissoes.dc.html' }, { id: 'modulos', label: 'Módulos e marca', icon: 'modules', href: 'Escola-Modulos.dc.html' }] }]
+    };
+    const __r = Object.assign({ yes: true, no: false, tabs }, shared, {
+      user: { name: 'Tereza Maciel' }, activeProfile: 'enf', profiles: [{ id: 'enf', label: 'Enfermaria', icon: 'heart', school: 'Colégio Recreio' }],
+      n2: 2, n3: 3, n4: 4, n5: 5, n6: 6,
+      go_pop_alergias: () => { location.hash = 'pop-alergias'; }, go_pop_atender: () => { location.hash = 'pop-atender'; }, go_pop_atender_ok: () => { location.hash = 'pop-atender-ok'; }, go_pop_dose: () => { location.hash = 'pop-dose'; }, go_pop_dose_ok: () => { location.hash = 'pop-dose-ok'; }, go_pop_fichas: () => { location.hash = 'pop-fichas'; }, go_pop_lembrar: () => { location.hash = 'pop-lembrar'; }, go_pop_lidas: () => { location.hash = 'pop-lidas'; }, go_pop_ver: () => { location.hash = 'pop-ver'; },
+brl: (v) => window.Recreio.brl(v), brl0: (v) => window.Recreio.brl(v, { maximumFractionDigits: 0 }), pct: (v) => window.Recreio.num(v, 0) + '%', pct1: (v) => window.Recreio.num(v, 1) + '%', um1: (v) => window.Recreio.num(v, 1),
+      nAt: 6, nMed: 4, nAlg: 9, nFichas: 38,
+      sedes: [{ value: 'aldeota', label: 'Unidade Aldeota' }, { value: 'eusebio', label: 'Unidade Eusébio' }],
+      turnos: [{ value: 'todos', label: 'Todos os turnos' }, { value: 'manha', label: 'Manhã' }, { value: 'tarde', label: 'Tarde e integral' }],
+      segs: [{ value: 'todos', label: 'Todos os segmentos' }, { value: 'inf', label: 'Educação Infantil' }, { value: 'f1', label: 'Fundamental I' }, { value: 'f2', label: 'Fundamental II' }, { value: 'em', label: 'Ensino Médio' }],
+      atend: [
+        { h: '7h52', n: '10 min', t: 'Lucas Andrade · 9º ano A', m: 'Dor de cabeça. Mediu pressão e temperatura, tomou água e descansou.', st: 'Voltou para a sala', tone: 'success' },
+        { h: '9h15', n: '15 min', t: 'Alice Cordeiro · 1º ano A', m: 'Ralou o joelho no recreio. Limpeza e curativo.', st: 'Família avisada', tone: 'success' },
+        { h: '9h50', n: '30 min', t: 'Davi Lima · 2º ano B', m: 'Dor de cabeça no intervalo. Sem febre e sem sinal de alergia. Tomou água e descansou.', st: 'Voltou para a sala', tone: 'success' },
+        { h: '10h05', n: '25 min', t: 'Lara Studart · 9º ano B', m: 'Febre de 38,4 °C. Ficou em observação.', st: 'Foi para casa', tone: 'warning' },
+        { h: '10h40', n: '5 min', t: 'Sofia Nogueira · 1º ano A', m: 'Dor de barriga. Sem febre. Voltou depois de descansar.', st: 'Voltou para a sala', tone: 'success' },
+        { h: '11h20', n: 'agora', t: 'Vicente Lacerda · 6º ano B', m: 'Coceira no braço depois do lanche. Sem contato com camarão. Em observação.', st: 'Em atendimento', tone: 'info' }],
+      medic: [
+        { h: '8h00', n: 'dada 8h02', t: 'Helena Prado · 5º ano A', m: 'Lactase 1 comprimido antes do lanche · receita até 03/2027', st: 'Dada', tone: 'success', bl: 'Ver', bv: 'ghost', href: '#pop-ver' },
+        { h: '10h00', n: 'dada 10h04', t: 'Laura Menezes · Infantil V', m: 'Antialérgico 2,5 mL · receita até 12/2026', st: 'Dada', tone: 'success', bl: 'Ver', bv: 'ghost', href: '#pop-ver' },
+        { h: '12h00', n: 'em 40 min', t: 'Théo Bastos · 3º ano A', m: 'Metilfenidato 10 mg depois do almoço · receita até 01/2027', st: 'A dar', tone: 'warning', bl: 'Registrar dose', bv: 'primary', href: '#pop-dose' },
+        { h: '15h00', n: 'à tarde', t: 'Miguel Fontes · 3º ano A', m: 'Antibiótico 5 mL · até sexta, 27/11 · receita anexada', st: 'A dar', tone: 'warning', bl: 'Registrar dose', bv: 'primary', href: '#pop-dose' }],
+      alertas: [
+        { nome: 'Davi Lima', meta: '2º ano B · alergia grave a amendoim · antialérgico autorizado', st: 'Alergia grave', tone: 'danger' },
+        { nome: 'Laura Menezes', meta: 'Infantil V · alergia a ovo · lanche separado', st: 'Alergia', tone: 'warning' },
+        { nome: 'Rafael Queiroz', meta: '4º ano A · asma · usa bombinha se tiver crise', st: 'Asma', tone: 'warning' },
+        { nome: 'Isis Carvalho', meta: '4º ano A · diabetes tipo 1 · mede a glicemia às 10h', st: 'Acompanhar', tone: 'info' }],
+      fichasBars: [{ t: 'Educação Infantil', m: '154 de 160', v: 96, tone: 'success' }, { t: 'Fundamental I', m: '441 de 450', v: 98, tone: 'success' }, { t: 'Fundamental II', m: '402 de 420', v: 96, tone: 'success' }, { t: 'Ensino Médio', m: '213 de 218', v: 98, tone: 'success' }],
+      motivosS: [{ value: 'cabeca', label: 'Dor de cabeça' }, { value: 'febre', label: 'Febre' }, { value: 'queda', label: 'Queda ou machucado' }, { value: 'barriga', label: 'Dor de barriga ou enjoo' }, { value: 'alergia', label: 'Reação alérgica' }, { value: 'outro', label: 'Outro' }],
+      desfechos: [{ value: 'sala', label: 'Voltou para a sala' }, { value: 'obs', label: 'Ficou em observação' }, { value: 'casa', label: 'A família vem buscar' }, { value: 'pa', label: 'Encaminhado ao pronto atendimento', description: 'Avisa a direção na hora.' }],
+      graves: [{ nome: 'Davi Lima', meta: '2º ano B · amendoim', st: 'Antialérgico na enfermaria', tone: 'danger' }, { nome: 'Luna Barreto', meta: 'Infantil V · picada de abelha', st: 'Plano de emergência', tone: 'danger' }, { nome: 'Vicente Lacerda', meta: '6º ano B · camarão', st: 'Sem medicação', tone: 'warning' }],
+      pendFichas: [{ nome: 'Valentina Rios', meta: '1º ano A · matrícula nova · lembrada em 19/11', st: '2 lembretes', tone: 'warning' }, { nome: 'Noah Teles', meta: '6º ano B · ficha de 2024, sem atualização', st: 'Desatualizada', tone: 'neutral' }, { nome: 'Enzo Prado', meta: 'Infantil V · matrícula nova', st: 'Sem ficha', tone: 'danger' }],
+      detAt: [{ l: 'Aluno', v: 'Lara Studart · 9º ano B' }, { l: 'Chegou', v: '10h05, trazido pelo Prof. Marcelo Dias' }, { l: 'Queixa', v: 'Febre e dor no corpo' }, { l: 'O que foi feito', v: 'Temperatura 38,4 °C. Repouso e água. Sem medicação: a ficha não autoriza antitérmico.' }, { l: 'Desfecho', v: 'A mãe buscou às 10h48, conferida na portaria' }, { l: 'Aviso à família', v: 'Enviado às 10h07 e lido às 10h09' }, { l: 'Registrado por', v: 'Tereza Maciel, enfermeira' }]
+    });
+    /* Controle de acesso: cada perfil vê só os módulos liberados em Grupos e permissões. */
+    const ACESSO = { prof: ['comunicados', 'notas', 'chamada', 'agenda', 'frequencia', 'ocorrencias', 'inicio', 'diario', 'horarios', 'materiais', 'atendimentos', 'tarefas'], coord: ['painel', 'comunicados', 'chat', 'notas', 'chamada', 'agenda', 'frequencia', 'boletins', 'ocorrencias', 'integral', 'alunos', 'autorizacoes', 'equipe', 'horarios', 'calendario', 'atendimentos', 'cardapio', 'galeria', 'pesquisas', 'saude', 'inclusao', 'relatorios', 'biblioteca', 'portaria', 'medidas', 'extras', 'eja', 'certificados'], sec: ['comunicados', 'alunos', 'matriculas', 'contratos', 'autorizacoes', 'portaria', 'equipe', 'solicitacoes', 'calendario', 'horarios', 'loja', 'pesquisas', 'captacao', 'certificados', 'transferencias', 'fotos', 'importacao'], fin: ['comunicados', 'alunos', 'contratos', 'mensalidades', 'loja', 'fiscal', 'caixa', 'dae'], bib: ['comunicados', 'biblioteca'], port: ['comunicados', 'portaria', 'autorizacoes'], int: ['comunicados', 'chamada', 'integral', 'ocorrencias'], nutri: ['comunicados', 'cardapio'], enf: ['comunicados', 'saude'], aee: ['comunicados', 'inclusao', 'atendimentos', 'ocorrencias'] };
+    const permitidos = ACESSO[__r.activeProfile];
+    if (permitidos) {
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.filter((i) => permitidos.includes(i.id)) })).filter((g) => g.items.length);
+      __r.tabs = (__r.tabs || []).filter((t) => permitidos.includes(t.id));
+      __r.units = null;
+    }
+    /* Biblioteca e portaria: direção e coordenação entram pela visão de gestão. A operação fica com a bibliotecária e a portaria. */
+    if (['dir', 'coord'].includes(__r.activeProfile)) {
+      const GESTAO = { biblioteca: 'Escola-Biblioteca-Gestao.dc.html', portaria: 'Escola-Portaria-Gestao.dc.html' };
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.map((i) => (GESTAO[i.id] ? Object.assign({}, i, { href: GESTAO[i.id] }) : i)) }));
+      __r.tabs = (__r.tabs || []).map((t) => (GESTAO[t.id] ? Object.assign({}, t, { href: GESTAO[t.id] }) : t));
+    }
+    /* Portal do professor: quem entra como professor vê o próprio menu, com as turmas e o planejamento. */
+    if (__r.activeProfile === 'prof') {
+      __r.nav = [
+        { items: [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }] },
+        { label: 'Minhas turmas', items: [{ id: 'diario', label: 'Diário de classe', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'tarefas', label: 'Tarefas', icon: 'list', count: 6, href: 'Professor-Tarefas.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', href: 'Escola-Ocorrencias.dc.html' }] },
+        { label: 'Planejamento', items: [{ id: 'horarios', label: 'Meus horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Professor-Materiais.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 2, href: 'Escola-Atendimentos.dc.html' }] }];
+      __r.tabs = [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'diario', label: 'Diário', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }];
+    }
+    return Object.assign({ s12: 12, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96 }, bell, __r);
+  }
+}
+</script><script src="vendor/runtime.js"></script></body></html>

@@ -1,0 +1,312 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Financeiro: Caixa e contas a pagar</title>
+<link rel="stylesheet" href="vendor/tokens.css"><link rel="stylesheet" href="vendor/bundle.css"><link rel="stylesheet" href="vendor/telas.css"><style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+<script src="vendor/react.js"></script><script src="vendor/react-dom.js"></script><script src="vendor/bundle.js"></script></head>
+<body><div id="app"></div><template id="dc-src"><x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" units="{{units}}" groups="{{nav}}" active="caixa"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="card" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Caixa e contas a pagar</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Financeiro · fluxo de caixa, contas a pagar e conciliação bancária</p></div></div>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar fornecedor, conta ou lançamento" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Escola-Notificacoes.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px; padding: 16px 20px; border-radius: var(--radius-lg); background: var(--surface-1); border: 1px solid var(--line); box-shadow: var(--shadow-1);">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; min-width: 0; max-width: 100%;">
+<x-import component-from-global-scope="Recreio.Select" label="Período" default-value="2026-11" options="{{meses}}"></x-import><x-import component-from-global-scope="Recreio.Select" label="Conta" default-value="todas" options="{{contas}}"></x-import><x-import component-from-global-scope="Recreio.Select" label="Categoria" default-value="todas" options="{{cats}}"></x-import>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-secondary" href="#pop-ofx"><x-import component-from-global-scope="Recreio.Icon" name="upload" size="{{s18}}"></x-import>Importar extrato</a><a class="rc-btn rc-btn-primary" href="#pop-nova"><x-import component-from-global-scope="Recreio.Icon" name="plus" size="{{s18}}"></x-import>Nova conta a pagar</a></div>
+</div>
+<section aria-label="Indicadores do caixa" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px;">
+<x-import component-from-global-scope="Recreio.StatCard" color="verde" label="Saldo em conta" value="{{saldo}}" icon="wallet" hint="2 contas · atualizado hoje, 8h10" format="{{brl0}}" href="#pop-saldo"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="amarelo" label="A pagar em 7 dias" value="{{apagar}}" icon="calendar" hint="9 contas · folha em 30/11" format="{{brl0}}" href="#pagar"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="vermelho" label="Esperando aprovação" value="{{nApr}}" icon="shield" hint="2 passam da sua alçada" href="#aprovar"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="azul" label="Sem conciliar" value="{{nConc}}" icon="sync" hint="Lançamentos do extrato de 24/11" href="#conciliar"></x-import>
+</section>
+<div class="rc-split" style="gap: 24px; align-items: start; --split: minmax(0, 3fr) minmax(340px, 2fr);">
+<div style="display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Fluxo de caixa de novembro" subtitle="Previsto contra realizado. A semana 4 ainda está aberta.">
+<div role="table" aria-label="Fluxo de caixa por semana">
+<div role="row" class="rc-rows-row rc-rows-head" style="--cols: minmax(0, 1.3fr) repeat(4, minmax(0, 1fr)); padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);"><span role="columnheader">Semana</span><span role="columnheader">Entradas previstas</span><span role="columnheader">Entradas realizadas</span><span role="columnheader">Saídas previstas</span><span role="columnheader">Saídas realizadas</span></div>
+<sc-for list="{{fluxo}}" as="r" hint-placeholder-count="4">
+<div role="row" class="rc-rows-row" style="--cols: minmax(0, 1.3fr) repeat(4, minmax(0, 1fr)); align-items: center; padding: 12px; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none;"><span role="cell" style="min-width: 0;"><strong style="display: block; font-weight: 600;">{{r.sem}}</strong><small style="color: var(--ink-2);">{{r.per}}</small></span><span role="cell" style="min-width: 0;" data-label="Entradas previstas"><span style="font-variant-numeric: tabular-nums;">{{r.ep}}</span></span><span role="cell" style="min-width: 0;" data-label="Entradas realizadas"><strong style="font-variant-numeric: tabular-nums;">{{r.er}}</strong></span><span role="cell" style="min-width: 0;" data-label="Saídas previstas"><span style="font-variant-numeric: tabular-nums;">{{r.sp}}</span></span><span role="cell" style="min-width: 0;" data-label="Saídas realizadas"><strong style="font-variant-numeric: tabular-nums;">{{r.sr}}</strong></span></div>
+</sc-for>
+</div><div style="margin-top: 20px;"><x-import component-from-global-scope="Recreio.BarChart" label="Saldo ao fim de cada semana" format="{{k}}" data="{{saldos}}" highlight="Sem. 4"></x-import></div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Despesas por categoria" subtitle="Novembro de 2026 · R$ 1.412.900,00 no mês">
+<div style="display: flex; flex-direction: column; gap: 14px;"><sc-for list="{{despesas}}" as="u" hint-placeholder-count="6"><div><div style="display: flex; justify-content: space-between; gap: 12px; margin-bottom: 6px;"><strong style="font-weight: 600;">{{u.t}}</strong><small style="color: var(--ink-2); white-space: nowrap;">{{u.m}}</small></div><x-import component-from-global-scope="Recreio.ProgressBar" value="{{u.v}}" tone="{{u.tone}}" size="sm" label="{{u.t}}" hide-label="{{yes}}"></x-import></div></sc-for></div>
+</x-import>
+</div>
+<div style="display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+<div id="aprovar"><x-import component-from-global-scope="Recreio.Card" title="Aprovação por alçada" subtitle="Você aprova até R$ 2.000,00">
+<div>
+<sc-for list="{{aprovacoes}}" as="p" hint-placeholder-count="3">
+<div class="rc-popup-row" style="grid-template-columns: 36px minmax(0, 1fr) auto;"><span class="rc-dialog-icon {{p.cls}}" style="width: 36px; height: 36px; border-radius: var(--radius-sm);"><x-import component-from-global-scope="Recreio.Icon" name="file-text" size="{{s18}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{p.nome}}</strong><small style="color: var(--ink-2);">{{p.meta}}</small></span><span style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px;"><a class="rc-btn rc-btn-{{p.bv}} rc-btn-sm" href="{{p.href}}">{{p.bl}}</a></span></div>
+</sc-for>
+</div><div style="margin-top: 14px;"><x-import component-from-global-scope="Recreio.Alert" tone="info" title="Quem aprova o quê">Até R$ 2.000,00: financeiro. Até R$ 20.000,00: direção administrativa. Acima disso: direção geral.</x-import></div>
+</x-import></div>
+<div id="conciliar"><x-import component-from-global-scope="Recreio.Card" title="Conciliação bancária" subtitle="O que está no extrato e ainda não bate com o sistema">
+<div>
+<sc-for list="{{concil}}" as="a" hint-placeholder-count="4">
+<div class="tl-linha " style="--cols: 40px minmax(0, 1fr) auto;"><span class="tl-ic rc-c-{{a.cor}}"><x-import component-from-global-scope="Recreio.Icon" name="{{a.icon}}" size="{{s20}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{a.t}}</strong><small>{{a.m}}</small></span><span class="tl-linha-fim"><a class="rc-btn rc-btn-secondary rc-btn-sm" href="#pop-conciliar">Conciliar</a></span></div>
+</sc-for>
+</div>
+</x-import></div>
+</div>
+</div>
+<div id="pagar"><x-import component-from-global-scope="Recreio.Card" title="Contas a pagar" subtitle="Novembro de 2026 · paga só depois de aprovada">
+<div role="table" aria-label="Contas a pagar">
+<div role="row" class="rc-rows-row rc-rows-head" style="--cols: minmax(0, 2.4fr) minmax(0, 1.3fr) 64px minmax(124px, .9fr) minmax(170px, 1fr) minmax(88px, auto); padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);"><span role="columnheader">Fornecedor</span><span role="columnheader">Categoria</span><span role="columnheader">Vence</span><span role="columnheader">Valor</span><span role="columnheader">Situação</span><span></span></div>
+<sc-for list="{{pagar}}" as="r" hint-placeholder-count="7">
+<div role="row" class="rc-rows-row" style="--cols: minmax(0, 2.4fr) minmax(0, 1.3fr) 64px minmax(124px, .9fr) minmax(170px, 1fr) minmax(88px, auto); align-items: center; padding: 12px; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none;"><span role="cell" style="min-width: 0;"><strong style="display: block; font-weight: 600;">{{r.forn}}</strong><small style="color: var(--ink-2);">{{r.desc}}</small></span><span role="cell" style="min-width: 0;" data-label="Categoria">{{r.cat}}</span><span role="cell" style="min-width: 0;" data-label="Vence"><span style="white-space: nowrap; font-variant-numeric: tabular-nums;">{{r.venc}}</span></span><span role="cell" style="min-width: 0;" data-label="Valor"><strong style="white-space: nowrap; font-variant-numeric: tabular-nums;">{{r.valor}}</strong></span><span role="cell" style="min-width: 0;" data-label="Situação"><x-import component-from-global-scope="Recreio.StatusPill" tone="{{r.tone}}" size="sm">{{r.st}}</x-import></span><span role="cell" style="min-width: 0;"><a class="rc-btn rc-btn-{{r.bv}} rc-btn-sm" href="{{r.href}}">{{r.bl}}</a></span></div>
+</sc-for>
+</div>
+</x-import></div>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="painel"></x-import>
+</div>
+</div>
+<div id="pop-nova" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Nova conta a pagar">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="plus" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Nova conta a pagar</p><p class="rc-dialog-desc">A conta segue para aprovação conforme o valor.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: flex; flex-direction: column; gap: 14px;"><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px 16px;"><x-import component-from-global-scope="Recreio.TextField" label="Fornecedor" default-value="Papelaria Central Ltda."></x-import><x-import component-from-global-scope="Recreio.Select" label="Categoria" default-value="mat" options="{{cats}}"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Valor" default-value="R$ 1.840,00"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Vencimento" default-value="26/11/2026" icon="calendar"></x-import><x-import component-from-global-scope="Recreio.Select" label="Forma de pagamento" default-value="boleto" options="{{formas}}"></x-import><x-import component-from-global-scope="Recreio.Select" label="Sede" default-value="aldeota" options="{{sedesC}}"></x-import></div><x-import component-from-global-scope="Recreio.TextField" label="Descrição" default-value="Papel sulfite A4 e cartuchos"></x-import><x-import component-from-global-scope="Recreio.FileDrop" label="Nota fiscal e boleto" hint="PDF ou foto até 10 MB"></x-import><x-import component-from-global-scope="Recreio.Switch" label="Conta recorrente" description="Repete todo mês, no mesmo dia."></x-import></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-nova-ok">Enviar para aprovação</a></div>
+</div>
+</div>
+<div id="pop-nova-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Conta enviada para aprovação">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Conta enviada para aprovação</p><p class="rc-dialog-desc">Valor até R$ 2.000,00: a aprovação é do financeiro. Ela já está na sua lista.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-aprovar" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Aprovar pagamento">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="shield" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Aprovar pagamento</p><p class="rc-dialog-desc">Papelaria Central · R$ 1.840,00 · dentro da sua alçada.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><dl class="rc-fields" style="grid-template-columns: minmax(0, 1fr);">
+<sc-for list="{{detConta}}" as="f" hint-placeholder-count="7"><div class="rc-field {{f.cls}}"><dt>{{f.l}}</dt><dd>{{f.v}}</dd></div></sc-for>
+</dl></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#pop-devolver">Devolver com motivo</a><a class="rc-btn rc-btn-primary" href="#pop-aprovar-ok"><x-import component-from-global-scope="Recreio.Icon" name="check" size="{{s18}}"></x-import>Aprovar</a></div>
+</div>
+</div>
+<div id="pop-aprovar-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Pagamento aprovado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Pagamento aprovado</p><p class="rc-dialog-desc">A conta entrou na fila de pagamento de 26/11. A aprovação ficou registrada com seu nome e a hora.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-devolver" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Devolver com motivo">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="arrow-left" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Devolver com motivo</p><p class="rc-dialog-desc">Quem pediu recebe o motivo e pode corrigir.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><x-import component-from-global-scope="Recreio.TextArea" label="Motivo" default-value="Falta a nota fiscal do fornecedor." rows="{{n2}}"></x-import></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-devolver-ok">Devolver</a></div>
+</div>
+</div>
+<div id="pop-devolver-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Conta devolvida">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Conta devolvida</p><p class="rc-dialog-desc">Renata Alencar foi avisada. A conta sai da fila até a correção.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-pagar" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Pagar a conta">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="card" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Pagar a conta</p><p class="rc-dialog-desc">Imobiliária Dunas · R$ 128.000,00 · aprovada por Lúcia Menezes em 24/11.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: flex; flex-direction: column; gap: 14px;"><x-import component-from-global-scope="Recreio.Select" label="Pagar pela conta" default-value="itau" options="{{contas}}"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Data do pagamento" default-value="30/11/2026" icon="calendar"></x-import><p style="margin: 0; font-size: 14px; color: var(--ink-2);">O pagamento sai pelo banco. O comprovante volta sozinho para esta conta.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-pagar-ok">Agendar pagamento</a></div>
+</div>
+</div>
+<div id="pop-pagar-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Pagamento agendado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Pagamento agendado</p><p class="rc-dialog-desc">Sai do Itaú em 30/11. O saldo previsto da semana 4 já considera esse valor.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-recibo" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Comprovante pronto">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="download" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Comprovante pronto</p><p class="rc-dialog-desc">comprovante-cagece-2026-10.pdf foi baixado.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-conciliar" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Conciliar lançamento">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="sync" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Conciliar lançamento</p><p class="rc-dialog-desc">PIX de R$ 1.480,00 recebido de Marcos Feitosa em 24/11.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><x-import component-from-global-scope="Recreio.RadioGroup" legend="O que é este valor" value="a" options="{{sugest}}"></x-import></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-conciliar-ok">Conciliar</a></div>
+</div>
+</div>
+<div id="pop-conciliar-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Lançamento conciliado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Lançamento conciliado</p><p class="rc-dialog-desc">A mensalidade foi baixada e a nota fiscal entra no próximo lote.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-ofx" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Importar extrato">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="upload" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Importar extrato</p><p class="rc-dialog-desc">Arquivo OFX do banco. O sistema casa sozinho o que tem o mesmo valor e a mesma data.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><x-import component-from-global-scope="Recreio.FileDrop" label="Extrato do banco" hint="Arquivo OFX ou CSV"></x-import></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-ofx-ok">Importar</a></div>
+</div>
+</div>
+<div id="pop-ofx-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Extrato importado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Extrato importado</p><p class="rc-dialog-desc">214 lançamentos lidos. 208 conciliados sozinhos e 6 esperam você.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-saldo" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Saldo por conta">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="wallet" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Saldo por conta</p><p class="rc-dialog-desc">Atualizado hoje, às 8h10, pelo extrato.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div>
+<sc-for list="{{saldosC}}" as="p" hint-placeholder-count="2">
+<div class="rc-popup-row" style="grid-template-columns: 36px minmax(0, 1fr) auto;"><span class="rc-dialog-icon {{p.cls}}" style="width: 36px; height: 36px; border-radius: var(--radius-sm);"><x-import component-from-global-scope="Recreio.Icon" name="{{p.icon}}" size="{{s18}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{p.nome}}</strong><small style="color: var(--ink-2);">{{p.meta}}</small></span><strong style="font-variant-numeric: tabular-nums;">{{p.st}}</strong></div>
+</sc-for>
+</div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Fechar</a></div>
+</div>
+</div>
+<div id="pop-lembrar-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Lembrete enviado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Lembrete enviado</p><p class="rc-dialog-desc">Roberto Farias recebeu o aviso da conta que espera por ele.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc></template><script id="dc-js" type="text/plain">
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 5, bellNotifs: [
+      { icon: 'clipboard', title: '5 justificativas para analisar', text: 'Frequência · Fundamental II', time: 'Hoje, 11h05', unread: true, priority: 'importante' },
+      { icon: 'chat', title: 'Fernanda Lima respondeu no chat', text: 'Ana Beatriz · 9º ano A', time: 'Hoje, 10h12', unread: true, priority: 'rotina' },
+      { icon: 'edit', title: 'História 9º B: faltam 4 notas', text: 'Fechamento do 4º bimestre', time: 'Hoje, 9h00', unread: true, priority: 'importante' },
+      { icon: 'alert', title: 'Ocorrência sem resposta da família', text: 'Mateus Holanda · 9º ano C · há 7 dias', time: 'Hoje, 8h30', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: '63 mensalidades vencidas', text: '41 famílias · a régua de cobrança enviou lembretes', time: 'Hoje, 7h00', unread: true, priority: 'rotina' }] };
+    const tabs = [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'comunicados', label: 'Avisos', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }];
+    const shared = {
+      bellCount: 5, activeChild: undefined, activeProfile: 'dir', kids: [],
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      units: [{ id: 'aldeota', label: 'Unidade Aldeota', meta: '1.248 alunos · Infantil ao Médio', href: 'Escola-Painel.dc.html', current: true }, { id: 'eusebio', label: 'Unidade Eusébio', meta: '936 alunos · Infantil e Fundamental I', href: 'Escola-Painel.dc.html' }, { id: 'rede', label: 'Todas as unidades', meta: 'Visão consolidada da rede', href: 'Escola-Painel.dc.html' }],
+      user: { name: 'Lúcia Menezes' },
+      profiles: [{ id: 'dir', label: 'Direção', icon: 'shield', school: 'Colégio Recreio' }, { id: 'prof', label: 'Professora', icon: 'book', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'chat', label: 'Chat com famílias', icon: 'chat', count: 4, href: 'Escola-Chat.dc.html' }] },
+        { label: 'Pedagógico', items: [{ id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Escola-Horarios.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'clipboard', count: 5, href: 'Escola-Frequencia.dc.html' }, { id: 'boletins', label: 'Fechamento e boletins', icon: 'chart', href: 'Escola-Boletins.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 3, href: 'Escola-Ocorrencias.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Escola-Integral.dc.html' }, { id: 'saude', label: 'Saúde e enfermaria', icon: 'heart', href: 'Escola-Saude.dc.html' }, { id: 'inclusao', label: 'Inclusão e AEE', icon: 'accessibility', href: 'Escola-Inclusao.dc.html' }, { id: 'medidas', label: 'Medidas disciplinares', icon: 'flag', href: 'Escola-Medidas.dc.html' }, { id: 'extras', label: 'Pontos extras', icon: 'star', href: 'Escola-Pontos-extras.dc.html' }, { id: 'eja', label: 'EJA', icon: 'moon', href: 'Escola-EJA.dc.html' }] },
+        { label: 'Secretaria', items: [{ id: 'alunos', label: 'Alunos', icon: 'users', href: 'Escola-Alunos.dc.html' }, { id: 'equipe', label: 'Equipe', icon: 'user', href: 'Escola-Equipe.dc.html' }, { id: 'captacao', label: 'Captação', icon: 'filter', count: 9, href: 'Escola-Captacao.dc.html' }, { id: 'matriculas', label: 'Matrículas', icon: 'file-text', count: 12, href: 'Escola-Matriculas.dc.html' }, { id: 'contratos', label: 'Contratos', icon: 'edit', count: 200, href: 'Escola-Contratos.dc.html' }, { id: 'solicitacoes', label: 'Solicitações', icon: 'file', count: 6, href: 'Escola-Solicitacoes.dc.html' }, { id: 'certificados', label: 'Certificados e diplomas', icon: 'graduation', href: 'Escola-Certificados.dc.html' }, { id: 'transferencias', label: 'Transferências', icon: 'sync', href: 'Escola-Transferencias.dc.html' }, { id: 'fotos', label: 'Fotos de alunos', icon: 'camera', href: 'Escola-Fotos.dc.html' }, { id: 'importacao', label: 'Migração de dados', icon: 'upload', href: 'Escola-Importacao.dc.html' }, { id: 'calendario', label: 'Calendário letivo', icon: 'flag', href: 'Escola-Calendario.dc.html' }, { id: 'autorizacoes', label: 'Passeios e autorizações', icon: 'key', href: 'Escola-Autorizacoes.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Escola-Biblioteca.dc.html' }] },
+        { label: 'Família e serviços', items: [{ id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 4, href: 'Escola-Atendimentos.dc.html' }, { id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Escola-Cardapio.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', href: 'Escola-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', count: 9, href: 'Escola-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', href: 'Escola-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'mensalidades', label: 'Mensalidades', icon: 'wallet', count: 41, urgent: true, href: 'Escola-Mensalidades.dc.html' }, { id: 'fiscal', label: 'Notas fiscais e IR', icon: 'receipt', count: 3, href: 'Escola-Fiscal.dc.html' }, { id: 'dae', label: 'DAE SEFAZ-CE', icon: 'receipt', href: 'Escola-DAE.dc.html' }, { id: 'caixa', label: 'Caixa e contas a pagar', icon: 'card', href: 'Escola-Caixa.dc.html' }] },
+        { label: 'Gestão', items: [{ id: 'relatorios', label: 'Relatórios e censo', icon: 'sparkline', href: 'Escola-Relatorios.dc.html' }, { id: 'permissoes', label: 'Grupos e permissões', icon: 'shield', href: 'Escola-Permissoes.dc.html' }, { id: 'modulos', label: 'Módulos e marca', icon: 'modules', href: 'Escola-Modulos.dc.html' }] }]
+    };
+    const __r = Object.assign({ yes: true, no: false, tabs }, shared, {
+      user: { name: 'Paulo Ribeiro' }, activeProfile: 'fin', profiles: [{ id: 'fin', label: 'Financeiro', icon: 'wallet', school: 'Colégio Recreio' }],
+      n2: 2, n3: 3, n4: 4, n5: 5, n6: 6,
+      go_pop_aprovar: () => { location.hash = 'pop-aprovar'; }, go_pop_aprovar_ok: () => { location.hash = 'pop-aprovar-ok'; }, go_pop_conciliar: () => { location.hash = 'pop-conciliar'; }, go_pop_conciliar_ok: () => { location.hash = 'pop-conciliar-ok'; }, go_pop_devolver: () => { location.hash = 'pop-devolver'; }, go_pop_devolver_ok: () => { location.hash = 'pop-devolver-ok'; }, go_pop_lembrar_ok: () => { location.hash = 'pop-lembrar-ok'; }, go_pop_lidas: () => { location.hash = 'pop-lidas'; }, go_pop_nova: () => { location.hash = 'pop-nova'; }, go_pop_nova_ok: () => { location.hash = 'pop-nova-ok'; }, go_pop_ofx: () => { location.hash = 'pop-ofx'; }, go_pop_ofx_ok: () => { location.hash = 'pop-ofx-ok'; }, go_pop_pagar: () => { location.hash = 'pop-pagar'; }, go_pop_pagar_ok: () => { location.hash = 'pop-pagar-ok'; }, go_pop_recibo: () => { location.hash = 'pop-recibo'; }, go_pop_saldo: () => { location.hash = 'pop-saldo'; },
+brl: (v) => window.Recreio.brl(v), brl0: (v) => window.Recreio.brl(v, { maximumFractionDigits: 0 }), pct: (v) => window.Recreio.num(v, 0) + '%', pct1: (v) => window.Recreio.num(v, 1) + '%', um1: (v) => window.Recreio.num(v, 1),
+      saldo: 1481480, apagar: 986240, nApr: 4, nConc: 6, k: (v) => 'R$ ' + window.Recreio.num(v / 1000, 0) + ' mil',
+      meses: [{ value: '2026-11', label: 'Novembro de 2026' }, { value: '2026-12', label: 'Dezembro de 2026' }, { value: '2026-10', label: 'Outubro de 2026' }],
+      contas: [{ value: 'todas', label: 'Todas as contas' }, { value: 'bb', label: 'Banco do Brasil · final 3407' }, { value: 'itau', label: 'Itaú · final 8815' }],
+      cats: [{ value: 'todas', label: 'Todas as categorias' }, { value: 'folha', label: 'Folha e encargos' }, { value: 'aluguel', label: 'Aluguel' }, { value: 'alim', label: 'Alimentação' }, { value: 'manut', label: 'Manutenção' }, { value: 'mat', label: 'Material' }, { value: 'util', label: 'Energia, água e internet' }],
+      fluxo: [
+        { sem: 'Semana 1', per: '02 a 06/11', ep: 'R$ 612.000', er: 'R$ 598.420', sp: 'R$ 388.000', sr: 'R$ 391.150' },
+        { sem: 'Semana 2', per: '09 a 13/11', ep: 'R$ 884.000', er: 'R$ 902.760', sp: 'R$ 142.000', sr: 'R$ 139.880' },
+        { sem: 'Semana 3', per: '16 a 20/11', ep: 'R$ 246.000', er: 'R$ 231.900', sp: 'R$ 118.000', sr: 'R$ 121.470' },
+        { sem: 'Semana 4', per: '23 a 30/11', ep: 'R$ 182.000', er: 'R$ 191.300', sp: 'R$ 986.240', sr: 'R$ 21.400' }],
+      saldos: [{ label: 'Sem. 1', value: 438270 }, { label: 'Sem. 2', value: 1201150 }, { label: 'Sem. 3', value: 1311580 }, { label: 'Sem. 4', value: 516640 }],
+      pagar: [
+        { forn: 'Folha de pagamento', desc: '94 colaboradores · novembro', cat: 'Folha e encargos', venc: '30/11', valor: 'R$ 742.300,00', st: 'Com a direção geral', tone: 'warning', bl: 'Ver', href: '#pop-aprovar', bv: 'ghost' },
+        { forn: 'Imobiliária Dunas', desc: 'Aluguel da sede Aldeota', cat: 'Aluguel', venc: '30/11', valor: 'R$ 128.000,00', st: 'Aprovada', tone: 'success', bl: 'Pagar', href: '#pop-pagar', bv: 'secondary' },
+        { forn: 'Sabor da Serra Alimentos', desc: 'Hortifrúti e carnes · semana 4', cat: 'Alimentação', venc: '27/11', valor: 'R$ 18.640,00', st: 'Com a direção administrativa', tone: 'warning', bl: 'Ver', href: '#pop-aprovar', bv: 'ghost' },
+        { forn: 'Enel Ceará', desc: 'Energia · outubro', cat: 'Energia, água e internet', venc: '26/11', valor: 'R$ 31.870,00', st: 'Aprovada', tone: 'success', bl: 'Pagar', href: '#pop-pagar', bv: 'secondary' },
+        { forn: 'Papelaria Central', desc: 'Papel sulfite e cartuchos', cat: 'Material', venc: '26/11', valor: 'R$ 1.840,00', st: 'Espera você', tone: 'info', bl: 'Aprovar', href: '#pop-aprovar', bv: 'primary' },
+        { forn: 'Clima Frio Refrigeração', desc: 'Conserto do ar da sala 12', cat: 'Manutenção', venc: '24/11', valor: 'R$ 960,00', st: 'Vencida', tone: 'danger', bl: 'Aprovar', href: '#pop-aprovar', bv: 'primary' },
+        { forn: 'Cagece', desc: 'Água e esgoto · outubro', cat: 'Energia, água e internet', venc: '19/11', valor: 'R$ 9.412,00', st: 'Paga em 19/11', tone: 'neutral', bl: 'Recibo', href: '#pop-recibo', bv: 'ghost' }],
+      aprovacoes: [
+        { nome: 'Papelaria Central · R$ 1.840,00', meta: 'Material · vence amanhã · pedido de Renata Alencar', v: 'R$ 1.840,00', bl: 'Aprovar', bv: 'primary', href: '#pop-aprovar', cls: 'rc-tone-brand' },
+        { nome: 'Clima Frio Refrigeração · R$ 960,00', meta: 'Manutenção · venceu ontem · nota anexada', v: 'R$ 960,00', bl: 'Aprovar', bv: 'primary', href: '#pop-aprovar', cls: 'rc-tone-danger' },
+        { nome: 'Sabor da Serra · R$ 18.640,00', meta: 'Acima da sua alçada · com Roberto Farias desde ontem', v: 'R$ 18.640,00', bl: 'Lembrar', bv: 'ghost', href: '#pop-lembrar-ok', cls: 'rc-tone-warning' }],
+      concil: [
+        { icon: 'arrow-down-right', cor: 'verde', t: 'Pix de Marcos Feitosa', m: 'Entrada de R$ 1.480,00 em 24/11 · sem mensalidade desse valor' },
+        { icon: 'arrow-down-right', cor: 'verde', t: '3 depósitos sem nome', m: 'Entrada de R$ 4.722,18 em 24/11 · conta final 3407' },
+        { icon: 'arrow-up-right', cor: 'vermelho', t: 'Débito da Enel Ceará', m: 'Saída de R$ 2.106,40 em 24/11 · conta ainda não lançada' },
+        { icon: 'arrow-up-right', cor: 'vermelho', t: 'Tarifa bancária', m: 'Saída de R$ 189,00 em 24/11 · pacote de serviços' }],
+      despesas: [{ t: 'Folha e encargos', m: 'R$ 876.000 · 62%', v: 62, tone: 'brand' }, { t: 'Aluguel', m: 'R$ 128.000 · 9%', v: 9, tone: 'brand' }, { t: 'Alimentação', m: 'R$ 113.000 · 8%', v: 8, tone: 'brand' }, { t: 'Manutenção', m: 'R$ 84.800 · 6%', v: 6, tone: 'brand' }, { t: 'Material', m: 'R$ 70.600 · 5%', v: 5, tone: 'brand' }, { t: 'Energia, água, internet e outros', m: 'R$ 140.500 · 10%', v: 10, tone: 'brand' }],
+      saldosC: [{ nome: 'Banco do Brasil · final 3407', meta: 'Conta de recebimento · Pix e boletos', st: 'R$ 1.388.040,12', tone: 'success', icon: 'wallet', cls: 'rc-tone-success' }, { nome: 'Itaú · final 8815', meta: 'Conta de pagamento · folha e fornecedores', st: 'R$ 93.439,88', tone: 'neutral', icon: 'card', cls: 'rc-tone-brand' }],
+      detConta: [{ l: 'Fornecedor', v: 'Papelaria Central Ltda.' }, { l: 'Descrição', v: 'Papel sulfite A4 (40 resmas) e 6 cartuchos' }, { l: 'Categoria', v: 'Material · Unidade Aldeota' }, { l: 'Valor', v: 'R$ 1.840,00' }, { l: 'Vencimento', v: '26/11/2026 · boleto' }, { l: 'Pedido por', v: 'Renata Alencar em 23/11/2026' }, { l: 'Anexos', v: 'nota-fiscal-4471.pdf · boleto.pdf' }],
+      formas: [{ value: 'boleto', label: 'Boleto' }, { value: 'pix', label: 'Pix' }, { value: 'ted', label: 'Transferência' }, { value: 'deb', label: 'Débito automático' }],
+      sugest: [{ value: 'a', label: 'Matrícula de 2027 · Sofia Feitosa (proposta aceita)', description: 'Mesmo valor e mesmo pagador.' }, { value: 'b', label: 'Lançar como adiantamento', description: 'Fica como crédito da família.' }, { value: 'c', label: 'Outro lançamento' }]
+,
+      sedesC: [{ value: 'aldeota', label: 'Unidade Aldeota' }, { value: 'eusebio', label: 'Unidade Eusébio' }, { value: 'rateio', label: 'Rateio entre as sedes' }]
+    });
+    /* Controle de acesso: cada perfil vê só os módulos liberados em Grupos e permissões. */
+    const ACESSO = { prof: ['comunicados', 'notas', 'chamada', 'agenda', 'frequencia', 'ocorrencias', 'inicio', 'diario', 'horarios', 'materiais', 'atendimentos', 'tarefas'], coord: ['painel', 'comunicados', 'chat', 'notas', 'chamada', 'agenda', 'frequencia', 'boletins', 'ocorrencias', 'integral', 'alunos', 'autorizacoes', 'equipe', 'horarios', 'calendario', 'atendimentos', 'cardapio', 'galeria', 'pesquisas', 'saude', 'inclusao', 'relatorios', 'biblioteca', 'portaria', 'medidas', 'extras', 'eja', 'certificados'], sec: ['comunicados', 'alunos', 'matriculas', 'contratos', 'autorizacoes', 'portaria', 'equipe', 'solicitacoes', 'calendario', 'horarios', 'loja', 'pesquisas', 'captacao', 'certificados', 'transferencias', 'fotos', 'importacao'], fin: ['comunicados', 'alunos', 'contratos', 'mensalidades', 'loja', 'fiscal', 'caixa', 'dae'], bib: ['comunicados', 'biblioteca'], port: ['comunicados', 'portaria', 'autorizacoes'], int: ['comunicados', 'chamada', 'integral', 'ocorrencias'], nutri: ['comunicados', 'cardapio'], enf: ['comunicados', 'saude'], aee: ['comunicados', 'inclusao', 'atendimentos', 'ocorrencias'] };
+    const permitidos = ACESSO[__r.activeProfile];
+    if (permitidos) {
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.filter((i) => permitidos.includes(i.id)) })).filter((g) => g.items.length);
+      __r.tabs = (__r.tabs || []).filter((t) => permitidos.includes(t.id));
+      __r.units = null;
+    }
+    /* Biblioteca e portaria: direção e coordenação entram pela visão de gestão. A operação fica com a bibliotecária e a portaria. */
+    if (['dir', 'coord'].includes(__r.activeProfile)) {
+      const GESTAO = { biblioteca: 'Escola-Biblioteca-Gestao.dc.html', portaria: 'Escola-Portaria-Gestao.dc.html' };
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.map((i) => (GESTAO[i.id] ? Object.assign({}, i, { href: GESTAO[i.id] }) : i)) }));
+      __r.tabs = (__r.tabs || []).map((t) => (GESTAO[t.id] ? Object.assign({}, t, { href: GESTAO[t.id] }) : t));
+    }
+    /* Portal do professor: quem entra como professor vê o próprio menu, com as turmas e o planejamento. */
+    if (__r.activeProfile === 'prof') {
+      __r.nav = [
+        { items: [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }] },
+        { label: 'Minhas turmas', items: [{ id: 'diario', label: 'Diário de classe', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'tarefas', label: 'Tarefas', icon: 'list', count: 6, href: 'Professor-Tarefas.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', href: 'Escola-Ocorrencias.dc.html' }] },
+        { label: 'Planejamento', items: [{ id: 'horarios', label: 'Meus horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Professor-Materiais.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 2, href: 'Escola-Atendimentos.dc.html' }] }];
+      __r.tabs = [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'diario', label: 'Diário', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }];
+    }
+    return Object.assign({ s12: 12, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96 }, bell, __r);
+  }
+}
+</script><script src="vendor/runtime.js"></script></body></html>

@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Professor: Diário de classe</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<link rel="stylesheet" href="telas.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" units="{{units}}" groups="{{nav}}" active="diario"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="clipboard" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Diário de classe</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Portal do professor · conteúdo dado, plano de aula e situação do diário</p></div></div>
+<a class="rc-btn rc-btn-ghost rc-btn-sm" href="Aluno-Hoje.dc.html">Ver como o aluno vê</a>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar aluno, turma ou aula" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Escola-Notificacoes.dc.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px; padding: 16px 20px; border-radius: var(--radius-lg); background: var(--surface-1); border: 1px solid var(--line); box-shadow: var(--shadow-1);">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; min-width: 0; max-width: 100%;">
+<x-import component-from-global-scope="Recreio.Select" label="Turma" default-value="b9" options="{{turmasSel}}"></x-import><x-import component-from-global-scope="Recreio.Select" label="Disciplina" default-value="mat" options="{{discSel}}"></x-import><div style="display: flex; flex-direction: column; gap: 6px;"><span style="font-size: 14px; font-weight: 600;">Bimestre</span><x-import component-from-global-scope="Recreio.SegmentedControl" label="Bimestre" value="b4" options="{{bims}}"></x-import></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-secondary" href="#pop-imprimir"><x-import component-from-global-scope="Recreio.Icon" name="download" size="{{s18}}"></x-import>Imprimir diário</a><a class="rc-btn rc-btn-primary" href="#pop-aula"><x-import component-from-global-scope="Recreio.Icon" name="plus" size="{{s18}}"></x-import>Registrar aula</a></div>
+</div>
+<section aria-label="Indicadores do diário" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px;">
+<x-import component-from-global-scope="Recreio.StatCard" color="azul" label="Aulas dadas" value="{{dadas}}" icon="check-circle" hint="De 40 previstas no 4º bimestre" format="{{de40}}"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="amarelo" label="Sem conteúdo" value="{{semCont}}" icon="clipboard" hint="19/11 e 24/11 · registre até 04/12"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="verde" label="Frequência da turma" value="{{freq}}" icon="users" hint="3 alunos abaixo de 85%" format="{{pct}}" href="Escola-Frequencia.dc.html"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="roxo" label="Dias para o fechamento" value="{{dias}}" icon="lock" hint="A coordenação fecha em 04/12"></x-import>
+</section>
+<div class="rc-split" style="gap: 24px; align-items: start; --split: minmax(0, 3fr) minmax(320px, 2fr);">
+<div style="display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Aulas registradas" subtitle="9º ano B · Matemática · 4º bimestre · da mais recente para a mais antiga" actions="{{verTodas}}">
+<div>
+<sc-for list="{{aulas}}" as="a" hint-placeholder-count="8">
+<div class="tl-linha {{a.cls}}" style="--cols: 92px minmax(0, 1fr) auto;"><span class="tl-linha-hora"><strong style="display: block;">{{a.d}}</strong><small>{{a.n}}</small></span><span style="min-width: 0;"><strong style="display: block;">{{a.t}}</strong><small>{{a.m}}</small></span><span class="tl-linha-fim"><small style="white-space: nowrap;">{{a.pres}}</small><x-import component-from-global-scope="Recreio.StatusPill" tone="{{a.tone}}" size="sm">{{a.st}}</x-import><a class="rc-btn rc-btn-{{a.bv}} rc-btn-sm" href="{{a.href}}">{{a.bl}}</a></span></div>
+</sc-for>
+</div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Quem faz o quê neste diário" subtitle="Regras do grupo de acesso, definidas pela direção">
+<div>
+<sc-for list="{{papeis}}" as="p" hint-placeholder-count="3">
+<div class="rc-popup-row" style="grid-template-columns: 36px minmax(0, 1fr) auto;"><span class="rc-dialog-icon {{p.cls}}" style="width: 36px; height: 36px; border-radius: var(--radius-sm);"><x-import component-from-global-scope="Recreio.Icon" name="{{p.icon}}" size="{{s18}}"></x-import></span><span style="min-width: 0;"><strong style="display: block;">{{p.nome}}</strong><small style="color: var(--ink-2);">{{p.meta}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{p.tone}}" size="sm">{{p.st}}</x-import></div>
+</sc-for>
+</div>
+</x-import>
+</div>
+<div style="display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Plano da aula de hoje" subtitle="Quarta, 25/11 · 1ª aula · Fórmula de Bhaskara" actions="{{editPlano}}">
+<div style="display: flex; flex-direction: column; gap: 16px;"><dl class="rc-fields" style="grid-template-columns: minmax(0, 1fr);">
+<sc-for list="{{plano}}" as="f" hint-placeholder-count="6"><div class="rc-field {{f.cls}}"><dt>{{f.l}}</dt><dd>{{f.v}}</dd></div></sc-for>
+</dl><div style="display: flex; flex-wrap: wrap; gap: 6px;"><sc-for list="{{bncc}}" as="b" hint-placeholder-count="2"><x-import component-from-global-scope="Recreio.StatusPill" tone="info" size="sm">{{b}}</x-import></sc-for></div></div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Card" title="Planejamento do bimestre" subtitle="4 unidades · 34 de 40 aulas">
+<div style="display: flex; flex-direction: column; gap: 14px;"><sc-for list="{{unidades}}" as="u" hint-placeholder-count="4"><div><div style="display: flex; justify-content: space-between; gap: 12px; margin-bottom: 6px;"><strong style="font-weight: 600;">{{u.t}}</strong><small style="color: var(--ink-2); white-space: nowrap;">{{u.m}}</small></div><x-import component-from-global-scope="Recreio.ProgressBar" value="{{u.v}}" tone="{{u.tone}}" size="sm" label="{{u.t}}" hide-label="{{yes}}"></x-import></div></sc-for></div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Alert" tone="warning" title="Diário aberto até 04/12">Depois do fechamento você só consulta. Para corrigir um registro, peça a reabertura à coordenação.</x-import>
+</div>
+</div>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="diario"></x-import>
+</div>
+</div>
+<div id="pop-aula" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Registrar aula">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="clipboard" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Registrar aula</p><p class="rc-dialog-desc">9º ano B · Matemática. A chamada fica na tela de Chamada. Aqui entra o que foi dado.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: flex; flex-direction: column; gap: 14px;"><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px 16px;"><x-import component-from-global-scope="Recreio.TextField" label="Data" default-value="24/11/2026" icon="calendar"></x-import><x-import component-from-global-scope="Recreio.Select" label="Quantidade" default-value="2" options="{{aulasSel}}"></x-import></div><x-import component-from-global-scope="Recreio.TextArea" label="Conteúdo dado" default-value="Fórmula de Bhaskara: dedução a partir do quadrado perfeito e primeiros exemplos." rows="{{n3}}"></x-import><x-import component-from-global-scope="Recreio.TextArea" label="Tarefa de casa" default-value="Livro, página 140, exercícios 3 a 9." rows="{{n2}}"></x-import><x-import component-from-global-scope="Recreio.Checkbox" label="Publicar a tarefa na agenda da turma" description="A família e o aluno veem hoje mesmo." default-checked="{{yes}}"></x-import></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-aula-ok">Salvar no diário</a></div>
+</div>
+</div>
+<div id="pop-aula-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Aula registrada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Aula registrada</p><p class="rc-dialog-desc">O conteúdo entrou no diário do 9º B e a tarefa foi para a agenda da turma.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-plano" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Plano de aula">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="edit" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Plano de aula</p><p class="rc-dialog-desc">O plano fica salvo no seu banco de aulas e pode ser reaproveitado em outra turma.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><x-import component-from-global-scope="Recreio.SaveGuard" label="Salvar plano" hint="Mude um campo para liberar o botão Salvar" on-save="{{go_pop_plano_ok}}">
+<div style="display: flex; flex-direction: column; gap: 14px;"><x-import component-from-global-scope="Recreio.TextField" label="Tema" default-value="Fórmula de Bhaskara: discriminante"></x-import><x-import component-from-global-scope="Recreio.TextArea" label="Objetivo" default-value="Usar o discriminante para dizer quantas raízes reais tem uma equação do 2º grau." rows="{{n2}}"></x-import><x-import component-from-global-scope="Recreio.TextArea" label="Desenvolvimento" default-value="Retomada da fórmula, 3 exemplos no quadro, duplas resolvem os exercícios 1 a 8 e corrigem entre si." rows="{{n3}}"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Habilidades da BNCC" default-value="EF09MA09, EF09MA06"></x-import></div>
+</x-import></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a></div>
+</div>
+</div>
+<div id="pop-plano-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Plano salvo">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Plano salvo</p><p class="rc-dialog-desc">Ele aparece no diário de hoje e em Materiais de aula, no banco de planos.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-imprimir" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Imprimir o diário">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="download" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Imprimir o diário</p><p class="rc-dialog-desc">Gera o PDF oficial com frequência, conteúdo e notas, no modelo da secretaria.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><x-import component-from-global-scope="Recreio.RadioGroup" legend="Período" value="bim" options="{{impr}}"></x-import></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-imprimir-ok">Gerar PDF</a></div>
+</div>
+</div>
+<div id="pop-imprimir-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="PDF pronto">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="download" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">PDF pronto</p><p class="rc-dialog-desc">diario-9B-matematica-4bim.pdf · 12 páginas. Aulas sem conteúdo saem marcadas.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Baixar arquivo</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1720}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 5, bellNotifs: [
+      { icon: 'clipboard', title: '5 justificativas para analisar', text: 'Frequência · Fundamental II', time: 'Hoje, 11h05', unread: true, priority: 'importante' },
+      { icon: 'chat', title: 'Fernanda Lima respondeu no chat', text: 'Ana Beatriz · 9º ano A', time: 'Hoje, 10h12', unread: true, priority: 'rotina' },
+      { icon: 'edit', title: 'História 9º B: faltam 4 notas', text: 'Fechamento do 4º bimestre', time: 'Hoje, 9h00', unread: true, priority: 'importante' },
+      { icon: 'alert', title: 'Ocorrência sem resposta da família', text: 'Mateus Holanda · 9º ano C · há 7 dias', time: 'Hoje, 8h30', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: '63 mensalidades vencidas', text: '41 famílias · a régua de cobrança enviou lembretes', time: 'Hoje, 7h00', unread: true, priority: 'rotina' }] };
+    const tabs = [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'comunicados', label: 'Avisos', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }];
+    const shared = {
+      bellCount: 5, activeChild: undefined, activeProfile: 'dir', kids: [],
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      units: [{ id: 'aldeota', label: 'Unidade Aldeota', meta: '1.248 alunos · Infantil ao Médio', href: 'Escola-Painel.dc.html', current: true }, { id: 'eusebio', label: 'Unidade Eusébio', meta: '936 alunos · Infantil e Fundamental I', href: 'Escola-Painel.dc.html' }, { id: 'rede', label: 'Todas as unidades', meta: 'Visão consolidada da rede', href: 'Escola-Painel.dc.html' }],
+      user: { name: 'Lúcia Menezes' },
+      profiles: [{ id: 'dir', label: 'Direção', icon: 'shield', school: 'Colégio Recreio' }, { id: 'prof', label: 'Professora', icon: 'book', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'chat', label: 'Chat com famílias', icon: 'chat', count: 4, href: 'Escola-Chat.dc.html' }] },
+        { label: 'Pedagógico', items: [{ id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Escola-Horarios.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'clipboard', count: 5, href: 'Escola-Frequencia.dc.html' }, { id: 'boletins', label: 'Fechamento e boletins', icon: 'chart', href: 'Escola-Boletins.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 3, href: 'Escola-Ocorrencias.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Escola-Integral.dc.html' }, { id: 'saude', label: 'Saúde e enfermaria', icon: 'heart', href: 'Escola-Saude.dc.html' }, { id: 'inclusao', label: 'Inclusão e AEE', icon: 'accessibility', href: 'Escola-Inclusao.dc.html' }, { id: 'medidas', label: 'Medidas disciplinares', icon: 'flag', href: 'Escola-Medidas.dc.html' }, { id: 'extras', label: 'Pontos extras', icon: 'star', href: 'Escola-Pontos-extras.dc.html' }, { id: 'eja', label: 'EJA', icon: 'moon', href: 'Escola-EJA.dc.html' }] },
+        { label: 'Secretaria', items: [{ id: 'alunos', label: 'Alunos', icon: 'users', href: 'Escola-Alunos.dc.html' }, { id: 'equipe', label: 'Equipe', icon: 'user', href: 'Escola-Equipe.dc.html' }, { id: 'captacao', label: 'Captação', icon: 'filter', count: 9, href: 'Escola-Captacao.dc.html' }, { id: 'matriculas', label: 'Matrículas', icon: 'file-text', count: 12, href: 'Escola-Matriculas.dc.html' }, { id: 'contratos', label: 'Contratos', icon: 'edit', count: 200, href: 'Escola-Contratos.dc.html' }, { id: 'solicitacoes', label: 'Solicitações', icon: 'file', count: 6, href: 'Escola-Solicitacoes.dc.html' }, { id: 'certificados', label: 'Certificados e diplomas', icon: 'graduation', href: 'Escola-Certificados.dc.html' }, { id: 'transferencias', label: 'Transferências', icon: 'sync', href: 'Escola-Transferencias.dc.html' }, { id: 'fotos', label: 'Fotos de alunos', icon: 'camera', href: 'Escola-Fotos.dc.html' }, { id: 'importacao', label: 'Migração de dados', icon: 'upload', href: 'Escola-Importacao.dc.html' }, { id: 'calendario', label: 'Calendário letivo', icon: 'flag', href: 'Escola-Calendario.dc.html' }, { id: 'autorizacoes', label: 'Passeios e autorizações', icon: 'key', href: 'Escola-Autorizacoes.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Escola-Biblioteca.dc.html' }] },
+        { label: 'Família e serviços', items: [{ id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 4, href: 'Escola-Atendimentos.dc.html' }, { id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Escola-Cardapio.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', href: 'Escola-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', count: 9, href: 'Escola-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', href: 'Escola-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'mensalidades', label: 'Mensalidades', icon: 'wallet', count: 41, urgent: true, href: 'Escola-Mensalidades.dc.html' }, { id: 'fiscal', label: 'Notas fiscais e IR', icon: 'receipt', count: 3, href: 'Escola-Fiscal.dc.html' }, { id: 'dae', label: 'DAE SEFAZ-CE', icon: 'receipt', href: 'Escola-DAE.dc.html' }, { id: 'caixa', label: 'Caixa e contas a pagar', icon: 'card', href: 'Escola-Caixa.dc.html' }] },
+        { label: 'Gestão', items: [{ id: 'relatorios', label: 'Relatórios e censo', icon: 'sparkline', href: 'Escola-Relatorios.dc.html' }, { id: 'permissoes', label: 'Grupos e permissões', icon: 'shield', href: 'Escola-Permissoes.dc.html' }, { id: 'modulos', label: 'Módulos e marca', icon: 'modules', href: 'Escola-Modulos.dc.html' }] }]
+    };
+    const __r = Object.assign({ yes: true, no: false, tabs }, shared, {
+      user: { name: 'Ricardo Albuquerque' }, activeProfile: 'prof', profiles: [{ id: 'prof', label: 'Professor', icon: 'book', school: 'Colégio Recreio' }],
+      n2: 2, n3: 3, n4: 4, n5: 5, n6: 6,
+      go_pop_aula: () => { location.hash = 'pop-aula'; }, go_pop_aula_ok: () => { location.hash = 'pop-aula-ok'; }, go_pop_imprimir: () => { location.hash = 'pop-imprimir'; }, go_pop_imprimir_ok: () => { location.hash = 'pop-imprimir-ok'; }, go_pop_lidas: () => { location.hash = 'pop-lidas'; }, go_pop_plano: () => { location.hash = 'pop-plano'; }, go_pop_plano_ok: () => { location.hash = 'pop-plano-ok'; },
+      dadas: 34, semCont: 3, freq: 91, dias: 9, de40: (v) => Math.round(v) + ' de 40', pct: (v) => window.Recreio.num(v, 0) + '%',
+      turmasSel: [{ value: 'a9', label: '9º ano A' }, { value: 'b9', label: '9º ano B' }, { value: 'a8', label: '8º ano A' }, { value: 'em', label: '1ª série EM' }],
+      discSel: [{ value: 'mat', label: 'Matemática' }, { value: 'fis', label: 'Física' }],
+      bims: [{ value: 'b1', label: '1º' }, { value: 'b2', label: '2º' }, { value: 'b3', label: '3º' }, { value: 'b4', label: '4º' }],
+      verTodas: React.createElement('a', { className: 'rc-btn rc-btn-ghost rc-btn-sm', href: '#pop-imprimir' }, 'Ver as 34 aulas'),
+      editPlano: React.createElement('a', { className: 'rc-btn rc-btn-ghost rc-btn-sm', href: '#pop-plano' }, 'Editar plano'),
+      aulas: [
+        { d: '25/11', n: 'Aula 34 · hoje', t: 'Fórmula de Bhaskara: discriminante', m: 'Exercícios 1 a 8 da página 142 · tarefa: Lista 7', pres: '29 de 31', st: 'Registrada', tone: 'success', bl: 'Editar', bv: 'ghost', href: '#pop-aula', cls: 'is-agora' },
+        { d: '24/11', n: 'Aulas 32 e 33', t: 'Sem conteúdo registrado', m: 'Chamada feita às 9h52 · falta o conteúdo das 2 aulas', pres: '30 de 31', st: 'Sem conteúdo', tone: 'warning', bl: 'Registrar', bv: 'secondary', href: '#pop-aula', cls: '' },
+        { d: '23/11', n: 'Aula 31', t: 'Equações do 2º grau incompletas', m: 'Resolução por fatoração · correção da Lista 6', pres: '31 de 31', st: 'Registrada', tone: 'success', bl: 'Editar', bv: 'ghost', href: '#pop-aula', cls: '' },
+        { d: '19/11', n: 'Aula 30', t: 'Sem conteúdo registrado', m: 'Chamada feita às 11h35 · falta o conteúdo', pres: '28 de 31', st: 'Sem conteúdo', tone: 'warning', bl: 'Registrar', bv: 'secondary', href: '#pop-aula', cls: '' },
+        { d: '18/11', n: 'Aulas 28 e 29', t: 'Prova 2: equações e sistemas', m: 'Avaliação escrita · 2 alunos fazem a segunda chamada em 26/11', pres: '29 de 31', st: 'Avaliação', tone: 'info', bl: 'Lançar notas', bv: 'secondary', href: 'Escola-Notas-e-faltas.dc.html', cls: '' },
+        { d: '17/11', n: 'Aula 27', t: 'Revisão para a Prova 2', m: 'Simulado com 10 questões · dúvidas da turma', pres: '30 de 31', st: 'Registrada', tone: 'success', bl: 'Editar', bv: 'ghost', href: '#pop-aula', cls: '' },
+        { d: '16/11', n: 'Aulas 25 e 26', t: 'Sistemas de equações do 2º grau', m: 'Método da substituição · problemas do cotidiano', pres: '31 de 31', st: 'Registrada', tone: 'success', bl: 'Editar', bv: 'ghost', href: '#pop-aula', cls: '' }],
+      papeis: [
+        { nome: 'Professor titular · Ricardo Albuquerque', meta: 'Faz chamada, registra conteúdo, lança e libera notas', st: 'Você', tone: 'success', icon: 'book', cls: 'rc-tone-success' },
+        { nome: 'Professor auxiliar', meta: 'Faz chamada e agenda. Não lança nem libera notas. Esta turma não tem auxiliar.', st: 'Sem auxiliar', tone: 'neutral', icon: 'hand', cls: 'rc-tone-neutral' },
+        { nome: 'Coordenação · Juliana Sampaio', meta: 'Acompanha, fecha o diário em 04/12 e reabre quando preciso', st: 'Fecha e reabre', tone: 'info', icon: 'lock', cls: 'rc-tone-info' }],
+      plano: [{ l: 'Objetivo', v: 'Usar o discriminante para dizer quantas raízes reais tem uma equação do 2º grau.' }, { l: 'Desenvolvimento', v: 'Retomada da fórmula, 3 exemplos no quadro, duplas resolvem os exercícios 1 a 8 e corrigem entre si.' }, { l: 'Recursos', v: 'Livro, página 142 · projetor · GeoGebra com as três parábolas' }, { l: 'Avaliação', v: 'Lista 7, entrega até 25/11 pelo portal do aluno.' }],
+      bncc: ['EF09MA09 · equações do 2º grau', 'EF09MA06 · funções e gráficos'],
+      unidades: [{ t: 'Sistemas de equações', m: '10 de 10 aulas', v: 100, tone: 'success' }, { t: 'Equações do 2º grau', m: '14 de 14 aulas', v: 100, tone: 'success' }, { t: 'Fórmula de Bhaskara', m: '6 de 8 aulas', v: 75, tone: 'brand' }, { t: 'Função quadrática', m: '4 de 8 aulas', v: 50, tone: 'brand' }],
+      aulasSel: [{ value: '1', label: '1 aula' }, { value: '2', label: '2 aulas seguidas' }],
+      impr: [{ value: 'bim', label: '4º bimestre completo' }, { value: 'mes', label: 'Só novembro' }, { value: 'ano', label: 'Ano letivo de 2026' }]
+    });
+    /* Controle de acesso: cada perfil vê só os módulos liberados em Grupos e permissões. */
+    const ACESSO = { prof: ['comunicados', 'notas', 'chamada', 'agenda', 'frequencia', 'ocorrencias', 'inicio', 'diario', 'horarios', 'materiais', 'atendimentos', 'tarefas'], coord: ['painel', 'comunicados', 'chat', 'notas', 'chamada', 'agenda', 'frequencia', 'boletins', 'ocorrencias', 'integral', 'alunos', 'autorizacoes', 'equipe', 'horarios', 'calendario', 'atendimentos', 'cardapio', 'galeria', 'pesquisas', 'saude', 'inclusao', 'relatorios', 'biblioteca', 'portaria', 'medidas', 'extras', 'eja', 'certificados'], sec: ['comunicados', 'alunos', 'matriculas', 'contratos', 'autorizacoes', 'portaria', 'equipe', 'solicitacoes', 'calendario', 'horarios', 'loja', 'pesquisas', 'captacao', 'certificados', 'transferencias', 'fotos', 'importacao'], fin: ['comunicados', 'alunos', 'contratos', 'mensalidades', 'loja', 'fiscal', 'caixa', 'dae'], bib: ['comunicados', 'biblioteca'], port: ['comunicados', 'portaria', 'autorizacoes'], int: ['comunicados', 'chamada', 'integral', 'ocorrencias'], nutri: ['comunicados', 'cardapio'], enf: ['comunicados', 'saude'], aee: ['comunicados', 'inclusao', 'atendimentos', 'ocorrencias'] };
+    const permitidos = ACESSO[__r.activeProfile];
+    if (permitidos) {
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.filter((i) => permitidos.includes(i.id)) })).filter((g) => g.items.length);
+      __r.tabs = (__r.tabs || []).filter((t) => permitidos.includes(t.id));
+      __r.units = null;
+    }
+    /* Biblioteca e portaria: direção e coordenação entram pela visão de gestão. A operação fica com a bibliotecária e a portaria. */
+    if (['dir', 'coord'].includes(__r.activeProfile)) {
+      const GESTAO = { biblioteca: 'Escola-Biblioteca-Gestao.dc.html', portaria: 'Escola-Portaria-Gestao.dc.html' };
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.map((i) => (GESTAO[i.id] ? Object.assign({}, i, { href: GESTAO[i.id] }) : i)) }));
+      __r.tabs = (__r.tabs || []).map((t) => (GESTAO[t.id] ? Object.assign({}, t, { href: GESTAO[t.id] }) : t));
+    }
+    /* Portal do professor: quem entra como professor vê o próprio menu, com as turmas e o planejamento. */
+    if (__r.activeProfile === 'prof') {
+      __r.nav = [
+        { items: [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }] },
+        { label: 'Minhas turmas', items: [{ id: 'diario', label: 'Diário de classe', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'tarefas', label: 'Tarefas', icon: 'list', count: 6, href: 'Professor-Tarefas.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', href: 'Escola-Ocorrencias.dc.html' }] },
+        { label: 'Planejamento', items: [{ id: 'horarios', label: 'Meus horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Professor-Materiais.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 2, href: 'Escola-Atendimentos.dc.html' }] }];
+      __r.tabs = [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'diario', label: 'Diário', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }];
+    }
+    return Object.assign({ s12: 12, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96 }, bell, __r);
+  }
+}
+</script>
+</body>
+</html>

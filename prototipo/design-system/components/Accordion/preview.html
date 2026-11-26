@@ -1,0 +1,23 @@
+<!-- @dsCard group="Dados" height=300 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>Accordion</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { maxWidth: 620 } }, /* @__PURE__ */ React.createElement(P.Accordion, { items: [
+      { id: "a", title: "Como pago a mensalidade com Pix?", open: true, content: "Abra Financeiro, toque na mensalidade e em Pagar com Pix. Copie o c\xF3digo ou leia o QR no app do banco. A confirma\xE7\xE3o chega aqui em segundos." },
+      { id: "b", title: "Posso trocar o respons\xE1vel financeiro?", meta: "Secretaria", content: "Sim. Pe\xE7a pela aba Mensagens, assunto Financeiro. A troca vale a partir da pr\xF3xima cobran\xE7a." },
+      { id: "c", title: "O que \xE9 o desconto de pontualidade?", content: "Pagando at\xE9 o vencimento, a mensalidade sai com o desconto informado no contrato." }
+    ] }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

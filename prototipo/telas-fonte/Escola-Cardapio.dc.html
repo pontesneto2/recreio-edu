@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Nutrição: Cardápio</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<link rel="stylesheet" href="telas.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" units="{{units}}" groups="{{nav}}" active="cardapio"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="utensils" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Cardápio</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">Nutrição · cardápio da semana, alérgenos e substituições</p></div></div>
+<a class="rc-btn rc-btn-ghost rc-btn-sm" href="Familia-Cardapio.dc.html">Ver como a família vê</a>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar prato, aluno ou restrição" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Escola-Notificacoes.dc.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px; padding: 16px 20px; border-radius: var(--radius-lg); background: var(--surface-1); border: 1px solid var(--line); box-shadow: var(--shadow-1);">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; min-width: 0; max-width: 100%;">
+<x-import component-from-global-scope="Recreio.Select" label="Semana" default-value="s48" options="{{semanasSel}}"></x-import><div style="display: flex; flex-direction: column; gap: 6px;"><span style="font-size: 14px; font-weight: 600;">Público</span><x-import component-from-global-scope="Recreio.SegmentedControl" label="Público" value="int" options="{{publicos}}"></x-import></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-secondary" href="#pop-copiar"><x-import component-from-global-scope="Recreio.Icon" name="copy" size="{{s18}}"></x-import>Copiar da semana anterior</a><a class="rc-btn rc-btn-primary" href="#pop-publicar"><x-import component-from-global-scope="Recreio.Icon" name="send" size="{{s18}}"></x-import>Publicar a próxima semana</a></div>
+</div>
+<section aria-label="Indicadores da cozinha" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px;">
+<x-import component-from-global-scope="Recreio.StatCard" color="azul" label="Refeições por dia" value="{{ref}}" icon="utensils" hint="112 no integral · 74 no Infantil"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="vermelho" label="Alunos com restrição" value="{{restr}}" icon="alert" hint="9 alergias graves · 14 intolerâncias" href="#restricoes"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="verde" label="Aceitação da semana" value="{{aceit}}" icon="heart" hint="Comeu tudo ou comeu bem" format="{{pct}}"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="roxo" label="Semanas publicadas" value="{{semPub}}" icon="calendar" hint="Esta e a próxima em rascunho"></x-import>
+</section>
+<x-import component-from-global-scope="Recreio.Card" title="Cardápio de 23 a 27 de novembro" subtitle="Integral e lanche do Fundamental I · publicado para as famílias em 19/11">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 12px;"><sc-for list="{{dias}}" as="d" hint-placeholder-count="5"><div class="tl-dia {{d.cls}}"><div class="tl-dia-head"><strong>{{d.dia}}</strong><small style="color: var(--ink-2);">{{d.data}}</small></div><sc-for list="{{d.ref}}" as="r" hint-placeholder-count="3"><div class="tl-dia-ref"><x-import component-from-global-scope="Recreio.Icon" name="{{r.i}}" size="{{s18}}"></x-import><strong style="font-weight: 600;">{{r.t}}</strong><small>{{r.m}}</small></div></sc-for><sc-if value="{{d.nota}}"><div><x-import component-from-global-scope="Recreio.StatusPill" tone="{{d.tone}}" size="sm">{{d.nota}}</x-import></div></sc-if><div><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-refeicao"><x-import component-from-global-scope="Recreio.Icon" name="edit" size="{{s18}}"></x-import>Editar o dia</a></div></div></sc-for></div>
+</x-import>
+<div class="rc-split" style="gap: 24px; align-items: start; --split: minmax(0, 1fr) minmax(0, 1fr);">
+<div id="restricoes"><x-import component-from-global-scope="Recreio.Card" title="Restrições de hoje" subtitle="Quem almoça hoje e precisa de prato diferente · vem da ficha de saúde">
+<div>
+<sc-for list="{{alergias}}" as="p" hint-placeholder-count="5">
+<div class="rc-popup-row" style="grid-template-columns: 40px minmax(0, 1fr) auto;"><x-import component-from-global-scope="Recreio.Avatar" name="{{p.nome}}" size="{{s40}}"></x-import><span style="min-width: 0;"><strong style="display: block;">{{p.nome}}</strong><small style="color: var(--ink-2);">{{p.meta}}</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="{{p.tone}}" size="sm">{{p.st}}</x-import></div>
+</sc-for>
+</div>
+</x-import></div>
+<div style="display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+<x-import component-from-global-scope="Recreio.Card" title="Aceitação por prato" subtitle="Registro das monitoras nesta semana">
+<div style="display: flex; flex-direction: column; gap: 14px;"><sc-for list="{{aceitacao}}" as="u" hint-placeholder-count="4"><div><div style="display: flex; justify-content: space-between; gap: 12px; margin-bottom: 6px;"><strong style="font-weight: 600;">{{u.t}}</strong><small style="color: var(--ink-2); white-space: nowrap;">{{u.m}}</small></div><x-import component-from-global-scope="Recreio.ProgressBar" value="{{u.v}}" tone="{{u.tone}}" size="sm" label="{{u.t}}" hide-label="{{yes}}"></x-import></div></sc-for></div>
+</x-import>
+<x-import component-from-global-scope="Recreio.Alert" tone="info" title="O que a nutricionista vê">Só alergias e restrições alimentares. Notas, financeiro e o resto da ficha ficam fora do alcance do grupo Nutrição.</x-import>
+</div>
+</div>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="painel"></x-import>
+</div>
+</div>
+<div id="pop-refeicao" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Editar o almoço de quarta">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="utensils" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Editar o almoço de quarta</p><p class="rc-dialog-desc">Quarta, 25/11 · integral. Marque os alérgenos: o sistema cruza com as fichas de saúde.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><x-import component-from-global-scope="Recreio.SaveGuard" label="Salvar refeição" hint="Mude um campo para liberar o botão Salvar" on-save="{{go_pop_refeicao_ok}}">
+<div style="display: flex; flex-direction: column; gap: 14px;"><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px 16px;"><x-import component-from-global-scope="Recreio.TextField" label="Prato principal" default-value="Peixe assado"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Acompanhamentos" default-value="Arroz, feijão verde, purê de jerimum"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Sobremesa" default-value="Abacaxi"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Substituição" default-value="Frango grelhado"></x-import></div><x-import component-from-global-scope="Recreio.FilterChips" label="Alérgenos do prato" value="{{fAl}}" options="{{alergenos}}"></x-import><x-import component-from-global-scope="Recreio.Alert" tone="warning" title="1 aluno com restrição a peixe">Matheus Queiroz recebe a substituição.</x-import></div>
+</x-import></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a></div>
+</div>
+</div>
+<div id="pop-refeicao-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Refeição atualizada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Refeição atualizada</p><p class="rc-dialog-desc">As famílias veem a mudança no cardápio. Quem tem restrição ao prato novo é avisado.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-publicar" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Publicar o cardápio de 30/11 a 04/12">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="send" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Publicar o cardápio de 30/11 a 04/12</p><p class="rc-dialog-desc">Famílias do integral e do Infantil recebem no app. A cozinha recebe a lista de substituições.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><x-import component-from-global-scope="Recreio.Alert" tone="success" title="Tudo conferido">15 refeições preenchidas · alérgenos marcados · 23 substituições geradas.</x-import></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-publicado">Publicar</a></div>
+</div>
+</div>
+<div id="pop-publicado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Cardápio publicado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Cardápio publicado</p><p class="rc-dialog-desc">186 famílias foram avisadas. A lista de substituições foi para a cozinha.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-copiar" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Semana copiada para o rascunho">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="copy" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Semana copiada para o rascunho</p><p class="rc-dialog-desc">Os pratos de 23 a 27/11 entraram em 30/11 a 04/12. Ajuste o que mudar e publique.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 5, bellNotifs: [
+      { icon: 'clipboard', title: '5 justificativas para analisar', text: 'Frequência · Fundamental II', time: 'Hoje, 11h05', unread: true, priority: 'importante' },
+      { icon: 'chat', title: 'Fernanda Lima respondeu no chat', text: 'Ana Beatriz · 9º ano A', time: 'Hoje, 10h12', unread: true, priority: 'rotina' },
+      { icon: 'edit', title: 'História 9º B: faltam 4 notas', text: 'Fechamento do 4º bimestre', time: 'Hoje, 9h00', unread: true, priority: 'importante' },
+      { icon: 'alert', title: 'Ocorrência sem resposta da família', text: 'Mateus Holanda · 9º ano C · há 7 dias', time: 'Hoje, 8h30', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: '63 mensalidades vencidas', text: '41 famílias · a régua de cobrança enviou lembretes', time: 'Hoje, 7h00', unread: true, priority: 'rotina' }] };
+    const tabs = [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'comunicados', label: 'Avisos', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }];
+    const shared = {
+      bellCount: 5, activeChild: undefined, activeProfile: 'dir', kids: [],
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      units: [{ id: 'aldeota', label: 'Unidade Aldeota', meta: '1.248 alunos · Infantil ao Médio', href: 'Escola-Painel.dc.html', current: true }, { id: 'eusebio', label: 'Unidade Eusébio', meta: '936 alunos · Infantil e Fundamental I', href: 'Escola-Painel.dc.html' }, { id: 'rede', label: 'Todas as unidades', meta: 'Visão consolidada da rede', href: 'Escola-Painel.dc.html' }],
+      user: { name: 'Lúcia Menezes' },
+      profiles: [{ id: 'dir', label: 'Direção', icon: 'shield', school: 'Colégio Recreio' }, { id: 'prof', label: 'Professora', icon: 'book', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'chat', label: 'Chat com famílias', icon: 'chat', count: 4, href: 'Escola-Chat.dc.html' }] },
+        { label: 'Pedagógico', items: [{ id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Escola-Horarios.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'clipboard', count: 5, href: 'Escola-Frequencia.dc.html' }, { id: 'boletins', label: 'Fechamento e boletins', icon: 'chart', href: 'Escola-Boletins.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 3, href: 'Escola-Ocorrencias.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Escola-Integral.dc.html' }, { id: 'saude', label: 'Saúde e enfermaria', icon: 'heart', href: 'Escola-Saude.dc.html' }, { id: 'inclusao', label: 'Inclusão e AEE', icon: 'accessibility', href: 'Escola-Inclusao.dc.html' }, { id: 'medidas', label: 'Medidas disciplinares', icon: 'flag', href: 'Escola-Medidas.dc.html' }, { id: 'extras', label: 'Pontos extras', icon: 'star', href: 'Escola-Pontos-extras.dc.html' }, { id: 'eja', label: 'EJA', icon: 'moon', href: 'Escola-EJA.dc.html' }] },
+        { label: 'Secretaria', items: [{ id: 'alunos', label: 'Alunos', icon: 'users', href: 'Escola-Alunos.dc.html' }, { id: 'equipe', label: 'Equipe', icon: 'user', href: 'Escola-Equipe.dc.html' }, { id: 'captacao', label: 'Captação', icon: 'filter', count: 9, href: 'Escola-Captacao.dc.html' }, { id: 'matriculas', label: 'Matrículas', icon: 'file-text', count: 12, href: 'Escola-Matriculas.dc.html' }, { id: 'contratos', label: 'Contratos', icon: 'edit', count: 200, href: 'Escola-Contratos.dc.html' }, { id: 'solicitacoes', label: 'Solicitações', icon: 'file', count: 6, href: 'Escola-Solicitacoes.dc.html' }, { id: 'certificados', label: 'Certificados e diplomas', icon: 'graduation', href: 'Escola-Certificados.dc.html' }, { id: 'transferencias', label: 'Transferências', icon: 'sync', href: 'Escola-Transferencias.dc.html' }, { id: 'fotos', label: 'Fotos de alunos', icon: 'camera', href: 'Escola-Fotos.dc.html' }, { id: 'importacao', label: 'Migração de dados', icon: 'upload', href: 'Escola-Importacao.dc.html' }, { id: 'calendario', label: 'Calendário letivo', icon: 'flag', href: 'Escola-Calendario.dc.html' }, { id: 'autorizacoes', label: 'Passeios e autorizações', icon: 'key', href: 'Escola-Autorizacoes.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Escola-Biblioteca.dc.html' }] },
+        { label: 'Família e serviços', items: [{ id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 4, href: 'Escola-Atendimentos.dc.html' }, { id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Escola-Cardapio.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', href: 'Escola-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', count: 9, href: 'Escola-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', href: 'Escola-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'mensalidades', label: 'Mensalidades', icon: 'wallet', count: 41, urgent: true, href: 'Escola-Mensalidades.dc.html' }, { id: 'fiscal', label: 'Notas fiscais e IR', icon: 'receipt', count: 3, href: 'Escola-Fiscal.dc.html' }, { id: 'dae', label: 'DAE SEFAZ-CE', icon: 'receipt', href: 'Escola-DAE.dc.html' }, { id: 'caixa', label: 'Caixa e contas a pagar', icon: 'card', href: 'Escola-Caixa.dc.html' }] },
+        { label: 'Gestão', items: [{ id: 'relatorios', label: 'Relatórios e censo', icon: 'sparkline', href: 'Escola-Relatorios.dc.html' }, { id: 'permissoes', label: 'Grupos e permissões', icon: 'shield', href: 'Escola-Permissoes.dc.html' }, { id: 'modulos', label: 'Módulos e marca', icon: 'modules', href: 'Escola-Modulos.dc.html' }] }]
+    };
+    const __r = Object.assign({ yes: true, no: false, tabs }, shared, {
+      user: { name: 'Marília Castro' }, activeProfile: 'nutri', profiles: [{ id: 'nutri', label: 'Nutrição', icon: 'utensils', school: 'Colégio Recreio' }],
+      n2: 2, n3: 3, n4: 4, n5: 5, n6: 6,
+      go_pop_copiar: () => { location.hash = 'pop-copiar'; }, go_pop_lidas: () => { location.hash = 'pop-lidas'; }, go_pop_publicado: () => { location.hash = 'pop-publicado'; }, go_pop_publicar: () => { location.hash = 'pop-publicar'; }, go_pop_refeicao: () => { location.hash = 'pop-refeicao'; }, go_pop_refeicao_ok: () => { location.hash = 'pop-refeicao-ok'; },
+      dias: [
+        { dia: 'Segunda', data: '23/11', cls: '', nota: '96% comeram bem', tone: 'success', ref: [{ i: 'utensils', t: 'Almoço', m: 'Frango grelhado, arroz, feijão, cenoura refogada · melancia' }, { i: 'sun', t: 'Lanche · 15h', m: 'Tapioca com queijo coalho · suco de caju' }, { i: 'moon', t: 'Integral · 17h', m: 'Vitamina de banana com aveia' }] },
+        { dia: 'Terça', data: '24/11', cls: '', nota: '84% comeram bem', tone: 'success', ref: [{ i: 'utensils', t: 'Almoço', m: 'Carne moída com legumes, macarrão, salada de alface · laranja' }, { i: 'sun', t: 'Lanche · 15h', m: 'Pão integral com ovo mexido · suco de goiaba' }, { i: 'moon', t: 'Integral · 17h', m: 'Cuscuz com leite' }] },
+        { dia: 'Quarta · hoje', data: '25/11', cls: 'is-hoje', nota: '81% comeram bem · peixe', tone: 'warning', ref: [{ i: 'utensils', t: 'Almoço', m: 'Peixe assado, arroz, feijão verde, purê de jerimum · abacaxi' }, { i: 'sun', t: 'Lanche · 15h', m: 'Bolo de milho · suco de acerola' }, { i: 'moon', t: 'Integral · 17h', m: 'Sopa de legumes com macarrão' }] },
+        { dia: 'Quinta', data: '26/11', cls: '', nota: '', tone: 'neutral', ref: [{ i: 'utensils', t: 'Almoço', m: 'Baião de dois, carne de sol desfiada, vinagrete · banana' }, { i: 'sun', t: 'Lanche · 15h', m: 'Iogurte natural com granola sem castanhas' }, { i: 'moon', t: 'Integral · 17h', m: 'Sanduíche de frango desfiado' }] },
+        { dia: 'Sexta', data: '27/11', cls: '', nota: '', tone: 'neutral', ref: [{ i: 'utensils', t: 'Almoço', m: 'Strogonoff de frango, arroz, batata assada · mamão' }, { i: 'sun', t: 'Lanche · 15h', m: 'Salada de frutas' }, { i: 'moon', t: 'Integral · 17h', m: 'Mingau de aveia' }] }],
+
+      ref: 186, restr: 23, aceit: 87, semPub: 1, pct: (v) => window.Recreio.num(v, 0) + '%',
+      semanasSel: [{ value: 's48', label: '23 a 27/11 · publicada' }, { value: 's49', label: '30/11 a 04/12 · rascunho' }, { value: 's50', label: '07 a 11/12 · em branco' }],
+      publicos: [{ value: 'int', label: 'Integral' }, { value: 'inf', label: 'Infantil' }, { value: 'cant', label: 'Cantina' }],
+      alergias: [
+        { nome: 'Davi Lima', meta: '2º ano B · integral · amendoim · prato sem castanhas', st: 'Alergia grave', tone: 'danger' },
+        { nome: 'Helena Prado', meta: '5º ano A · integral · lactose · purê sem leite', st: 'Intolerância', tone: 'warning' },
+        { nome: 'Caio Reis', meta: '9º ano A · semi-integral · glúten · massa trocada por arroz', st: 'Doença celíaca', tone: 'danger' },
+        { nome: 'Laura Menezes', meta: 'Infantil V · integral · ovo · bolo sem ovo no lanche', st: 'Alergia', tone: 'warning' },
+        { nome: 'Matheus Queiroz', meta: '9º ano B · semi-integral · não come peixe · frango no lugar', st: 'Escolha da família', tone: 'neutral' }],
+      aceitacao: [{ t: 'Frango grelhado com cenoura', m: '96% · segunda', v: 96, tone: 'success' }, { t: 'Carne moída com legumes', m: '84% · terça', v: 84, tone: 'success' }, { t: 'Peixe assado com purê de jerimum', m: '81% · hoje', v: 81, tone: 'warning' }, { t: 'Sopa de legumes com macarrão', m: '72% · semana passada', v: 72, tone: 'warning' }],
+      fAl: ['peixe'], alergenos: [{ value: 'leite', label: 'Leite' }, { value: 'ovo', label: 'Ovo' }, { value: 'gluten', label: 'Glúten' }, { value: 'peixe', label: 'Peixe' }, { value: 'castanhas', label: 'Castanhas e amendoim' }, { value: 'soja', label: 'Soja' }]
+    });
+    /* Controle de acesso: cada perfil vê só os módulos liberados em Grupos e permissões. */
+    const ACESSO = { prof: ['comunicados', 'notas', 'chamada', 'agenda', 'frequencia', 'ocorrencias', 'inicio', 'diario', 'horarios', 'materiais', 'atendimentos', 'tarefas'], coord: ['painel', 'comunicados', 'chat', 'notas', 'chamada', 'agenda', 'frequencia', 'boletins', 'ocorrencias', 'integral', 'alunos', 'autorizacoes', 'equipe', 'horarios', 'calendario', 'atendimentos', 'cardapio', 'galeria', 'pesquisas', 'saude', 'inclusao', 'relatorios', 'biblioteca', 'portaria', 'medidas', 'extras', 'eja', 'certificados'], sec: ['comunicados', 'alunos', 'matriculas', 'contratos', 'autorizacoes', 'portaria', 'equipe', 'solicitacoes', 'calendario', 'horarios', 'loja', 'pesquisas', 'captacao', 'certificados', 'transferencias', 'fotos', 'importacao'], fin: ['comunicados', 'alunos', 'contratos', 'mensalidades', 'loja', 'fiscal', 'caixa', 'dae'], bib: ['comunicados', 'biblioteca'], port: ['comunicados', 'portaria', 'autorizacoes'], int: ['comunicados', 'chamada', 'integral', 'ocorrencias'], nutri: ['comunicados', 'cardapio'], enf: ['comunicados', 'saude'], aee: ['comunicados', 'inclusao', 'atendimentos', 'ocorrencias'] };
+    const permitidos = ACESSO[__r.activeProfile];
+    if (permitidos) {
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.filter((i) => permitidos.includes(i.id)) })).filter((g) => g.items.length);
+      __r.tabs = (__r.tabs || []).filter((t) => permitidos.includes(t.id));
+      __r.units = null;
+    }
+    /* Biblioteca e portaria: direção e coordenação entram pela visão de gestão. A operação fica com a bibliotecária e a portaria. */
+    if (['dir', 'coord'].includes(__r.activeProfile)) {
+      const GESTAO = { biblioteca: 'Escola-Biblioteca-Gestao.dc.html', portaria: 'Escola-Portaria-Gestao.dc.html' };
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.map((i) => (GESTAO[i.id] ? Object.assign({}, i, { href: GESTAO[i.id] }) : i)) }));
+      __r.tabs = (__r.tabs || []).map((t) => (GESTAO[t.id] ? Object.assign({}, t, { href: GESTAO[t.id] }) : t));
+    }
+    /* Portal do professor: quem entra como professor vê o próprio menu, com as turmas e o planejamento. */
+    if (__r.activeProfile === 'prof') {
+      __r.nav = [
+        { items: [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }] },
+        { label: 'Minhas turmas', items: [{ id: 'diario', label: 'Diário de classe', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'tarefas', label: 'Tarefas', icon: 'list', count: 6, href: 'Professor-Tarefas.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', href: 'Escola-Ocorrencias.dc.html' }] },
+        { label: 'Planejamento', items: [{ id: 'horarios', label: 'Meus horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Professor-Materiais.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 2, href: 'Escola-Atendimentos.dc.html' }] }];
+      __r.tabs = [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'diario', label: 'Diário', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }];
+    }
+    return Object.assign({ s12: 12, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96 }, bell, __r);
+  }
+}
+</script>
+</body>
+</html>

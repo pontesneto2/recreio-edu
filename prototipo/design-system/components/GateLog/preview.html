@@ -1,0 +1,28 @@
+<!-- @dsCard group="Portaria e biblioteca" height=620 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>GateLog</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { maxWidth: 760 } }, /* @__PURE__ */ React.createElement(P.GateLog, { counts: { presentes: 1184, saidas: 37, atrasos: 12, visitantes: 5 }, entries: [
+      { time: "17h43", kind: "saida", name: "Davi Lima", group: "2\xBA ano B", by: "com Fernanda Lima, m\xE3e" },
+      { time: "17h40", kind: "saida", name: "Gabriela Moreira", group: "1\xAA s\xE9rie EM", by: "transporte escolar Tio Edson" },
+      { time: "17h36", kind: "visitante", name: "Ant\xF4nio Barros", group: "Manuten\xE7\xE3o do ar-condicionado", by: "bloco B" },
+      { time: "17h31", kind: "antecipada", name: "Caio Reis", group: "9\xBA ano A", by: "consulta m\xE9dica, com Paulo Reis, pai" },
+      { time: "17h25", kind: "saida", name: "Maria Clara Pinheiro", group: "Infantil V", by: "com Diego Pinheiro, pai" },
+      { time: "13h12", kind: "atraso", name: "Arthur Nogueira", group: "9\xBA ano A", by: "12 minutos" },
+      { time: "07h18", kind: "atraso", name: "Ana Beatriz Lima", group: "9\xBA ano A", by: "port\xE3o da Av. das Escolas" },
+      { time: "07h02", kind: "entrada", name: "Davi Lima", group: "2\xBA ano B", by: "port\xE3o principal" }
+    ] }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

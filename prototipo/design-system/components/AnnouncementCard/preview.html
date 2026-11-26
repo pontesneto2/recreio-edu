@@ -1,0 +1,33 @@
+<!-- @dsCard group="Comunicação" height=520 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>AnnouncementCard</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement(
+      P.AnnouncementCard,
+      {
+        priority: "importante",
+        from: "Coordena\xE7\xE3o do Fundamental I",
+        date: "Hoje, 8h12",
+        requireConfirm: true,
+        libras: true,
+        title: "Visita ao Planet\xE1rio do Drag\xE3o do Mar na ter\xE7a",
+        summary: "Ter\xE7a, 01/12, sa\xEDda \xE0s 7h30 e volta \xE0s 11h30. Precisa da sua autoriza\xE7\xE3o at\xE9 sexta, 27/11.",
+        attachments: [{ name: "roteiro-da-visita.pdf", size: "184 KB" }]
+      },
+      /* @__PURE__ */ React.createElement("p", null, "As turmas do 2\xBA ano v\xE3o assistir \xE0 sess\xE3o sobre o c\xE9u do sert\xE3o no Planet\xE1rio Rubens de Azevedo. O \xF4nibus sai do port\xE3o da Av. Santos Dumont e volta antes do almo\xE7o."),
+      /* @__PURE__ */ React.createElement("p", null, "Mande lanche leve, garrafa de \xE1gua e bon\xE9. O uniforme \xE9 obrigat\xF3rio.")
+    );
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

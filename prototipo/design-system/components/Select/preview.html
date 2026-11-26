@@ -1,0 +1,19 @@
+<!-- @dsCard group="Campos" height=120 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>Select</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { maxWidth: 320 } }, /* @__PURE__ */ React.createElement(P.Select, { label: "Turma", placeholder: "Escolha a turma", options: ["Infantil V \xB7 Manh\xE3", "2\xBA ano B \xB7 Manh\xE3", "6\xBA ano A \xB7 Tarde", "9\xBA ano A \xB7 Manh\xE3", "2\xAA s\xE9rie EM \xB7 Manh\xE3"] }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

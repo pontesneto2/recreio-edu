@@ -1,0 +1,27 @@
+<!-- @dsCard group="Comunicação" height=600 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>ConversationList</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    const [a, setA] = React.useState("c1");
+    return /* @__PURE__ */ React.createElement("div", { style: { maxWidth: 460 } }, /* @__PURE__ */ React.createElement(P.ConversationList, { active: a, onSelect: setA, conversations: [
+      { id: "c1", name: "Profa. Helena Costa", kind: "professor", role: "L\xEDngua Portuguesa \xB7 9\xBA ano A", child: "Ana Beatriz", last: "A resenha de Iracema pode ser entregue at\xE9 segunda.", time: "10h42", unread: 2, online: true },
+      { id: "c2", name: "Juliana Sampaio", kind: "coordenacao", role: "Coordena\xE7\xE3o do Fundamental II", child: "Ana Beatriz", last: "", typing: true, time: "10h15", unread: 0 },
+      { id: "c3", name: "Prof. Ricardo Albuquerque", kind: "professor", role: "Matem\xE1tica \xB7 9\xBA ano A", child: "Ana Beatriz", last: "Ela foi muito bem na prova 2, tirou 9,0.", time: "ontem", unread: 1 },
+      { id: "c4", name: "Monitora Camila Rocha", kind: "integral", role: "Tempo integral \xB7 2\xBA ano B", child: "Davi", last: "Davi terminou a tarefa no estudo dirigido.", time: "ontem", unread: 0, online: true },
+      { id: "c5", name: "Renata Alencar", kind: "secretaria", role: "Financeiro", last: "Segue o demonstrativo atualizado.", time: "seg", unread: 0 },
+      { id: "c6", name: "Secretaria Escolar", kind: "secretaria", role: "Documentos", last: "A declara\xE7\xE3o de matr\xEDcula est\xE1 pronta para baixar.", time: "20/11", unread: 0 }
+    ] }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

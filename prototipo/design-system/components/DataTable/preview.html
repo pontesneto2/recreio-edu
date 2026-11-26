@@ -1,0 +1,39 @@
+<!-- @dsCard group="Dados" height=470 width=960 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>DataTable</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    const rows = [
+      { id: 1, aluno: "Ana Beatriz Lima", turma: "9\xBA ano A", resp: "Fernanda Lima", venc: "10/11", valor: 1620, st: "paga" },
+      { id: 2, aluno: "Arthur Nogueira", turma: "9\xBA ano A", resp: "Carlos Nogueira", venc: "10/11", valor: 1652.4, st: "vencida" },
+      { id: 3, aluno: "Bruno Sales", turma: "9\xBA ano A", resp: "Paula Sales", venc: "10/12", valor: 1620, st: "aberta" },
+      { id: 4, aluno: "Maria Clara Pinheiro", turma: "Infantil V", resp: "Diego Pinheiro", venc: "10/11", valor: 1290, st: "compensando" },
+      { id: 5, aluno: "Davi Lima", turma: "2\xBA ano B", resp: "Fernanda Lima", venc: "10/12", valor: 1480, st: "aberta" },
+      { id: 6, aluno: "Gabriela Moreira", turma: "1\xAA s\xE9rie EM", resp: "Sandra Moreira", venc: "10/11", valor: 1890, st: "paga" },
+      { id: 7, aluno: "Jo\xE3o Pedro Cavalcante", turma: "9\xBA ano A", resp: "M\xE1rcio Cavalcante", venc: "10/11", valor: 1620, st: "negociada" },
+      { id: 8, aluno: "Sofia Ara\xFAjo", turma: "7\xBA ano A", resp: "Cl\xE1udia Ara\xFAjo", venc: "10/11", valor: 1620, st: "paga" }
+    ];
+    const ST = { paga: ["success", "Paga"], vencida: ["danger", "Vencida"], aberta: ["info", "Em aberto"], compensando: ["info", "Compensando"], negociada: ["warning", "Negociada"] };
+    const [sel, setSel] = React.useState([2]);
+    const [sort, setSort] = React.useState({ key: "aluno", dir: "asc" });
+    const sorted = [...rows].sort((a, b) => (a[sort.key] > b[sort.key] ? 1 : -1) * (sort.dir === "asc" ? 1 : -1));
+    return /* @__PURE__ */ React.createElement(P.DataTable, { caption: "Cobran\xE7as de novembro", selectable: true, selected: sel, onSelect: setSel, sort, onSort: setSort, rows: sorted, columns: [
+      { key: "aluno", label: "Aluno", sortable: true, render: (r) => /* @__PURE__ */ React.createElement("span", { style: { display: "flex", gap: 10, alignItems: "center" } }, /* @__PURE__ */ React.createElement(P.Avatar, { name: r.aluno, size: 28 }), /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement("span", { style: { display: "block", fontWeight: 560 } }, r.aluno), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 13, color: "var(--ink-2)" } }, r.turma))) },
+      { key: "resp", label: "Respons\xE1vel financeiro" },
+      { key: "venc", label: "Vencimento", sortable: true },
+      { key: "valor", label: "Valor", numeric: true, align: "right", sortable: true, render: (r) => P.brl(r.valor) },
+      { key: "st", label: "Situa\xE7\xE3o", render: (r) => /* @__PURE__ */ React.createElement(P.StatusPill, { size: "sm", tone: ST[r.st][0] }, ST[r.st][1]) }
+    ] });
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!-- @dsCard group="Sobreposições" height=440 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>Dialog</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    const [o, setO] = React.useState(true);
+    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(P.Button, { onClick: () => setO(true) }, "Abrir di\xE1logo"), /* @__PURE__ */ React.createElement(
+      P.Dialog,
+      {
+        open: o,
+        onClose: () => setO(false),
+        title: "Autorizar passeio ao Museu do Cear\xE1",
+        description: "Sexta, 05/12, das 7h30 \xE0s 12h. \xD4nibus da escola.",
+        footer: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(P.Button, { variant: "ghost", onClick: () => setO(false) }, "Agora n\xE3o"), /* @__PURE__ */ React.createElement(P.Button, { variant: "primary", icon: "check", onClick: () => setO(false) }, "Autorizar"))
+      },
+      /* @__PURE__ */ React.createElement(P.Checkbox, { label: "Davi pode ser fotografado durante o passeio", defaultChecked: true }),
+      /* @__PURE__ */ React.createElement("div", { style: { height: 12 } }),
+      /* @__PURE__ */ React.createElement(P.TextField, { label: "Contato de emerg\xEAncia no dia", defaultValue: "(85) 99812-4821" })
+    ));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

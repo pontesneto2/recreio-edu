@@ -1,0 +1,7 @@
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.webp binary
+
+# O protótipo é referência visual: fica fora das estatísticas de linguagem do GitHub.
+prototipo/** linguist-documentation

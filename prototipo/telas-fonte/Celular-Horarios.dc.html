@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Celular: Horários</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+<header class="rc-app-bar"><a class="rc-app-back" href="Celular-Mais.dc.html" aria-label="Voltar"><x-import component-from-global-scope="Recreio.Icon" name="chevron-left" size="{{s22}}"></x-import></a><h1>Horário de aulas<small>Ana Beatriz · 9º ano A · Manhã</small></h1><span></span></header>
+<div class="rc-app-scroll">
+<div class="rc-app-body"><x-import component-from-global-scope="Recreio.SegmentedControl" label="Dia" value="qua" options="{{dias}}" full="{{yes}}"></x-import><div class="rc-app-card is-flush"><div class="rc-app-row"><strong class="rc-tnum" style="width: 48px; color: var(--ink-2);">7h30</strong><span><strong>Língua Portuguesa</strong><small>Profa. Helena Costa · sala 12</small></span></div><div class="rc-app-row" style="background: var(--brand-soft); margin: 0 -14px; padding: 10px 14px; border-radius: 0;"><strong class="rc-tnum" style="width: 48px; color: var(--ink-2);">8h20</strong><span><strong>Matemática</strong><small>Prof. Ricardo Albuquerque · sala 12</small></span></div><div class="rc-app-row"><strong class="rc-tnum" style="width: 48px; color: var(--ink-2);">9h10</strong><span><strong>Ciências</strong><small>Prof. Marcos Vinícius Teixeira · laboratório</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="brand" size="sm" icon="clock">Agora</x-import></div><div class="rc-app-row"><strong class="rc-tnum" style="width: 48px; color: var(--ink-2);">10h00</strong><span><small>Intervalo · 20 minutos</small></span></div><div class="rc-app-row"><strong class="rc-tnum" style="width: 48px; color: var(--ink-2);">10h20</strong><span><strong>História</strong><small>Prof. Marcelo Dias · sala 12</small></span></div><div class="rc-app-row"><strong class="rc-tnum" style="width: 48px; color: var(--ink-2);">11h10</strong><span><strong>Inglês</strong><small>Teacher Tatiane Freitas · sala de idiomas</small></span></div></div><div class="rc-app-sec"><h2>À tarde</h2></div><div class="rc-app-card is-flush"><div class="rc-app-row"><strong class="rc-tnum" style="width: 48px; color: var(--ink-2);">14h00</strong><span><strong>Reforço de Matemática</strong><small>Prof. Ricardo Albuquerque · sala 12 · terças</small></span></div><div class="rc-app-row"><strong class="rc-tnum" style="width: 48px; color: var(--ink-2);">15h00</strong><span><strong>Estudo dirigido</strong><small>Semi-integral · biblioteca</small></span></div></div></div>
+</div>
+
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="mais"></x-import>
+
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return Object.assign({ yes: true, no: false, one: 1, two: 2, three: 3, s14: 14, s16: 16, s18: 18, s20: 20, s22: 22, s24: 24, s28: 28, s32: 32, s36: 36, s40: 40, s44: 44, s48: 48, s56: 56, s64: 64, s72: 72, s96: 96, tabs: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Celular-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', count: 2, href: 'Celular-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Celular-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 1, href: 'Celular-Chat.dc.html' }, { id: 'mais', label: 'Mais', icon: 'menu', href: 'Celular-Mais.dc.html' }] }, {
+      dias: [{ value: 'seg', label: 'Seg' }, { value: 'ter', label: 'Ter' }, { value: 'qua', label: 'Qua' }, { value: 'qui', label: 'Qui' }, { value: 'sex', label: 'Sex' }]
+    });
+  }
+}
+</script>
+</body>
+</html>

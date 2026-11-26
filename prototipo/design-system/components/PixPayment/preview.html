@@ -1,0 +1,20 @@
+<!-- @dsCard group="Financeiro" height=700 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>PixPayment</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    const [st, setSt] = React.useState("aguardando");
+    return /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, alignItems: "start" } }, /* @__PURE__ */ React.createElement("div", { className: "rc-card", style: { padding: 24 } }, /* @__PURE__ */ React.createElement(P.PixPayment, { amount: 1406, reference: "Mensalidade de dezembro \xB7 Davi", expiresIn: 1792 })), /* @__PURE__ */ React.createElement("div", { className: "rc-card", style: { padding: 24 } }, /* @__PURE__ */ React.createElement(P.PixPayment, { amount: 1406, status: "pago" })));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

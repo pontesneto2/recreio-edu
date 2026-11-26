@@ -1,0 +1,19 @@
+<!-- @dsCard group="Carregamento" height=80 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>Spinner</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 20, alignItems: "center", color: "var(--brand-ink)" } }, /* @__PURE__ */ React.createElement(P.Spinner, { size: 16 }), /* @__PURE__ */ React.createElement(P.Spinner, { size: 24 }), /* @__PURE__ */ React.createElement(P.Spinner, { size: 32 }), /* @__PURE__ */ React.createElement("span", { style: { display: "flex", gap: 8, alignItems: "center", color: "var(--ink-2)" } }, /* @__PURE__ */ React.createElement(P.Spinner, { size: 16 }), "Sincronizando notas"));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!-- @dsCard group="Dados" height=420 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>Timeline</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { maxWidth: 520 } }, /* @__PURE__ */ React.createElement(P.Timeline, { nowIndex: 2, items: [
+      { time: "7h30", kind: "saida", title: "Entrada registrada", meta: "Port\xE3o principal", tone: "success", done: true },
+      { time: "9h10", kind: "aula", title: "Prova de Ci\xEAncias", meta: "Conte\xFAdo: sistema solar, cap\xEDtulo 4", done: true },
+      { time: "10h00", kind: "refeicao", title: "Lanche: tapioca com queijo e salada de frutas", meta: "Comeu tudo", tone: "brand" },
+      { time: "11h40", kind: "foto", title: "3 fotos no laborat\xF3rio", tone: "accent" },
+      { time: "12h30", kind: "saida", title: "Sa\xEDda prevista", meta: "V\xF3 L\xFAcia vai buscar" }
+    ] }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

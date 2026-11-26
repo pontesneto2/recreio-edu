@@ -1,0 +1,19 @@
+<!-- @dsCard group="Campos" height=160 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>Switch</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { maxWidth: 460 } }, /* @__PURE__ */ React.createElement(P.Switch, { label: "Avisos urgentes", description: "Sempre ligado para emerg\xEAncias da escola.", defaultChecked: true }), /* @__PURE__ */ React.createElement(P.Switch, { label: "Resumo di\xE1rio \xE0s 18h", description: "Junta a rotina do dia num aviso s\xF3." }), /* @__PURE__ */ React.createElement(P.Switch, { label: "Hor\xE1rio de sil\xEAncio", description: "Das 21h \xE0s 7h, s\xF3 avisos urgentes." }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

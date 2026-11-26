@@ -1,0 +1,19 @@
+<!-- @dsCard group="Fundamentos" height=120 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>SchoolMark</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    return /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 16, alignItems: "center", flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement(P.SchoolMark, { name: "Col\xE9gio Recreio", size: 48 }), /* @__PURE__ */ React.createElement(P.SchoolTheme, { seed: "#B45309" }, /* @__PURE__ */ React.createElement(P.SchoolMark, { name: "Escola Cajueiro", size: 48 })), /* @__PURE__ */ React.createElement(P.SchoolTheme, { seed: "#4D7C0F" }, /* @__PURE__ */ React.createElement(P.SchoolMark, { name: "Instituto Carna\xFAba", size: 48 })), /* @__PURE__ */ React.createElement(P.SchoolTheme, { seed: "#FACC15" }, /* @__PURE__ */ React.createElement(P.SchoolMark, { name: "Escola Sol Nascente", size: 48 })));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Biblioteca: Acervo e empréstimos</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-shell" style="font-family: var(--font-sans); color: var(--ink);">
+<div class="rc-shell-side">
+<x-import component-from-global-scope="Recreio.SideNav" school="{{school}}" units="{{units}}" groups="{{nav}}" active="biblioteca"></x-import>
+</div>
+<div class="rc-shell-main">
+<header style="position: sticky; top: 0; z-index: 10; background: var(--surface-1); border-bottom: 1px solid var(--line);">
+<div class="rc-shell-bar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<div class="rc-pagehead" style="flex: 1 1 260px;"><span class="rc-pagehead-icon" aria-hidden="true"><x-import component-from-global-scope="Recreio.Icon" name="book" size="{{s22}}"></x-import></span><div class="rc-pagehead-text"><h1 style="margin: 0; font-size: 1.375rem; font-weight: 750; letter-spacing: -0.025em;">Biblioteca</h1><p style="margin: 0; font-size: 14px; color: var(--ink-2);">4.218 títulos · 186 empréstimos ativos · 9 atrasados</p></div></div>
+<a class="rc-btn rc-btn-ghost rc-btn-sm" href="Familia-Biblioteca.dc.html">Ver como a família vê</a>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Buscar título, autor ou aluno" style="flex: 1 1 280px; max-width: 380px;"></x-import>
+<details class="rc-bellmenu">
+<summary class="rc-iconbtn rc-iconbtn-primary" aria-label="Notificações"><x-import component-from-global-scope="Recreio.Icon" name="bell" size="{{s20}}"></x-import><span class="rc-iconbtn-badge">{{bellCount}}</span></summary>
+<div class="rc-bellmenu-panel" role="dialog" aria-label="Notificações">
+<div class="rc-bellmenu-head"><strong>Notificações</strong><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lidas">Marcar todas como lidas</a></div>
+<ul class="rc-bellmenu-list">
+<sc-for list="{{bellNotifs}}" as="n" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.NotificationItem" index="{{ $index }}" icon="{{n.icon}}" title="{{n.title}}" text="{{n.text}}" time="{{n.time}}" unread="{{n.unread}}" priority="{{n.priority}}"></x-import>
+</sc-for>
+</ul>
+<a class="rc-bellmenu-all" href="Escola-Notificacoes.dc.html">Ver todas as notificações</a>
+</div>
+</details>
+<x-import component-from-global-scope="Recreio.ProfileSwitcher" user="{{user}}" dependents="{{kids}}" active-child="{{activeChild}}" profiles="{{profiles}}" active-profile="{{activeProfile}}"></x-import>
+</div>
+</header>
+<main class="rc-shell-content" style="display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
+<nav class="rc-tabs rc-tabs-links" aria-label="Biblioteca">
+<a class="rc-tab is-on" href="Escola-Biblioteca.dc.html" aria-current="page"><x-import component-from-global-scope="Recreio.Icon" name="book" size="{{s18}}"></x-import>Balcão</a>
+<a class="rc-tab" href="Escola-Biblioteca-Acervo.dc.html"><x-import component-from-global-scope="Recreio.Icon" name="list" size="{{s18}}"></x-import>Acervo e reservas</a>
+</nav>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px; padding: 16px 20px; border-radius: var(--radius-lg); background: var(--surface-1); border: 1px solid var(--line); box-shadow: var(--shadow-1);">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; min-width: 0; max-width: 100%;">
+<x-import component-from-global-scope="Recreio.Select" label="Sede" default-value="aldeota" options="{{sedes}}"></x-import>
+<x-import component-from-global-scope="Recreio.Select" label="Série" default-value="todas" options="{{series}}"></x-import>
+<x-import component-from-global-scope="Recreio.Select" label="Turma" default-value="todas" options="{{turmasF}}"></x-import>
+<x-import component-from-global-scope="Recreio.Select" label="Turno" default-value="todos" options="{{turnos}}"></x-import>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-secondary" href="#pop-livro">Cadastrar livro</a><a class="rc-btn rc-btn-secondary" href="#devolucao">Registrar devolução</a><a class="rc-btn rc-btn-primary" href="#emprestimo">Novo empréstimo</a></div>
+</div>
+<section aria-label="Indicadores da biblioteca" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 16px;">
+<x-import component-from-global-scope="Recreio.StatCard" color="ciano" label="Empréstimos ativos" value="{{a}}" icon="book" hint="Limite de 3 livros por aluno"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="vermelho" label="Atrasados" value="{{b}}" icon="alert" hint="Multa de R$ 0,50 por dia" href="#pop-atrasados"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="amarelo" label="Vencem esta semana" value="{{v}}" icon="clock" hint="Lembrete automático 2 dias antes"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="roxo" label="Reservas na fila" value="{{c}}" icon="bookmark" hint="8 já disponíveis para retirada"></x-import>
+<x-import component-from-global-scope="Recreio.StatCard" color="verde" label="Leituras no ano" value="{{d}}" delta="{{dd}}" delta-suffix="%" delta-label="vs. 2025" icon="star"></x-import>
+</section>
+<div class="rc-split" style="gap: 24px; align-items: start; --split: minmax(0, 1fr) minmax(0, 1fr);">
+<div id="emprestimo"><x-import component-from-global-scope="Recreio.Card" title="Novo empréstimo" subtitle="Balcão · valide o aluno e o exemplar antes de entregar">
+<div style="display: flex; flex-direction: column; gap: 16px;">
+<p class="rc-section-title" style="margin: 0;">1 · Aluno</p>
+<x-import component-from-global-scope="Recreio.SearchField" placeholder="Nome, matrícula ou carteirinha"></x-import>
+<div style="display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid var(--line); border-radius: var(--radius-md); background: var(--surface-0);"><x-import component-from-global-scope="Recreio.Avatar" name="Ana Beatriz Lima" size="{{s40}}"></x-import><span style="min-width: 0; flex: 1;"><strong style="display: block;">Ana Beatriz Lima</strong><small style="color: var(--ink-2);">9º ano A · Manhã · matrícula 2018-0214</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="success" size="sm" icon="check">Liberada</x-import></div>
+<p class="rc-section-title" style="margin: 4px 0 0;">2 · Exemplar</p>
+<div style="display: flex; gap: 8px;"><div style="flex: 1; min-width: 0;"><x-import component-from-global-scope="Recreio.SearchField" placeholder="Título, autor, ISBN ou código do exemplar"></x-import></div><a class="rc-btn rc-btn-secondary" href="#pop-leitor"><x-import component-from-global-scope="Recreio.Icon" name="scan" size="{{s18}}"></x-import><span class="rc-btn-label">Ler código</span></a></div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid var(--line); border-radius: var(--radius-md); background: var(--surface-0);"><span style="display: grid; place-items: center; width: 40px; height: 52px; flex: none; border-radius: 4px; background: #8a3b12; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .02em; box-shadow: var(--shadow-1);">DC</span><span style="min-width: 0; flex: 1;"><strong style="display: block;">Dom Casmurro · Machado de Assis</strong><small style="color: var(--ink-2);">Exemplar 0090 · Estante B1 · 4 de 6 disponíveis</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="success" size="sm">Disponível</x-import></div>
+<p class="rc-section-title" style="margin: 4px 0 0;">3 · Validação</p>
+<div style="display: flex; flex-direction: column; gap: 8px;"><sc-for list="{{valida}}" as="v" hint-placeholder-count="4"><div style="display: flex; align-items: center; gap: 8px; font-size: 14px;"><x-import component-from-global-scope="Recreio.StatusPill" tone="{{v.tone}}" icon="{{v.icon}}" size="sm">{{v.st}}</x-import><span>{{v.t}}</span></div></sc-for></div>
+<p class="rc-section-title" style="margin: 4px 0 0;">4 · Prazo e estado</p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: 12px;">
+<x-import component-from-global-scope="Recreio.Select" label="Prazo" default-value="14" options="{{prazos}}"></x-import>
+<x-import component-from-global-scope="Recreio.TextField" label="Devolver até" default-value="Quarta, 09/12"></x-import>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px;"><span style="font-size: 14px; font-weight: 600;">Estado do exemplar na saída</span><x-import component-from-global-scope="Recreio.SegmentedControl" label="Estado na saída" value="bom" options="{{estados}}"></x-import></div>
+<x-import component-from-global-scope="Recreio.TextArea" label="Observações" default-value="Lombada com pequeno rasgo, registrado na saída." rows="{{two}}"></x-import>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-primary" href="#pop-emprestimo">Confirmar empréstimo</a><a class="rc-btn rc-btn-ghost" href="Escola-Biblioteca.dc.html">Limpar</a></div>
+</div>
+</x-import></div>
+<div id="devolucao"><x-import component-from-global-scope="Recreio.Card" title="Devolução" subtitle="Leia o código do exemplar. O sistema acha o empréstimo e calcula a multa">
+<div style="display: flex; flex-direction: column; gap: 16px;">
+<div style="display: flex; gap: 8px;"><div style="flex: 1; min-width: 0;"><x-import component-from-global-scope="Recreio.SearchField" placeholder="Código do exemplar ou nome do aluno"></x-import></div><a class="rc-btn rc-btn-secondary" href="#pop-leitor"><x-import component-from-global-scope="Recreio.Icon" name="scan" size="{{s18}}"></x-import><span class="rc-btn-label">Ler código</span></a></div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid var(--line); border-radius: var(--radius-md); background: var(--surface-0);"><span style="display: grid; place-items: center; width: 40px; height: 52px; flex: none; border-radius: 4px; background: #5b6b2f; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .02em; box-shadow: var(--shadow-1);">OQ</span><span style="min-width: 0; flex: 1;"><strong style="display: block;">O Quinze · Rachel de Queiroz</strong><small style="color: var(--ink-2);">Exemplar 0233 · com Arthur Nogueira, 9º ano A · Manhã</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="danger" size="sm" icon="alert">6 dias de atraso</x-import></div>
+<dl class="rc-fields" style="grid-template-columns: repeat(auto-fill, minmax(min(100%, 140px), 1fr)); gap: 14px 18px;">
+<div class="rc-field"><dt>Retirado em</dt><dd>08/10</dd></div><div class="rc-field"><dt>Devolver até</dt><dd>19/11</dd></div><div class="rc-field"><dt>Renovações</dt><dd>2 de 2</dd></div><div class="rc-field"><dt>Multa</dt><dd style="color: var(--danger);">R$ 3,00</dd></div><div class="rc-field rc-field-wide"><dt>Observação da saída</dt><dd>Sem avarias. Exemplar novo.</dd></div>
+</dl>
+<div style="display: flex; flex-direction: column; gap: 6px;"><span style="font-size: 14px; font-weight: 600;">Estado na devolução</span><x-import component-from-global-scope="Recreio.SegmentedControl" label="Estado na devolução" value="desgastado" options="{{estados}}"></x-import></div>
+<x-import component-from-global-scope="Recreio.TextArea" label="Observações da devolução" default-value="Duas páginas dobradas. Avisar a família." rows="{{two}}"></x-import>
+<x-import component-from-global-scope="Recreio.Checkbox" label="Avisar a família sobre o estado do livro" default-checked="{{yes}}"></x-import>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><a class="rc-btn rc-btn-primary" href="#pop-devolvido">Registrar devolução e multa</a><a class="rc-btn rc-btn-ghost" href="#pop-isentar">Isentar multa</a></div>
+</div>
+</x-import></div>
+</div>
+<x-import component-from-global-scope="Recreio.Card" title="Movimentação" subtitle="Todos os empréstimos, devoluções e reservas da sede">
+<div style="display: flex; flex-direction: column; gap: 14px;">
+<x-import component-from-global-scope="Recreio.FilterChips" label="Situação" value="{{fMov}}" options="{{movOpts}}" single="{{yes}}"></x-import>
+<div role="table" aria-label="Movimentação da biblioteca">
+<div role="row" class="rc-rows-row rc-rows-head" style="--cols: minmax(190px, 2fr) minmax(160px, 1.4fr) 84px 96px 132px minmax(110px, 1fr) 170px; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);"><span>Livro</span><span>Aluno</span><span>Retirada</span><span>Devolver até</span><span>Situação</span><span>Observação</span><span></span></div>
+<sc-for list="{{mov}}" as="m" hint-placeholder-count="8">
+<div role="row" class="rc-rows-row" style="--cols: minmax(190px, 2fr) minmax(160px, 1.4fr) 84px 96px 132px minmax(110px, 1fr) 170px; align-items: center; padding: 12px; border-bottom: 1px solid var(--line);">
+<span role="cell" style="min-width: 0;"><strong style="display: block;">{{m.livro}}</strong><small style="color: var(--ink-2);">{{m.autor}} · ex. {{m.ex}}</small></span>
+<span role="cell" style="display: flex; align-items: center; gap: 10px; min-width: 0;" data-label="Aluno"><x-import component-from-global-scope="Recreio.Avatar" name="{{m.aluno}}" size="{{s32}}"></x-import><span style="min-width: 0;"><span style="display: block;">{{m.aluno}}</span><small style="color: var(--ink-2);">{{m.turma}}</small></span></span>
+<span role="cell" data-label="Retirada">{{m.ret}}</span>
+<span role="cell" data-label="Devolver até">{{m.dev}}</span>
+<span role="cell" data-label="Situação"><x-import component-from-global-scope="Recreio.StatusPill" tone="{{m.tone}}" size="sm">{{m.st}}</x-import></span>
+<span role="cell" style="font-size: 14px; color: var(--ink-2);" data-label="Observação">{{m.obs}}</span>
+<span role="cell" style="display: flex; gap: 4px; justify-content: flex-end;"><a class="rc-btn rc-btn-ghost rc-btn-sm" href="{{m.a1h}}">{{m.a1}}</a><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#devolucao">Devolver</a></span>
+</div>
+</sc-for>
+</div>
+<x-import component-from-global-scope="Recreio.Pagination" page="{{one}}" pages="{{pages}}" total="{{a}}" page-size="{{eight}}" label="empréstimos"></x-import>
+</div>
+</x-import>
+<section style="display: flex; flex-direction: column; gap: 12px;">
+<h2 style="margin: 0; font-size: 1.25rem; font-weight: 750; letter-spacing: -0.02em;">Mais procurados</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 16px;">
+<sc-for list="{{books}}" as="b" hint-placeholder-count="4">
+<x-import component-from-global-scope="Recreio.BookCard" title="{{b.title}}" author="{{b.author}}" year="{{b.year}}" copies="{{b.copies}}" available="{{b.av}}" shelf="{{b.shelf}}" tags="{{b.tags}}"></x-import>
+</sc-for>
+</div>
+</section>
+</main>
+</div>
+<div class="rc-shell-tabbar">
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="biblioteca"></x-import>
+</div>
+</div>
+<div id="pop-emprestimo" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Confirmar o empréstimo?">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="book" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Confirmar o empréstimo?</p><p class="rc-dialog-desc">Dom Casmurro, exemplar 0090, para Ana Beatriz Lima · 9º ano A · Manhã.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><dl class="rc-fields" style="gap: 12px 20px;"><div class="rc-field"><dt>Devolver até</dt><dd>Quarta, 09/12</dd></div><div class="rc-field"><dt>Renovações</dt><dd>Até 2 vezes</dd></div><div class="rc-field"><dt>Estado na saída</dt><dd>Bom</dd></div><div class="rc-field rc-field-wide"><dt>Observação</dt><dd>Lombada com pequeno rasgo, registrado na saída.</dd></div></dl></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#emprestimo">Revisar</a><a class="rc-btn rc-btn-primary" href="#pop-emprestado">Confirmar empréstimo</a></div>
+</div>
+</div>
+<div id="pop-emprestado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Empréstimo registrado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Empréstimo registrado</p><p class="rc-dialog-desc">Ana Beatriz levou Dom Casmurro. A família vê o empréstimo no app, e o lembrete sai em 07/12.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#pop-impresso">Imprimir comprovante</a><a class="rc-btn rc-btn-primary" href="#emprestimo">Próximo empréstimo</a></div>
+</div>
+</div>
+<div id="pop-devolvido" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Devolução registrada">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{s32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Devolução registrada</p><p class="rc-dialog-desc">O Quinze voltou para a Estante B3. A multa de R$ 3,00 vai para a próxima mensalidade, e a família recebeu o aviso sobre as páginas dobradas.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#devolucao">Próxima devolução</a></div>
+</div>
+</div>
+<div id="pop-isentar" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Isentar a multa de R$ 3,00?">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-info"><x-import component-from-global-scope="Recreio.Icon" name="shield" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Isentar a multa de R$ 3,00?</p><p class="rc-dialog-desc">Arthur Nogueira · O Quinze. A isenção fica no histórico do aluno, com o seu nome.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><x-import component-from-global-scope="Recreio.TextArea" label="Motivo (obrigatório)" placeholder="Ex.: aluno esteve afastado por atestado médico" rows="{{three}}"></x-import></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#devolucao">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-devolvido">Isentar e registrar</a></div>
+</div>
+</div>
+<div id="pop-atrasados" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="9 empréstimos atrasados">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-danger"><x-import component-from-global-scope="Recreio.Icon" name="alert" size="{{s22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">9 empréstimos atrasados</p><p class="rc-dialog-desc">Multa de R$ 0,50 por dia. A família recebe aviso no app a cada 3 dias de atraso.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{s20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div><sc-for list="{{atrasados}}" as="f" hint-placeholder-count="5"><div class="rc-popup-row"><x-import component-from-global-scope="Recreio.Avatar" name="{{f.aluno}}" size="{{s36}}"></x-import><span style="min-width: 0;"><strong style="display: block;">{{f.aluno}}</strong><small style="color: var(--ink-2);">{{f.meta}}</small></span><a class="rc-btn rc-btn-ghost rc-btn-sm" href="#pop-lembrado">Lembrar</a></div></sc-for></div><p style="margin: 12px 0 0; font-size: 14px; color: var(--ink-2);">E mais 4 alunos.</p></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Fechar</a><a class="rc-btn rc-btn-primary" href="#pop-lembrado">Lembrar as 9 famílias</a></div>
+</div>
+</div>
+<div id="pop-lembrado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Lembrete enviado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="send" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Lembrete enviado</p><p class="rc-dialog-desc">O responsável recebe no app, com aviso no celular. O envio fica no histórico do aluno.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-livro" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Cadastrar livro no acervo">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-lg">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="book" size="{{pS22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Cadastrar livro no acervo</p><p class="rc-dialog-desc">Cada exemplar ganha um código próprio para o empréstimo.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{pS20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; gap: 12px;"><x-import component-from-global-scope="Recreio.TextField" label="Título" placeholder="Ex.: Memórias Póstumas de Brás Cubas"></x-import><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px;"><x-import component-from-global-scope="Recreio.TextField" label="Autor"></x-import><x-import component-from-global-scope="Recreio.TextField" label="ISBN" hint="Preenche o resto sozinho, se existir"></x-import></div><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px;"><x-import component-from-global-scope="Recreio.TextField" label="Exemplares" default-value="1"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Estante" default-value="Estante B1"></x-import><x-import component-from-global-scope="Recreio.TextField" label="Ano"></x-import></div><x-import component-from-global-scope="Recreio.Checkbox" label="Leitura indicada para alguma série"></x-import></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Cancelar</a><a class="rc-btn rc-btn-primary" href="#pop-livro-ok">Cadastrar</a></div>
+</div>
+</div>
+<div id="pop-livro-ok" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Livro cadastrado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Livro cadastrado</p><p class="rc-dialog-desc">O exemplar já aparece na busca do balcão e na Biblioteca das famílias.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-leitor" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Ler o código do exemplar">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-brand"><x-import component-from-global-scope="Recreio.Icon" name="scan" size="{{pS22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Ler o código do exemplar</p><p class="rc-dialog-desc">A câmera lê o código de barras da etiqueta ou o ISBN da contracapa.</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{pS20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div style="display: grid; place-items: center; height: 180px; border-radius: var(--radius-lg); background: #0b1220; position: relative; overflow: hidden;"><div style="width: 72%; height: 110px; border: 2px solid rgba(255,255,255,.7); border-radius: 12px; display: grid; align-items: center;"><div style="height: 2px; background: #ff5a5a; box-shadow: 0 0 12px #ff5a5a;"></div></div></div><p style="margin: 12px 0 0; font-size: 14px; color: var(--ink-2);">Sem câmera neste computador? Use um leitor USB ou digite o código no campo de busca.</p></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-ghost" href="#">Digitar o código</a><a class="rc-btn rc-btn-primary" href="#pop-lido">Usar a leitura</a></div>
+</div>
+</div>
+<div id="pop-lido" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Código lido">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="scan" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Código lido</p><p class="rc-dialog-desc">Exemplar 0090 · Dom Casmurro. Os dados já estão no formulário.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-renovado" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Empréstimo renovado">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="refresh" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Empréstimo renovado</p><p class="rc-dialog-desc">O prazo novo é de mais 14 dias. A família recebe o aviso com a nova data.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-impresso" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Comprovante enviado para impressão">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="file-text" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Comprovante enviado para impressão</p><p class="rc-dialog-desc">Saiu na impressora do balcão. A família também recebe o comprovante no app.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+<div id="pop-historico" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Histórico do exemplar 0089">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog ">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-info"><x-import component-from-global-scope="Recreio.Icon" name="history" size="{{pS22}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Histórico do exemplar 0089</p><p class="rc-dialog-desc">Dom Casmurro · Machado de Assis · Estante B1</p></div><a class="rc-iconbtn" href="#" aria-label="Fechar"><x-import component-from-global-scope="Recreio.Icon" name="x" size="{{pS20}}"></x-import></a></div>
+<div class="rc-dialog-body"><div><div class="rc-popup-row" style="grid-template-columns: minmax(0, 1fr) auto;"><span style="min-width: 0;"><strong style="display: block;">Gabriela Moreira · 1ª série EM</strong><small style="color: var(--ink-2);">11/11 a 25/11 · devolvido em bom estado</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="success" size="sm">Em dia</x-import></div><div class="rc-popup-row" style="grid-template-columns: minmax(0, 1fr) auto;"><span style="min-width: 0;"><strong style="display: block;">Bruno Sales · 9º ano A</strong><small style="color: var(--ink-2);">02/09 a 19/09 · 3 dias de atraso, multa paga</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="warning" size="sm">Com atraso</x-import></div><div class="rc-popup-row" style="grid-template-columns: minmax(0, 1fr) auto;"><span style="min-width: 0;"><strong style="display: block;">Larissa Bezerra · 9º ano A</strong><small style="color: var(--ink-2);">05/08 a 19/08 · sem observações</small></span><x-import component-from-global-scope="Recreio.StatusPill" tone="success" size="sm">Em dia</x-import></div></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-secondary" href="#">Fechar</a></div>
+</div>
+</div>
+<div id="pop-lidas" class="rc-overlay rc-popup" role="dialog" aria-modal="true" aria-label="Notificações marcadas como lidas">
+<a class="rc-popup-close" href="#" aria-label="Fechar" tabindex="-1"></a>
+<div class="rc-dialog rc-dialog-sm rc-dialog-hero">
+<div class="rc-dialog-head"><span class="rc-dialog-icon rc-tone-success"><x-import component-from-global-scope="Recreio.Icon" name="check-circle" size="{{pS32}}"></x-import></span><div class="rc-dialog-titles"><p class="rc-dialog-title">Notificações marcadas como lidas</p><p class="rc-dialog-desc">O sino volta a avisar quando chegar algo novo.</p></div></div>
+<div class="rc-dialog-foot"><a class="rc-btn rc-btn-primary" href="#">Concluir</a></div>
+</div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":3300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const bell = { s20: 20, bellCount: 5, bellNotifs: [
+      { icon: 'clipboard', title: '5 justificativas para analisar', text: 'Frequência · Fundamental II', time: 'Hoje, 11h05', unread: true, priority: 'importante' },
+      { icon: 'chat', title: 'Fernanda Lima respondeu no chat', text: 'Ana Beatriz · 9º ano A', time: 'Hoje, 10h12', unread: true, priority: 'rotina' },
+      { icon: 'edit', title: 'História 9º B: faltam 4 notas', text: 'Fechamento do 4º bimestre', time: 'Hoje, 9h00', unread: true, priority: 'importante' },
+      { icon: 'alert', title: 'Ocorrência sem resposta da família', text: 'Mateus Holanda · 9º ano C · há 7 dias', time: 'Hoje, 8h30', unread: true, priority: 'urgente' },
+      { icon: 'wallet', title: '63 mensalidades vencidas', text: '41 famílias · a régua de cobrança enviou lembretes', time: 'Hoje, 7h00', unread: true, priority: 'rotina' }] };
+    const tabs = [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'comunicados', label: 'Avisos', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }];
+    const shared = {
+      bellCount: 5, activeChild: undefined, activeProfile: 'dir', kids: [],
+      school: { name: 'Colégio Recreio', unit: 'Unidade Aldeota' },
+      units: [{ id: 'aldeota', label: 'Unidade Aldeota', meta: '1.248 alunos · Infantil ao Médio', href: 'Escola-Painel.dc.html', current: true }, { id: 'eusebio', label: 'Unidade Eusébio', meta: '936 alunos · Infantil e Fundamental I', href: 'Escola-Painel.dc.html' }, { id: 'rede', label: 'Todas as unidades', meta: 'Visão consolidada da rede', href: 'Escola-Painel.dc.html' }],
+      user: { name: 'Lúcia Menezes' },
+      profiles: [{ id: 'dir', label: 'Direção', icon: 'shield', school: 'Colégio Recreio' }, { id: 'prof', label: 'Professora', icon: 'book', school: 'Colégio Recreio' }],
+      nav: [
+        { items: [{ id: 'painel', label: 'Painel', icon: 'home', href: 'Escola-Painel.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }, { id: 'chat', label: 'Chat com famílias', icon: 'chat', count: 4, href: 'Escola-Chat.dc.html' }] },
+        { label: 'Pedagógico', items: [{ id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Escola-Horarios.dc.html' }, { id: 'frequencia', label: 'Frequência', icon: 'clipboard', count: 5, href: 'Escola-Frequencia.dc.html' }, { id: 'boletins', label: 'Fechamento e boletins', icon: 'chart', href: 'Escola-Boletins.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', count: 3, href: 'Escola-Ocorrencias.dc.html' }, { id: 'integral', label: 'Integral e reforço', icon: 'sun-moon', href: 'Escola-Integral.dc.html' }, { id: 'saude', label: 'Saúde e enfermaria', icon: 'heart', href: 'Escola-Saude.dc.html' }, { id: 'inclusao', label: 'Inclusão e AEE', icon: 'accessibility', href: 'Escola-Inclusao.dc.html' }, { id: 'medidas', label: 'Medidas disciplinares', icon: 'flag', href: 'Escola-Medidas.dc.html' }, { id: 'extras', label: 'Pontos extras', icon: 'star', href: 'Escola-Pontos-extras.dc.html' }, { id: 'eja', label: 'EJA', icon: 'moon', href: 'Escola-EJA.dc.html' }] },
+        { label: 'Secretaria', items: [{ id: 'alunos', label: 'Alunos', icon: 'users', href: 'Escola-Alunos.dc.html' }, { id: 'equipe', label: 'Equipe', icon: 'user', href: 'Escola-Equipe.dc.html' }, { id: 'captacao', label: 'Captação', icon: 'filter', count: 9, href: 'Escola-Captacao.dc.html' }, { id: 'matriculas', label: 'Matrículas', icon: 'file-text', count: 12, href: 'Escola-Matriculas.dc.html' }, { id: 'contratos', label: 'Contratos', icon: 'edit', count: 200, href: 'Escola-Contratos.dc.html' }, { id: 'solicitacoes', label: 'Solicitações', icon: 'file', count: 6, href: 'Escola-Solicitacoes.dc.html' }, { id: 'certificados', label: 'Certificados e diplomas', icon: 'graduation', href: 'Escola-Certificados.dc.html' }, { id: 'transferencias', label: 'Transferências', icon: 'sync', href: 'Escola-Transferencias.dc.html' }, { id: 'fotos', label: 'Fotos de alunos', icon: 'camera', href: 'Escola-Fotos.dc.html' }, { id: 'importacao', label: 'Migração de dados', icon: 'upload', href: 'Escola-Importacao.dc.html' }, { id: 'calendario', label: 'Calendário letivo', icon: 'flag', href: 'Escola-Calendario.dc.html' }, { id: 'autorizacoes', label: 'Passeios e autorizações', icon: 'key', href: 'Escola-Autorizacoes.dc.html' }, { id: 'portaria', label: 'Portaria', icon: 'gate', href: 'Escola-Portaria.dc.html' }, { id: 'biblioteca', label: 'Biblioteca', icon: 'book', href: 'Escola-Biblioteca.dc.html' }] },
+        { label: 'Família e serviços', items: [{ id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 4, href: 'Escola-Atendimentos.dc.html' }, { id: 'cardapio', label: 'Cardápio', icon: 'utensils', href: 'Escola-Cardapio.dc.html' }, { id: 'galeria', label: 'Galeria de fotos', icon: 'image', href: 'Escola-Galeria.dc.html' }, { id: 'loja', label: 'Loja da escola', icon: 'tag', count: 9, href: 'Escola-Loja.dc.html' }, { id: 'pesquisas', label: 'Pesquisas', icon: 'target', href: 'Escola-Pesquisas.dc.html' }] },
+        { label: 'Financeiro', items: [{ id: 'mensalidades', label: 'Mensalidades', icon: 'wallet', count: 41, urgent: true, href: 'Escola-Mensalidades.dc.html' }, { id: 'fiscal', label: 'Notas fiscais e IR', icon: 'receipt', count: 3, href: 'Escola-Fiscal.dc.html' }, { id: 'dae', label: 'DAE SEFAZ-CE', icon: 'receipt', href: 'Escola-DAE.dc.html' }, { id: 'caixa', label: 'Caixa e contas a pagar', icon: 'card', href: 'Escola-Caixa.dc.html' }] },
+        { label: 'Gestão', items: [{ id: 'relatorios', label: 'Relatórios e censo', icon: 'sparkline', href: 'Escola-Relatorios.dc.html' }, { id: 'permissoes', label: 'Grupos e permissões', icon: 'shield', href: 'Escola-Permissoes.dc.html' }, { id: 'modulos', label: 'Módulos e marca', icon: 'modules', href: 'Escola-Modulos.dc.html' }] }]
+    };
+    const __r = Object.assign({ yes: true, no: false, tabs }, shared, {
+      user: { name: 'Joana Paiva' }, activeProfile: 'bib', profiles: [{ id: 'bib', label: 'Biblioteca', icon: 'book', school: 'Colégio Recreio' }],
+      a: 186, b: 9, v: 14, c: 23, d: 6412, dd: 14, one: 1, two: 2, three: 3, eight: 8, pages: 24, s18: 18, s20: 20, s22: 22, s32: 32, s36: 36, s40: 40,
+      sedes: [{ value: 'aldeota', label: 'Unidade Aldeota' }, { value: 'eusebio', label: 'Unidade Eusébio' }],
+      series: [{ value: 'todas', label: 'Todas as séries' }, { value: 'f1', label: 'Fundamental I' }, { value: 'f2', label: 'Fundamental II' }, { value: 'em', label: 'Ensino Médio' }],
+      turmasF: [{ value: 'todas', label: 'Todas as turmas' }, { value: '2b', label: '2º ano B' }, { value: '7a', label: '7º ano A' }, { value: '9a', label: '9º ano A' }, { value: '1em', label: '1ª série EM' }],
+      turnos: [{ value: 'todos', label: 'Todos os turnos' }, { value: 'manha', label: 'Manhã' }, { value: 'tarde', label: 'Tarde' }, { value: 'integral', label: 'Integral' }],
+      prazos: [{ value: '7', label: '7 dias' }, { value: '14', label: '14 dias (padrão)' }, { value: '21', label: '21 dias (leitura do bimestre)' }],
+      estados: [{ value: 'novo', label: 'Novo' }, { value: 'bom', label: 'Bom' }, { value: 'desgastado', label: 'Desgastado' }, { value: 'danificado', label: 'Danificado' }],
+      valida: [
+        { st: 'Ok', tone: 'success', icon: 'check', t: 'Sem livros em atraso nem multa em aberto' },
+        { st: 'Ok', tone: 'success', icon: 'check', t: 'Dentro do limite: 1 de 3 livros com a aluna' },
+        { st: 'Ok', tone: 'success', icon: 'check', t: 'Exemplar disponível e sem reserva na frente' },
+        { st: 'Atenção', tone: 'warning', icon: 'alert', t: 'Já leu este título em 2025. Confirme com a aluna' }],
+      fMov: ['aberto'], movOpts: [{ value: 'aberto', label: 'Em aberto · 186' }, { value: 'atraso', label: 'Atrasados · 9' }, { value: 'semana', label: 'Vencem esta semana · 14' }, { value: 'hoje', label: 'Devolvidos hoje · 11' }, { value: 'reservas', label: 'Reservas · 23' }],
+      mov: [
+        { livro: 'O Quinze', autor: 'Rachel de Queiroz', ex: '0233', aluno: 'Arthur Nogueira', turma: '9º ano A · Manhã', ret: '08/10', dev: '19/11', st: '6 dias de atraso', tone: 'danger', obs: 'Renovado 2 vezes', a1: 'Lembrar', a1h: '#pop-lembrado' },
+        { livro: 'Iracema', autor: 'José de Alencar', ex: '0118', aluno: 'Ana Beatriz Lima', turma: '9º ano A · Manhã', ret: '18/11', dev: '02/12', st: 'No prazo', tone: 'success', obs: 'Leitura do bimestre', a1: 'Renovar', a1h: '#pop-renovado' },
+        { livro: 'Menina Bonita do Laço de Fita', autor: 'Ana Maria Machado', ex: '0507', aluno: 'Davi Lima', turma: '2º ano B · Manhã', ret: '12/11', dev: '26/11', st: 'Vence amanhã', tone: 'warning', obs: 'Renovado 1 vez', a1: 'Renovar', a1h: '#pop-renovado' },
+        { livro: 'A Bolsa Amarela', autor: 'Lygia Bojunga', ex: '0341', aluno: 'Sofia Araújo', turma: '7º ano A · Manhã', ret: '13/11', dev: '27/11', st: 'Vence em 2 dias', tone: 'warning', obs: 'Capa colada na saída', a1: 'Renovar', a1h: '#pop-renovado' },
+        { livro: 'Capitães da Areia', autor: 'Jorge Amado', ex: '0410', aluno: 'Lucas Andrade', turma: '9º ano A · Manhã', ret: '19/11', dev: '03/12', st: 'No prazo', tone: 'success', obs: 'Sem observações', a1: 'Renovar', a1h: '#pop-renovado' },
+        { livro: 'O Pequeno Príncipe', autor: 'Antoine de Saint-Exupéry', ex: '0602', aluno: 'Helena Prado', turma: '5º ano A · Tarde', ret: '10/11', dev: '24/11', st: '1 dia de atraso', tone: 'danger', obs: 'Família avisada hoje', a1: 'Lembrar', a1h: '#pop-lembrado' },
+        { livro: 'Dom Casmurro', autor: 'Machado de Assis', ex: '0089', aluno: 'Gabriela Moreira', turma: '1ª série EM · Manhã', ret: '11/11', dev: '25/11', st: 'Devolvido hoje', tone: 'neutral', obs: 'Devolvido em bom estado', a1: 'Histórico', a1h: '#pop-historico' },
+        { livro: 'Vidas Secas', autor: 'Graciliano Ramos', ex: '0154', aluno: 'Pedro Vasconcelos', turma: '9º ano B · Manhã', ret: '05/11', dev: '03/12', st: 'No prazo', tone: 'success', obs: 'Renovado 1 vez · Isabela na fila', a1: 'Renovar', a1h: '#pop-renovado' }],
+      atrasados: [
+        { aluno: 'Arthur Nogueira', meta: 'O Quinze · 9º ano A · 6 dias · R$ 3,00' },
+        { aluno: 'Helena Prado', meta: 'O Pequeno Príncipe · 5º ano A · 1 dia · R$ 0,50' },
+        { aluno: 'João Pedro Cavalcante', meta: 'Vidas Secas · 9º ano A · 3 dias · R$ 1,50' },
+        { aluno: 'Pedro Henrique Rocha', meta: 'O Cortiço · 1ª série EM · 8 dias · R$ 4,00' },
+        { aluno: 'Laura Menezes', meta: 'Bruxa Onilda · Infantil V · 2 dias · sem multa no Infantil' }],
+      books: [
+        { title: 'Iracema', author: 'José de Alencar', year: 1865, copies: 5, av: 3, shelf: 'Estante B3', tags: ['9º ano', 'Leitura do bimestre'] },
+        { title: 'O Quinze', author: 'Rachel de Queiroz', year: 1930, copies: 4, av: 0, shelf: 'Estante B3', tags: ['Literatura cearense'] },
+        { title: 'Menina Bonita do Laço de Fita', author: 'Ana Maria Machado', year: 1986, copies: 6, av: 2, shelf: 'Infantil A1', tags: ['Fundamental I'] },
+        { title: 'Dom Casmurro', author: 'Machado de Assis', year: 1899, copies: 6, av: 4, shelf: 'Estante B1', tags: ['Ensino Médio', 'Vestibular'] }]
+    });
+    /* Controle de acesso: cada perfil vê só os módulos liberados em Grupos e permissões. */
+    const ACESSO = { prof: ['comunicados', 'notas', 'chamada', 'agenda', 'frequencia', 'ocorrencias', 'inicio', 'diario', 'horarios', 'materiais', 'atendimentos', 'tarefas'], coord: ['painel', 'comunicados', 'chat', 'notas', 'chamada', 'agenda', 'frequencia', 'boletins', 'ocorrencias', 'integral', 'alunos', 'autorizacoes', 'equipe', 'horarios', 'calendario', 'atendimentos', 'cardapio', 'galeria', 'pesquisas', 'saude', 'inclusao', 'relatorios', 'biblioteca', 'portaria', 'medidas', 'extras', 'eja', 'certificados'], sec: ['comunicados', 'alunos', 'matriculas', 'contratos', 'autorizacoes', 'portaria', 'equipe', 'solicitacoes', 'calendario', 'horarios', 'loja', 'pesquisas', 'captacao', 'certificados', 'transferencias', 'fotos', 'importacao'], fin: ['comunicados', 'alunos', 'contratos', 'mensalidades', 'loja', 'fiscal', 'caixa', 'dae'], bib: ['comunicados', 'biblioteca'], port: ['comunicados', 'portaria', 'autorizacoes'], int: ['comunicados', 'chamada', 'integral', 'ocorrencias'], nutri: ['comunicados', 'cardapio'], enf: ['comunicados', 'saude'], aee: ['comunicados', 'inclusao', 'atendimentos', 'ocorrencias'] };
+    const permitidos = ACESSO[__r.activeProfile];
+    if (permitidos) {
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.filter((i) => permitidos.includes(i.id)) })).filter((g) => g.items.length);
+      __r.tabs = (__r.tabs || []).filter((t) => permitidos.includes(t.id));
+      __r.units = null;
+    }
+    /* Biblioteca e portaria: direção e coordenação entram pela visão de gestão. A operação fica com a bibliotecária e a portaria. */
+    if (['dir', 'coord'].includes(__r.activeProfile)) {
+      const GESTAO = { biblioteca: 'Escola-Biblioteca-Gestao.dc.html', portaria: 'Escola-Portaria-Gestao.dc.html' };
+      __r.nav = __r.nav.map((g) => Object.assign({}, g, { items: g.items.map((i) => (GESTAO[i.id] ? Object.assign({}, i, { href: GESTAO[i.id] }) : i)) }));
+      __r.tabs = (__r.tabs || []).map((t) => (GESTAO[t.id] ? Object.assign({}, t, { href: GESTAO[t.id] }) : t));
+    }
+    /* Portal do professor: quem entra como professor vê o próprio menu, com as turmas e o planejamento. */
+    if (__r.activeProfile === 'prof') {
+      __r.nav = [
+        { items: [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'comunicados', label: 'Comunicados', icon: 'bell', href: 'Escola-Comunicados.dc.html' }] },
+        { label: 'Minhas turmas', items: [{ id: 'diario', label: 'Diário de classe', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas e faltas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'tarefas', label: 'Tarefas', icon: 'list', count: 6, href: 'Professor-Tarefas.dc.html' }, { id: 'agenda', label: 'Agenda da turma', icon: 'calendar', href: 'Escola-Agenda.dc.html' }, { id: 'ocorrencias', label: 'Ocorrências', icon: 'alert', href: 'Escola-Ocorrencias.dc.html' }] },
+        { label: 'Planejamento', items: [{ id: 'horarios', label: 'Meus horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }, { id: 'materiais', label: 'Materiais de aula', icon: 'paperclip', href: 'Professor-Materiais.dc.html' }, { id: 'atendimentos', label: 'Atendimentos', icon: 'hand', count: 2, href: 'Escola-Atendimentos.dc.html' }] }];
+      __r.tabs = [{ id: 'inicio', label: 'Início', icon: 'home', href: 'Professor-Inicio.dc.html' }, { id: 'diario', label: 'Diário', icon: 'clipboard', href: 'Professor-Diario.dc.html' }, { id: 'chamada', label: 'Chamada', icon: 'check-circle', href: 'Escola-Chamada.dc.html' }, { id: 'notas', label: 'Notas', icon: 'edit', href: 'Escola-Notas-e-faltas.dc.html' }, { id: 'horarios', label: 'Horários', icon: 'clock', href: 'Professor-Horarios.dc.html' }];
+    }
+    return Object.assign({ pS3: 3, pS16: 16, pS18: 18, pS20: 20, pS22: 22, pS32: 32, pS36: 36, pS40: 40, pYes: true, pFmt: [{ value: 'xlsx', label: 'Excel (.xlsx)' }, { value: 'csv', label: 'CSV' }, { value: 'pdf', label: 'PDF para impressão' }] }, {}, bell, __r);
+  }
+}
+</script>
+</body>
+</html>

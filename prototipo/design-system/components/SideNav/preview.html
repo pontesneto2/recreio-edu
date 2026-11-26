@@ -1,0 +1,27 @@
+<!-- @dsCard group="Navegação" height=780 -->
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>SideNav</title>
+<style>body{padding:20px;background:var(--surface-0);} #root{min-height:40px;}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function() {
+  const P = window.Recreio;
+  function Demo() {
+    const groups = [
+      { items: [{ id: "hoje", label: "Painel", icon: "home" }, { id: "agenda", label: "Agenda", icon: "calendar" }, { id: "comunicados", label: "Comunicados", icon: "bell" }, { id: "mensagens", label: "Chat", icon: "chat", count: 4 }] },
+      { label: "Pedag\xF3gico", items: [{ id: "diario", label: "Notas e faltas", icon: "edit" }, { id: "boletim", label: "Boletim", icon: "chart" }, { id: "ocorrencias", label: "Ocorr\xEAncias", icon: "alert", count: 3 }, { id: "acompanhamento", label: "Integral e refor\xE7o", icon: "sun-moon" }] },
+      { label: "Secretaria", items: [{ id: "alunos", label: "Alunos", icon: "users" }, { id: "matriculas", label: "Matr\xEDculas", icon: "file-text", count: 12 }, { id: "portaria", label: "Portaria", icon: "gate" }, { id: "biblioteca", label: "Biblioteca", icon: "book" }] },
+      { label: "Financeiro", items: [{ id: "cobrancas", label: "Mensalidades", icon: "wallet", count: 7, urgent: true }, { id: "boletos", label: "Boletos", icon: "barcode" }, { id: "ir", label: "Recibos de IR", icon: "receipt" }] },
+      { label: "Gest\xE3o", items: [{ id: "indicadores", label: "Indicadores", icon: "pulse" }, { id: "permissoes", label: "Grupos e permiss\xF5es", icon: "shield" }, { id: "config", label: "Configura\xE7\xF5es", icon: "sliders" }] }
+    ];
+    const [a, setA] = React.useState("cobrancas");
+    return /* @__PURE__ */ React.createElement("div", { style: { height: 760, display: "flex" } }, /* @__PURE__ */ React.createElement(P.SideNav, { school: { name: "Col\xE9gio Recreio", unit: "Unidade Aldeota" }, groups, active: a, onNavigate: setA }));
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(P.RecreioProvider, null, /* @__PURE__ */ React.createElement(Demo, null)));
+})();
+</script>
+</body>
+</html>

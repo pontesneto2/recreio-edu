@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Celular: Pagar com Pix</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/recreio/tokens.css">
+<link rel="stylesheet" href="ds/recreio/components/bundle.css">
+<script src="ds/recreio/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-0)}
+a{color:var(--brand-ink)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<x-import component-from-global-scope="Recreio.RecreioProvider">
+<div class="rc-app">
+<div class="rc-app-status" aria-hidden="true"><span>9:41</span><span class="rc-app-status-icons"><i></i><b></b></span></div>
+<header class="rc-app-bar"><a class="rc-app-back" href="Celular-Financeiro.dc.html" aria-label="Voltar"><x-import component-from-global-scope="Recreio.Icon" name="chevron-left" size="{{s22}}"></x-import></a><h1>Pagar mensalidade<small>Dezembro de 2026 · Davi</small></h1><span></span></header>
+<div class="rc-app-scroll">
+<div style="display: flex; flex-direction: column; gap: 16px; padding: 16px;">
+<x-import component-from-global-scope="Recreio.InvoiceCard" competence="Dezembro de 2026" description="Mensalidade 2º ano" child="Davi" amount="{{a}}" due="quinta, 10/12" status="avencer" discount="{{d}}" compact="{{yes}}"></x-import>
+<div class="rc-card" style="padding: 16px;">
+<x-import component-from-global-scope="Recreio.PixPayment" amount="{{p}}" reference="Mensalidade de dezembro · Davi" payee="Colégio Recreio" expires-in="{{exp}}"></x-import>
+</div>
+</div>
+</div>
+<x-import component-from-global-scope="Recreio.TabBar" items="{{tabs}}" active="financeiro"></x-import>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const shared = {
+      tabs: [{ id: 'hoje', label: 'Hoje', icon: 'home', href: 'Celular-Hoje.dc.html' }, { id: 'agenda', label: 'Agenda', icon: 'calendar', count: 2, href: 'Celular-Agenda.dc.html' }, { id: 'financeiro', label: 'Financeiro', icon: 'wallet', count: 1, href: 'Celular-Financeiro.dc.html' }, { id: 'chat', label: 'Chat', icon: 'chat', count: 1, href: 'Celular-Chat.dc.html' }, { id: 'mais', label: 'Mais', icon: 'menu', href: 'Celular-Mais.dc.html' }]
+    };
+    return Object.assign({ yes: true, no: false, s22: 22 }, shared, { a: 1480, d: 74, p: 1406, exp: 1792 });
+  }
+}
+</script>
+</body>
+</html>
