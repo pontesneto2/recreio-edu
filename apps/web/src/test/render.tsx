@@ -16,13 +16,26 @@ export const renderRoute = (path: string) => {
   );
 };
 
-/** Troca o `fetch` global por respostas fixas, indexadas pela URL. */
+/** Resposta de erro no formato da API (RFC 9457). */
+export const problemResponse = (status: number, problem: Record<string, unknown>) =>
+  new Response(JSON.stringify({ status, ...problem }), {
+    status,
+    headers: { 'Content-Type': 'application/problem+json' },
+  });
+
+/** Troca o `fetch` global por respostas fixas, indexadas pela URL. URL fora da lista recebe 404. */
 export const mockApi = (responses: Record<string, unknown>) =>
   vi.stubGlobal(
     'fetch',
     vi.fn(async (url: string) =>
       url in responses
         ? Response.json(responses[url])
-        : Response.json({ erro: { codigo: 'NAO_ENCONTRADO' } }, { status: 404 }),
+        : problemResponse(404, {
+            type: 'https://recreio.app/problemas/nao-encontrado',
+            title: 'Recurso não encontrado',
+            detail: `Rota GET ${url} não encontrada.`,
+            instance: url,
+            code: 'NAO_ENCONTRADO',
+          }),
     ),
   );

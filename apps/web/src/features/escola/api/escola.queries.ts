@@ -8,5 +8,5 @@ export const escolaKeys = {
 
 export const escolaQuery = queryOptions({
   queryKey: escolaKeys.all,
-  queryFn: () => getJson('/api/escola', escolaSchema),
+  queryFn: () => getJson('/api/v1/escola', escolaSchema),
 });

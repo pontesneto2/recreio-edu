@@ -9,11 +9,11 @@ export const alunosKeys = {
 
 export const alunosQuery = queryOptions({
   queryKey: alunosKeys.all,
-  queryFn: () => getJson('/api/alunos', alunoSchema.array()),
+  queryFn: () => getJson('/api/v1/alunos', alunoSchema.array()),
 });
 
 export const alunoQuery = (id: string) =>
   queryOptions({
     queryKey: alunosKeys.detail(id),
-    queryFn: () => getJson(`/api/alunos/${encodeURIComponent(id)}`, alunoSchema),
+    queryFn: () => getJson(`/api/v1/alunos/${encodeURIComponent(id)}`, alunoSchema),
   });

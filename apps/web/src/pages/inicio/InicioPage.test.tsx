@@ -16,7 +16,7 @@ const alunos = [
 
 describe('InicioPage', () => {
   test('mostra unidades e alunos vindos da API', async () => {
-    mockApi({ '/api/escola': escola, '/api/alunos': alunos });
+    mockApi({ '/api/v1/escola': escola, '/api/v1/alunos': alunos });
     renderRoute('/');
 
     expect(await screen.findByText('Davi Lima')).toBeInTheDocument();
@@ -24,7 +24,7 @@ describe('InicioPage', () => {
   });
 
   test('avisa quando a API de alunos falha', async () => {
-    mockApi({ '/api/escola': escola });
+    mockApi({ '/api/v1/escola': escola });
     renderRoute('/');
 
     expect(await screen.findByText('Não conseguimos carregar os alunos')).toBeInTheDocument();
