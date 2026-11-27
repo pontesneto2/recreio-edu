@@ -88,7 +88,7 @@ Outros itens da API:
 - Logs estruturados com pino, já ativos, com `requestId` em cada linha (feito) e `escola_id` (pendente).
 - Rastreamento com OpenTelemetry na API e no portal.
 - Captura de erros com Sentry nos 2 lados.
-- `/api/health` (processo vivo) e `/api/ready` (banco e Redis respondendo).
+- [x] `/api/health` (processo vivo) e `/api/ready` (banco respondendo). Redis entra no `/api/ready` quando a API passar a usar.
 
 ### DevOps
 
