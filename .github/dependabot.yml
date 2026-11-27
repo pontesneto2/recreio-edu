@@ -8,6 +8,10 @@ updates:
       dependencias:
         patterns: ['*']
         update-types: [minor, patch]
+    ignore:
+      # Os tipos acompanham a versão do Node em .nvmrc (24).
+      - dependency-name: '@types/node'
+        update-types: [version-update:semver-major]
   - package-ecosystem: github-actions
     directory: /
     schedule:
