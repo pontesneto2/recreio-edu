@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { naEscola } from './dados.ts';
 
 // O Lighthouse 12 tirou a categoria PWA. Este arquivo confere o que ela conferia: manifesto, service worker e abrir sem conexão.
 // O service worker fica ligado aqui. A API vem do `--mode api-falsa` do `vite preview`, porque o `page.route` não vê o service worker.
@@ -25,14 +26,14 @@ test('o manifesto tem o que a instalação pede', async ({ page, request }) => {
 });
 
 test('o service worker assume a página e o portal abre sem conexão', async ({ page, context }) => {
-  await page.goto('/escola');
+  await page.goto(naEscola('/escola'));
   // O primeiro service worker ativa sozinho e passa a controlar a página depois de recarregar.
   await page.evaluate(() => navigator.serviceWorker.ready.then(() => undefined));
   await page.reload();
   await expect.poll(() => page.evaluate(() => navigator.serviceWorker.controller !== null)).toBe(true);
 
   await context.setOffline(true);
-  await page.goto('/familia');
+  await page.goto(naEscola('/familia'));
 
   // A casca e a página sob demanda saem do precache do Workbox.
   const menu = page.getByRole('navigation', { name: 'Navegação principal' }).filter({ visible: true });

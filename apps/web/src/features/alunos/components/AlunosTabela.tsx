@@ -1,6 +1,8 @@
 import type { Aluno } from '@recreio/contracts';
 import { Alert, DataTable, brl } from '@recreio/design-system';
 import { useQuery } from '@tanstack/react-query';
+import { ApiError } from '@/shared/api/http-client.ts';
+import { useEscolaDaRota } from '@/shared/sessao/escola-da-rota.ts';
 import { alunosQuery } from '../api/alunos.queries.ts';
 
 const COLUNAS = [
@@ -16,7 +18,15 @@ const COLUNAS = [
 ];
 
 export const AlunosTabela = () => {
-  const { data, isPending, isError } = useQuery(alunosQuery);
+  const { data, isPending, isError, error } = useQuery(alunosQuery(useEscolaDaRota()));
+
+  if (error instanceof ApiError && error.code === 'PERMISSAO_NEGADA') {
+    return (
+      <Alert tone="info" title="Seu perfil não vê esta informação">
+        A escola libera o acesso em Grupos e permissões.
+      </Alert>
+    );
+  }
 
   if (isError) {
     return (

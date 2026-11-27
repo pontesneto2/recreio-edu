@@ -36,3 +36,20 @@ export const encontrarAtivoDaBarra = (navegacao: NavegacaoDoPerfil, pathname: st
   const naBarra = ativo && navegacao.barraInferior.some(({ id }) => id === ativo.id);
   return naBarra ? ativo.id : ID_MAIS;
 };
+
+/** Caminho do portal dentro da escola: `/familia/agenda` vira `/colegio-recreio/familia/agenda` (ADR 0011). */
+export const caminhoNaEscola = (escola: string, caminho: string) =>
+  caminho === '/' ? `/${escola}` : `/${escola}${caminho}`;
+
+/**
+ * Menu do perfil com os links dentro da escola. A configuração em `shared/config/navigation` fica sem
+ * o slug, e o router monta as rotas relativas a `/:escola`.
+ */
+export const navegacaoNaEscola = (navegacao: NavegacaoDoPerfil, escola: string): NavegacaoDoPerfil => ({
+  ...navegacao,
+  base: caminhoNaEscola(escola, navegacao.base),
+  grupos: navegacao.grupos.map((grupo) => ({
+    ...grupo,
+    items: grupo.items.map((item) => ({ ...item, href: caminhoNaEscola(escola, item.href) })),
+  })),
+});

@@ -10,5 +10,7 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup();
+  // A sessão salva para o modo sem internet não passa de um teste para outro.
+  window.localStorage.removeItem('recreio.sessao');
   vi.unstubAllGlobals();
 });

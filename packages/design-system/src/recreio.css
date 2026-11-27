@@ -2882,6 +2882,26 @@ img.rc-schoolmark {
 .rc-sidenav-foot .rc-madeby {
   color: var(--on-nav-2);
 }
+/* Seletor de perfil no rodapé do menu: o painel abre para cima, dentro da tela. */
+.rc-sidenav-foot .rc-profsw {
+  margin-bottom: var(--space-3);
+}
+.rc-sidenav-foot .rc-profsw-btn {
+  width: 100%;
+}
+.rc-sidenav-foot .rc-profsw-text {
+  flex: 1;
+  min-width: 0;
+}
+.rc-sidenav-foot .rc-profsw-pop {
+  top: auto;
+  right: auto;
+  bottom: calc(100% + 8px);
+  left: 0;
+  width: min(300px, calc(100vw - 32px));
+  color: var(--ink);
+  transform-origin: bottom left;
+}
 .rc-sidenav .rc-schoolmark {
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.16);
 }
@@ -5910,6 +5930,29 @@ html[data-leitura='simples'] .rc-annc-summary {
 }
 .rc-login-madeby {
   margin-top: auto;
+}
+/* Formulário da entrada (Main e Celular-Entrar no protótipo). */
+.rc-login-heading {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  letter-spacing: -0.035em;
+}
+.rc-login-lead {
+  margin: 0 0 var(--space-6);
+  color: var(--ink-2);
+}
+.rc-login-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.rc-login-note {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--ink-2);
 }
 .rc-login-show {
   position: relative;

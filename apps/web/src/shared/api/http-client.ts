@@ -1,5 +1,5 @@
 import { problemSchema } from '@recreio/contracts';
-import type { z } from 'zod';
+import { z } from 'zod';
 
 type ApiErrorFields = {
   status: number;
@@ -28,10 +28,22 @@ export class ApiError extends Error {
   }
 }
 
-/** Lê o corpo RFC 9457 da resposta. Sem ele (proxy fora do ar, HTML de erro), usa o código `ERRO_HTTP`. */
+/** Corpo de erro das rotas do Better Auth (`/api/auth/*`), que não usam problem+json. */
+const erroDoAuthSchema = z.object({ code: z.string().min(1), message: z.string().optional() });
+
+/**
+ * Lê o corpo RFC 9457 da resposta. As rotas `/api/auth/*` respondem `{ code, message }`.
+ * Sem nenhum dos dois (proxy fora do ar, HTML de erro), usa o código `ERRO_HTTP`.
+ */
 const toApiError = async (path: string, res: Response): Promise<ApiError> => {
-  const problem = problemSchema.safeParse(await res.json().catch(() => undefined));
+  const corpo: unknown = await res.json().catch(() => undefined);
+  const problem = problemSchema.safeParse(corpo);
   if (problem.success) return new ApiError(problem.data);
+  const erroDoAuth = erroDoAuthSchema.safeParse(corpo);
+  if (erroDoAuth.success) {
+    const { code, message } = erroDoAuth.data;
+    return new ApiError({ status: res.status, code, title: message ?? code, detail: message });
+  }
   return new ApiError({
     status: res.status,
     code: 'ERRO_HTTP',
@@ -40,9 +52,25 @@ const toApiError = async (path: string, res: Response): Promise<ApiError> => {
   });
 };
 
-/** Faz GET em `/api/v1/...` e valida a resposta com o schema do contrato. */
+const ACCEPT = 'application/json, application/problem+json';
+
+/**
+ * Faz GET em `/api/v1/...` e valida a resposta com o schema do contrato.
+ * `credentials: 'include'` leva o cookie de sessão (ADR 0007).
+ */
 export const getJson = async <S extends z.ZodType>(path: string, schema: S): Promise<z.infer<S>> => {
-  const res = await fetch(path, { headers: { Accept: 'application/json, application/problem+json' } });
+  const res = await fetch(path, { credentials: 'include', headers: { Accept: ACCEPT } });
   if (!res.ok) throw await toApiError(path, res);
   return schema.parse(await res.json());
+};
+
+/** Faz POST com corpo JSON. Usado nas rotas do Better Auth, que respondem sem contrato do portal. */
+export const postJson = async (path: string, body: unknown): Promise<void> => {
+  const res = await fetch(path, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { Accept: ACCEPT, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw await toApiError(path, res);
 };

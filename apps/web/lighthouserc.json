@@ -3,7 +3,11 @@
     "collect": {
       "startServerCommand": "vite preview --mode api-falsa --port 4274 --strictPort",
       "startServerReadyPattern": "4274",
-      "url": ["http://localhost:4274/", "http://localhost:4274/escola"],
+      "url": [
+        "http://localhost:4274/",
+        "http://localhost:4274/colegio-recreio/escola",
+        "http://localhost:4274/colegio-recreio/entrar"
+      ],
       "numberOfRuns": 1,
       "settings": {
         "chromeFlags": "--headless=new --no-sandbox",

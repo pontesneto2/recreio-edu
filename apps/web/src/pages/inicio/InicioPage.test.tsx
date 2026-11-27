@@ -1,5 +1,5 @@
 import { screen } from '@testing-library/react';
-import { mockApi, renderRoute } from '@/test/render.tsx';
+import { comSessao, mockApi, problemResponse, renderRoute, naEscola, apiDaEscola } from '@/test/render.tsx';
 
 const escola = {
   nome: 'Colégio Recreio',
@@ -23,32 +23,54 @@ const alunos = [
 
 describe('InicioPage', () => {
   test('mostra unidades e alunos vindos da API', async () => {
-    mockApi({ '/api/v1/escola': escola, '/api/v1/alunos': alunos });
-    renderRoute('/escola');
+    mockApi({ ...comSessao(['direcao']), [apiDaEscola()]: escola, [apiDaEscola('/alunos')]: alunos });
+    renderRoute(naEscola('/escola'));
 
     expect(await screen.findByText('Davi Lima')).toBeInTheDocument();
     expect(screen.getByText('Alunos · Unidade Aldeota')).toBeInTheDocument();
   });
 
   test('avisa quando a API de alunos falha', async () => {
-    mockApi({ '/api/v1/escola': escola });
-    renderRoute('/escola');
+    mockApi({ ...comSessao(['direcao']), [apiDaEscola()]: escola });
+    renderRoute(naEscola('/escola'));
 
     expect(await screen.findByText('Não conseguimos carregar os alunos')).toBeInTheDocument();
   });
 
   test('avisa quando a API da escola falha', async () => {
-    mockApi({ '/api/v1/alunos': alunos });
-    renderRoute('/escola');
+    mockApi({ ...comSessao(['direcao']), [apiDaEscola('/alunos')]: alunos });
+    renderRoute(naEscola('/escola'));
 
     expect(await screen.findByText('Não conseguimos carregar as unidades')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Tentar de novo' })).toBeInTheDocument();
   });
 
   test('mostra o estado vazio quando a escola não tem unidade', async () => {
-    mockApi({ '/api/v1/escola': { ...escola, unidades: [] }, '/api/v1/alunos': alunos });
-    renderRoute('/escola');
+    mockApi({
+      ...comSessao(['direcao']),
+      [apiDaEscola()]: { ...escola, unidades: [] },
+      [apiDaEscola('/alunos')]: alunos,
+    });
+    renderRoute(naEscola('/escola'));
 
     expect(await screen.findByText('Nenhuma unidade cadastrada')).toBeInTheDocument();
+  });
+
+  test('perfil sem permissão vê o aviso no lugar dos dados', async () => {
+    const permissaoNegada = () =>
+      problemResponse(403, {
+        type: 'https://recreio.app/problemas/permissao-negada',
+        title: 'Permissão negada',
+        code: 'PERMISSAO_NEGADA',
+      });
+    mockApi({
+      ...comSessao(['portaria'], 'Francisco Araújo'),
+      [apiDaEscola()]: permissaoNegada,
+      [apiDaEscola('/alunos')]: permissaoNegada,
+    });
+    renderRoute(naEscola('/escola'));
+
+    await vi.waitFor(() => expect(screen.getAllByText('Seu perfil não vê esta informação')).toHaveLength(2));
+    expect(screen.queryByText('Davi Lima')).not.toBeInTheDocument();
   });
 });

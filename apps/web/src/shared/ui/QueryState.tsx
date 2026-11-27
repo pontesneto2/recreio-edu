@@ -1,6 +1,7 @@
 import { EmptyState, ErrorState, LoadingCard } from '@recreio/design-system';
 import type { UseQueryResult } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
+import { ApiError } from '../api/http-client.ts';
 import { useConexao } from '../pwa/useConexao.ts';
 
 type Vazio<T> = {
@@ -24,11 +25,21 @@ type QueryStateProps<T> = {
 
 const listaVazia = (data: unknown) => Array.isArray(data) && data.length === 0;
 
+const semPermissao = (erro: Error) => erro instanceof ApiError && erro.code === 'PERMISSAO_NEGADA';
+
 /** Os 3 estados de toda tela com dado do servidor: carregando, erro e vazio. O conteúdo só aparece com dado. */
 export const QueryState = <T,>({ query, carregando, esqueleto, vazio, erro, children }: QueryStateProps<T>) => {
   const online = useConexao();
 
   if (query.isPending) return esqueleto ?? <LoadingCard label={carregando ?? 'Carregando'} />;
+
+  if (query.isError && semPermissao(query.error)) {
+    return (
+      <EmptyState title="Seu perfil não vê esta informação" compact>
+        A escola libera o acesso em Grupos e permissões.
+      </EmptyState>
+    );
+  }
 
   if (query.isError) {
     return (

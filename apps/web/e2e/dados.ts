@@ -1,4 +1,4 @@
-import { alunoSchema, escolaSchema, type Problem } from '@recreio/contracts';
+import { alunoSchema, escolaPublicaSchema, escolaSchema, euSchema, type Problem } from '@recreio/contracts';
 
 /**
  * Respostas fixas da API para o e2e e o Lighthouse. Passam pelos schemas do contrato:
@@ -35,10 +35,36 @@ export const ALUNOS = alunoSchema.array().parse([
   },
 ]);
 
+/** Slug da escola das telas (ADR 0011). As rotas do portal começam por ele. */
+export const SLUG = 'colegio-recreio';
+
+/** Caminho do portal na escola: `naEscola('/familia')` vira `/colegio-recreio/familia`. */
+export const naEscola = (caminho = '') => `/${SLUG}${caminho}`;
+
+export const ESCOLA_PUBLICA = escolaPublicaSchema.parse({
+  slug: SLUG,
+  nome: ESCOLA.nome,
+  cidade: ESCOLA.cidade,
+  corMarca: ESCOLA.corMarca,
+});
+
+/** Sessão de demonstração: uma pessoa com os 4 perfis do portal no Colégio Recreio. */
+export const EU = euSchema.parse({
+  usuario: {
+    id: 'demonstracao',
+    nome: 'Fernanda Lima',
+    email: 'fernanda.lima@colegiorecreio.test',
+    emailVerificado: true,
+  },
+  escolas: [{ slug: SLUG, nome: ESCOLA.nome, perfis: ['responsavel', 'aluno', 'professor', 'direcao'] }],
+});
+
 /** Corpo de resposta por caminho de `/api/v1`. */
 export const RESPOSTAS: Record<string, unknown> = {
-  '/api/v1/escola': ESCOLA,
-  '/api/v1/alunos': ALUNOS,
+  '/api/v1/eu': EU,
+  [`/api/v1/escolas/${SLUG}`]: ESCOLA,
+  [`/api/v1/escolas/${SLUG}/publica`]: ESCOLA_PUBLICA,
+  [`/api/v1/escolas/${SLUG}/alunos`]: ALUNOS,
 };
 
 /** Erro 404 no formato da API (RFC 9457) para um caminho fora de `RESPOSTAS`. */

@@ -1,10 +1,10 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { mockApi, renderRoute } from '@/test/render.tsx';
+import { TODOS_OS_PERFIS, comSessao, mockApi, renderRoute } from '@/test/render.tsx';
 
 describe('PreferenciasPage', () => {
   beforeEach(() => {
-    mockApi({});
+    mockApi(comSessao(TODOS_OS_PERFIS));
     window.localStorage.clear();
   });
 

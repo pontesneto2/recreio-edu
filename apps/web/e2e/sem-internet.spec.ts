@@ -1,8 +1,9 @@
 import { esperarSemViolacoesGraves } from './axe.ts';
+import { naEscola } from './dados.ts';
 import { expect, test } from './fixtures.ts';
 
 test('sem conexão, a faixa do topo leva à tela do modo sem internet', async ({ page, context }) => {
-  await page.goto('/escola');
+  await page.goto(naEscola('/escola'));
   await expect(page.getByRole('navigation', { name: 'Navegação principal' }).first()).toBeVisible();
 
   await context.setOffline(true);

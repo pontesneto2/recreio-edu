@@ -1,12 +1,14 @@
 import { Button, EmptyState, TopBar } from '@recreio/design-system';
 import { useNavigate } from 'react-router';
 import type { ItemDeNavegacao, NavegacaoDoPerfil } from '@/shared/config/navigation/index.ts';
+import { useNavegacaoNaEscola } from '@/shared/layout/useNavegacaoNaEscola.ts';
 
 type EmConstrucaoPageProps = { item: ItemDeNavegacao; navegacao: NavegacaoDoPerfil };
 
 /** Destino dos itens do menu cujas telas ainda não foram portadas do protótipo. */
-export const EmConstrucaoPage = ({ item, navegacao }: EmConstrucaoPageProps) => {
+export const EmConstrucaoPage = ({ item, navegacao: semEscola }: EmConstrucaoPageProps) => {
   const navigate = useNavigate();
+  const navegacao = useNavegacaoNaEscola(semEscola);
   const inicio = navegacao.grupos[0]?.items[0];
 
   return (

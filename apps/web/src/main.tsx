@@ -13,7 +13,7 @@ if (!container) throw new Error('Elemento #root não encontrado em index.html.')
 
 createRoot(container).render(
   <StrictMode>
-    <Providers queryClient={createQueryClient()}>
+    <Providers queryClient={createQueryClient()} router={router}>
       <RouterProvider router={router} />
       <AvisoDeAtualizacao />
     </Providers>

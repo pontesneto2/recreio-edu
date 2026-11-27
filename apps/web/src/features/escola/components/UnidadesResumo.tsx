@@ -1,6 +1,7 @@
 import type { Escola } from '@recreio/contracts';
 import { StatCard } from '@recreio/design-system';
 import { useQuery } from '@tanstack/react-query';
+import { useEscolaDaRota } from '@/shared/sessao/escola-da-rota.ts';
 import { QueryState } from '@/shared/ui/QueryState.tsx';
 import { escolaQuery } from '../api/escola.queries.ts';
 
@@ -14,7 +15,7 @@ const semUnidades = (escola: Escola) => escola.unidades.length === 0;
 
 /** Um cartão por unidade com o total de alunos. */
 export const UnidadesResumo = () => {
-  const query = useQuery(escolaQuery);
+  const query = useQuery(escolaQuery(useEscolaDaRota()));
 
   return (
     <section aria-label="Unidades">
