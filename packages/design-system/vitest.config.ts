@@ -6,6 +6,8 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   plugins: [react(), babel({ presets: [reactCompilerPreset()] })],
   test: {
+    // a11y/ é do Playwright (navegador de verdade), fora do Vitest.
+    include: ['src/**/*.test.{ts,tsx}'],
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     css: false,
