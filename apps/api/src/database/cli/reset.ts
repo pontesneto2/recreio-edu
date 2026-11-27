@@ -27,5 +27,7 @@ try {
 }
 
 await migrarBanco(env.DATABASE_MIGRATION_URL);
-const escolaId = await seedDadosCanonicos(env.DATABASE_MIGRATION_URL, env.DEV_ESCOLA_DOMINIO);
+const escolaId = await seedDadosCanonicos(env.DATABASE_MIGRATION_URL, {
+  senhaPadrao: env.SEED_SENHA_PADRAO,
+});
 logger.info({ escolaId }, 'banco recriado, migrado e com seed');

@@ -4,6 +4,7 @@ import { z } from 'zod';
 const PADRAO_LOCAL = {
   DATABASE_URL: 'postgres://recreio_app:recreio_app@localhost:5432/recreio',
   DATABASE_MIGRATION_URL: 'postgres://recreio:recreio@localhost:5432/recreio',
+  AUTH_SECRET: 'recreio-dev-segredo-local-nao-use-em-producao',
 } as const;
 
 /**
@@ -93,6 +94,28 @@ const resolverInfra = (raw: InfraBruta, ctx: z.RefinementCtx) => {
   };
 };
 
+/** Lista separada por vírgula, sem itens vazios. */
+const listaDeTexto = z.string().transform((valor) =>
+  valor
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean),
+);
+
+/** Autenticação (ADR 0007) e seed. */
+const autenticacaoEnv = {
+  /** Segredo que assina cookies e tokens do Better Auth, com 32 caracteres ou mais. Obrigatório em produção. */
+  AUTH_SECRET: z.string().min(32).optional(),
+  /** Origem do portal. Os links dos e-mails usam esta origem quando a requisição não traz uma confiável. */
+  AUTH_URL: z.url().default('http://localhost:5173'),
+  /** Origens aceitas no login, separadas por vírgula. Aceita curinga de subdomínio: `https://*.recreio.app`. */
+  AUTH_TRUSTED_ORIGINS: listaDeTexto.default(['http://localhost:5173']),
+  /** Tentativas por minuto por IP em entrar, cadastrar e pedir troca de senha. Em NODE_ENV=test fica desligado. */
+  AUTH_RATE_LIMIT_PER_MINUTE: z.coerce.number().int().positive().default(10),
+  /** Senha das contas de demonstração do seed. O seed não roda em produção. */
+  SEED_SENHA_PADRAO: z.string().min(10).optional(),
+};
+
 const envSchema = z
   .object({
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
@@ -105,12 +128,11 @@ const envSchema = z
     DATABASE_URL: z.url().optional(),
     /** Conexão das migrações e do seed como recreio, dono das tabelas. */
     DATABASE_MIGRATION_URL: z.url().optional(),
-    /** Escola atendida quando o Host é localhost ou 127.0.0.1, fora de produção (ADR 0006). */
-    DEV_ESCOLA_DOMINIO: z.string().trim().toLowerCase().min(1).default('colegiorecreio.localhost'),
     ...infraSchema,
+    ...autenticacaoEnv,
   })
   .transform((raw, ctx) => {
-    for (const chave of ['DATABASE_URL', 'DATABASE_MIGRATION_URL'] as const) {
+    for (const chave of ['DATABASE_URL', 'DATABASE_MIGRATION_URL', 'AUTH_SECRET'] as const) {
       if (raw.NODE_ENV === 'production' && !raw[chave]) {
         ctx.addIssue({ code: 'custom', path: [chave], message: `${chave} é obrigatória em produção.` });
       }
@@ -120,6 +142,7 @@ const envSchema = z
       DATABASE_URL: raw.DATABASE_URL ?? PADRAO_LOCAL.DATABASE_URL,
       DATABASE_MIGRATION_URL: raw.DATABASE_MIGRATION_URL ?? PADRAO_LOCAL.DATABASE_MIGRATION_URL,
       ...resolverInfra(raw, ctx),
+      AUTH_SECRET: raw.AUTH_SECRET ?? PADRAO_LOCAL.AUTH_SECRET,
     };
   });
 

@@ -15,6 +15,17 @@ export const emailJobSchema = z.discriminatedUnion('modelo', [
       linkAcesso: z.url({ protocol: /^https?$/ }),
     }),
   }),
+  // Confirmação de e-mail e troca de senha (ADR 0007). O link aponta para o portal da escola.
+  z.object({
+    modelo: z.literal('confirmacao-email'),
+    para: z.email(),
+    variaveis: z.object({ nome: z.string().trim().min(1), link: z.url({ protocol: /^https?$/ }) }),
+  }),
+  z.object({
+    modelo: z.literal('troca-de-senha'),
+    para: z.email(),
+    variaveis: z.object({ nome: z.string().trim().min(1), link: z.url({ protocol: /^https?$/ }) }),
+  }),
   z.object({
     modelo: z.literal('teste'),
     para: z.email(),

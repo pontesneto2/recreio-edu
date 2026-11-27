@@ -1,19 +1,15 @@
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
-import { dominioDoHost } from './resolver-escola.ts';
+import { slugDaRota } from './resolver-escola.ts';
 
-describe('dominioDoHost', () => {
-  test('localhost e 127.0.0.1 viram o domínio local', () => {
-    for (const host of ['localhost', '127.0.0.1', '[::1]', 'LOCALHOST']) {
-      assert.equal(dominioDoHost(host, 'colegiorecreio.localhost'), 'colegiorecreio.localhost', host);
+describe('slugDaRota', () => {
+  test('aceita minúsculas, números e hífen entre palavras', () => {
+    for (const slug of ['colegio-recreio', 'escola2', 'a-b-c']) assert.equal(slugDaRota(slug), slug);
+  });
+
+  test('recusa maiúsculas, espaço, ponto, hífen nas pontas e texto longo', () => {
+    for (const slug of ['Colegio', 'colegio recreio', '../etc', '-recreio', 'recreio-', 'a--b', 'x'.repeat(64), 42]) {
+      assert.equal(slugDaRota(slug), undefined, String(slug));
     }
-  });
-
-  test('sem domínio local, localhost segue como está', () => {
-    assert.equal(dominioDoHost('localhost'), 'localhost');
-  });
-
-  test('outros hosts saem em minúsculas e sem ponto final', () => {
-    assert.equal(dominioDoHost('ColegioRecreio.Recreio.App.', 'x'), 'colegiorecreio.recreio.app');
   });
 });

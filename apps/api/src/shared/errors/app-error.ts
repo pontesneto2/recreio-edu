@@ -39,3 +39,24 @@ export class TooManyRequestsError extends AppError {
     this.name = 'TooManyRequestsError';
   }
 }
+
+export class NaoAutenticadoError extends AppError {
+  constructor(detail: string) {
+    super('NAO_AUTENTICADO', detail);
+    this.name = 'NaoAutenticadoError';
+  }
+}
+
+export class SemAcessoError extends AppError {
+  constructor(detail: string) {
+    super('SEM_ACESSO', detail);
+    this.name = 'SemAcessoError';
+  }
+}
+
+export class PermissaoNegadaError extends AppError {
+  constructor(detail: string) {
+    super('PERMISSAO_NEGADA', detail);
+    this.name = 'PermissaoNegadaError';
+  }
+}

@@ -10,12 +10,15 @@ export const escolas = pgTable(
     cnpj: text('cnpj').notNull().unique(),
     cidade: text('cidade').notNull(),
     corMarca: text('cor_marca').notNull(),
-    /** Host do portal da escola, sem porta e em minúsculas. A API resolve a escola por ele (ADR 0006). */
-    dominio: text('dominio').notNull().unique(),
+    /** Identificador da escola na rota do portal e da API (ADR 0011): `/colegio-recreio/...`. */
+    slug: text('slug').notNull().unique(),
+    /** Domínio próprio da escola, sem porta e em minúsculas. Reservado para uma opção futura; a API não resolve por ele. */
+    dominio: text('dominio').unique(),
     ...timestamps(),
   },
   (t) => [
     check('escolas_cor_marca_hex', sql`${t.corMarca} ~ '^#[0-9A-Fa-f]{6}$'`),
     check('escolas_dominio_minusculo', sql`${t.dominio} = lower(${t.dominio})`),
+    check('escolas_slug_formato', sql`${t.slug} ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and length(${t.slug}) <= 63`),
   ],
 );

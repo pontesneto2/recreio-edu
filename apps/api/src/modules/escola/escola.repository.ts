@@ -1,4 +1,4 @@
-import type { Escola } from '@recreio/contracts';
+import type { Escola, EscolaPublica } from '@recreio/contracts';
 import { asc, count, eq } from 'drizzle-orm';
 import type { WithEscola } from '../../database/escola-context.ts';
 import { alunos, escolas, unidades } from '../../database/schema/index.ts';
@@ -9,6 +9,7 @@ export type DadosEscola = Omit<Escola, 'hoje'>;
 
 export type EscolaRepository = {
   get: (contexto: EscolaContexto) => Promise<DadosEscola | undefined>;
+  getPublica: (contexto: EscolaContexto) => Promise<EscolaPublica | undefined>;
 };
 
 export const createDrizzleEscolaRepository = (withEscola: WithEscola): EscolaRepository => ({
@@ -29,5 +30,13 @@ export const createDrizzleEscolaRepository = (withEscola: WithEscola): EscolaRep
         .orderBy(asc(unidades.nome));
 
       return { ...escola, unidades: listaUnidades };
+    }),
+  getPublica: ({ escolaId }) =>
+    withEscola(escolaId, async (tx) => {
+      const [escola] = await tx
+        .select({ slug: escolas.slug, nome: escolas.nome, cidade: escolas.cidade, corMarca: escolas.corMarca })
+        .from(escolas)
+        .where(eq(escolas.id, escolaId));
+      return escola;
     }),
 });

@@ -1,4 +1,5 @@
-import type { z } from 'zod';
+import { slugDaEscolaSchema } from '@recreio/contracts';
+import { z } from 'zod';
 import type { ZodOpenApiOperationObject, oas31 } from 'zod-openapi';
 
 export type HttpMethod = 'get' | 'post' | 'put' | 'patch' | 'delete';
@@ -21,3 +22,14 @@ export type OpenApiModule = {
 };
 
 export const defineOpenApiModule = (module: OpenApiModule): OpenApiModule => module;
+
+/** Nome do esquema de segurança do cookie de sessão em `components.securitySchemes`. */
+export const ESQUEMA_DA_SESSAO = 'cookieAuth';
+
+/** `security` de operação que exige o cookie de sessão do Better Auth. */
+export const SESSAO_EXIGIDA = [{ [ESQUEMA_DA_SESSAO]: [] }];
+
+/** Parâmetro `{escola}` das rotas da escola (ADR 0011). */
+export const escolaParamsSchema = z.object({
+  escola: slugDaEscolaSchema.meta({ description: 'Slug da escola, como `colegio-recreio`.' }),
+});

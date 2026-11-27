@@ -1,34 +1,31 @@
+import { slugDaEscolaSchema } from '@recreio/contracts';
 import type { RequestHandler, Response } from 'express';
 import { NotFoundError } from '../errors/app-error.ts';
 import { ATRIBUTO, anotarRequisicao } from '../observability/span.ts';
 import type { EscolaContexto } from './escola-contexto.ts';
 
-const HOSTS_LOCAIS = new Set(['localhost', '127.0.0.1', '[::1]', '::1']);
+/** Nome do parâmetro de rota com o slug: `/api/v1/escolas/:escola`. */
+export const PARAMETRO_DA_ESCOLA = 'escola';
 
-/**
- * Domínio usado na busca da escola. `hostname` já vem sem porta (Express).
- * Em desenvolvimento, localhost vira `dominioLocal`.
- */
-export const dominioDoHost = (hostname: string, dominioLocal?: string): string => {
-  const host = hostname.trim().toLowerCase().replace(/\.$/, '');
-  return dominioLocal && HOSTS_LOCAIS.has(host) ? dominioLocal : host;
+/** Slug válido da rota, ou `undefined` para texto fora do formato (que nunca casa com uma escola). */
+export const slugDaRota = (valor: unknown): string | undefined => {
+  const resultado = slugDaEscolaSchema.safeParse(valor);
+  return resultado.success ? resultado.data : undefined;
 };
 
 export type ResolverEscolaOptions = {
-  buscarEscolaPorDominio: (dominio: string) => Promise<string | undefined>;
-  /** Domínio atendido em localhost. Fica vazio em produção. */
-  dominioLocal?: string;
+  buscarEscolaPorSlug: (slug: string) => Promise<string | undefined>;
 };
 
-/** Resolve a escola pelo Host (ADR 0006) e guarda em `res.locals`. Host desconhecido responde 404. */
-export const createResolverEscola = ({
-  buscarEscolaPorDominio,
-  dominioLocal,
-}: ResolverEscolaOptions): RequestHandler => {
+/**
+ * Resolve a escola pelo slug da rota (ADR 0011) e guarda em `res.locals`. Slug desconhecido
+ * ou fora do formato responde 404. Vai no router montado em `/escolas/:escola`, com `mergeParams`.
+ */
+export const createResolverEscola = ({ buscarEscolaPorSlug }: ResolverEscolaOptions): RequestHandler => {
   return async (req, res, next) => {
-    const dominio = dominioDoHost(req.hostname ?? '', dominioLocal);
-    const escolaId = dominio ? await buscarEscolaPorDominio(dominio) : undefined;
-    if (!escolaId) throw new NotFoundError('Escola não encontrada para este endereço.');
+    const slug = slugDaRota(req.params[PARAMETRO_DA_ESCOLA]);
+    const escolaId = slug ? await buscarEscolaPorSlug(slug) : undefined;
+    if (!escolaId) throw new NotFoundError('Escola não encontrada.');
     const contexto: EscolaContexto = { escolaId };
     res.locals.escola = contexto;
     // Os logs seguintes da requisição e o span HTTP levam a escola.

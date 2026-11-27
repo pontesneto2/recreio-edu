@@ -3,7 +3,7 @@
   "info": {
     "title": "API Recreio",
     "version": "1.0.0",
-    "description": "API do Recreio Sistema Educacional. Erros seguem a RFC 9457 (`application/problem+json`) com o campo `code`. Toda resposta traz `X-Request-Id`."
+    "description": "API do Recreio Sistema Educacional. Erros seguem a RFC 9457 (`application/problem+json`) com o campo `code`. Toda resposta traz `X-Request-Id`. Rotas com cadeado exigem o cookie de sessão do Better Auth, obtido em `POST /api/auth/sign-in/email`."
   },
   "servers": [
     {
@@ -12,21 +12,84 @@
   ],
   "tags": [
     {
+      "name": "Sessão",
+      "description": "Quem está logado. Entrar, sair e trocar senha ficam em `/api/auth/*`, rotas do Better Auth fora deste documento."
+    },
+    {
       "name": "Escola",
       "description": "Dados da escola e das unidades."
     },
     {
       "name": "Alunos",
-      "description": "Alunos matriculados na escola."
+      "description": "Alunos matriculados na escola. Exige a permissão `alunos:ver`."
     }
   ],
   "paths": {
-    "/escola": {
+    "/eu": {
+      "get": {
+        "operationId": "obterEu",
+        "summary": "Obtém a pessoa logada e os vínculos dela em cada escola",
+        "tags": [
+          "Sessão"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A pessoa e as escolas em que tem vínculo, com os perfis em cada uma. Lista vazia sem vínculo.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Eu"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/NaoAutenticado"
+          },
+          "404": {
+            "$ref": "#/components/responses/NaoEncontrado"
+          },
+          "429": {
+            "$ref": "#/components/responses/LimiteExcedido"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErroInterno"
+          }
+        }
+      }
+    },
+    "/escolas/{escola}": {
       "get": {
         "operationId": "obterEscola",
         "summary": "Obtém os dados da escola",
+        "description": "Exige a permissão `painel:ver`.",
         "tags": [
           "Escola"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "escola",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+              "description": "Slug da escola, como `colegio-recreio`."
+            },
+            "required": true,
+            "description": "Slug da escola, como `colegio-recreio`."
+          }
         ],
         "responses": {
           "200": {
@@ -35,6 +98,59 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Escola"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/NaoAutenticado"
+          },
+          "403": {
+            "$ref": "#/components/responses/AcessoNegado"
+          },
+          "404": {
+            "$ref": "#/components/responses/NaoEncontrado"
+          },
+          "429": {
+            "$ref": "#/components/responses/LimiteExcedido"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErroInterno"
+          }
+        }
+      }
+    },
+    "/escolas/{escola}/publica": {
+      "get": {
+        "operationId": "obterEscolaPublica",
+        "summary": "Obtém nome, cidade e cor da escola, sem login",
+        "description": "Aberta, porque a tela de entrada mostra a escola antes do login.",
+        "tags": [
+          "Escola"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "escola",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+              "description": "Slug da escola, como `colegio-recreio`."
+            },
+            "required": true,
+            "description": "Slug da escola, como `colegio-recreio`."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados públicos da escola do slug.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EscolaPublica"
                 }
               }
             }
@@ -51,12 +167,32 @@
         }
       }
     },
-    "/alunos": {
+    "/escolas/{escola}/alunos": {
       "get": {
         "operationId": "listarAlunos",
         "summary": "Lista os alunos",
         "tags": [
           "Alunos"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "escola",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+              "description": "Slug da escola, como `colegio-recreio`."
+            },
+            "required": true,
+            "description": "Slug da escola, como `colegio-recreio`."
+          }
         ],
         "responses": {
           "200": {
@@ -72,6 +208,12 @@
               }
             }
           },
+          "401": {
+            "$ref": "#/components/responses/NaoAutenticado"
+          },
+          "403": {
+            "$ref": "#/components/responses/AcessoNegado"
+          },
           "404": {
             "$ref": "#/components/responses/NaoEncontrado"
           },
@@ -84,14 +226,32 @@
         }
       }
     },
-    "/alunos/{id}": {
+    "/escolas/{escola}/alunos/{id}": {
       "get": {
         "operationId": "buscarAluno",
         "summary": "Busca um aluno pelo id",
         "tags": [
           "Alunos"
         ],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "parameters": [
+          {
+            "in": "path",
+            "name": "escola",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+              "description": "Slug da escola, como `colegio-recreio`."
+            },
+            "required": true,
+            "description": "Slug da escola, como `colegio-recreio`."
+          },
           {
             "in": "path",
             "name": "id",
@@ -118,6 +278,12 @@
           },
           "400": {
             "$ref": "#/components/responses/DadosInvalidos"
+          },
+          "401": {
+            "$ref": "#/components/responses/NaoAutenticado"
+          },
+          "403": {
+            "$ref": "#/components/responses/AcessoNegado"
           },
           "404": {
             "$ref": "#/components/responses/NaoEncontrado"
@@ -186,6 +352,83 @@
         ],
         "additionalProperties": false
       },
+      "Eu": {
+        "type": "object",
+        "properties": {
+          "usuario": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "nome": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+              },
+              "emailVerificado": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "nome",
+              "email",
+              "emailVerificado"
+            ],
+            "additionalProperties": false
+          },
+          "escolas": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "slug": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 63,
+                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                },
+                "nome": {
+                  "type": "string"
+                },
+                "perfis": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "responsavel",
+                      "aluno",
+                      "professor",
+                      "secretaria",
+                      "financeiro",
+                      "portaria",
+                      "coordenacao",
+                      "direcao"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "slug",
+                "nome",
+                "perfis"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "usuario",
+          "escolas"
+        ],
+        "additionalProperties": false
+      },
       "Escola": {
         "type": "object",
         "properties": {
@@ -245,6 +488,34 @@
         ],
         "additionalProperties": false
       },
+      "EscolaPublica": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 63,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "cidade": {
+            "type": "string"
+          },
+          "corMarca": {
+            "type": "string",
+            "pattern": "^#[0-9A-Fa-f]{6}$"
+          }
+        },
+        "required": [
+          "slug",
+          "nome",
+          "cidade",
+          "corMarca"
+        ],
+        "additionalProperties": false
+      },
       "Aluno": {
         "type": "object",
         "properties": {
@@ -284,8 +555,26 @@
       }
     },
     "responses": {
+      "NaoAutenticado": {
+        "description": "A requisição não trouxe o cookie de sessão, ou a sessão expirou. Entre de novo.",
+        "content": {
+          "application/problem+json": {
+            "example": {
+              "type": "https://recreio.app/problemas/nao-autenticado",
+              "title": "Sessão ausente ou expirada",
+              "status": 401,
+              "detail": "Sessão ausente ou expirada. Entre de novo para continuar.",
+              "instance": "/api/v1/eu",
+              "code": "NAO_AUTENTICADO"
+            },
+            "schema": {
+              "$ref": "#/components/schemas/Problema"
+            }
+          }
+        }
+      },
       "NaoEncontrado": {
-        "description": "O recurso não existe, ou o Host da requisição não pertence a nenhuma escola.",
+        "description": "O recurso não existe, ou o slug da rota não pertence a nenhuma escola.",
         "content": {
           "application/problem+json": {
             "example": {
@@ -293,7 +582,7 @@
               "title": "Recurso não encontrado",
               "status": 404,
               "detail": "Aluno não encontrado.",
-              "instance": "/api/v1/alunos/7a1e2b3c-0000-4000-8000-000000000000",
+              "instance": "/api/v1/escolas/colegio-recreio/alunos/7a1e2b3c-0000-4000-8000-000000000000",
               "code": "NAO_ENCONTRADO"
             },
             "schema": {
@@ -339,7 +628,7 @@
               "title": "Limite de requisições excedido",
               "status": 429,
               "detail": "Limite de 300 requisições por minuto excedido. Tente de novo após o tempo de Retry-After.",
-              "instance": "/api/v1/alunos",
+              "instance": "/api/v1/escolas/colegio-recreio/alunos",
               "code": "LIMITE_EXCEDIDO"
             },
             "schema": {
@@ -357,11 +646,43 @@
               "title": "Erro interno",
               "status": 500,
               "detail": "Erro interno. Tente de novo em instantes.",
-              "instance": "/api/v1/alunos",
+              "instance": "/api/v1/escolas/colegio-recreio/alunos",
               "code": "ERRO_INTERNO"
             },
             "schema": {
               "$ref": "#/components/schemas/Problema"
+            }
+          }
+        }
+      },
+      "AcessoNegado": {
+        "description": "A conta não tem vínculo com a escola (`SEM_ACESSO`) ou não tem a permissão (`PERMISSAO_NEGADA`).",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/Problema"
+            },
+            "examples": {
+              "SEM_ACESSO": {
+                "value": {
+                  "type": "https://recreio.app/problemas/sem-acesso",
+                  "title": "Sem acesso a esta escola",
+                  "status": 403,
+                  "detail": "A conta não tem vínculo com esta escola.",
+                  "instance": "/api/v1/escolas/colegio-recreio/alunos",
+                  "code": "SEM_ACESSO"
+                }
+              },
+              "PERMISSAO_NEGADA": {
+                "value": {
+                  "type": "https://recreio.app/problemas/permissao-negada",
+                  "title": "Permissão negada",
+                  "status": 403,
+                  "detail": "Os perfis da conta não têm a ação \"ver\" no módulo \"alunos\".",
+                  "instance": "/api/v1/escolas/colegio-recreio/alunos",
+                  "code": "PERMISSAO_NEGADA"
+                }
+              }
             }
           }
         }
@@ -375,7 +696,7 @@
               "title": "Dados inválidos",
               "status": 400,
               "detail": "Os dados enviados não são válidos.",
-              "instance": "/api/v1/alunos/ID%20Inv%C3%A1lido",
+              "instance": "/api/v1/escolas/colegio-recreio/alunos/ID%20Inv%C3%A1lido",
               "code": "DADOS_INVALIDOS",
               "errors": {
                 "id": [
@@ -388,6 +709,14 @@
             }
           }
         }
+      }
+    },
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "recreio.session_token",
+        "description": "Cookie httpOnly do Better Auth. Em produção o nome ganha o prefixo `__Secure-`. O portal envia com `credentials: \"include\"`."
       }
     }
   }

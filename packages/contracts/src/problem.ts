@@ -3,6 +3,9 @@ import { z } from 'zod';
 /** Códigos estáveis de erro. O portal decide o que mostrar por eles, sem ler o texto. */
 export const problemCodeSchema = z.enum([
   'DADOS_INVALIDOS',
+  'NAO_AUTENTICADO',
+  'SEM_ACESSO',
+  'PERMISSAO_NEGADA',
   'NAO_ENCONTRADO',
   'CORPO_GRANDE_DEMAIS',
   'LIMITE_EXCEDIDO',

@@ -7,5 +7,9 @@ export const createEscolaController = (service: EscolaService) => {
     res.json(await service.obter(escolaDaRequisicao(res)));
   };
 
-  return { obter };
+  const obterPublica: RequestHandler = async (_req, res) => {
+    res.json(await service.obterPublica(escolaDaRequisicao(res)));
+  };
+
+  return { obter, obterPublica };
 };

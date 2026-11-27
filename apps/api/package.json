@@ -33,6 +33,7 @@
     "@recreio/contracts": "*",
     "@scalar/express-api-reference": "^0.10.43",
     "@sentry/node": "^11.20.0",
+    "better-auth": "^1.7.28",
     "bullmq": "^6.7.10",
     "cors": "^2.8.6",
     "drizzle-orm": "^0.45.4",

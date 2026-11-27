@@ -10,6 +10,7 @@ const PRODUCAO = {
   REDIS_URL: 'redis://redis:6379',
   SMTP_URL: 'smtps://usuario:senha@smtp.exemplo.com:465',
   S3_BUCKET: 'recreio-producao',
+  AUTH_SECRET: 'segredo-de-producao-com-mais-de-32-caracteres',
 };
 
 /** Caminhos das variáveis que o Zod recusou. */
@@ -52,9 +53,16 @@ describe('variáveis de infraestrutura', () => {
     assert.equal(parseEnv({ NODE_ENV: 'test' }).REDIS_URL, undefined);
   });
 
-  test('produção exige banco, Redis, SMTP e bucket', () => {
+  test('produção exige banco, segredo da sessão, Redis, SMTP e bucket', () => {
     const faltando = recusadas({ NODE_ENV: 'production' });
-    for (const chave of ['DATABASE_URL', 'DATABASE_MIGRATION_URL', 'REDIS_URL', 'SMTP_URL', 'S3_BUCKET']) {
+    for (const chave of [
+      'DATABASE_URL',
+      'DATABASE_MIGRATION_URL',
+      'AUTH_SECRET',
+      'REDIS_URL',
+      'SMTP_URL',
+      'S3_BUCKET',
+    ]) {
       assert.ok(faltando.includes(chave), `${chave} deveria ser obrigatória`);
     }
   });

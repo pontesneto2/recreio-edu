@@ -44,6 +44,26 @@ const modelos: { [M in ModeloEmail]: (variaveis: VariaveisDe<M>) => Mensagem } =
       ],
       acao: { rotulo: 'Entrar no portal', url: linkAcesso },
     }),
+  'confirmacao-email': ({ nome, link }) =>
+    montarMensagem({
+      assunto: 'Confirme seu e-mail para entrar no portal da escola',
+      saudacao: `Olá, ${nome}.`,
+      paragrafos: [
+        'Confirme este e-mail para entrar no portal da escola. O link vale por 24 horas.',
+        'Se você não pediu acesso, ignore esta mensagem. Ninguém entra na conta sem esta confirmação.',
+      ],
+      acao: { rotulo: 'Confirmar e-mail', url: link },
+    }),
+  'troca-de-senha': ({ nome, link }) =>
+    montarMensagem({
+      assunto: 'Troca de senha do portal da escola',
+      saudacao: `Olá, ${nome}.`,
+      paragrafos: [
+        'Recebemos um pedido para trocar a senha da sua conta. Crie a senha nova pelo link abaixo.',
+        'O link vale por 30 minutos e funciona uma vez só. Se não foi você, ignore esta mensagem: sua senha atual continua valendo.',
+      ],
+      acao: { rotulo: 'Criar senha nova', url: link },
+    }),
   teste: ({ origem }) =>
     montarMensagem({
       assunto: 'E-mail de teste do Recreio',

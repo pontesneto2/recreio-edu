@@ -15,6 +15,34 @@
       "when": 1795798934085,
       "tag": "0001_rls_multi_escola",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795801180446,
+      "tag": "0002_autenticacao_e_vinculos",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1795801182520,
+      "tag": "0003_rls_vinculos_e_permissoes",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1795802817280,
+      "tag": "0004_escola_pela_rota",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1795802829659,
+      "tag": "0005_funcoes_escola_por_slug",
+      "breakpoints": true
     }
   ]
 }

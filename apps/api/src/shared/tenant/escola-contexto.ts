@@ -1,2 +1,2 @@
-/** Escola da requisição atual, resolvida pelo Host. Todo repositório recebe este contexto. */
+/** Escola da requisição atual, resolvida pelo slug da rota (ADR 0011). Todo repositório recebe este contexto. */
 export type EscolaContexto = { escolaId: string };

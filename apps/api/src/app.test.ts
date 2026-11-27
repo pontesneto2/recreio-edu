@@ -1,4 +1,4 @@
-import { alunoSchema, escolaSchema, problemSchema } from '@recreio/contracts';
+import { alunoSchema, escolaPublicaSchema, escolaSchema, problemSchema } from '@recreio/contracts';
 import assert from 'node:assert/strict';
 import { after, before, describe, test } from 'node:test';
 import { z } from 'zod';
@@ -7,12 +7,14 @@ import { type Container, createContainer } from './container.ts';
 import { seedDadosCanonicos } from './database/seed/seed.ts';
 import { openApiDocument } from './openapi.ts';
 import { type BancoDeTeste, iniciarBancoDeTeste } from './test/database.ts';
-import { requisitar } from './test/http.ts';
 import { iniciarRedisDeTeste, type RedisDeTeste } from './test/redis.ts';
 import { useServer } from './test/server.ts';
+import { EMAILS, SENHA_DE_TESTE, configDeTeste, entrar, rotaDaEscola } from './test/sessao.ts';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
-const DOMINIO = 'colegiorecreio.localhost';
+const ESCOLA = rotaDaEscola();
+const PUBLICA = rotaDaEscola('/publica');
+const ALUNOS = rotaDaEscola('/alunos');
 const ALUNO_INEXISTENTE = '7a1e2b3c-0000-4000-8000-000000000000';
 const statusSchema = z.object({ status: z.string() });
 
@@ -26,8 +28,7 @@ const readProblem = async (res: Response, status: number, code: string) => {
   return problem;
 };
 
-// Um PostgreSQL com migrações e seed e um Redis para o arquivo todo. O fetch sai de 127.0.0.1,
-// que a API trata como DEV_ESCOLA_DOMINIO.
+// Um PostgreSQL com migrações e seed e um Redis para o arquivo todo.
 let banco: BancoDeTeste;
 let redis: RedisDeTeste;
 let container: Container;
@@ -37,8 +38,8 @@ const REDIS_FORA = 'redis://127.0.0.1:1';
 
 before(async () => {
   [banco, redis] = await Promise.all([iniciarBancoDeTeste(), iniciarRedisDeTeste()]);
-  await seedDadosCanonicos(banco.urlDono, DOMINIO);
-  container = createContainer({ databaseUrl: banco.urlApp, dominioLocal: DOMINIO, redisUrl: redis.url });
+  await seedDadosCanonicos(banco.urlDono, { senhaPadrao: SENHA_DE_TESTE });
+  container = createContainer({ ...configDeTeste(banco.urlApp).config, redisUrl: redis.url });
 });
 
 after(async () => {
@@ -48,6 +49,11 @@ after(async () => {
 
 describe('API HTTP', () => {
   const server = useServer(() => createApp(container));
+  // Direção tem todas as permissões. As regras por perfil estão em autenticacao.test.ts.
+  let sessao: RequestInit = {};
+  before(async () => {
+    sessao = { headers: { Cookie: await entrar(server.baseUrl, EMAILS.direcao) } };
+  });
 
   test('GET /api/health responde ok, fora da versão', async () => {
     const res = await fetch(`${server.baseUrl}/api/health`);
@@ -61,8 +67,8 @@ describe('API HTTP', () => {
     assert.deepEqual(await res.json(), { status: 'ok', dependencias: { postgres: 'ok', redis: 'ok' } });
   });
 
-  test('GET /api/v1/escola devolve a escola com a contagem de alunos por unidade', async () => {
-    const res = await fetch(`${server.baseUrl}/api/v1/escola`);
+  test('GET /escolas/:escola devolve a escola com a contagem de alunos por unidade', async () => {
+    const res = await fetch(`${server.baseUrl}${ESCOLA}`, sessao);
     assert.equal(res.status, 200);
     const escola = escolaSchema.parse(await res.json());
     assert.equal(escola.nome, 'Colégio Recreio');
@@ -76,8 +82,8 @@ describe('API HTTP', () => {
     );
   });
 
-  test('GET /api/v1/alunos devolve os alunos do seed', async () => {
-    const res = await fetch(`${server.baseUrl}/api/v1/alunos`);
+  test('GET /escolas/:escola/alunos devolve os alunos do seed', async () => {
+    const res = await fetch(`${server.baseUrl}${ALUNOS}`, sessao);
     assert.equal(res.status, 200);
     const alunos = alunoSchema.array().parse(await res.json());
     assert.deepEqual(
@@ -101,35 +107,35 @@ describe('API HTTP', () => {
     );
   });
 
-  test('GET /api/v1/alunos/:id devolve o aluno', async () => {
-    const lista = alunoSchema.array().parse(await (await fetch(`${server.baseUrl}/api/v1/alunos`)).json());
+  test('GET /escolas/:escola/alunos/:id devolve o aluno', async () => {
+    const lista = alunoSchema.array().parse(await (await fetch(`${server.baseUrl}${ALUNOS}`, sessao)).json());
     const davi = lista.find((aluno) => aluno.nome === 'Davi Lima');
     assert.ok(davi);
 
-    const res = await fetch(`${server.baseUrl}/api/v1/alunos/${davi.id}`);
+    const res = await fetch(`${server.baseUrl}${ALUNOS}/${davi.id}`, sessao);
     assert.equal(res.status, 200);
     assert.deepEqual(alunoSchema.parse(await res.json()), davi);
   });
 
-  test('GET /api/v1/alunos/:id devolve 404 NAO_ENCONTRADO em problem+json', async () => {
-    const res = await fetch(`${server.baseUrl}/api/v1/alunos/${ALUNO_INEXISTENTE}`);
+  test('GET /escolas/:escola/alunos/:id devolve 404 NAO_ENCONTRADO em problem+json', async () => {
+    const res = await fetch(`${server.baseUrl}${ALUNOS}/${ALUNO_INEXISTENTE}`, sessao);
     const problem = await readProblem(res, 404, 'NAO_ENCONTRADO');
     assert.equal(problem.type, 'https://recreio.app/problemas/nao-encontrado');
     assert.equal(problem.title, 'Recurso não encontrado');
     assert.equal(problem.detail, 'Aluno não encontrado.');
-    assert.equal(problem.instance, `/api/v1/alunos/${ALUNO_INEXISTENTE}`);
+    assert.equal(problem.instance, `${ALUNOS}/${ALUNO_INEXISTENTE}`);
   });
 
-  test('GET /api/v1/alunos/:id devolve 400 DADOS_INVALIDOS com erros por campo', async () => {
-    const res = await fetch(`${server.baseUrl}/api/v1/alunos/${encodeURIComponent('ID Inválido')}?cpf=123`);
+  test('GET /escolas/:escola/alunos/:id devolve 400 DADOS_INVALIDOS com erros por campo', async () => {
+    const res = await fetch(`${server.baseUrl}${ALUNOS}/${encodeURIComponent('ID Inválido')}?cpf=123`, sessao);
     const problem = await readProblem(res, 400, 'DADOS_INVALIDOS');
     assert.equal(problem.type, 'https://recreio.app/problemas/dados-invalidos');
     assert.ok(problem.errors?.id?.length, 'esperava mensagem para o campo id');
-    assert.equal(problem.instance, '/api/v1/alunos/ID%20Inv%C3%A1lido', 'instance não leva a query');
+    assert.equal(problem.instance, `${ALUNOS}/ID%20Inv%C3%A1lido`, 'instance não leva a query');
   });
 
   test('corpo que não é JSON devolve 400 DADOS_INVALIDOS', async () => {
-    const res = await fetch(`${server.baseUrl}/api/v1/alunos`, {
+    const res = await fetch(`${server.baseUrl}${ALUNOS}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: '{"nome":',
@@ -138,7 +144,7 @@ describe('API HTTP', () => {
   });
 
   test('corpo acima de 1 MB devolve 413 CORPO_GRANDE_DEMAIS', async () => {
-    const res = await fetch(`${server.baseUrl}/api/v1/alunos`, {
+    const res = await fetch(`${server.baseUrl}${ALUNOS}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nome: 'x'.repeat(1_100_000) }),
@@ -160,32 +166,33 @@ describe('API HTTP', () => {
   });
 });
 
-describe('escola pelo Host', () => {
+describe('escola pela rota', () => {
   const server = useServer(() => createApp(container));
 
-  test('o domínio da escola, com ou sem porta, devolve os dados dela', async () => {
-    for (const host of [DOMINIO, `${DOMINIO}:3333`, 'localhost:5173']) {
-      const res = await requisitar(server.port, '/api/v1/escola', host);
-      assert.equal(res.status, 200, host);
-      assert.equal(escolaSchema.parse(res.corpo).nome, 'Colégio Recreio');
+  test('o slug da rota escolhe a escola', async () => {
+    const res = await fetch(`${server.baseUrl}${PUBLICA}`);
+    assert.equal(res.status, 200);
+    assert.deepEqual(escolaPublicaSchema.parse(await res.json()), {
+      slug: 'colegio-recreio',
+      nome: 'Colégio Recreio',
+      cidade: 'Fortaleza',
+      corMarca: '#0067CC',
+    });
+  });
+
+  test('slug sem escola ou fora do formato devolve 404 NAO_ENCONTRADO em problem+json', async () => {
+    for (const slug of ['escola-que-nao-existe', 'Colegio-Recreio', 'colegio_recreio']) {
+      for (const caminho of ['/publica', '', '/alunos']) {
+        const res = await fetch(`${server.baseUrl}${rotaDaEscola(caminho, slug)}`);
+        const problem = await readProblem(res, 404, 'NAO_ENCONTRADO');
+        assert.equal(problem.detail, 'Escola não encontrada.', `${slug}${caminho}`);
+      }
     }
   });
 
-  test('Host sem escola cadastrada devolve 404 NAO_ENCONTRADO em problem+json', async () => {
-    for (const caminho of ['/api/v1/escola', '/api/v1/alunos']) {
-      const res = await requisitar(server.port, caminho, 'escola-que-nao-existe.recreio.app');
-      assert.equal(res.status, 404, caminho);
-      assert.match(res.contentType, /^application\/problem\+json/);
-      const problem = problemSchema.parse(res.corpo);
-      assert.equal(problem.code, 'NAO_ENCONTRADO');
-      assert.equal(problem.detail, 'Escola não encontrada para este endereço.');
-    }
-  });
-
-  test('health, ready e a documentação não dependem do Host', async () => {
-    for (const caminho of ['/api/health', '/api/ready', '/api/docs', '/api/v1/openapi.json']) {
-      const res = await requisitar(server.port, caminho, 'escola-que-nao-existe.recreio.app');
-      assert.equal(res.status, 200, caminho);
+  test('as rotas antigas por Host não existem mais', async () => {
+    for (const caminho of ['/api/v1/escola', '/api/v1/escola/publica', '/api/v1/alunos']) {
+      await readProblem(await fetch(`${server.baseUrl}${caminho}`), 404, 'NAO_ENCONTRADO');
     }
   });
 });
@@ -193,7 +200,7 @@ describe('escola pelo Host', () => {
 describe('X-Request-Id', () => {
   const server = useServer(() => createApp(container));
   const requestId = async (header?: string) => {
-    const res = await fetch(`${server.baseUrl}/api/v1/escola`, {
+    const res = await fetch(`${server.baseUrl}${PUBLICA}`, {
       headers: header === undefined ? {} : { 'X-Request-Id': header },
     });
     return res.headers.get('x-request-id');
@@ -217,7 +224,7 @@ describe('X-Request-Id', () => {
   });
 
   test('vai também nas respostas de erro', async () => {
-    const res = await fetch(`${server.baseUrl}/api/v1/alunos/${ALUNO_INEXISTENTE}`, {
+    const res = await fetch(`${server.baseUrl}/api/v1/nada`, {
       headers: { 'X-Request-Id': 'erro-1' },
     });
     assert.equal(res.status, 404);
@@ -230,7 +237,8 @@ describe('erro não previsto', () => {
     createApp({
       ...container,
       escolaService: {
-        obter: async () => {
+        ...container.escolaService,
+        obterPublica: async () => {
           throw new Error('senha do banco: segredo');
         },
       },
@@ -238,7 +246,7 @@ describe('erro não previsto', () => {
   );
 
   test('devolve 500 ERRO_INTERNO sem vazar a mensagem original', async () => {
-    const res = await fetch(`${server.baseUrl}/api/v1/escola`);
+    const res = await fetch(`${server.baseUrl}${PUBLICA}`);
     const problem = await readProblem(res, 500, 'ERRO_INTERNO');
     assert.equal(problem.detail, 'Erro interno. Tente de novo em instantes.');
     assert.doesNotMatch(JSON.stringify(problem), /segredo/);
@@ -249,13 +257,13 @@ describe('limite de requisições', () => {
   const server = useServer(() => createApp(container, { rateLimitPerMinute: 2 }));
 
   test('a 3ª requisição no minuto recebe 429 LIMITE_EXCEDIDO com Retry-After', async () => {
-    const primeira = await fetch(`${server.baseUrl}/api/v1/escola`);
+    const primeira = await fetch(`${server.baseUrl}${PUBLICA}`);
     assert.equal(primeira.status, 200);
     assert.match(primeira.headers.get('ratelimit-policy') ?? '', /q=2; w=60/);
     assert.match(primeira.headers.get('ratelimit') ?? '', /r=1; t=\d+/);
-    await fetch(`${server.baseUrl}/api/v1/escola`);
+    await fetch(`${server.baseUrl}${PUBLICA}`);
 
-    const res = await fetch(`${server.baseUrl}/api/v1/escola`);
+    const res = await fetch(`${server.baseUrl}${PUBLICA}`);
     const problem = await readProblem(res, 429, 'LIMITE_EXCEDIDO');
     assert.equal(problem.type, 'https://recreio.app/problemas/limite-excedido');
     assert.match(res.headers.get('retry-after') ?? '', /^\d+$/);
@@ -273,7 +281,7 @@ describe('limite de requisições', () => {
   });
 
   test('atrás de proxy confiável (loopback), o limite conta por IP de X-Forwarded-For', async () => {
-    const comIp = (ip: string) => fetch(`${server.baseUrl}/api/v1/escola`, { headers: { 'X-Forwarded-For': ip } });
+    const comIp = (ip: string) => fetch(`${server.baseUrl}${PUBLICA}`, { headers: { 'X-Forwarded-For': ip } });
     assert.equal((await comIp('203.0.113.10')).status, 200);
     assert.equal((await comIp('203.0.113.10')).status, 200);
     assert.equal((await comIp('203.0.113.10')).status, 429);
@@ -285,8 +293,8 @@ describe('limite de requisições sem Redis', () => {
   const server = useServer(() => createApp({ ...container, redis: undefined }, { rateLimitPerMinute: 1 }));
 
   test('conta em memória', async () => {
-    assert.equal((await fetch(`${server.baseUrl}/api/v1/escola`)).status, 200);
-    assert.equal((await fetch(`${server.baseUrl}/api/v1/escola`)).status, 429);
+    assert.equal((await fetch(`${server.baseUrl}${PUBLICA}`)).status, 200);
+    assert.equal((await fetch(`${server.baseUrl}${PUBLICA}`)).status, 429);
   });
 });
 
@@ -312,7 +320,7 @@ describe('documentação da API', () => {
   });
 
   test('o resto da API mantém a CSP padrão do helmet', async () => {
-    const res = await fetch(`${server.baseUrl}/api/v1/escola`);
+    const res = await fetch(`${server.baseUrl}${PUBLICA}`);
     assert.match(res.headers.get('content-security-policy') ?? '', /script-src 'self'/);
   });
 });
@@ -348,7 +356,7 @@ describe('API HTTP só sem Redis', () => {
   let semRedis: Container | undefined;
   // A fábrica roda no `before` do useServer, depois que o banco do arquivo subiu.
   const server = useServer(() => {
-    semRedis = createContainer({ databaseUrl: banco.urlApp, dominioLocal: DOMINIO, redisUrl: REDIS_FORA });
+    semRedis = createContainer({ databaseUrl: banco.urlApp, redisUrl: REDIS_FORA });
     return createApp(semRedis);
   });
 

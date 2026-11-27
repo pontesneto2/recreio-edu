@@ -1,12 +1,13 @@
 import { problemSchema } from '@recreio/contracts';
 import { createDocument, type ZodOpenApiPathsObject } from 'zod-openapi';
+import { COOKIE_DE_SESSAO } from '../sessao/cookie.ts';
 import { problemResponse } from './problem-responses.ts';
-import type { ApiOperation, ApiPaths, OpenApiModule } from './registry.ts';
+import { type ApiOperation, type ApiPaths, ESQUEMA_DA_SESSAO, type OpenApiModule } from './registry.ts';
 
 export const API_V1_PREFIX = '/api/v1';
 
 /**
- * Toda operação pode responder 404 (Host sem escola), 429 (limite) e 500 (erro interno).
+ * Toda operação pode responder 404 (slug sem escola), 429 (limite) e 500 (erro interno).
  * Operação com corpo também pode responder 413. O módulo não precisa repetir.
  */
 const withCommonProblems = (operation: ApiOperation): ApiOperation => ({
@@ -42,13 +43,24 @@ export const createOpenApiDocument = (modules: OpenApiModule[]) =>
       version: '1.0.0',
       description:
         'API do Recreio Sistema Educacional. Erros seguem a RFC 9457 (`application/problem+json`) com o campo `code`. ' +
-        'Toda resposta traz `X-Request-Id`.',
+        'Toda resposta traz `X-Request-Id`. Rotas com cadeado exigem o cookie de sessão do Better Auth, ' +
+        'obtido em `POST /api/auth/sign-in/email`.',
     },
     servers: [{ url: API_V1_PREFIX }],
     tags: modules.map((module) => module.tag),
     paths: mergePaths(modules),
     components: {
       schemas: Object.assign({ Problema: problemSchema }, ...modules.map((module) => module.schemas)),
+      securitySchemes: {
+        [ESQUEMA_DA_SESSAO]: {
+          type: 'apiKey',
+          in: 'cookie',
+          name: COOKIE_DE_SESSAO,
+          description:
+            'Cookie httpOnly do Better Auth. Em produção o nome ganha o prefixo `__Secure-`. ' +
+            'O portal envia com `credentials: "include"`.',
+        },
+      },
     },
   });
 

@@ -1,4 +1,4 @@
-import type { Escola } from '@recreio/contracts';
+import type { Escola, EscolaPublica } from '@recreio/contracts';
 import { NotFoundError } from '../../shared/errors/app-error.ts';
 import type { EscolaContexto } from '../../shared/tenant/escola-contexto.ts';
 import type { EscolaRepository } from './escola.repository.ts';
@@ -14,6 +14,8 @@ export const dataNoFuso = (instante: Date, fuso = FUSO_HORARIO): string =>
 
 export type EscolaService = {
   obter: (contexto: EscolaContexto) => Promise<Escola>;
+  /** Nome, cidade e cor da marca, para a tela de entrada. */
+  obterPublica: (contexto: EscolaContexto) => Promise<EscolaPublica>;
 };
 
 export const createEscolaService = (
@@ -24,5 +26,10 @@ export const createEscolaService = (
     const escola = await repository.get(contexto);
     if (!escola) throw new NotFoundError('Escola não encontrada.');
     return { ...escola, hoje: dataNoFuso(agora()) };
+  },
+  obterPublica: async (contexto) => {
+    const escola = await repository.getPublica(contexto);
+    if (!escola) throw new NotFoundError('Escola não encontrada.');
+    return escola;
   },
 });
