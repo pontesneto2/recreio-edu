@@ -249,15 +249,17 @@ Esta fase começa junto com a fase 1 e não termina.
 
 ## Decisões
 
-| ADR                                                | Decisão                          | Situação                                                        |
-| -------------------------------------------------- | -------------------------------- | --------------------------------------------------------------- |
-| [0005](adr/0005-postgresql-e-drizzle.md)           | Banco e ORM                      | Aceita: PostgreSQL 17 com Drizzle                               |
-| [0006](adr/0006-multi-escola-por-dominio-e-rls.md) | Multi-escola                     | Aceita: escola pelo domínio, `escola_id` com Row Level Security |
-| [0007](adr/0007-autenticacao-better-auth.md)       | Autenticação                     | Aceita: Better Auth com sessão em cookie                        |
-| [0008](adr/0008-padroes-de-api.md)                 | Padrões da API                   | Aceita: `/api/v1`, RFC 9457, OpenAPI gerado do Zod              |
-| [0009](adr/0009-filas-com-bullmq.md)               | Filas                            | Aceita: BullMQ com Redis                                        |
-| [0010](adr/0010-armazenamento-de-arquivos-s3.md)   | Arquivos                         | Aceita: API S3, RustFS no ambiente local                        |
-| 0011                                               | Hospedagem e ambientes           | Pendente: comparar custo                                        |
-| 0012                                               | Gateway de pagamento             | Pendente: comparar taxas (Asaas, Efí, Iugu, Pagar.me)           |
-| 0013                                               | Assinatura eletrônica e NFS-e    | Pendente                                                        |
-| 0014                                               | Tempo real (chat e notificações) | Pendente: proposta WebSocket na própria API                     |
+| ADR                                                   | Decisão                                   | Situação                                                                |
+| ----------------------------------------------------- | ----------------------------------------- | ----------------------------------------------------------------------- |
+| [0005](adr/0005-postgresql-e-drizzle.md)              | Banco e ORM                               | Aceita: PostgreSQL 17 com Drizzle                                       |
+| [0006](adr/0006-multi-escola-por-dominio-e-rls.md)    | Multi-escola                              | Aceita: `escola_id` com Row Level Security. Resolução pela rota na 0011 |
+| [0007](adr/0007-autenticacao-better-auth.md)          | Autenticação                              | Aceita: Better Auth com sessão em cookie                                |
+| [0008](adr/0008-padroes-de-api.md)                    | Padrões da API                            | Aceita: `/api/v1`, RFC 9457, OpenAPI gerado do Zod                      |
+| [0009](adr/0009-filas-com-bullmq.md)                  | Filas                                     | Aceita: BullMQ com Redis                                                |
+| [0010](adr/0010-armazenamento-de-arquivos-s3.md)      | Arquivos                                  | Aceita: API S3, RustFS no ambiente local                                |
+| [0011](adr/0011-escola-pela-rota.md)                  | Endereço das escolas                      | Aceita: `recreio-edu.com.br/{slug}`, domínio único                      |
+| [0012](adr/0012-app-nativo-white-label.md)            | App nativo white label                    | Aceita: app Recreio com marca dinâmica, app próprio como plano pago     |
+| [0013](adr/0013-assinaturas-e-cobranca-recorrente.md) | Assinaturas e cobrança recorrente         | Proposta: plataforma separada, subconta por escola, Asaas a confirmar   |
+| 0014                                                  | Hospedagem e ambientes                    | Pendente: comparar custo                                                |
+| 0015                                                  | Assinatura eletrônica e NFS-e das escolas | Pendente                                                                |
+| 0016                                                  | Tempo real (chat e notificações)          | Pendente: proposta WebSocket na própria API                             |

@@ -1,6 +1,6 @@
 # 0006. Multi-escola: escola resolvida pelo domínio e isolada com Row Level Security
 
-- Status: aceita
+- Status: aceita, com a resolução por domínio substituída pela [ADR 0011](0011-escola-pela-rota.md)
 - Data: 2026-11-27
 
 ## Contexto
