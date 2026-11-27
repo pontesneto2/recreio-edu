@@ -39,7 +39,7 @@ As fases 4, 5, 6 e 7 podem andar em paralelo com equipes separadas, porque cada 
 Pendente nesta fase:
 
 - Regra de proteção da `main`: bloquear force push e exclusão, exigir CI verde no merge.
-- Corrigir os 24 avisos do React Compiler no design system, componente por componente.
+- [x] Corrigir os 24 avisos do React Compiler no design system, componente por componente.
 
 ## Fase 1. Plataforma
 
