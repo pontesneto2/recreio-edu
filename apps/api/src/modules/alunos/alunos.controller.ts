@@ -4,7 +4,8 @@ import { z } from 'zod';
 import { parseInput } from '../../shared/http/parse.ts';
 import type { AlunosService } from './alunos.service.ts';
 
-const paramsSchema = z.object({ id: alunoIdSchema });
+/** Parâmetros de `/alunos/:id`. O `alunos.openapi.ts` documenta o mesmo schema. */
+export const alunoParamsSchema = z.object({ id: alunoIdSchema.meta({ description: 'Identificador do aluno.' }) });
 
 export const createAlunosController = (service: AlunosService) => {
   const listar: RequestHandler = async (_req, res) => {
@@ -12,7 +13,7 @@ export const createAlunosController = (service: AlunosService) => {
   };
 
   const buscarPorId: RequestHandler = async (req, res) => {
-    const { id } = parseInput(paramsSchema, req.params);
+    const { id } = parseInput(alunoParamsSchema, req.params);
     res.json(await service.buscarPorId(id));
   };
 

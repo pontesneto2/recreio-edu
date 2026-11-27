@@ -1,0 +1,382 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "API Recreio",
+    "version": "1.0.0",
+    "description": "API do Recreio Sistema Educacional. Erros seguem a RFC 9457 (`application/problem+json`) com o campo `code`. Toda resposta traz `X-Request-Id`."
+  },
+  "servers": [
+    {
+      "url": "/api/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Escola",
+      "description": "Dados da escola e das unidades."
+    },
+    {
+      "name": "Alunos",
+      "description": "Alunos matriculados na escola."
+    }
+  ],
+  "paths": {
+    "/escola": {
+      "get": {
+        "operationId": "obterEscola",
+        "summary": "Obtém os dados da escola",
+        "tags": [
+          "Escola"
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados da escola, com as unidades.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Escola"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/LimiteExcedido"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErroInterno"
+          }
+        }
+      }
+    },
+    "/alunos": {
+      "get": {
+        "operationId": "listarAlunos",
+        "summary": "Lista os alunos",
+        "tags": [
+          "Alunos"
+        ],
+        "responses": {
+          "200": {
+            "description": "Todos os alunos da escola.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Aluno"
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/LimiteExcedido"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErroInterno"
+          }
+        }
+      }
+    },
+    "/alunos/{id}": {
+      "get": {
+        "operationId": "buscarAluno",
+        "summary": "Busca um aluno pelo id",
+        "tags": [
+          "Alunos"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z0-9-]+$",
+              "description": "Identificador do aluno."
+            },
+            "required": true,
+            "description": "Identificador do aluno."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "O aluno.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aluno"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/DadosInvalidos"
+          },
+          "404": {
+            "$ref": "#/components/responses/NaoEncontrado"
+          },
+          "429": {
+            "$ref": "#/components/responses/LimiteExcedido"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErroInterno"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Problema": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL que identifica o tipo de erro."
+          },
+          "title": {
+            "type": "string",
+            "description": "Resumo do tipo de erro. Igual para todo erro do mesmo tipo."
+          },
+          "status": {
+            "type": "integer",
+            "minimum": 400,
+            "maximum": 599,
+            "description": "Status HTTP da resposta."
+          },
+          "detail": {
+            "description": "Explicação deste erro em particular.",
+            "type": "string"
+          },
+          "instance": {
+            "description": "Caminho da requisição que falhou, sem a query.",
+            "type": "string"
+          },
+          "code": {
+            "type": "string",
+            "description": "Código estável do erro, como `NAO_ENCONTRADO`."
+          },
+          "errors": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Mensagens por campo quando `code` é `DADOS_INVALIDOS`. A chave `$` marca erro fora de campo."
+          }
+        },
+        "required": [
+          "type",
+          "title",
+          "status",
+          "code"
+        ],
+        "additionalProperties": false
+      },
+      "Escola": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string"
+          },
+          "cnpj": {
+            "type": "string"
+          },
+          "cidade": {
+            "type": "string"
+          },
+          "corMarca": {
+            "type": "string",
+            "pattern": "^#[0-9A-Fa-f]{6}$"
+          },
+          "hoje": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "unidades": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "nome": {
+                  "type": "string"
+                },
+                "alunos": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "id",
+                "nome",
+                "alunos"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "nome",
+          "cnpj",
+          "cidade",
+          "corMarca",
+          "hoje",
+          "unidades"
+        ],
+        "additionalProperties": false
+      },
+      "Aluno": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "turma": {
+            "type": "string"
+          },
+          "turno": {
+            "type": "string"
+          },
+          "matricula": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{4}$"
+          },
+          "mensalidade": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "required": [
+          "id",
+          "nome",
+          "turma",
+          "turno",
+          "matricula",
+          "mensalidade"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "responses": {
+      "LimiteExcedido": {
+        "description": "O cliente passou do limite de requisições por minuto.",
+        "headers": {
+          "Retry-After": {
+            "required": true,
+            "description": "Segundos até a janela do limite reiniciar.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991,
+              "description": "Segundos até a janela do limite reiniciar."
+            }
+          },
+          "RateLimit": {
+            "required": true,
+            "description": "Requisições restantes e segundos até reiniciar (draft 8 da IETF).",
+            "schema": {
+              "type": "string",
+              "description": "Requisições restantes e segundos até reiniciar (draft 8 da IETF)."
+            }
+          },
+          "RateLimit-Policy": {
+            "required": true,
+            "description": "Cota e janela do limite (draft 8 da IETF).",
+            "schema": {
+              "type": "string",
+              "description": "Cota e janela do limite (draft 8 da IETF)."
+            }
+          }
+        },
+        "content": {
+          "application/problem+json": {
+            "example": {
+              "type": "https://recreio.app/problemas/limite-excedido",
+              "title": "Limite de requisições excedido",
+              "status": 429,
+              "detail": "Limite de 300 requisições por minuto excedido. Tente de novo após o tempo de Retry-After.",
+              "instance": "/api/v1/alunos",
+              "code": "LIMITE_EXCEDIDO"
+            },
+            "schema": {
+              "$ref": "#/components/schemas/Problema"
+            }
+          }
+        }
+      },
+      "ErroInterno": {
+        "description": "Erro não previsto. O detalhe fica só no log, ligado ao X-Request-Id.",
+        "content": {
+          "application/problem+json": {
+            "example": {
+              "type": "https://recreio.app/problemas/erro-interno",
+              "title": "Erro interno",
+              "status": 500,
+              "detail": "Erro interno. Tente de novo em instantes.",
+              "instance": "/api/v1/alunos",
+              "code": "ERRO_INTERNO"
+            },
+            "schema": {
+              "$ref": "#/components/schemas/Problema"
+            }
+          }
+        }
+      },
+      "DadosInvalidos": {
+        "description": "A entrada não segue o schema do contrato.",
+        "content": {
+          "application/problem+json": {
+            "example": {
+              "type": "https://recreio.app/problemas/dados-invalidos",
+              "title": "Dados inválidos",
+              "status": 400,
+              "detail": "Os dados enviados não são válidos.",
+              "instance": "/api/v1/alunos/ID%20Inv%C3%A1lido",
+              "code": "DADOS_INVALIDOS",
+              "errors": {
+                "id": [
+                  "Texto inválido: deve corresponder ao padrão /^[a-z0-9-]+$/"
+                ]
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/Problema"
+            }
+          }
+        }
+      },
+      "NaoEncontrado": {
+        "description": "O recurso não existe.",
+        "content": {
+          "application/problem+json": {
+            "example": {
+              "type": "https://recreio.app/problemas/nao-encontrado",
+              "title": "Recurso não encontrado",
+              "status": 404,
+              "detail": "Aluno não encontrado.",
+              "instance": "/api/v1/alunos/nao-existe",
+              "code": "NAO_ENCONTRADO"
+            },
+            "schema": {
+              "$ref": "#/components/schemas/Problema"
+            }
+          }
+        }
+      }
+    }
+  }
+}

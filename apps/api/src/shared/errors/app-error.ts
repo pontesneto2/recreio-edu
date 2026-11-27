@@ -1,28 +1,41 @@
-/** Erro de domínio com status HTTP e código estável que o portal pode tratar. */
-export class AppError extends Error {
-  readonly statusCode: number;
-  readonly code: string;
-  readonly details?: unknown;
+import type { ProblemCode } from '@recreio/contracts';
+import { problemTypes } from './problem-types.ts';
 
-  constructor(message: string, options: { statusCode?: number; code?: string; details?: unknown } = {}) {
-    super(message);
+/** Mensagens de validação por campo. A chave é o caminho do campo com pontos (`responsavel.cpf`). */
+export type FieldErrors = Record<string, string[]>;
+
+/** Erro de domínio com código estável. O tratador de erros converte em `application/problem+json`. */
+export class AppError extends Error {
+  readonly code: ProblemCode;
+  readonly status: number;
+  readonly errors?: FieldErrors;
+
+  constructor(code: ProblemCode, detail: string, options: { errors?: FieldErrors; cause?: unknown } = {}) {
+    super(detail, { cause: options.cause });
     this.name = 'AppError';
-    this.statusCode = options.statusCode ?? 500;
-    this.code = options.code ?? 'ERRO_INTERNO';
-    this.details = options.details;
+    this.code = code;
+    this.status = problemTypes[code].status;
+    this.errors = options.errors;
   }
 }
 
 export class NotFoundError extends AppError {
-  constructor(message: string) {
-    super(message, { statusCode: 404, code: 'NAO_ENCONTRADO' });
+  constructor(detail: string) {
+    super('NAO_ENCONTRADO', detail);
     this.name = 'NotFoundError';
   }
 }
 
 export class ValidationError extends AppError {
-  constructor(message: string, details?: unknown) {
-    super(message, { statusCode: 400, code: 'DADOS_INVALIDOS', details });
+  constructor(detail: string, errors?: FieldErrors) {
+    super('DADOS_INVALIDOS', detail, { errors });
     this.name = 'ValidationError';
+  }
+}
+
+export class TooManyRequestsError extends AppError {
+  constructor(detail: string) {
+    super('LIMITE_EXCEDIDO', detail);
+    this.name = 'TooManyRequestsError';
   }
 }
