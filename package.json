@@ -25,6 +25,7 @@
     "test": "npm run test --workspaces --if-present",
     "test:e2e": "npm run test:e2e -w @recreio/web",
     "test:storybook": "npm run build-storybook && npm run test:a11y -w @recreio/design-system",
+    "test:lighthouse": "npm run test:lighthouse -w @recreio/web",
     "lint": "eslint --flag unstable_native_nodejs_ts_config .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

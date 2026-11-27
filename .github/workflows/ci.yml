@@ -29,6 +29,101 @@ jobs:
       - run: npm test
       - run: npm run build
 
+  # Portal de ponta a ponta no build de produção (vite preview), com a API simulada e axe em cada tela.
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Versão do Playwright
+        id: playwright
+        run: echo "versao=$(node -p "require('./node_modules/@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+      - name: Cache do Chromium do Playwright
+        id: cache-playwright
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.versao }}
+      - name: Chromium do Playwright
+        if: steps.cache-playwright.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+      - name: Bibliotecas do sistema para o Chromium
+        if: steps.cache-playwright.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+      - run: npm run test:e2e
+      - name: Relatório do Playwright
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: relatorio-e2e
+          path: |
+            apps/web/playwright-report/
+            apps/web/test-results/
+          retention-days: 7
+
+  # Storybook estático e axe em cada história, com a mesma regra do addon de acessibilidade.
+  storybook:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Versão do Playwright
+        id: playwright
+        run: echo "versao=$(node -p "require('./node_modules/@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+      - name: Cache do Chromium do Playwright
+        id: cache-playwright
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.versao }}
+      - name: Chromium do Playwright
+        if: steps.cache-playwright.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+      - name: Bibliotecas do sistema para o Chromium
+        if: steps.cache-playwright.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+      - run: npm run test:storybook
+      - name: Relatório do Playwright
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: relatorio-storybook
+          path: |
+            packages/design-system/playwright-report/
+            packages/design-system/test-results/
+          retention-days: 7
+
+  # Lighthouse em / e /escola: acessibilidade e boas práticas a partir de 0,9. Usa o Chrome do runner.
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run test:lighthouse
+      - name: Relatórios do Lighthouse
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: relatorio-lighthouse
+          path: apps/web/.lighthouseci/
+          include-hidden-files: true
+          retention-days: 7
+
   # Um job só para as 2 imagens, assim a proteção da main exige um check com nome fixo.
   docker:
     runs-on: ubuntu-latest
