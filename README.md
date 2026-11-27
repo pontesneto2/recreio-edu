@@ -42,7 +42,7 @@ Abra http://localhost:5000. O `index.html` lista as telas por grupo (Família, A
 
 ## Estrutura
 
-Cada aplicação tem a própria pasta `src/`. As camadas, as regras de importação e o formato de erro da API estão em [docs/arquitetura.md](docs/arquitetura.md). As decisões ficam em [docs/adr](docs/adr/) e o fluxo de trabalho em [CONTRIBUTING.md](CONTRIBUTING.md).
+Cada aplicação tem a própria pasta `src/`. As camadas, as regras de importação e o formato de erro da API estão em [docs/arquitetura.md](docs/arquitetura.md). As decisões ficam em [docs/adr](docs/adr/), o plano de entregas em [docs/roadmap.md](docs/roadmap.md) e o fluxo de trabalho em [CONTRIBUTING.md](CONTRIBUTING.md).
 
 | Pasta                               | Conteúdo                                                                                   |
 | ----------------------------------- | ------------------------------------------------------------------------------------------ |
