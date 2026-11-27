@@ -15,6 +15,7 @@ Portal web em React e API em Node para o Recreio. O protótipo com as 173 telas 
 | CI         | GitHub Actions: auditoria, format, lint, typecheck, testes, build, imagens e CodeQL |
 | Imagens    | Docker multi-stage: API em `node:24-alpine`, portal em nginx sem root               |
 | API extras | pino (logs estruturados), helmet (cabeçalhos de segurança), desligamento gracioso   |
+| Padrões    | `/api/v1`, erros RFC 9457, OpenAPI 3.1 gerado do Zod, `X-Request-Id`, limite por IP |
 
 ## Requisitos
 
@@ -32,8 +33,9 @@ npm run dev
 
 - Portal web: http://localhost:5173
 - API: http://localhost:3333/api/health
+- Documentação da API: http://localhost:3333/api/docs
 
-O Vite repassa `/api` para a porta 3333, então o portal chama `fetch('/api/...')` sem configurar URL.
+O Vite repassa `/api` para a porta 3333, então o portal chama `fetch('/api/v1/...')` sem configurar URL. Rotas de negócio ficam sob `/api/v1`; versionamento, erros e o OpenAPI estão em [docs/api](docs/api/README.md).
 
 ## Docker
 
@@ -62,7 +64,7 @@ Abra http://localhost:5000. O `index.html` lista as telas por grupo (Família, A
 
 ## Estrutura
 
-Cada aplicação tem a própria pasta `src/`. As camadas, as regras de importação e o formato de erro da API estão em [docs/arquitetura.md](docs/arquitetura.md). As decisões ficam em [docs/adr](docs/adr/), o plano de entregas em [docs/roadmap.md](docs/roadmap.md) e o fluxo de trabalho em [CONTRIBUTING.md](CONTRIBUTING.md).
+Cada aplicação tem a própria pasta `src/`. As camadas e as regras de importação estão em [docs/arquitetura.md](docs/arquitetura.md). Os padrões da API (URLs, status, erros, paginação, limites) estão em [docs/api/padroes.md](docs/api/padroes.md). As decisões ficam em [docs/adr](docs/adr/), o plano de entregas em [docs/roadmap.md](docs/roadmap.md) e o fluxo de trabalho em [CONTRIBUTING.md](CONTRIBUTING.md).
 
 | Pasta                               | Conteúdo                                                                                   |
 | ----------------------------------- | ------------------------------------------------------------------------------------------ |
@@ -88,15 +90,16 @@ Cada aplicação tem a própria pasta `src/`. As camadas, as regras de importaç
 | `npm run lint`                        | ESLint em todo o código fora de `prototipo/`.             |
 | `npm run format`                      | Prettier em todo o código fora de `prototipo/`.           |
 | `npm run check`                       | Lint, typecheck, testes e build, na mesma ordem do CI.    |
+| `npm run openapi -w @recreio/api`     | Regrava `docs/api/openapi.json` a partir dos contratos.   |
 
 ## Portar uma tela do protótipo
 
 1. Abra a tela em `prototipo/visualizar` para ver o resultado esperado.
 2. Leia o `.dc.html` correspondente em `prototipo/telas-fonte`. A marcação usa `Recreio.<Componente>`; cada um existe em `@recreio/design-system` com o mesmo nome.
 3. Descreva os dados de `renderVals()` como schema Zod em `packages/contracts`.
-4. Crie o módulo em `apps/api/src/modules/<dominio>` e a consulta em `apps/web/src/features/<dominio>/api`.
+4. Crie o módulo em `apps/api/src/modules/<dominio>`, com as operações em `<dominio>.openapi.ts`, e a consulta em `apps/web/src/features/<dominio>/api`.
 5. Crie a página em `apps/web/src/pages` e a rota em `apps/web/src/app/router.tsx`.
 
 ## Variáveis de ambiente
 
-A API lê `apps/api/.env` quando o arquivo existe e valida as variáveis com Zod ao subir. Copie `apps/api/.env.example` para começar.
+A API lê `apps/api/.env` quando o arquivo existe e valida as variáveis com Zod ao subir. Copie `apps/api/.env.example` para começar. `RATE_LIMIT_PER_MINUTE` (padrão 300) limita as requisições por minuto por IP em `/api/v1`.

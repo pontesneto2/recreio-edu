@@ -25,17 +25,21 @@ src/
 ├── main.ts                  Sobe o servidor e trata SIGINT/SIGTERM
 ├── app.ts                   Monta o Express: segurança, logs, rotas, erros
 ├── container.ts             Raiz de composição: liga repositórios aos services
+├── openapi.ts               Junta as declarações OpenAPI dos módulos
 ├── config/env.ts            Variáveis de ambiente validadas com Zod
+├── scripts/                 `generate-openapi.ts` (npm run openapi)
 ├── modules/
 │   └── <dominio>/
 │       ├── <dominio>.routes.ts       URLs e verbos HTTP
+│       ├── <dominio>.openapi.ts      Operações documentadas no OpenAPI
 │       ├── <dominio>.controller.ts   Lê a requisição, valida, chama o service
 │       ├── <dominio>.service.ts      Regra de negócio
 │       ├── <dominio>.repository.ts   Acesso a dados (hoje em memória)
 │       └── <dominio>.*.test.ts       Testes do módulo
 ├── shared/
-│   ├── errors/              AppError, NotFoundError, ValidationError
-│   ├── http/                Tratamento de erro e validação de entrada
+│   ├── errors/              AppError e subclasses, catálogo de problemas
+│   ├── http/                Problem+json, validação, X-Request-Id, limite de requisições
+│   ├── openapi/             Registro, montagem do documento e página /api/docs
 │   └── logger/              Logger estruturado (pino)
 └── database/seed/           Dados de demonstração do protótipo
 ```
@@ -48,17 +52,31 @@ Cada requisição percorre `routes → controller → service → repository`. C
 
 Os módulos são funções fábrica (`createAlunosService(repository)`), sem classes de serviço nem framework de injeção. Os testes montam o service com um repositório próprio.
 
-Erros saem sempre no mesmo formato, com código estável para o portal tratar:
+As rotas de negócio ficam sob `/api/v1`. `app.ts` monta, nesta ordem: pino-http (com `X-Request-Id`), helmet, CORS, `express.json`, `/api/health`, `/api/docs`, o router da v1 (limite por IP, `openapi.json` e os módulos) e o tratamento de erro.
+
+Erros saem em `application/problem+json` (RFC 9457), com código estável em `code` para o portal tratar:
 
 ```json
-{ "erro": { "codigo": "NAO_ENCONTRADO", "mensagem": "Aluno não encontrado." } }
+{
+  "type": "https://recreio.app/problemas/nao-encontrado",
+  "title": "Recurso não encontrado",
+  "status": 404,
+  "detail": "Aluno não encontrado.",
+  "instance": "/api/v1/alunos/nao-existe",
+  "code": "NAO_ENCONTRADO"
+}
 ```
 
-| Código            | Status | Quando                                      |
-| ----------------- | ------ | ------------------------------------------- |
-| `DADOS_INVALIDOS` | 400    | Entrada não segue o schema Zod              |
-| `NAO_ENCONTRADO`  | 404    | Recurso ou rota não existe                  |
-| `ERRO_INTERNO`    | 500    | Erro não previsto; o detalhe vai só pro log |
+| Código            | Status | Quando                                                      |
+| ----------------- | ------ | ----------------------------------------------------------- |
+| `DADOS_INVALIDOS` | 400    | Entrada não segue o schema Zod. `errors` lista os campos    |
+| `NAO_ENCONTRADO`  | 404    | Recurso ou rota não existe                                  |
+| `LIMITE_EXCEDIDO` | 429    | Passou de `RATE_LIMIT_PER_MINUTE`. `Retry-After` diz quando |
+| `ERRO_INTERNO`    | 500    | Erro não previsto. O detalhe vai só para o log              |
+
+O catálogo fica em `shared/errors/problem-types.ts` e o schema do corpo em `packages/contracts/src/problem.ts`. Campos, paginação, limites e exemplos estão em [api/padroes.md](api/padroes.md).
+
+Cada módulo declara as próprias operações em `<dominio>.openapi.ts`. `src/openapi.ts` junta os módulos num documento OpenAPI 3.1, servido em `/api/v1/openapi.json` e versionado em `docs/api/openapi.json` ([api/README.md](api/README.md)).
 
 ## Portal (`apps/web/src`)
 

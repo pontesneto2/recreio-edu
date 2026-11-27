@@ -63,16 +63,26 @@ Objetivo: qualquer funcionalidade nova já nasce com banco, login, permissão, l
 
 ### API
 
-- OpenAPI gerado dos schemas Zod e publicado em `/api/docs`.
-- Versionamento por prefixo `/api/v1`.
-- Paginação por cursor, filtros validados, limite de taxa por IP e por usuário.
-- Idempotência por cabeçalho `Idempotency-Key` em toda operação que cria cobrança ou envia mensagem.
+Padrões da [ADR 0008](adr/0008-padroes-de-api.md), descritos em [api/padroes.md](api/padroes.md):
+
+- [x] OpenAPI 3.1 gerado dos schemas Zod, em `/api/v1/openapi.json`, publicado em `/api/docs` e versionado em `docs/api/openapi.json`.
+- [x] Versionamento por prefixo `/api/v1`.
+- [x] Erros RFC 9457 (`application/problem+json`) com `code` estável.
+- [x] `X-Request-Id` em toda resposta, repassado quando o cliente envia.
+- [x] Limite de taxa por IP, com `429` e `Retry-After`.
+- [x] Helpers de paginação por cursor em `packages/contracts` (`cursorQuerySchema`, `paginated`).
+- [ ] Listas existentes no formato `{ data, nextCursor }` e filtros validados, junto com os repositórios Drizzle.
+- [ ] Limite de taxa por usuário e contador no Redis, depois do login.
+- [ ] Idempotência por cabeçalho `Idempotency-Key` em toda operação que cria cobrança ou envia mensagem.
+
+Outros itens da API:
+
 - Filas para trabalho assíncrono (e-mail, push, PDF, webhooks). Proposta: BullMQ com Redis.
 - Arquivos (documentos, fotos, PDFs) em armazenamento compatível com S3, com URL assinada.
 
 ### Observabilidade
 
-- Logs estruturados com pino, já ativos, mais `requestId` e `escola_id` em cada linha.
+- Logs estruturados com pino, já ativos, com `requestId` em cada linha (feito) e `escola_id` (pendente).
 - Rastreamento com OpenTelemetry na API e no portal.
 - Captura de erros com Sentry nos 2 lados.
 - `/api/health` (processo vivo) e `/api/ready` (banco e Redis respondendo).

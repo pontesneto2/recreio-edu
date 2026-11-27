@@ -29,7 +29,9 @@ Tipos aceitos: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `buil
 
 1. Schema em `packages/contracts/src/<dominio>.ts` e export em `index.ts`.
 2. Pasta `apps/api/src/modules/<dominio>` com `routes`, `controller`, `service`, `repository` e teste do service.
-3. Service registrado em `src/container.ts` e rota em `src/app.ts`.
+3. Service registrado em `src/container.ts` e rota no router `v1` de `src/app.ts`. O caminho segue [docs/api/padroes.md](docs/api/padroes.md).
+4. Operações em `modules/<dominio>/<dominio>.openapi.ts` com `defineOpenApiModule`: `operationId`, `summary`, `tags`, parâmetros, resposta de sucesso e os erros específicos (`problemResponse('NAO_ENCONTRADO')`). O módulo entra na lista de `src/openapi.ts`.
+5. `npm run openapi -w @recreio/api` e commit do `docs/api/openapi.json` junto com a mudança. O teste `openapi.test.ts` falha sem esse passo.
 
 ## Nova tela no portal
 
