@@ -8,7 +8,9 @@ import { createAlunosRouter } from './modules/alunos/alunos.routes.ts';
 import { createEscolaRouter } from './modules/escola/escola.routes.ts';
 import { openApiDocument } from './openapi.ts';
 import { errorHandler, notFoundHandler } from './shared/http/error-handler.ts';
-import { createRateLimit } from './shared/http/rate-limit.ts';
+import { camposDoLog, ignorarNoLog } from './shared/http/log-http.ts';
+import { createRateLimit, createRedisRateLimitStore } from './shared/http/rate-limit.ts';
+import { createReadyHandler } from './shared/http/ready.ts';
 import { genRequestId, REQUEST_ID_HEADER } from './shared/http/request-id.ts';
 import { logger } from './shared/logger/logger.ts';
 import { createApiReferenceRouter } from './shared/openapi/api-reference.ts';
@@ -25,7 +27,11 @@ export const createApp = (container: Container, { rateLimitPerMinute = defaultRa
   const app = express();
 
   app.disable('x-powered-by');
-  app.use(pinoHttp({ logger, genReqId: genRequestId }));
+  // Proxies confiáveis para req.ip e o limite por IP. Valor de produção em docs/operacao/README.md.
+  app.set('trust proxy', env.TRUST_PROXY);
+  app.use(
+    pinoHttp({ logger, genReqId: genRequestId, customProps: camposDoLog, autoLogging: { ignore: ignorarNoLog } }),
+  );
   app.use(helmet());
   app.use(
     cors({
@@ -38,19 +44,14 @@ export const createApp = (container: Container, { rateLimitPerMinute = defaultRa
   app.get('/api/health', (_req, res) => {
     res.json({ status: 'ok', uptime: process.uptime() });
   });
-  app.get('/api/ready', async (req, res) => {
-    try {
-      await container.verificarBanco();
-      res.json({ status: 'ok' });
-    } catch (err) {
-      req.log.warn({ err }, 'banco indisponível');
-      res.status(503).json({ status: 'indisponivel' });
-    }
-  });
+  app.get('/api/ready', createReadyHandler({ postgres: container.verificarBanco, redis: container.verificarRedis }));
   app.use('/api/docs', createApiReferenceRouter(`${API_V1_PREFIX}/openapi.json`));
 
   const v1 = express.Router();
-  if (rateLimitPerMinute !== false) v1.use(createRateLimit(rateLimitPerMinute));
+  if (rateLimitPerMinute !== false) {
+    const store = container.redis ? createRedisRateLimitStore(container.redis) : undefined;
+    v1.use(createRateLimit(rateLimitPerMinute, store));
+  }
   v1.get('/openapi.json', (_req, res) => {
     res.json(openApiDocument);
   });

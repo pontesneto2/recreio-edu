@@ -7,12 +7,13 @@ export const API_V1_PREFIX = '/api/v1';
 
 /**
  * Toda operação pode responder 404 (Host sem escola), 429 (limite) e 500 (erro interno).
- * O módulo não precisa repetir.
+ * Operação com corpo também pode responder 413. O módulo não precisa repetir.
  */
 const withCommonProblems = (operation: ApiOperation): ApiOperation => ({
   ...operation,
   responses: {
     404: problemResponse('NAO_ENCONTRADO'),
+    ...(operation.requestBody ? { 413: problemResponse('CORPO_GRANDE_DEMAIS') } : {}),
     429: problemResponse('LIMITE_EXCEDIDO'),
     500: problemResponse('ERRO_INTERNO'),
     ...operation.responses,

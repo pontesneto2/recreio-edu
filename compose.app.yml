@@ -1,10 +1,27 @@
-# API e portal com as imagens de produção, ligados aos serviços de docker-compose.yml.
+# API, worker e portal com as imagens de produção, ligados aos serviços de docker-compose.yml.
 #   docker compose -f compose.app.yml up --build
 # O portal fica em http://localhost:8080 e repassa /api para a API na rede interna.
 name: recreio
 
 include:
   - docker-compose.yml
+
+# Variáveis comuns à API e ao worker, que usam a mesma imagem.
+x-api-env: &api-env
+  NODE_ENV: production
+  LOG_LEVEL: info
+  DATABASE_URL: postgres://recreio_app:recreio_app@postgres:5432/recreio
+  DATABASE_MIGRATION_URL: postgres://recreio:recreio@postgres:5432/recreio
+  REDIS_URL: redis://redis:6379
+  SMTP_URL: smtp://mailpit:1025
+  S3_ENDPOINT: http://storage:9000
+  # O navegador chega no RustFS pela porta publicada no host.
+  S3_PUBLIC_ENDPOINT: http://localhost:9000
+  S3_ACCESS_KEY: recreio
+  S3_SECRET_KEY: recreio-storage
+  S3_BUCKET: recreio
+  # Traces vão para o Jaeger quando o perfil observabilidade está no ar. Sem ele, o envio falha calado.
+  OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4318
 
 services:
   api:
@@ -13,22 +30,30 @@ services:
       dockerfile: apps/api/Dockerfile
     image: recreio-api:local
     environment:
-      NODE_ENV: production
+      <<: *api-env
       PORT: 3333
       CORS_ORIGIN: http://localhost:${WEB_PORT:-8080}
-      LOG_LEVEL: info
-      DATABASE_URL: postgres://recreio_app:recreio_app@postgres:5432/recreio
-      DATABASE_MIGRATION_URL: postgres://recreio:recreio@postgres:5432/recreio
       DEV_ESCOLA_DOMINIO: colegiorecreio.localhost
-      REDIS_URL: redis://redis:6379
-      SMTP_URL: smtp://mailpit:1025
-      S3_ENDPOINT: http://storage:9000
-      S3_ACCESS_KEY: recreio
-      S3_SECRET_KEY: recreio-storage
-      S3_BUCKET: recreio
+      # O nginx do portal fica em outro container da rede do Compose (IP privado).
+      TRUST_PROXY: uniquelocal
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Mesma imagem da API, outro comando. Consome as filas do BullMQ.
+  worker:
+    image: recreio-api:local
+    command: ['node', '--import', './dist/instrumentation.js', 'dist/worker.js']
+    environment:
+      <<: *api-env
+    # O healthcheck da imagem chama /api/health, que o worker não serve.
+    healthcheck:
+      disable: true
+    depends_on:
+      api:
+        condition: service_started
       redis:
         condition: service_healthy
 

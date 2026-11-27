@@ -1,5 +1,6 @@
 import type { RequestHandler, Response } from 'express';
 import { NotFoundError } from '../errors/app-error.ts';
+import { ATRIBUTO, anotarRequisicao } from '../observability/span.ts';
 import type { EscolaContexto } from './escola-contexto.ts';
 
 const HOSTS_LOCAIS = new Set(['localhost', '127.0.0.1', '[::1]', '::1']);
@@ -30,8 +31,19 @@ export const createResolverEscola = ({
     if (!escolaId) throw new NotFoundError('Escola não encontrada para este endereço.');
     const contexto: EscolaContexto = { escolaId };
     res.locals.escola = contexto;
+    // Os logs seguintes da requisição e o span HTTP levam a escola.
+    req.log = req.log.child({ escolaId });
+    anotarRequisicao({ [ATRIBUTO.escolaId]: escolaId });
     next();
   };
+};
+
+/** Escola já resolvida na resposta, ou `undefined` antes do `resolverEscola`. Usada em log e erro. */
+export const escolaIdDaResposta = (res: { locals?: Record<string, unknown> }): string | undefined => {
+  const contexto = res.locals?.escola;
+  return contexto && typeof contexto === 'object' && 'escolaId' in contexto && typeof contexto.escolaId === 'string'
+    ? contexto.escolaId
+    : undefined;
 };
 
 /** Contexto gravado pelo `resolverEscola`. Falha quando a rota foi montada sem o middleware. */

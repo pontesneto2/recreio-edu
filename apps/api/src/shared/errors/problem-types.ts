@@ -12,6 +12,7 @@ export type ProblemType = {
 export const problemTypes = {
   DADOS_INVALIDOS: { status: 400, title: 'Dados inválidos', slug: 'dados-invalidos' },
   NAO_ENCONTRADO: { status: 404, title: 'Recurso não encontrado', slug: 'nao-encontrado' },
+  CORPO_GRANDE_DEMAIS: { status: 413, title: 'Corpo da requisição grande demais', slug: 'corpo-grande-demais' },
   LIMITE_EXCEDIDO: { status: 429, title: 'Limite de requisições excedido', slug: 'limite-excedido' },
   ERRO_INTERNO: { status: 500, title: 'Erro interno', slug: 'erro-interno' },
 } as const satisfies Record<ProblemCode, ProblemType>;

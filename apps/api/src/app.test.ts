@@ -8,6 +8,7 @@ import { seedDadosCanonicos } from './database/seed/seed.ts';
 import { openApiDocument } from './openapi.ts';
 import { type BancoDeTeste, iniciarBancoDeTeste } from './test/database.ts';
 import { requisitar } from './test/http.ts';
+import { iniciarRedisDeTeste, type RedisDeTeste } from './test/redis.ts';
 import { useServer } from './test/server.ts';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
@@ -25,20 +26,24 @@ const readProblem = async (res: Response, status: number, code: string) => {
   return problem;
 };
 
-// Um PostgreSQL com migrações e seed para o arquivo todo. O fetch sai de 127.0.0.1,
+// Um PostgreSQL com migrações e seed e um Redis para o arquivo todo. O fetch sai de 127.0.0.1,
 // que a API trata como DEV_ESCOLA_DOMINIO.
 let banco: BancoDeTeste;
+let redis: RedisDeTeste;
 let container: Container;
 
+/** Porta 1 recusa a conexão na hora. */
+const REDIS_FORA = 'redis://127.0.0.1:1';
+
 before(async () => {
-  banco = await iniciarBancoDeTeste();
+  [banco, redis] = await Promise.all([iniciarBancoDeTeste(), iniciarRedisDeTeste()]);
   await seedDadosCanonicos(banco.urlDono, DOMINIO);
-  container = createContainer({ databaseUrl: banco.urlApp, dominioLocal: DOMINIO });
+  container = createContainer({ databaseUrl: banco.urlApp, dominioLocal: DOMINIO, redisUrl: redis.url });
 });
 
 after(async () => {
   await container?.encerrar();
-  await banco?.parar();
+  await Promise.all([banco?.parar(), redis?.parar()]);
 });
 
 describe('API HTTP', () => {
@@ -50,10 +55,10 @@ describe('API HTTP', () => {
     assert.equal(statusSchema.parse(await res.json()).status, 'ok');
   });
 
-  test('GET /api/ready responde ok com o banco no ar', async () => {
+  test('GET /api/ready responde ok com Postgres e Redis no ar', async () => {
     const res = await fetch(`${server.baseUrl}/api/ready`);
     assert.equal(res.status, 200);
-    assert.deepEqual(await res.json(), { status: 'ok' });
+    assert.deepEqual(await res.json(), { status: 'ok', dependencias: { postgres: 'ok', redis: 'ok' } });
   });
 
   test('GET /api/v1/escola devolve a escola com a contagem de alunos por unidade', async () => {
@@ -130,6 +135,17 @@ describe('API HTTP', () => {
       body: '{"nome":',
     });
     await readProblem(res, 400, 'DADOS_INVALIDOS');
+  });
+
+  test('corpo acima de 1 MB devolve 413 CORPO_GRANDE_DEMAIS', async () => {
+    const res = await fetch(`${server.baseUrl}/api/v1/alunos`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome: 'x'.repeat(1_100_000) }),
+    });
+    const problem = await readProblem(res, 413, 'CORPO_GRANDE_DEMAIS');
+    assert.equal(problem.type, 'https://recreio.app/problemas/corpo-grande-demais');
+    assert.equal(problem.detail, 'O corpo da requisição passa do limite de 1024 KB.');
   });
 
   test('rota desconhecida devolve 404 NAO_ENCONTRADO', async () => {
@@ -249,6 +265,29 @@ describe('limite de requisições', () => {
     const res = await fetch(`${server.baseUrl}/api/health`);
     assert.equal(res.status, 200);
   });
+
+  test('o contador fica no Redis', async () => {
+    assert.ok(container.redis);
+    const chaves = await container.redis.keys('recreio:limite:*');
+    assert.ok(chaves.length > 0, 'esperava a chave do contador no Redis');
+  });
+
+  test('atrás de proxy confiável (loopback), o limite conta por IP de X-Forwarded-For', async () => {
+    const comIp = (ip: string) => fetch(`${server.baseUrl}/api/v1/escola`, { headers: { 'X-Forwarded-For': ip } });
+    assert.equal((await comIp('203.0.113.10')).status, 200);
+    assert.equal((await comIp('203.0.113.10')).status, 200);
+    assert.equal((await comIp('203.0.113.10')).status, 429);
+    assert.equal((await comIp('203.0.113.11')).status, 200, 'outro cliente tem a própria cota');
+  });
+});
+
+describe('limite de requisições sem Redis', () => {
+  const server = useServer(() => createApp({ ...container, redis: undefined }, { rateLimitPerMinute: 1 }));
+
+  test('conta em memória', async () => {
+    assert.equal((await fetch(`${server.baseUrl}/api/v1/escola`)).status, 200);
+    assert.equal((await fetch(`${server.baseUrl}/api/v1/escola`)).status, 429);
+  });
 });
 
 describe('documentação da API', () => {
@@ -278,23 +317,51 @@ describe('documentação da API', () => {
   });
 });
 
-describe('API HTTP sem banco', () => {
+describe('API HTTP sem banco e sem Redis', () => {
   // Porta 1 recusa a conexão na hora.
-  const semBanco = createContainer({ databaseUrl: 'postgres://recreio_app:recreio_app@127.0.0.1:1/recreio' });
+  const semBanco = createContainer({
+    databaseUrl: 'postgres://recreio_app:recreio_app@127.0.0.1:1/recreio',
+    redisUrl: REDIS_FORA,
+  });
   const server = useServer(() => createApp(semBanco));
 
   after(async () => {
     await semBanco.encerrar();
   });
 
-  test('GET /api/ready devolve 503', async () => {
+  test('GET /api/ready devolve 503 e aponta as 2 dependências', async () => {
     const res = await fetch(`${server.baseUrl}/api/ready`);
     assert.equal(res.status, 503);
-    assert.deepEqual(await res.json(), { status: 'indisponivel' });
+    assert.deepEqual(await res.json(), {
+      status: 'indisponivel',
+      dependencias: { postgres: 'indisponivel', redis: 'indisponivel' },
+    });
   });
 
   test('GET /api/health continua 200', async () => {
     const res = await fetch(`${server.baseUrl}/api/health`);
     assert.equal(res.status, 200);
+  });
+});
+
+describe('API HTTP só sem Redis', () => {
+  let semRedis: Container | undefined;
+  // A fábrica roda no `before` do useServer, depois que o banco do arquivo subiu.
+  const server = useServer(() => {
+    semRedis = createContainer({ databaseUrl: banco.urlApp, dominioLocal: DOMINIO, redisUrl: REDIS_FORA });
+    return createApp(semRedis);
+  });
+
+  after(async () => {
+    await semRedis?.encerrar();
+  });
+
+  test('GET /api/ready devolve 503 com o Postgres ok e o Redis indisponível', async () => {
+    const res = await fetch(`${server.baseUrl}/api/ready`);
+    assert.equal(res.status, 503);
+    assert.deepEqual(await res.json(), {
+      status: 'indisponivel',
+      dependencias: { postgres: 'ok', redis: 'indisponivel' },
+    });
   });
 });

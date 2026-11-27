@@ -31,6 +31,11 @@ const specs: Record<ProblemCode, ProblemResponseSpec> = {
     description: 'O recurso não existe, ou o Host da requisição não pertence a nenhuma escola.',
     example: { detail: 'Aluno não encontrado.', instance: '/api/v1/alunos/7a1e2b3c-0000-4000-8000-000000000000' },
   },
+  CORPO_GRANDE_DEMAIS: {
+    id: 'CorpoGrandeDemais',
+    description: 'O corpo da requisição passa do limite aceito pela API.',
+    example: { detail: 'O corpo da requisição passa do limite de 1024 KB.', instance: '/api/v1/alunos' },
+  },
   LIMITE_EXCEDIDO: {
     id: 'LimiteExcedido',
     description: 'O cliente passou do limite de requisições por minuto.',

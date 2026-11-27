@@ -1,7 +1,13 @@
 import { z } from 'zod';
 
 /** Códigos estáveis de erro. O portal decide o que mostrar por eles, sem ler o texto. */
-export const problemCodeSchema = z.enum(['DADOS_INVALIDOS', 'NAO_ENCONTRADO', 'LIMITE_EXCEDIDO', 'ERRO_INTERNO']);
+export const problemCodeSchema = z.enum([
+  'DADOS_INVALIDOS',
+  'NAO_ENCONTRADO',
+  'CORPO_GRANDE_DEMAIS',
+  'LIMITE_EXCEDIDO',
+  'ERRO_INTERNO',
+]);
 
 const fieldErrorsSchema = z.record(z.string(), z.array(z.string())).meta({
   description: 'Mensagens por campo quando `code` é `DADOS_INVALIDOS`. A chave `$` marca erro fora de campo.',
