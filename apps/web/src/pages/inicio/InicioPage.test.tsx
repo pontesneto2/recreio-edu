@@ -7,11 +7,18 @@ const escola = {
   cidade: 'Fortaleza',
   corMarca: '#0067CC',
   hoje: '2026-11-25',
-  unidades: [{ id: 'aldeota', nome: 'Unidade Aldeota', alunos: 1248 }],
+  unidades: [{ id: '6f1c1c1e-2b7d-4c3a-8e9f-1a2b3c4d5e6f', nome: 'Unidade Aldeota', alunos: 1248 }],
 };
 
 const alunos = [
-  { id: 'davi', nome: 'Davi Lima', turma: '2º ano B', turno: 'Manhã', matricula: '2024-0318', mensalidade: 1480 },
+  {
+    id: '0d4b7a52-6c1e-4f0a-9d3b-2f5e8c7a0318',
+    nome: 'Davi Lima',
+    turma: '2º ano B',
+    turno: 'Manhã',
+    matricula: '2024-0318',
+    mensalidadeCentavos: 148000,
+  },
 ];
 
 describe('InicioPage', () => {

@@ -23,13 +23,13 @@ const specs: Record<ProblemCode, ProblemResponseSpec> = {
     example: {
       detail: 'Os dados enviados não são válidos.',
       instance: '/api/v1/alunos/ID%20Inv%C3%A1lido',
-      errors: { id: ['Texto inválido: deve corresponder ao padrão /^[a-z0-9-]+$/'] },
+      errors: { id: ['Formato do UUID inválido'] },
     },
   },
   NAO_ENCONTRADO: {
     id: 'NaoEncontrado',
-    description: 'O recurso não existe.',
-    example: { detail: 'Aluno não encontrado.', instance: '/api/v1/alunos/nao-existe' },
+    description: 'O recurso não existe, ou o Host da requisição não pertence a nenhuma escola.',
+    example: { detail: 'Aluno não encontrado.', instance: '/api/v1/alunos/7a1e2b3c-0000-4000-8000-000000000000' },
   },
   LIMITE_EXCEDIDO: {
     id: 'LimiteExcedido',

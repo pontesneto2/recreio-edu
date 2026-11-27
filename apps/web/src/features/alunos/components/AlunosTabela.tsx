@@ -8,10 +8,10 @@ const COLUNAS = [
   { key: 'turma', label: 'Turma' },
   { key: 'matricula', label: 'Matrícula' },
   {
-    key: 'mensalidade',
+    key: 'mensalidadeCentavos',
     label: 'Mensalidade',
     align: 'right' as const,
-    render: (aluno: Aluno) => brl(aluno.mensalidade),
+    render: (aluno: Aluno) => brl(aluno.mensalidadeCentavos / 100),
   },
 ];
 

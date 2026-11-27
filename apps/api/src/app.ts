@@ -38,6 +38,15 @@ export const createApp = (container: Container, { rateLimitPerMinute = defaultRa
   app.get('/api/health', (_req, res) => {
     res.json({ status: 'ok', uptime: process.uptime() });
   });
+  app.get('/api/ready', async (req, res) => {
+    try {
+      await container.verificarBanco();
+      res.json({ status: 'ok' });
+    } catch (err) {
+      req.log.warn({ err }, 'banco indisponível');
+      res.status(503).json({ status: 'indisponivel' });
+    }
+  });
   app.use('/api/docs', createApiReferenceRouter(`${API_V1_PREFIX}/openapi.json`));
 
   const v1 = express.Router();
@@ -45,6 +54,8 @@ export const createApp = (container: Container, { rateLimitPerMinute = defaultRa
   v1.get('/openapi.json', (_req, res) => {
     res.json(openApiDocument);
   });
+  // Daqui em diante toda rota tem dados de escola. Host sem escola responde 404.
+  v1.use(container.resolverEscola);
   v1.use('/escola', createEscolaRouter(container.escolaService));
   v1.use('/alunos', createAlunosRouter(container.alunosService));
   app.use(API_V1_PREFIX, v1);

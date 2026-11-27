@@ -1,8 +1,9 @@
 import { z } from 'zod';
 
 export const unidadeSchema = z.object({
-  id: z.string(),
+  id: z.uuid(),
   nome: z.string(),
+  /** Quantidade de alunos cadastrados na unidade. */
   alunos: z.int().nonnegative(),
 });
 

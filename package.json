@@ -15,6 +15,8 @@
     "dev": "concurrently -n api,web -c blue,magenta \"npm run dev -w @recreio/api\" \"npm run dev -w @recreio/web\"",
     "dev:api": "npm run dev -w @recreio/api",
     "dev:web": "npm run dev -w @recreio/web",
+    "db:migrate": "npm run db:migrate -w @recreio/api",
+    "db:seed": "npm run db:seed -w @recreio/api",
     "prototipo": "serve prototipo/visualizar -l 5000",
     "storybook": "npm run storybook -w @recreio/design-system",
     "build-storybook": "npm run build-storybook -w @recreio/design-system",

@@ -5,10 +5,18 @@ import type { ApiOperation, ApiPaths, OpenApiModule } from './registry.ts';
 
 export const API_V1_PREFIX = '/api/v1';
 
-/** Toda operação pode responder 429 (limite) e 500 (erro interno); o módulo não precisa repetir. */
+/**
+ * Toda operação pode responder 404 (Host sem escola), 429 (limite) e 500 (erro interno).
+ * O módulo não precisa repetir.
+ */
 const withCommonProblems = (operation: ApiOperation): ApiOperation => ({
   ...operation,
-  responses: { 429: problemResponse('LIMITE_EXCEDIDO'), 500: problemResponse('ERRO_INTERNO'), ...operation.responses },
+  responses: {
+    404: problemResponse('NAO_ENCONTRADO'),
+    429: problemResponse('LIMITE_EXCEDIDO'),
+    500: problemResponse('ERRO_INTERNO'),
+    ...operation.responses,
+  },
 });
 
 const mergePaths = (modules: OpenApiModule[]): ZodOpenApiPathsObject => {
