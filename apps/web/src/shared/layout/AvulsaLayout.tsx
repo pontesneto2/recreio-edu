@@ -1,5 +1,5 @@
-import { Outlet } from 'react-router';
 import { AvisoSemInternet } from '../pwa/AvisoSemInternet.tsx';
+import { ConteudoDaRota } from './ConteudoDaRota.tsx';
 
 const COLUNA_STYLE = {
   maxWidth: 960,
@@ -14,7 +14,7 @@ export const AvulsaLayout = () => (
   <main className="rc-shell-content" id="conteudo">
     <div style={COLUNA_STYLE}>
       <AvisoSemInternet />
-      <Outlet />
+      <ConteudoDaRota />
     </div>
   </main>
 );

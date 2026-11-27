@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "description": "Componentes React e tokens do Sistema Recreio.",
+  "sideEffects": [
+    "*.css"
+  ],
   "exports": {
     ".": "./src/index.ts",
     "./tokens.css": "./src/tokens.css",

@@ -24,7 +24,7 @@ describe('EscolhaPerfilPage', () => {
 
     const { menuLateral } = await encontrarMenus();
     expect(within(menuLateral).getByRole('link', { name: 'Diário de classe' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Início' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Início' })).toBeInTheDocument();
   });
 
   test('"Trocar perfil" no menu volta para a escolha', async () => {

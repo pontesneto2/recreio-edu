@@ -73,6 +73,24 @@ export default defineConfig({
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
+  build: {
+    rolldownOptions: {
+      output: {
+        // Bibliotecas mudam menos que o portal: em arquivos próprios, ficam no cache do navegador entre deploys.
+        codeSplitting: {
+          groups: [
+            { name: 'react', test: /[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/, priority: 30 },
+            { name: 'router', test: /[\\/]node_modules[\\/](react-router|@remix-run)[\\/]/, priority: 20 },
+            { name: 'query', test: /[\\/]node_modules[\\/]@tanstack[\\/]/, priority: 20 },
+            { name: 'zod', test: /[\\/]node_modules[\\/]zod[\\/]/, priority: 20 },
+            // Só os arquivos do design system usados por 2 ou mais partes do portal.
+            // Um arquivo usado por uma página só (como o `school.tsx` das preferências) fica no arquivo da página.
+            { name: 'design-system', test: /[\\/]packages[\\/]design-system[\\/]/, priority: 10, minShareCount: 2 },
+          ],
+        },
+      },
+    },
+  },
   server: {
     port: 5173,
     proxy: {

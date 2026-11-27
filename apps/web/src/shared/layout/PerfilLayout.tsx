@@ -1,7 +1,8 @@
 import { AppShell, SideNav, TabBar } from '@recreio/design-system';
-import { Outlet, useLocation, useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import type { NavegacaoDoPerfil } from '../config/navigation/index.ts';
 import { AvisoSemInternet } from '../pwa/AvisoSemInternet.tsx';
+import { ConteudoDaRota } from './ConteudoDaRota.tsx';
 import { encontrarAtivoDaBarra, encontrarItemAtivo, itensDaBarraInferior, itensDoMenu } from './navegacao.ts';
 
 /** Escola mostrada no menu até a sessão trazer a escola e a unidade da pessoa. */
@@ -33,7 +34,7 @@ export const PerfilLayout = ({ navegacao }: PerfilLayoutProps) => {
       tabbar={<TabBar items={barraInferior} active={encontrarAtivoDaBarra(navegacao, pathname)} onNavigate={irPara} />}
     >
       <AvisoSemInternet />
-      <Outlet />
+      <ConteudoDaRota />
     </AppShell>
   );
 };
