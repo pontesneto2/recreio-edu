@@ -28,14 +28,18 @@ Portal web em React e API em Node para o Recreio. O protótipo com as 173 telas 
 ```bash
 npm install
 docker compose up -d
+npm run db:migrate
+npm run db:seed
 npm run dev
 ```
 
 - Portal web: http://localhost:5173 (escolha de perfil em `/`; rotas por perfil em [docs/frontend.md](docs/frontend.md))
-- API: http://localhost:3333/api/health
+- API: http://localhost:3333/api/health (processo) e http://localhost:3333/api/ready (banco)
 - Documentação da API: http://localhost:3333/api/docs
 
 O Vite repassa `/api` para a porta 3333, então o portal chama `fetch('/api/v1/...')` sem configurar URL. Rotas de negócio ficam sob `/api/v1`; versionamento, erros e o OpenAPI estão em [docs/api](docs/api/README.md).
+
+Em `localhost`, a API atende a escola de `DEV_ESCOLA_DOMINIO` (Colégio Recreio). Banco, usuários, migrações e RLS estão em [docs/banco-de-dados.md](docs/banco-de-dados.md). Os testes da API sobem um PostgreSQL com Testcontainers, então o Docker precisa estar rodando para `npm test`.
 
 ## Docker
 
@@ -83,6 +87,8 @@ Cada aplicação tem a própria pasta `src/`. As camadas e as regras de importa�
 | ------------------------------------- | ----------------------------------------------------------------------- |
 | `npm run dev`                         | Sobe API e portal juntos.                                               |
 | `npm run dev:api` / `npm run dev:web` | Sobe só um dos dois.                                                    |
+| `npm run db:migrate`                  | Aplica as migrações pendentes como `recreio`.                           |
+| `npm run db:seed`                     | Grava os dados de demonstração. Pode rodar de novo.                     |
 | `npm run prototipo`                   | Serve `prototipo/visualizar` na porta 5000.                             |
 | `npm run storybook`                   | Storybook do design system na porta 6006.                               |
 | `npm run build-storybook`             | Gera o Storybook estático em `packages/design-system/storybook-static`. |

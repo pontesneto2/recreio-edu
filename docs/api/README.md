@@ -37,7 +37,8 @@ O arquivo fica fora do Prettier (`.prettierignore`), porque o teste compara o te
 
 ## Versionamento
 
-- Toda rota de negócio fica sob `/api/v1`. `/api/health` não tem versão, porque serve ao balanceador e não a clientes.
+- Toda rota de negócio fica sob `/api/v1`. `/api/health` e `/api/ready` não têm versão nem entram no OpenAPI, porque servem ao balanceador e não a clientes. `/api/health` responde 200 com o processo vivo. `/api/ready` responde 200 `{ "status": "ok" }` com o banco no ar e 503 `{ "status": "indisponivel" }` sem ele.
+- Toda rota da v1, menos `/api/v1/openapi.json`, resolve a escola pelo `Host` (ADR 0006). Host sem escola responde 404 `NAO_ENCONTRADO`. Em desenvolvimento, `localhost` e `127.0.0.1` apontam para `DEV_ESCOLA_DOMINIO`.
 - Mudança compatível entra na v1 sem aviso: campo novo na resposta, parâmetro opcional novo, endpoint novo, código de erro novo.
 - Mudança incompatível cria `/api/v2`: remover ou renomear campo, mudar tipo, tornar parâmetro obrigatório, mudar o significado de um status.
 - A v2 nasce como um router novo em `app.ts` e um documento OpenAPI próprio. A v1 continua no ar até os clientes migrarem.

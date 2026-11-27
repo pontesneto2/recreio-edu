@@ -87,10 +87,10 @@ No portal, a única variável de execução é `API_UPSTREAM`, lida pelo nginx.
 
 ## Health e ready
 
-| Rota          | Situação  | Responde 200 quando                         | Uso                                                     |
-| ------------- | --------- | ------------------------------------------- | ------------------------------------------------------- |
-| `/api/health` | Existe    | O processo Node atende HTTP                 | Healthcheck da imagem e liveness. Não consulta o banco. |
-| `/api/ready`  | Planejada | Postgres e Redis respondem (roadmap fase 1) | Readiness: o balanceador só manda tráfego com 200 aqui. |
+| Rota          | Situação | Responde 200 quando                                           | Uso                                                                                                                   |
+| ------------- | -------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `/api/health` | Existe   | O processo Node atende HTTP                                   | Healthcheck da imagem e liveness. Não consulta o banco.                                                               |
+| `/api/ready`  | Existe   | Postgres responde a `select 1`. Redis entra quando a API usar | Readiness: o balanceador só manda tráfego com 200 aqui. Responde 503 `{ "status": "indisponivel" }` com o banco fora. |
 
 O liveness reinicia o container quando falha. Por isso ele não depende do banco: uma queda do Postgres reiniciaria todas as instâncias da API sem resolver nada. O readiness tira a instância do balanceador até o banco voltar.
 

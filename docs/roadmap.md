@@ -47,11 +47,14 @@ Objetivo: qualquer funcionalidade nova já nasce com banco, login, permissão, l
 
 ### Banco de dados
 
-- PostgreSQL 17, local via Docker Compose e gerenciado em produção.
-- ORM com migrações versionadas. Proposta: Drizzle ORM com drizzle-kit (ADR).
-- Multi-tenant por coluna `escola_id` em toda tabela, com Row Level Security do Postgres como segunda barreira (ADR).
-- Repositórios em memória de hoje viram repositórios Drizzle sem mudar os services.
-- Seed com os dados canônicos de `prototipo/docs/dados-canonicos.md`.
+- [x] PostgreSQL 17 local via Docker Compose.
+- [ ] PostgreSQL 17 gerenciado em produção.
+- [x] ORM com migrações versionadas: Drizzle ORM com drizzle-kit (ADR 0005).
+- [x] Multi-tenant por coluna `escola_id` em toda tabela, com Row Level Security do Postgres como segunda barreira (ADR 0006).
+- [x] Repositórios Drizzle no lugar dos repositórios em memória. Os services recebem o contexto da escola.
+- [x] Seed com os dados canônicos de `prototipo/docs/dados-canonicos.md`.
+
+Detalhes em [banco-de-dados.md](banco-de-dados.md).
 
 ### Autenticação e autorização
 
@@ -103,7 +106,7 @@ Operação documentada em [operacao/](operacao/README.md).
 
 ### Testes
 
-- Testes de integração da API contra Postgres real com Testcontainers.
+- [x] Testes de integração da API contra Postgres real com Testcontainers.
 - MSW para simular a API nos testes do portal.
 - Playwright para testes de ponta a ponta dos fluxos principais.
 

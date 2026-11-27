@@ -34,25 +34,46 @@ src/
 │       ├── <dominio>.openapi.ts      Operações documentadas no OpenAPI
 │       ├── <dominio>.controller.ts   Lê a requisição, valida, chama o service
 │       ├── <dominio>.service.ts      Regra de negócio
-│       ├── <dominio>.repository.ts   Acesso a dados (hoje em memória)
+│       ├── <dominio>.repository.ts   Acesso a dados com Drizzle
 │       └── <dominio>.*.test.ts       Testes do módulo
 ├── shared/
 │   ├── errors/              AppError e subclasses, catálogo de problemas
 │   ├── http/                Problem+json, validação, X-Request-Id, limite de requisições
 │   ├── openapi/             Registro, montagem do documento e página /api/docs
-│   └── logger/              Logger estruturado (pino)
-└── database/seed/           Dados de demonstração do protótipo
+│   ├── logger/              Logger estruturado (pino)
+│   └── tenant/              Escola da requisição: middleware resolverEscola e EscolaContexto
+├── database/
+│   ├── schema/              Tabelas em TypeScript (Drizzle)
+│   ├── client.ts            Pool do pg e instância do Drizzle
+│   ├── escola-context.ts    withEscola e busca da escola pelo domínio
+│   ├── migrator.ts          Aplica as migrações de apps/api/drizzle
+│   ├── seed/                Dados de demonstração do protótipo
+│   └── cli/                 Scripts db:migrate, db:seed e db:reset
+└── test/                    Banco descartável (Testcontainers) e helpers HTTP
 ```
 
 Cada requisição percorre `routes → controller → service → repository`. Cada camada conhece só a seguinte:
 
 - O controller trata HTTP: lê `req`, valida com `parseInput` e escreve `res`. Regra de negócio fica fora dele.
 - O service tem a regra de negócio e lança erros de domínio (`NotFoundError`). Ele não importa nada do Express.
-- O repository é um tipo (`AlunosRepository`) com uma implementação em memória. A troca por banco de dados cria outra implementação do mesmo tipo e muda só `container.ts`.
+- O repository é um tipo (`AlunosRepository`). A implementação de produção usa Drizzle (`createDrizzleAlunosRepository`). Os testes de service usam a implementação em memória (`alunos.repository.memory.ts`).
 
 Os módulos são funções fábrica (`createAlunosService(repository)`), sem classes de serviço nem framework de injeção. Os testes montam o service com um repositório próprio.
 
-As rotas de negócio ficam sob `/api/v1`. `app.ts` monta, nesta ordem: pino-http (com `X-Request-Id`), helmet, CORS, `express.json`, `/api/health`, `/api/docs`, o router da v1 (limite por IP, `openapi.json` e os módulos) e o tratamento de erro.
+As rotas de negócio ficam sob `/api/v1`. `app.ts` monta, nesta ordem: pino-http (com `X-Request-Id`), helmet, CORS, `express.json`, `/api/health`, `/api/ready`, `/api/docs`, o router da v1 (limite por IP, `openapi.json`, `resolverEscola` e os módulos) e o tratamento de erro.
+
+### Dados e escola da requisição
+
+A API é multi-escola (ADR 0006). Toda rota com dados de escola passa antes pelo middleware `resolverEscola`:
+
+1. O middleware lê o `Host`, chama a função `escola_por_dominio` no banco e grava `{ escolaId }` em `res.locals`. Host sem escola responde 404.
+2. O controller pega o contexto com `escolaDaRequisicao(res)` e repassa ao service.
+3. O service repassa o `EscolaContexto` ao repositório em toda chamada.
+4. O repositório roda as consultas dentro de `withEscola(escolaId, fn)`. Ele abre uma transação com `app.escola_id` definido, e as políticas de Row Level Security escondem as linhas de outras escolas.
+
+A API conecta como `recreio_app`, que não é dono das tabelas. Migrações e seed rodam como `recreio`. Tabelas, migrações, políticas e o checklist de tabela nova estão em [banco-de-dados.md](banco-de-dados.md).
+
+`/api/health` responde se o processo está vivo. `/api/ready` roda `select 1` no banco e responde 503 quando ele não responde.
 
 Erros saem em `application/problem+json` (RFC 9457), com código estável em `code` para o portal tratar:
 
@@ -62,7 +83,7 @@ Erros saem em `application/problem+json` (RFC 9457), com código estável em `co
   "title": "Recurso não encontrado",
   "status": 404,
   "detail": "Aluno não encontrado.",
-  "instance": "/api/v1/alunos/nao-existe",
+  "instance": "/api/v1/alunos/7a1e2b3c-0000-4000-8000-000000000000",
   "code": "NAO_ENCONTRADO"
 }
 ```
@@ -125,10 +146,10 @@ Componentes do protótipo convertidos para TypeScript. As props de cada componen
 
 ## Testes
 
-| Onde   | Ferramenta              | O que cobre                                                    |
-| ------ | ----------------------- | -------------------------------------------------------------- |
-| API    | `node --test`           | Services com repositório em memória; HTTP de ponta a ponta     |
-| Portal | Vitest, Testing Library | Páginas e cascas renderizadas com rota real e `fetch` simulado |
+| Onde   | Ferramenta                    | O que cobre                                                            |
+| ------ | ----------------------------- | ---------------------------------------------------------------------- |
+| API    | `node --test`, Testcontainers | Services com repositório em memória; HTTP e RLS contra PostgreSQL real |
+| Portal | Vitest, Testing Library       | Páginas e cascas renderizadas com rota real e `fetch` simulado         |
 
 ## Qualidade
 
