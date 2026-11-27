@@ -2,6 +2,7 @@ prototipo/
 
 package-lock.json
 dist/
+storybook-static/
 
 # Gerado por `npm run openapi -w @recreio/api`. O teste compara byte a byte com o JSON.stringify.
 docs/api/openapi.json
