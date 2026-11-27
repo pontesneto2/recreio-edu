@@ -19,3 +19,11 @@ updates:
     directory: /
     schedule:
       interval: monthly
+  - package-ecosystem: docker
+    directories: [/apps/api, /apps/web]
+    schedule:
+      interval: weekly
+    ignore:
+      # A imagem do Node acompanha a versão de .nvmrc (24).
+      - dependency-name: node
+        update-types: [version-update:semver-major]
