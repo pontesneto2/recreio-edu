@@ -21,7 +21,7 @@ COPY apps/web apps/web
 RUN npm run build -w @recreio/web
 
 # Roda como usuário nginx (uid 101) e escuta na porta 8080.
-FROM nginxinc/nginx-unprivileged:1.30-alpine AS runtime
+FROM nginxinc/nginx-unprivileged:1.31-alpine AS runtime
 ENV API_UPSTREAM=http://api:3333
 COPY apps/web/nginx/security-headers.conf /etc/nginx/snippets/security-headers.conf
 COPY apps/web/nginx/default.conf.template /etc/nginx/templates/default.conf.template
