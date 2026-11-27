@@ -37,9 +37,11 @@ export function SideNav({
   onCollapse,
 }: SideNavProps) {
   const [col, setCol] = useState(() => (collapsed0 != null ? !!collapsed0 : readNav()));
-  useEffect(() => {
+  const [prevCollapsed, setPrevCollapsed] = useState(collapsed0);
+  if (collapsed0 !== prevCollapsed) {
+    setPrevCollapsed(collapsed0);
     if (collapsed0 != null) setCol(!!collapsed0);
-  }, [collapsed0]);
+  }
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
       if (e.key === NAV_KEY && collapsed0 == null) setCol(readNav());
@@ -50,8 +52,10 @@ export function SideNav({
   const toggle = () => {
     const n = !col;
     setCol(n);
+    // Condicionais ficam fora do try: o React Compiler ainda não compila esse caso.
+    const salvo = n ? 'recolhido' : 'aberto';
     try {
-      window.localStorage.setItem(NAV_KEY, n ? 'recolhido' : 'aberto');
+      window.localStorage.setItem(NAV_KEY, salvo);
     } catch {
       /* vale só nesta tela */
     }
@@ -498,12 +502,13 @@ export function CommandPalette({
       .filter((g) => g.items.length);
   }, [q, groups]);
   const all = flat.flatMap((g) => g.items);
-  useEffect(() => {
+  // Posição do primeiro item de cada grupo na lista corrida, para o destaque do teclado.
+  const starts = flat.map((_, gi) => flat.slice(0, gi).reduce((s, g) => s + g.items.length, 0));
+  // Fechada, a busca volta vazia e o destaque volta ao topo; sem texto digitado, o destaque fica onde estava.
+  if (!open && q !== '') {
+    setQ('');
     setI(0);
-  }, [q]);
-  useEffect(() => {
-    if (!open) setQ('');
-  }, [open]);
+  }
   if (!open) return null;
   const pick = (it: CommandItem) => {
     onSelect && onSelect(it);
@@ -521,7 +526,6 @@ export function CommandPalette({
     if (e.key === 'Enter' && all[i]) pick(all[i]);
     if (e.key === 'Escape') onClose && onClose();
   };
-  let n = -1;
   return (
     <Portal>
       <div
@@ -534,7 +538,10 @@ export function CommandPalette({
             <input
               autoFocus
               value={q}
-              onChange={(e) => setQ(e.target.value)}
+              onChange={(e) => {
+                setQ(e.target.value);
+                setI(0);
+              }}
               placeholder={placeholder}
               role="combobox"
               aria-expanded="true"
@@ -547,12 +554,11 @@ export function CommandPalette({
             {flat.length === 0 && (
               <p className="rc-cmd-empty">Nada encontrado para “{q}”. Tente o nome, a matrícula ou a turma.</p>
             )}
-            {flat.map((g) => (
+            {flat.map((g, gi) => (
               <div key={g.label} role="group" aria-label={g.label}>
                 <p className="rc-nav-group-label">{g.label}</p>
-                {g.items.map((it) => {
-                  n += 1;
-                  const k = n;
+                {g.items.map((it, j) => {
+                  const k = starts[gi] + j;
                   return (
                     <div
                       key={it.id || it.label}

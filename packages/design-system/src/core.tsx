@@ -34,10 +34,10 @@ import { createPortal } from 'react-dom';
 /* ---------- utilidades ---------- */
 export const cx = (...a: unknown[]) => a.filter(Boolean).join(' ');
 let _uid = 0;
+const nextUid = (prefix: string) => `${prefix}-${++_uid}`;
 export const useUid = (prefix = 'pt') => {
-  const r = useRef<string | null>(null);
-  if (r.current === null) r.current = `${prefix}-${++_uid}`;
-  return r.current;
+  const [uid] = useState(() => nextUid(prefix));
+  return uid;
 };
 export const prefersReducedMotion = () => {
   if (typeof window === 'undefined') return false;
@@ -64,10 +64,7 @@ export const useCountUp = (value: number, duration = 700) => {
   const reduced = useReducedMotion();
   const [v, setV] = useState(reduced ? value : 0);
   useEffect(() => {
-    if (reduced) {
-      setV(value);
-      return;
-    }
+    if (reduced) return;
     let raf: number;
     const start = performance.now();
     const from = 0;
@@ -80,7 +77,7 @@ export const useCountUp = (value: number, duration = 700) => {
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
   }, [value, reduced, duration]);
-  return v;
+  return reduced ? value : v;
 };
 export const brl = (n: number | null | undefined, opts: Intl.NumberFormatOptions = {}) =>
   (n ?? 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', ...opts });
@@ -563,19 +560,22 @@ export const useThemeMode = () => {
   return mode;
 };
 /** Aplica a cor da escola aos filhos (variáveis CSS no wrapper). */
-export function SchoolTheme({ seed, brand, mode, children, as: Tag = 'div', className, style }: SchoolThemeProps) {
+export function SchoolTheme({ seed, brand, mode, children, as: Tag = 'div', className, style, ref }: SchoolThemeProps) {
   const live = useThemeMode();
   const m = mode || live;
   const pal = useMemo(() => (seed ? schoolPalette(seed, m) : null), [seed, m]);
   const bv = useMemo(() => (brand ? brandVars(brand, m).vars : null), [brand, m]);
+  // A ref vale para qualquer tag; o tipo da união de todas as tags não cabe no TypeScript.
+  const Root = Tag as React.ElementType;
   return (
-    <Tag
+    <Root
+      ref={ref}
       className={cx('rc-school-theme', className)}
       style={{ ...(pal ? pal.vars : {}), ...(bv || {}), ...style }}
       data-theme-mode={m}
     >
       {children}
-    </Tag>
+    </Root>
   );
 }
 
@@ -775,41 +775,55 @@ export function ToastProvider({ children, max = 4 }: ToastProviderProps) {
 
 /** Raiz do produto: preferências de acessibilidade, cor da escola e toasts. */
 const RC_APP_RET = 'recreio:voltar-ao-app';
+/** Tela do app guardada como origem, ou null sem armazenamento ou com valor fora do formato. */
+const readAppReturn = () => {
+  try {
+    const v = window.sessionStorage.getItem(RC_APP_RET);
+    return v && /^App-[A-Za-z-]+\.dc\.html$/.test(v) ? v : null;
+  } catch {
+    return null;
+  }
+};
 /** Quem sai do app nativo para o portal web leva um atalho de volta, como o "◀ App" do iOS. Guarda só o nome da tela de origem. */
-function useAppReturn() {
+function useAppReturn(rootRef: React.RefObject<HTMLElement | null>) {
   const [ret, setRet] = useState<string | null>(null);
   useEffect(() => {
+    // A tela só existe depois do commit; a leitura do DOM passa pela ref da raiz.
+    const el = rootRef.current;
+    if (!el) return undefined;
+    const doc = el.ownerDocument;
     const here = () => {
       const m = /(App-[A-Za-z-]+\.dc\.html)/.exec(window.location.pathname || '');
       return m ? m[1] : null;
     };
-    const isApp = !!document.querySelector('.rc-nat-body, .rc-nat-cam, .rc-nat-lock');
+    const isApp = !!doc.querySelector('.rc-nat-body, .rc-nat-cam, .rc-nat-lock');
+    if (!isApp) {
+      setRet(readAppReturn());
+      return undefined;
+    }
     try {
-      if (isApp) window.sessionStorage.removeItem(RC_APP_RET);
-      else {
-        const v = window.sessionStorage.getItem(RC_APP_RET);
-        if (v && /^App-[A-Za-z-]+\.dc\.html$/.test(v)) setRet(v);
-      }
+      window.sessionStorage.removeItem(RC_APP_RET);
     } catch {
       /* sem armazenamento, sem atalho */
     }
-    if (!isApp) return undefined;
     const onClick = (e: MouseEvent) => {
       const a = e.target && (e.target as Element).closest ? (e.target as Element).closest('a[href]') : null;
       if (!a) return;
       const h = a.getAttribute('href') || '';
       if (!/\.dc\.html/.test(h) || /^App-/.test(h)) return;
-      const tab = document.querySelector('.rc-tabbar-item:last-child');
+      const tab = doc.querySelector('.rc-tabbar-item:last-child');
       const mais = tab ? tab.getAttribute('href') || '' : '';
+      // Condicionais ficam fora do try: o React Compiler ainda não compila esse caso.
+      const origem = here() || (/^App-/.test(mais) ? mais : 'App-Perfil-Escolha.dc.html');
       try {
-        window.sessionStorage.setItem(RC_APP_RET, here() || (/^App-/.test(mais) ? mais : 'App-Perfil-Escolha.dc.html'));
+        window.sessionStorage.setItem(RC_APP_RET, origem);
       } catch {
         /* idem */
       }
     };
-    document.addEventListener('click', onClick, true);
-    return () => document.removeEventListener('click', onClick, true);
-  }, []);
+    doc.addEventListener('click', onClick, true);
+    return () => doc.removeEventListener('click', onClick, true);
+  }, [rootRef]);
   return ret;
 }
 export function RecreioProvider({ children, seed, theme, initialPrefs, onPrefsChange }: RecreioProviderProps) {
@@ -830,10 +844,13 @@ export function RecreioProvider({ children, seed, theme, initialPrefs, onPrefsCh
   useLayoutEffect(() => {
     applyPrefs(prefs);
   }, [prefs]);
-  useEffect(() => {
+  const [prevTheme, setPrevTheme] = useState(theme);
+  if (theme !== prevTheme) {
+    setPrevTheme(theme);
     if (theme) setPrefsState((p) => ({ ...p, theme }));
-  }, [theme]);
-  const appReturn = useAppReturn();
+  }
+  const rootRef = useRef<HTMLElement>(null);
+  const appReturn = useAppReturn(rootRef);
   const [brand, setBrand] = useState(loadBrand);
   useEffect(() => {
     const onBrand = (e: CustomEvent<Brand | null>) => setBrand(e && e.detail !== undefined ? e.detail : loadBrand());
@@ -851,7 +868,7 @@ export function RecreioProvider({ children, seed, theme, initialPrefs, onPrefsCh
     <PrefsCtx.Provider value={{ prefs, setPrefs }}>
       <BrandCtx.Provider value={brand}>
         <ToastProvider>
-          <SchoolTheme seed={seed} brand={brand} className="rc-root">
+          <SchoolTheme ref={rootRef} seed={seed} brand={brand} className="rc-root">
             {children}
             {appReturn && (
               <a className="rc-nat-return" href={appReturn}>

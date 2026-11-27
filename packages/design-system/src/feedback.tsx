@@ -275,6 +275,29 @@ export function Tooltip({ content, children, side = 'top' }: TooltipProps) {
   );
 }
 
+/** Mantém o painel montado durante a animação de saída: `render` some `ms` depois de `open` virar false. */
+function usePresence(open: boolean, ms: number) {
+  const [render, setRender] = useState(open);
+  const [leaving, setLeaving] = useState(false);
+  const [prevOpen, setPrevOpen] = useState(open);
+  if (open !== prevOpen) {
+    setPrevOpen(open);
+    if (open) {
+      setRender(true);
+      setLeaving(false);
+    } else if (render) setLeaving(true);
+  }
+  useEffect(() => {
+    if (!leaving) return undefined;
+    const t = setTimeout(() => {
+      setRender(false);
+      setLeaving(false);
+    }, ms);
+    return () => clearTimeout(t);
+  }, [leaving, ms]);
+  return { render, leaving };
+}
+
 /** Diálogo modal. Prende o foco, fecha com Esc, devolve o foco ao sair. */
 export function Dialog({
   open,
@@ -289,22 +312,8 @@ export function Dialog({
   tone,
 }: DialogProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [render, setRender] = useState(open);
-  const [leaving, setLeaving] = useState(false);
+  const { render, leaving } = usePresence(open, 200);
   const tid = useUid('dlg');
-  useEffect(() => {
-    if (open) {
-      setRender(true);
-      setLeaving(false);
-    } else if (render) {
-      setLeaving(true);
-      const t = setTimeout(() => {
-        setRender(false);
-        setLeaving(false);
-      }, 200);
-      return () => clearTimeout(t);
-    }
-  }, [open]);
   useFocusTrap(ref, open && render);
   useEffect(() => {
     if (!open) return;
@@ -582,22 +591,8 @@ export function SaveGuard({
 /** Gaveta: sobe de baixo no celular, desliza da direita no desktop. */
 export function Sheet({ open, onClose, title, children, footer, side = 'auto', width = 440 }: SheetProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [render, setRender] = useState(open);
-  const [leaving, setLeaving] = useState(false);
+  const { render, leaving } = usePresence(open, 260);
   const tid = useUid('sh');
-  useEffect(() => {
-    if (open) {
-      setRender(true);
-      setLeaving(false);
-    } else if (render) {
-      setLeaving(true);
-      const t = setTimeout(() => {
-        setRender(false);
-        setLeaving(false);
-      }, 260);
-      return () => clearTimeout(t);
-    }
-  }, [open]);
   useFocusTrap(ref, open && render);
   useEffect(() => {
     if (!open) return;

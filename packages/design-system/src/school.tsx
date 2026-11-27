@@ -283,6 +283,14 @@ export function InvoiceCard({
   );
 }
 
+/** Marcador de canto do QR, 7 por 7 módulos. */
+const QRFinder = ({ x, y }: { x: number; y: number }) => (
+  <g>
+    <rect x={x} y={y} width="7" height="7" rx="1.2" className="rc-qr-f" />
+    <rect x={x + 1} y={y + 1} width="5" height="5" rx=".8" className="rc-qr-bg" />
+    <rect x={x + 2} y={y + 2} width="3" height="3" rx=".6" className="rc-qr-f" />
+  </g>
+);
 /* QR ilustrativo determinístico (não é um QR real): só para protótipo. */
 export const FakeQR = ({ seed = 'pix', size = 176, label = 'QR Code do Pix' }) => {
   const n = 25;
@@ -298,20 +306,13 @@ export const FakeQR = ({ seed = 'pix', size = 176, label = 'QR Code do Pix' }) =
   for (let y = 0; y < n; y++)
     for (let x = 0; x < n; x++)
       if (!finder(x, y) && rnd() > 0.52) cells.push(<rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" />);
-  const F = ({ x, y }: { x: number; y: number }) => (
-    <g>
-      <rect x={x} y={y} width="7" height="7" rx="1.2" className="rc-qr-f" />
-      <rect x={x + 1} y={y + 1} width="5" height="5" rx=".8" className="rc-qr-bg" />
-      <rect x={x + 2} y={y + 2} width="3" height="3" rx=".6" className="rc-qr-f" />
-    </g>
-  );
   return (
     <svg className="rc-qr" width={size} height={size} viewBox={`-1 -1 ${n + 2} ${n + 2}`} role="img" aria-label={label}>
       <rect x="-1" y="-1" width={n + 2} height={n + 2} className="rc-qr-bg" rx="1.5" />
       <g className="rc-qr-m">{cells}</g>
-      <F x={0} y={0} />
-      <F x={n - 7} y={0} />
-      <F x={0} y={n - 7} />
+      <QRFinder x={0} y={0} />
+      <QRFinder x={n - 7} y={0} />
+      <QRFinder x={0} y={n - 7} />
     </svg>
   );
 };
@@ -327,7 +328,11 @@ export function PixPayment({
 }: PixPaymentProps) {
   const [left, setLeft] = useState(expiresIn);
   const [status, setStatus] = useState(st0);
-  useEffect(() => setStatus(st0), [st0]);
+  const [prevSt0, setPrevSt0] = useState(st0);
+  if (st0 !== prevSt0) {
+    setPrevSt0(st0);
+    setStatus(st0);
+  }
   useEffect(() => {
     if (status !== 'aguardando') return;
     const t = setInterval(() => setLeft((l) => Math.max(0, l - 1)), 1000);
@@ -1115,12 +1120,14 @@ export function AttendanceRoster({
   );
 }
 
+// Padrão estável: um [] novo a cada render faria a lista voltar a ser copiada sem fim.
+const NO_MESSAGES: ThreadMessage[] = [];
 /** Conversa por assunto: bolhas, leitura, prazo de resposta da escola e campo para escrever. */
 export function MessageThread({
   subject,
   participants,
   sla,
-  messages = [],
+  messages = NO_MESSAGES,
   me = 'me',
   onSend,
   typing,
@@ -1128,7 +1135,11 @@ export function MessageThread({
   const [txt, setTxt] = useState('');
   const end = useRef<HTMLDivElement>(null);
   const [list, setList] = useState(messages);
-  useEffect(() => setList(messages), [messages]);
+  const [prevMessages, setPrevMessages] = useState(messages);
+  if (messages !== prevMessages) {
+    setPrevMessages(messages);
+    setList(messages);
+  }
   useEffect(() => {
     end.current && end.current.scrollIntoView({ block: 'nearest' });
   }, [list.length]);
@@ -1350,9 +1361,11 @@ export function ModuleCard({
   color = 'azul',
 }: ModuleCardProps) {
   const [enabled, setEnabled] = useState(!!enabled0);
-  useEffect(() => {
+  const [prevEnabled0, setPrevEnabled0] = useState(enabled0);
+  if (enabled0 !== prevEnabled0) {
+    setPrevEnabled0(enabled0);
     setEnabled(!!enabled0);
-  }, [enabled0]);
+  }
   return (
     <div className={cx('rc-card', 'rc-module', `rc-c-${color}`, enabled && 'is-on', locked && 'is-locked')}>
       <div className="rc-module-head">
@@ -1558,15 +1571,14 @@ export function BrandEditor({ defaults = {}, onSave }: BrandEditorProps) {
     cnpj: b.cnpj && onlyDigits(b.cnpj).length !== 14 ? 'O CNPJ tem 14 dígitos' : '',
   };
   const invalid = Object.values(errs).some(Boolean);
-  const safe = {
-    ...b,
-    primary: isHex(b.primary) ? b.primary : saved.primary,
-    secondary: isHex(b.secondary) ? b.secondary : saved.secondary,
-    accent: isHex(b.accent) ? b.accent : saved.accent,
-  };
+  // Cor inválida no meio da digitação mostra a cor salva na prévia.
+  const primary = isHex(b.primary) ? b.primary : saved.primary;
+  const secondary = isHex(b.secondary) ? b.secondary : saved.secondary;
+  const accent = isHex(b.accent) ? b.accent : saved.accent;
+  const { navStyle, font, radius } = b;
   const bv = useMemo(
-    () => brandVars(safe, 'claro'),
-    [safe.primary, safe.secondary, safe.accent, safe.navStyle, safe.font, safe.radius],
+    () => brandVars({ primary, secondary, accent, navStyle, font, radius }, 'claro'),
+    [primary, secondary, accent, navStyle, font, radius],
   );
   const v = bv.vars;
   const pickFile = (k: 'logo' | 'logoDark' | 'symbol') => (e: React.ChangeEvent<HTMLInputElement>) => {

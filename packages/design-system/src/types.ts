@@ -80,6 +80,7 @@ export interface SchoolThemeProps {
   as?: keyof JSX.IntrinsicElements;
   className?: string;
   style?: React.CSSProperties;
+  ref?: React.Ref<HTMLElement>;
 }
 /** Marca salva pela escola (white label). Campos vazios valem o padrão. */
 export interface Brand {

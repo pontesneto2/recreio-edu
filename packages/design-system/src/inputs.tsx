@@ -142,6 +142,10 @@ export const TextField = React.forwardRef(function TextField(
   );
 });
 
+const growToFit = (el: HTMLTextAreaElement) => {
+  el.style.height = 'auto';
+  el.style.height = `${el.scrollHeight + 2}px`;
+};
 export function TextArea({
   label,
   hint,
@@ -163,12 +167,11 @@ export function TextArea({
   const r = useRef<HTMLTextAreaElement>(null);
   const [len, setLen] = useState(String(value ?? defaultValue ?? '').length);
   const grow = () => {
-    if (autoGrow && r.current) {
-      r.current.style.height = 'auto';
-      r.current.style.height = `${r.current.scrollHeight + 2}px`;
-    }
+    if (autoGrow && r.current) growToFit(r.current);
   };
-  useLayoutEffect(grow, []);
+  useLayoutEffect(() => {
+    if (autoGrow && r.current) growToFit(r.current);
+  }, [autoGrow]);
   return (
     <Field
       id={fid}
@@ -220,9 +223,11 @@ export function SearchField({
   ...rest
 }: SearchFieldProps) {
   const [v, setV] = useState(value ?? '');
-  useEffect(() => {
+  const [prevValue, setPrevValue] = useState(value);
+  if (value !== prevValue) {
+    setPrevValue(value);
     if (value !== undefined) setV(value);
-  }, [value]);
+  }
   return (
     <div className={cx('rc-input', 'rc-search', `rc-input-${size}`, className)} role="search">
       <Icon name="search" size={18} className="rc-input-icon" />
@@ -295,9 +300,11 @@ export function Select({
     document.addEventListener('pointerdown', onDoc);
     return () => document.removeEventListener('pointerdown', onDoc);
   }, [open]);
-  useEffect(() => {
+  const [prevOpen, setPrevOpen] = useState(open);
+  if (open !== prevOpen) {
+    setPrevOpen(open);
     if (open) setHi(selIdx >= 0 ? selIdx : 0);
-  }, [open]);
+  }
   useEffect(() => {
     if (open && list.current && hi >= 0) {
       const el = list.current.children[hi];
@@ -499,9 +506,11 @@ export function Switch({
   const uid = useUid('sw');
   const fid = id || uid;
   const [on, setOn] = useState(!!(checked ?? defaultChecked));
-  useEffect(() => {
+  const [prevChecked, setPrevChecked] = useState(checked);
+  if (checked !== prevChecked) {
+    setPrevChecked(checked);
     if (checked !== undefined) setOn(!!checked);
-  }, [checked]);
+  }
   return (
     <label className={cx('rc-switch', `rc-switch-${size}`, disabled && 'is-disabled', className)} htmlFor={fid}>
       {(label || description) && (
