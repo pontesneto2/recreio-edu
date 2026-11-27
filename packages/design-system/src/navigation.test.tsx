@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import axe from 'axe-core';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { CommandPalette, SideNav } from './navigation';
@@ -22,6 +23,43 @@ describe('SideNav', () => {
     expect(nav()).not.toHaveClass('is-collapsed');
     expect(window.localStorage.getItem('recreio.menu')).toBe('aberto');
     expect(onCollapse).toHaveBeenCalledWith(false);
+  });
+
+  describe('acessibilidade (axe)', () => {
+    const school = { name: 'Colégio Recreio', unit: 'Unidade Aldeota' };
+    const groups = [{ items: [{ id: 'painel', label: 'Painel', icon: 'home' as const }] }];
+    const units = [
+      { id: 'aldeota', label: 'Unidade Aldeota', current: true },
+      { id: 'eusebio', label: 'Unidade Eusébio' },
+    ];
+    // O jsdom não calcula cor nem layout: o contraste fica para o teste do Storybook no navegador.
+    const violacoes = async (container: HTMLElement) =>
+      (
+        await axe.run(container, { rules: { 'color-contrast': { enabled: false }, region: { enabled: false } } })
+      ).violations.map((v) => v.id);
+
+    it('sem unidades, não tem violação', async () => {
+      const { container } = render(<SideNav school={school} groups={groups} active="painel" collapsed={false} />);
+      expect(await violacoes(container)).toEqual([]);
+    });
+
+    it('com unidades, o nome do resumo sai do texto visível', async () => {
+      const { container } = render(
+        <SideNav school={school} units={units} groups={groups} active="painel" collapsed={false} />,
+      );
+      expect(await violacoes(container)).toEqual([]);
+      // Um aria-label troca o nome inteiro e esconde o texto visível (regra label-content-name-mismatch).
+      const resumo = container.querySelector('summary');
+      expect(resumo).not.toHaveAttribute('aria-label');
+      expect(resumo).toHaveTextContent(/^Trocar unidade\. Atual: /);
+      // As iniciais da marca não entram no nome: o nome da escola já está escrito ao lado.
+      expect(resumo?.querySelector('.rc-schoolmark')).toHaveAttribute('aria-hidden', 'true');
+    });
+
+    it('recolhido, a marca da escola continua com nome', () => {
+      render(<SideNav school={school} groups={groups} collapsed />);
+      expect(screen.getByRole('img', { name: 'Colégio Recreio' })).toBeInTheDocument();
+    });
   });
 });
 

@@ -1,7 +1,8 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { BrandEditor, FakeQR, MessageThread, ModuleCard, PixPayment } from './school';
+import { RecreioProvider } from './core';
+import { BrandEditor, FakeQR, MessageThread, ModuleCard, PixPayment, PreferencesPanel } from './school';
 import type { ThreadMessage } from './types';
 
 describe('FakeQR', () => {
@@ -87,5 +88,32 @@ describe('BrandEditor', () => {
     await userEvent.type(field, '34AB');
     expect(field).toHaveValue('#1234AB');
     expect(stage.getAttribute('style')).not.toBe(before);
+  });
+});
+
+describe('PreferencesPanel', () => {
+  const renderPainel = (props: Parameters<typeof PreferencesPanel>[0] = {}) =>
+    render(
+      <RecreioProvider>
+        <PreferencesPanel {...props} />
+      </RecreioProvider>,
+    );
+
+  it('por padrão diz que salva neste aparelho', async () => {
+    const onSave = vi.fn();
+    renderPainel({ onSave });
+    expect(screen.getByText('Salvo neste aparelho.')).toBeInTheDocument();
+    expect(screen.queryByText(/sua conta/)).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('switch', { name: /Reduzir movimento/ }));
+    await userEvent.click(screen.getByRole('button', { name: 'Salvar preferências' }));
+
+    expect(await screen.findByText(/^Salvo neste aparelho às \d+h\d{2}\.$/)).toBeInTheDocument();
+    expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ motion: 'reduzido' }));
+  });
+
+  it('com savedIn="account" diz que salva na conta', () => {
+    renderPainel({ savedIn: 'account' });
+    expect(screen.getByText('Salvo na sua conta e válido em todos os seus aparelhos.')).toBeInTheDocument();
   });
 });

@@ -2247,8 +2247,22 @@ export function BrandEditor({ defaults = {}, onSave }: BrandEditorProps) {
 }
 
 const PREF_KEYS: Array<keyof Preferences> = ['theme', 'textScale', 'spacing', 'font', 'reading', 'motion', 'focus'];
-/** Painel de acessibilidade e leitura: a prévia muda na hora, e Salvar preferências grava na conta. Avisa ao sair sem salvar. */
-export function PreferencesPanel({ compact, onSave }: PreferencesPanelProps) {
+/** Textos do aviso de salvamento, conforme o lugar onde as preferências ficam guardadas. */
+const SAVED_TEXT = {
+  device: {
+    idle: 'Salvo neste aparelho.',
+    at: (hora: string) => `Salvo neste aparelho às ${hora}.`,
+    toast: 'Valem neste aparelho.',
+  },
+  account: {
+    idle: 'Salvo na sua conta e válido em todos os seus aparelhos.',
+    at: (hora: string) => `Salvo na sua conta às ${hora}. Vale em todos os seus aparelhos.`,
+    toast: 'Valem em todos os seus aparelhos.',
+  },
+} as const;
+/** Painel de acessibilidade e leitura: a prévia muda na hora, e Salvar preferências grava no lugar de `savedIn`. Avisa ao sair sem salvar. */
+export function PreferencesPanel({ compact, onSave, savedIn = 'device' }: PreferencesPanelProps) {
+  const savedText = SAVED_TEXT[savedIn];
   const { prefs, setPrefs } = usePreferences();
   const [base, setBase] = useState(prefs);
   const [extra, setExtra] = useState({ libras: false, ouvir: true, traduzir: false });
@@ -2261,7 +2275,7 @@ export function PreferencesPanel({ compact, onSave }: PreferencesPanelProps) {
   const toast = useToast();
   const commit = () => {
     const d = new Date();
-    toast.show({ tone: 'success', title: 'Preferências salvas', message: 'Valem em todos os seus aparelhos.' });
+    toast.show({ tone: 'success', title: 'Preferências salvas', message: savedText.toast });
     setBase(prefs);
     setBaseX(extra);
     setSavedAt(`${d.getHours()}h${String(d.getMinutes()).padStart(2, '0')}`);
@@ -2399,8 +2413,8 @@ export function PreferencesPanel({ compact, onSave }: PreferencesPanelProps) {
             {dirty > 0
               ? `${dirty} ${dirty === 1 ? 'alteração' : 'alterações'} sem salvar. A prévia já mostra como fica.`
               : savedAt
-                ? `Salvo na sua conta às ${savedAt}. Vale em todos os seus aparelhos.`
-                : 'Salvo na sua conta e válido em todos os seus aparelhos.'}
+                ? savedText.at(savedAt)
+                : savedText.idle}
           </span>
         </p>
         <Button variant="ghost" disabled={!dirty || saving} onClick={discard}>

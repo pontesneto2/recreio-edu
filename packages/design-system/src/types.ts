@@ -46,6 +46,8 @@ export interface SchoolMarkProps {
   src?: string;
   size?: number;
   className?: string;
+  /** Esconde a marca do leitor de tela quando o nome da escola já está escrito ao lado. */
+  decorative?: boolean;
 }
 export interface MadeByProps {
   product?: string;
@@ -934,6 +936,8 @@ export interface BrandPreviewProps {
 export interface PreferencesPanelProps {
   compact?: boolean;
   onSave?: (p: Preferences & { libras: boolean; ouvir: boolean; traduzir: boolean }) => void;
+  /** Onde as preferências ficam guardadas. `device` (padrão) até existir login; `account` quando vão para a conta. */
+  savedIn?: 'device' | 'account';
 }
 export interface BrandEditorProps {
   defaults?: Brand;

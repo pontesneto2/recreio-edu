@@ -351,7 +351,7 @@ export function Logo({ variant = 'inline', size = 28, tone = 'auto', className }
     </span>
   );
 }
-export function SchoolMark({ name = 'Escola', src, size = 36, className }: SchoolMarkProps) {
+export function SchoolMark({ name = 'Escola', src, size = 36, className, decorative }: SchoolMarkProps) {
   const initials = name
     .split(/\s+/)
     .filter((w) => w.length > 2 || /^[A-Z]/.test(w))
@@ -360,13 +360,12 @@ export function SchoolMark({ name = 'Escola', src, size = 36, className }: Schoo
     .join('')
     .toUpperCase();
   return src ? (
-    <img className={cx('rc-schoolmark', className)} src={src} alt={name} width={size} height={size} />
+    <img className={cx('rc-schoolmark', className)} src={src} alt={decorative ? '' : name} width={size} height={size} />
   ) : (
     <span
       className={cx('rc-schoolmark', className)}
       style={{ width: size, height: size, fontSize: size * 0.36 }}
-      aria-label={name}
-      role="img"
+      {...(decorative ? { 'aria-hidden': true } : { 'aria-label': name, role: 'img' })}
     >
       {initials}
     </span>

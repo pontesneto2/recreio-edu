@@ -91,8 +91,10 @@ export function SideNav({
       <div className="rc-sidenav-head">
         {units && units.length && !collapsed ? (
           <details className="rc-sidenav-units">
-            <summary className="rc-sidenav-school" aria-label={`Trocar unidade. Atual: ${school.unit || ''}`}>
-              <SchoolMark name={school.name} src={school.logo} size={36} />
+            {/* O nome vem do texto visível (regra label-content-name-mismatch do axe): a frase escondida diz a ação. */}
+            <summary className="rc-sidenav-school">
+              <span className="rc-sr">Trocar unidade. Atual: </span>
+              <SchoolMark name={school.name} src={school.logo} size={36} decorative />
               <div className="rc-sidenav-school-text">
                 <p className="rc-sidenav-school-name">{school.name}</p>
                 {school.unit && <p className="rc-sidenav-school-unit">{school.unit}</p>}
@@ -120,7 +122,7 @@ export function SideNav({
           </details>
         ) : (
           <div className="rc-sidenav-school">
-            <SchoolMark name={school.name} src={school.logo} size={36} />
+            <SchoolMark name={school.name} src={school.logo} size={36} decorative={!collapsed} />
             {!collapsed && (
               <div className="rc-sidenav-school-text">
                 <p className="rc-sidenav-school-name">{school.name}</p>
