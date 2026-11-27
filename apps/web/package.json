@@ -22,7 +22,10 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.1",
     "@babel/core": "^7.29.13",
+    "@lhci/cli": "^0.16.1",
+    "@playwright/test": "^1.65.1",
     "@rolldown/plugin-babel": "^0.3.1",
     "@tanstack/react-query-devtools": "^5.108.4",
     "@testing-library/jest-dom": "^8.0.0",
