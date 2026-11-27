@@ -29,6 +29,24 @@ Requisito: Docker Desktop (ou Docker Engine) com Compose 2.20 ou mais novo.
 
 A API (`npm run dev:api`) usa 3333 e o portal (`npm run dev:web`) usa 5173.
 
+A porta do Postgres no host vem de `POSTGRES_PORT` no `.env` da raiz (modelo em `.env.example`). Sem o arquivo, fica 5432. Quem troca a porta ajusta também `DATABASE_URL` e `DATABASE_MIGRATION_URL` em `apps/api/.env`.
+
+### PostgreSQL do Windows na 5432
+
+Um PostgreSQL instalado como serviço do Windows escuta na 5432 junto com o Docker Desktop. `localhost:5432` chega nele, e o login falha com `password authentication failed for user "recreio"`, mesmo com o Compose no ar. Para confirmar, `netstat -ano | findstr :5432` mostra 2 processos, um deles `postgres.exe`.
+
+Correção, sem mexer no serviço do Windows:
+
+1. `.env` na raiz com `POSTGRES_PORT=5433`.
+2. Em `apps/api/.env`:
+
+   ```bash
+   DATABASE_URL=postgres://recreio_app:recreio_app@localhost:5433/recreio
+   DATABASE_MIGRATION_URL=postgres://recreio:recreio@localhost:5433/recreio
+   ```
+
+3. `docker compose up -d`, depois `npm run db:migrate` e `npm run db:seed`.
+
 ## Apagar e recriar os dados
 
 ```bash
@@ -42,15 +60,16 @@ O bucket `recreio` do RustFS não é criado pelo Compose. Crie pelo console em h
 
 ## Problemas comuns
 
-| Sintoma                                                                                       | Causa                                      | Correção                                                                        |
-| --------------------------------------------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------- |
-| `error during connect` ou `Cannot connect to the Docker daemon`                               | Docker Desktop fechado                     | Abra o Docker Desktop e espere o ícone ficar verde. Confira com `docker info`.  |
-| `open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified` (Windows) | Docker Desktop fechado ou WSL parado       | Abra o Docker Desktop. Se persistir, rode `wsl --shutdown` e abra de novo.      |
-| `Bind for 0.0.0.0:5432 failed: port is already allocated`                                     | Outro Postgres (ou outro Compose) na porta | Pare o outro processo ou mude o lado esquerdo da porta no `docker-compose.yml`. |
-| `role "recreio_app" does not exist`                                                           | Volume criado antes do script de init      | `docker compose down -v` e suba de novo.                                        |
-| `password authentication failed for user "recreio_app"`                                       | Senha diferente da do volume               | Confira `DATABASE_URL` em `apps/api/.env` ou recrie o volume.                   |
-| Serviço com estado `unhealthy` em `docker compose ps`                                         | Serviço não respondeu ao healthcheck       | `docker compose logs <serviço>` mostra o motivo.                                |
-| E-mail não aparece no Mailpit                                                                 | `SMTP_URL` apontando para outro host       | Use `smtp://localhost:1025` no `apps/api/.env`.                                 |
+| Sintoma                                                                                       | Causa                                         | Correção                                                                                       |
+| --------------------------------------------------------------------------------------------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `error during connect` ou `Cannot connect to the Docker daemon`                               | Docker Desktop fechado                        | Abra o Docker Desktop e espere o ícone ficar verde. Confira com `docker info`.                 |
+| `open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified` (Windows) | Docker Desktop fechado ou WSL parado          | Abra o Docker Desktop. Se persistir, rode `wsl --shutdown` e abra de novo.                     |
+| `Bind for 0.0.0.0:5432 failed: port is already allocated`                                     | Outro Postgres (ou outro Compose) na porta    | Pare o outro processo ou use `POSTGRES_PORT` no `.env` da raiz.                                |
+| `password authentication failed for user "recreio"` com o Compose no ar (Windows)             | PostgreSQL do Windows atende `localhost:5432` | `POSTGRES_PORT=5433`, como em [PostgreSQL do Windows na 5432](#postgresql-do-windows-na-5432). |
+| `role "recreio_app" does not exist`                                                           | Volume criado antes do script de init         | `docker compose down -v` e suba de novo.                                                       |
+| `password authentication failed for user "recreio_app"`                                       | Senha diferente da do volume                  | Confira `DATABASE_URL` em `apps/api/.env` ou recrie o volume.                                  |
+| Serviço com estado `unhealthy` em `docker compose ps`                                         | Serviço não respondeu ao healthcheck          | `docker compose logs <serviço>` mostra o motivo.                                               |
+| E-mail não aparece no Mailpit                                                                 | `SMTP_URL` apontando para outro host          | Use `smtp://localhost:1025` no `apps/api/.env`.                                                |
 
 ## Imagens de produção na máquina local
 

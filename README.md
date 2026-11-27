@@ -45,7 +45,7 @@ Em `localhost`, a API atende a escola de `DEV_ESCOLA_DOMINIO` (Colégio Recreio)
 
 | Arquivo                                   | O que faz                                                                                                           |
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `docker-compose.yml`                      | Serviços do desenvolvimento: Postgres 5432, Redis 6379, Mailpit 1025 e 8025, RustFS 9000 e 9001.                    |
+| `docker-compose.yml`                      | Serviços do desenvolvimento: Postgres 5432 (`POSTGRES_PORT`), Redis 6379, Mailpit 1025 e 8025, RustFS 9000 e 9001.  |
 | `apps/api/Dockerfile`                     | Imagem da API: só dependências de produção, usuário `node`, healthcheck em `/api/health`.                           |
 | `apps/web/Dockerfile` e `apps/web/nginx/` | Imagem do portal: nginx sem root na porta 8080, fallback de SPA, cache e CSP, `/api` repassado para `API_UPSTREAM`. |
 | `compose.app.yml`                         | API e portal com as imagens de produção, ligados aos serviços acima.                                                |

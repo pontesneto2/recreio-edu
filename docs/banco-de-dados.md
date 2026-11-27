@@ -17,7 +17,19 @@ npm run dev
 
 As URLs padrão da API apontam para o `docker-compose.yml`, então o `.env` é opcional. Para mudar, copie `apps/api/.env.example` para `apps/api/.env`.
 
-No Windows, um PostgreSQL instalado como serviço também pode ocupar a porta 5432. A conexão cai nele e a senha de `recreio` falha. Pare o serviço ou troque a porta no `docker-compose.yml` e nas URLs do `.env`.
+### Porta 5432 ocupada
+
+No Windows, um PostgreSQL instalado como serviço pode escutar na 5432 junto com o Docker. A conexão em `localhost:5432` cai nele, e o login de `recreio` falha com `password authentication failed`. Para usar a 5433:
+
+1. Copie `.env.example` da raiz para `.env` e troque para `POSTGRES_PORT=5433`. O `docker compose` lê esse arquivo.
+2. Em `apps/api/.env`, aponte as 2 URLs para a 5433:
+
+   ```bash
+   DATABASE_URL=postgres://recreio_app:recreio_app@localhost:5433/recreio
+   DATABASE_MIGRATION_URL=postgres://recreio:recreio@localhost:5433/recreio
+   ```
+
+3. Rode `docker compose up -d` de novo. O container passa a publicar a 5433.
 
 ## Os 2 usuários
 
