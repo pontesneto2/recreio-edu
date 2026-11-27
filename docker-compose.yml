@@ -48,6 +48,16 @@ services:
     volumes:
       - storage-data:/data
 
+  # Traces locais. Sobe só com: docker compose --profile observabilidade up -d
+  # Interface em http://localhost:16686. A API envia OTLP por HTTP na 4318.
+  jaeger:
+    image: jaegertracing/jaeger:2.22.0
+    profiles: [observabilidade]
+    ports:
+      - 16686:16686
+      - 4317:4317
+      - 4318:4318
+
 volumes:
   postgres-data:
   storage-data:

@@ -47,4 +47,5 @@ WORKDIR /app/apps/api
 EXPOSE 3333
 HEALTHCHECK --interval=15s --timeout=3s --start-period=10s --retries=3 \
   CMD ["node", "-e", "fetch('http://127.0.0.1:' + (process.env.PORT || 3333) + '/api/health').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
-CMD ["node", "dist/main.js"]
+# O OpenTelemetry carrega antes do app. O worker usa a mesma imagem com `dist/worker.js` (compose.app.yml).
+CMD ["node", "--import", "./dist/instrumentation.js", "dist/main.js"]
