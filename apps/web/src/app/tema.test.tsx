@@ -8,7 +8,7 @@ const escola = (corMarca: string) => ({
   cidade: 'Fortaleza',
   corMarca,
   hoje: '2026-11-25',
-  unidades: [{ id: 'aldeota', nome: 'Unidade Aldeota', alunos: 1248 }],
+  unidades: [{ id: '6f1c1c1e-2b7d-4c3a-8e9f-1a2b3c4d5e6f', nome: 'Unidade Aldeota', alunos: 1248 }],
 });
 
 const corDaMarcaAplicada = () =>
