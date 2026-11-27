@@ -12,8 +12,9 @@
     "node": ">=24"
   },
   "scripts": {
-    "dev": "concurrently -n api,web -c blue,magenta \"npm run dev -w @recreio/api\" \"npm run dev -w @recreio/web\"",
+    "dev": "concurrently -n api,worker,web -c blue,yellow,magenta \"npm run dev -w @recreio/api\" \"npm run dev:worker -w @recreio/api\" \"npm run dev -w @recreio/web\"",
     "dev:api": "npm run dev -w @recreio/api",
+    "dev:worker": "npm run dev:worker -w @recreio/api",
     "dev:web": "npm run dev -w @recreio/web",
     "db:migrate": "npm run db:migrate -w @recreio/api",
     "db:seed": "npm run db:seed -w @recreio/api",

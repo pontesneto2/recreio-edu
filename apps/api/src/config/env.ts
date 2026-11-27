@@ -6,6 +6,93 @@ const PADRAO_LOCAL = {
   DATABASE_MIGRATION_URL: 'postgres://recreio:recreio@localhost:5432/recreio',
 } as const;
 
+/**
+ * Valor do `trust proxy` do Express: `true`/`false`, número de saltos ou lista de IPs e
+ * nomes (`loopback`, `uniquelocal`, `10.0.0.0/8`).
+ */
+export const parseTrustProxy = (valor: string): boolean | number | string => {
+  const texto = valor.trim();
+  if (texto === 'true') return true;
+  if (texto === 'false') return false;
+  if (/^\d+$/.test(texto)) return Number(texto);
+  return texto;
+};
+
+/** Proxy, Redis, filas, e-mail, arquivos e observabilidade. */
+const infraSchema = {
+  /** Proxies confiáveis para ler o IP do cliente em `X-Forwarded-For`. */
+  TRUST_PROXY: z.string().min(1).default('loopback').transform(parseTrustProxy),
+  /** Redis das filas e do contador do limite de requisições (ADR 0009). */
+  REDIS_URL: z.url().optional(),
+  /** Tarefas que o worker processa ao mesmo tempo em cada fila. */
+  WORKER_CONCURRENCY: z.coerce.number().int().min(1).max(100).default(5),
+  /** Servidor SMTP. Mailpit no ambiente local. */
+  SMTP_URL: z.url().optional(),
+  /** Remetente dos e-mails. */
+  EMAIL_FROM: z.string().min(3).default('Recreio <nao-responda@recreio.app>'),
+  /** Endpoint compatível com S3 (ADR 0010). Sem valor em produção, o SDK usa o endpoint da AWS. */
+  S3_ENDPOINT: z.url().optional(),
+  /** Endpoint das URLs assinadas que o navegador recebe. Sem valor, vale `S3_ENDPOINT`. */
+  S3_PUBLIC_ENDPOINT: z.url().optional(),
+  S3_REGION: z.string().min(1).default('us-east-1'),
+  /** Sem chave em produção, o SDK usa a cadeia padrão de credenciais (papel da instância). */
+  S3_ACCESS_KEY: z.string().min(1).optional(),
+  S3_SECRET_KEY: z.string().min(1).optional(),
+  S3_BUCKET: z.string().min(3).optional(),
+  /** Endereço `endpoint/bucket/chave`, exigido pelo RustFS. Padrão: ligado quando há `S3_ENDPOINT`. */
+  S3_FORCE_PATH_STYLE: z.stringbool().optional(),
+  /** Validade das URLs assinadas, em segundos. */
+  S3_URL_TTL_SECONDS: z.coerce.number().int().min(30).max(3600).default(300),
+  /** Desliga o OpenTelemetry. O próprio SDK também lê esta variável. */
+  OTEL_SDK_DISABLED: z.stringbool().default(false),
+  /** Nome do serviço nos traces. Padrão: `recreio-api` ou `recreio-worker`. */
+  OTEL_SERVICE_NAME: z.string().min(1).optional(),
+  /** Coletor OTLP. Sem valor, o SDK usa `http://localhost:4318`. */
+  OTEL_EXPORTER_OTLP_ENDPOINT: z.url().optional(),
+  /** Projeto do Sentry. Sem valor, nenhum erro sai para o Sentry. */
+  SENTRY_DSN: z.url().optional(),
+  /** Ambiente mostrado no Sentry. Padrão: o valor de NODE_ENV. */
+  SENTRY_ENVIRONMENT: z.string().min(1).optional(),
+};
+
+/** Valores do docker-compose.yml para as variáveis de infraestrutura, fora de produção. */
+const PADRAO_LOCAL_INFRA = {
+  REDIS_URL: 'redis://localhost:6379',
+  SMTP_URL: 'smtp://localhost:1025',
+  S3_ENDPOINT: 'http://localhost:9000',
+  S3_ACCESS_KEY: 'recreio',
+  S3_SECRET_KEY: 'recreio-storage',
+  S3_BUCKET: 'recreio',
+} as const;
+
+const INFRA_OBRIGATORIAS_EM_PRODUCAO = ['REDIS_URL', 'SMTP_URL', 'S3_BUCKET'] as const;
+
+type InfraBruta = z.output<z.ZodObject<typeof infraSchema>> & { NODE_ENV: string };
+
+/** Aplica os padrões locais e exige as variáveis de produção. */
+const resolverInfra = (raw: InfraBruta, ctx: z.RefinementCtx) => {
+  const producao = raw.NODE_ENV === 'production';
+  for (const chave of INFRA_OBRIGATORIAS_EM_PRODUCAO) {
+    if (producao && !raw[chave]) {
+      ctx.addIssue({ code: 'custom', path: [chave], message: `${chave} é obrigatória em produção.` });
+    }
+  }
+  const local = <K extends keyof typeof PADRAO_LOCAL_INFRA>(chave: K) =>
+    producao ? undefined : PADRAO_LOCAL_INFRA[chave];
+  const s3Endpoint = raw.S3_ENDPOINT ?? local('S3_ENDPOINT');
+  return {
+    // Nos testes o Redis vem do container de teste. Sem REDIS_URL, o limite conta em memória.
+    REDIS_URL: raw.REDIS_URL ?? (raw.NODE_ENV === 'development' ? PADRAO_LOCAL_INFRA.REDIS_URL : undefined),
+    SMTP_URL: raw.SMTP_URL ?? PADRAO_LOCAL_INFRA.SMTP_URL,
+    S3_ENDPOINT: s3Endpoint,
+    S3_ACCESS_KEY: raw.S3_ACCESS_KEY ?? local('S3_ACCESS_KEY'),
+    S3_SECRET_KEY: raw.S3_SECRET_KEY ?? local('S3_SECRET_KEY'),
+    S3_BUCKET: raw.S3_BUCKET ?? PADRAO_LOCAL_INFRA.S3_BUCKET,
+    S3_FORCE_PATH_STYLE: raw.S3_FORCE_PATH_STYLE ?? Boolean(s3Endpoint),
+    SENTRY_ENVIRONMENT: raw.SENTRY_ENVIRONMENT ?? raw.NODE_ENV,
+  };
+};
+
 const envSchema = z
   .object({
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
@@ -20,6 +107,7 @@ const envSchema = z
     DATABASE_MIGRATION_URL: z.url().optional(),
     /** Escola atendida quando o Host é localhost ou 127.0.0.1, fora de produção (ADR 0006). */
     DEV_ESCOLA_DOMINIO: z.string().trim().toLowerCase().min(1).default('colegiorecreio.localhost'),
+    ...infraSchema,
   })
   .transform((raw, ctx) => {
     for (const chave of ['DATABASE_URL', 'DATABASE_MIGRATION_URL'] as const) {
@@ -31,9 +119,13 @@ const envSchema = z
       ...raw,
       DATABASE_URL: raw.DATABASE_URL ?? PADRAO_LOCAL.DATABASE_URL,
       DATABASE_MIGRATION_URL: raw.DATABASE_MIGRATION_URL ?? PADRAO_LOCAL.DATABASE_MIGRATION_URL,
+      ...resolverInfra(raw, ctx),
     };
   });
 
 export type Env = z.output<typeof envSchema>;
 
-export const env: Env = envSchema.parse(process.env);
+/** Lê e valida as variáveis. Os testes chamam com um objeto próprio. */
+export const parseEnv = (variaveis: NodeJS.ProcessEnv): Env => envSchema.parse(variaveis);
+
+export const env: Env = parseEnv(process.env);
