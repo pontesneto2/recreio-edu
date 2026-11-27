@@ -20,7 +20,7 @@ O OpenAPI sai dos schemas Zod de `packages/contracts`. Ninguém escreve o JSON �
 
 1. Cada módulo declara as operações em `apps/api/src/modules/<dominio>/<dominio>.openapi.ts`, ao lado das rotas: `operationId`, `summary`, `tags`, parâmetros e respostas.
 2. `apps/api/src/openapi.ts` junta os módulos com `createOpenApiDocument` (`shared/openapi/document.ts`).
-3. O montador acrescenta as respostas `429` e `500` em toda operação. O módulo declara só as específicas, como `400` e `404`, com `problemResponse('NAO_ENCONTRADO')`.
+3. O montador acrescenta as respostas `404`, `429` e `500` em toda operação, e `413` nas operações com corpo. O módulo declara só as específicas, como `400` e `404`, com `problemResponse('NAO_ENCONTRADO')`.
 4. A biblioteca [zod-openapi](https://github.com/samchungy/zod-openapi) converte os schemas. Os schemas listados em `schemas` viram componentes com nome (`#/components/schemas/Aluno`).
 
 ## Regenerar o openapi.json
@@ -37,7 +37,7 @@ O arquivo fica fora do Prettier (`.prettierignore`), porque o teste compara o te
 
 ## Versionamento
 
-- Toda rota de negócio fica sob `/api/v1`. `/api/health` e `/api/ready` não têm versão nem entram no OpenAPI, porque servem ao balanceador e não a clientes. `/api/health` responde 200 com o processo vivo. `/api/ready` responde 200 `{ "status": "ok" }` com o banco no ar e 503 `{ "status": "indisponivel" }` sem ele.
+- Toda rota de negócio fica sob `/api/v1`. `/api/health` e `/api/ready` não têm versão nem entram no OpenAPI, porque servem ao balanceador e não a clientes. `/api/health` responde 200 com o processo vivo. `/api/ready` responde 200 com Postgres e Redis no ar e 503 com algum fora. O corpo diz qual: `{ "status": "indisponivel", "dependencias": { "postgres": "ok", "redis": "indisponivel" } }`.
 - Toda rota da v1, menos `/api/v1/openapi.json`, resolve a escola pelo `Host` (ADR 0006). Host sem escola responde 404 `NAO_ENCONTRADO`. Em desenvolvimento, `localhost` e `127.0.0.1` apontam para `DEV_ESCOLA_DOMINIO`.
 - Mudança compatível entra na v1 sem aviso: campo novo na resposta, parâmetro opcional novo, endpoint novo, código de erro novo.
 - Mudança incompatível cria `/api/v2`: remover ou renomear campo, mudar tipo, tornar parâmetro obrigatório, mudar o significado de um status.

@@ -75,27 +75,34 @@ Padrões da [ADR 0008](adr/0008-padroes-de-api.md), descritos em [api/padroes.md
 - [x] Limite de taxa por IP, com `429` e `Retry-After`.
 - [x] Helpers de paginação por cursor em `packages/contracts` (`cursorQuerySchema`, `paginated`).
 - [ ] Listas existentes no formato `{ data, nextCursor }` e filtros validados, junto com os repositórios Drizzle.
-- [ ] Limite de taxa por usuário e contador no Redis, depois do login.
+- [x] Contador do limite de taxa no Redis (`rate-limit-redis`), com `trust proxy` configurável (`TRUST_PROXY`).
+- [x] `413` `CORPO_GRANDE_DEMAIS` em problem+json para corpo acima de 1 MB.
+- [ ] Limite de taxa por usuário, depois do login.
 - [ ] Idempotência por cabeçalho `Idempotency-Key` em toda operação que cria cobrança ou envia mensagem.
 
 Outros itens da API:
 
-- Filas para trabalho assíncrono (e-mail, push, PDF, webhooks). Proposta: BullMQ com Redis.
-- Arquivos (documentos, fotos, PDFs) em armazenamento compatível com S3, com URL assinada.
+- [x] Filas com BullMQ e Redis (ADR 0009): worker separado, id determinístico, tentativas com espera exponencial e retenção de falhas. Primeira fila: `emails` ([operacao/filas.md](operacao/filas.md)).
+- [x] Arquivos em armazenamento compatível com S3 (ADR 0010): chave por escola, URL assinada de upload e download, bucket criado em desenvolvimento ([operacao/armazenamento.md](operacao/armazenamento.md)). A rota pública entra com a funcionalidade de documentos.
+- [ ] Filas de push, PDF e webhooks, e a tabela de saída (outbox) para enfileirar na mesma transação.
 
 ### Observabilidade
 
-- Logs estruturados com pino, já ativos, com `requestId` em cada linha (feito) e `escola_id` (pendente).
-- Rastreamento com OpenTelemetry na API e no portal.
-- Captura de erros com Sentry nos 2 lados.
-- [x] `/api/health` (processo vivo) e `/api/ready` (banco respondendo). Redis entra no `/api/ready` quando a API passar a usar.
+Detalhes em [operacao/observabilidade.md](operacao/observabilidade.md).
+
+- [x] Logs estruturados com pino, com `requestId`, `escolaId` e `trace_id` em cada linha. Health e ready fora do log.
+- [x] Rastreamento com OpenTelemetry na API e no worker (HTTP, Express, pg, ioredis), exportado por OTLP. Jaeger local no perfil `observabilidade`.
+- [ ] Rastreamento no portal.
+- [x] Captura de erros 5xx da API e de tarefas que falharam de vez com Sentry, ligada por `SENTRY_DSN`.
+- [ ] Sentry no portal.
+- [x] `/api/health` (processo vivo) e `/api/ready` (Postgres e Redis respondendo, com a dependência que falhou no corpo).
 
 ### DevOps
 
 Operação documentada em [operacao/](operacao/README.md).
 
 - [x] Docker Compose local com Postgres, Redis, Mailpit (e-mail) e RustFS (arquivos compatíveis com S3).
-- [x] Dockerfile multi-stage da API, imagem sem root e com healthcheck.
+- [x] Dockerfile multi-stage da API, imagem sem root e com healthcheck. O worker usa a mesma imagem com outro comando.
 - [x] Imagem do portal em nginx sem root, com CSP, cache por tipo de arquivo e `/api` repassado para a API.
 - [x] CI constrói as 2 imagens a cada pull request. CodeQL e `npm audit` rodam no CI.
 - [ ] 3 ambientes: desenvolvimento, staging e produção. Hospedagem por ADR. O plano está em `operacao/README.md`; falta o ADR 0011.

@@ -4,18 +4,22 @@ Portal web em React e API em Node para o Recreio. O protótipo com as 173 telas 
 
 ## Stack
 
-| Camada     | Tecnologia                                                                                                             |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------- |
-| Linguagem  | TypeScript 6 em todo o código, modo strict                                                                             |
-| Portal     | React 19, React Compiler, Vite 8, React Router 8, TanStack Query 5                                                     |
-| API        | Node 24 executando TypeScript nativo, Express 5                                                                        |
-| Contratos  | Zod 4, schemas compartilhados entre API e portal em `@recreio/contracts`                                               |
-| Testes     | Vitest e Testing Library no portal, `node --test` na API, Playwright e axe no navegador, Lighthouse CI                 |
-| Qualidade  | ESLint 10, typescript-eslint, Prettier, Husky, lint-staged, commitlint                                                 |
-| CI         | GitHub Actions: auditoria, format, lint, typecheck, testes, build, e2e, axe no Storybook, Lighthouse, imagens e CodeQL |
-| Imagens    | Docker multi-stage: API em `node:24-alpine`, portal em nginx sem root                                                  |
-| API extras | pino (logs estruturados), helmet (cabeçalhos de segurança), desligamento gracioso                                      |
-| Padrões    | `/api/v1`, erros RFC 9457, OpenAPI 3.1 gerado do Zod, `X-Request-Id`, limite por IP                                    |
+| Camada          | Tecnologia                                                                                                             |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Linguagem       | TypeScript 6 em todo o código, modo strict                                                                             |
+| Portal          | React 19, React Compiler, Vite 8, React Router 8, TanStack Query 5                                                     |
+| API             | Node 24 executando TypeScript nativo, Express 5                                                                        |
+| Contratos       | Zod 4, schemas compartilhados entre API e portal em `@recreio/contracts`                                               |
+| Testes          | Vitest e Testing Library no portal, `node --test` na API, Playwright e axe no navegador, Lighthouse CI                 |
+| Qualidade       | ESLint 10, typescript-eslint, Prettier, Husky, lint-staged, commitlint                                                 |
+| CI              | GitHub Actions: auditoria, format, lint, typecheck, testes, build, e2e, axe no Storybook, Lighthouse, imagens e CodeQL |
+| Imagens         | Docker multi-stage: API em `node:24-alpine`, portal em nginx sem root                                                  |
+| API extras      | pino (logs estruturados), helmet (cabeçalhos de segurança), desligamento gracioso                                      |
+| --------------- | -----------------------------------------------------------------------------------                                    |
+| Filas           | BullMQ sobre Redis 8, worker em processo separado, e-mail por nodemailer                                               |
+| Arquivos        | S3 (`@aws-sdk/client-s3`) com URL assinada. RustFS no ambiente local                                                   |
+| Observabilidade | OpenTelemetry (HTTP, Express, pg, ioredis) por OTLP, Sentry para erros 5xx                                             |
+| Padrões         | `/api/v1`, erros RFC 9457, OpenAPI 3.1 gerado do Zod, `X-Request-Id`, limite por IP                                    |
 
 ## Requisitos
 
@@ -34,7 +38,9 @@ npm run dev
 ```
 
 - Portal web: http://localhost:5173 (escolha de perfil em `/`; rotas por perfil em [docs/frontend.md](docs/frontend.md))
-- API: http://localhost:3333/api/health (processo) e http://localhost:3333/api/ready (banco)
+- API: http://localhost:3333/api/health (processo) e http://localhost:3333/api/ready (Postgres e Redis)
+- Worker das filas: sobe junto no `npm run dev`. Os e-mails chegam ao Mailpit em http://localhost:8025
+- Traces: `docker compose --profile observabilidade up -d` e http://localhost:16686 ([docs/operacao/observabilidade.md](docs/operacao/observabilidade.md))
 - Documentação da API: http://localhost:3333/api/docs
 
 O Vite repassa `/api` para a porta 3333, então o portal chama `fetch('/api/v1/...')` sem configurar URL. Rotas de negócio ficam sob `/api/v1`; versionamento, erros e o OpenAPI estão em [docs/api](docs/api/README.md).
@@ -43,12 +49,12 @@ Em `localhost`, a API atende a escola de `DEV_ESCOLA_DOMINIO` (Colégio Recreio)
 
 ## Docker
 
-| Arquivo                                   | O que faz                                                                                                           |
-| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `docker-compose.yml`                      | Serviços do desenvolvimento: Postgres 5432 (`POSTGRES_PORT`), Redis 6379, Mailpit 1025 e 8025, RustFS 9000 e 9001.  |
-| `apps/api/Dockerfile`                     | Imagem da API: só dependências de produção, usuário `node`, healthcheck em `/api/health`.                           |
-| `apps/web/Dockerfile` e `apps/web/nginx/` | Imagem do portal: nginx sem root na porta 8080, fallback de SPA, cache e CSP, `/api` repassado para `API_UPSTREAM`. |
-| `compose.app.yml`                         | API e portal com as imagens de produção, ligados aos serviços acima.                                                |
+| Arquivo                                   | O que faz                                                                                                                                                    |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `docker-compose.yml`                      | Serviços do desenvolvimento: Postgres 5432 (`POSTGRES_PORT`), Redis 6379, Mailpit 1025 e 8025, RustFS 9000 e 9001. Jaeger 16686 no perfil `observabilidade`. |
+| `apps/api/Dockerfile`                     | Imagem da API: só dependências de produção, usuário `node`, healthcheck em `/api/health`.                                                                    |
+| `apps/web/Dockerfile` e `apps/web/nginx/` | Imagem do portal: nginx sem root na porta 8080, fallback de SPA, cache e CSP, `/api` repassado para `API_UPSTREAM`.                                          |
+| `compose.app.yml`                         | API, worker e portal com as imagens de produção, ligados aos serviços acima. O worker usa a imagem da API.                                                   |
 
 ```bash
 docker compose up -d                              # serviços do desenvolvimento
@@ -102,6 +108,7 @@ Cada aplicação tem a própria pasta `src/`. As camadas e as regras de importa�
 | `npm run format`                      | Prettier em todo o código fora de `prototipo/`.                                                   |
 | `npm run check`                       | Lint, typecheck, testes e build, na mesma ordem do CI.                                            |
 | `npm run openapi -w @recreio/api`     | Regrava `docs/api/openapi.json` a partir dos contratos.                                           |
+| `npm run dev:worker`                  | Sobe só o worker das filas.                                                                       |
 
 ## Portar uma tela do protótipo
 
@@ -113,4 +120,4 @@ Cada aplicação tem a própria pasta `src/`. As camadas e as regras de importa�
 
 ## Variáveis de ambiente
 
-A API lê `apps/api/.env` quando o arquivo existe e valida as variáveis com Zod ao subir. Copie `apps/api/.env.example` para começar. `RATE_LIMIT_PER_MINUTE` (padrão 300) limita as requisições por minuto por IP em `/api/v1`.
+A API e o worker leem `apps/api/.env` quando o arquivo existe e validam as variáveis com Zod ao subir. Copie `apps/api/.env.example` para começar. Fora de produção, Redis, SMTP e S3 apontam para o `docker-compose.yml` sem configuração. A tabela completa, com o que é obrigatório em produção, está em [docs/operacao/README.md](docs/operacao/README.md#variáveis-de-ambiente-da-api).

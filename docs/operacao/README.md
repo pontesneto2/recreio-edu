@@ -4,6 +4,9 @@ Como a API e o portal são empacotados, configurados e liberados. A hospedagem a
 
 - [ci-cd.md](ci-cd.md): workflows do GitHub Actions e proteção da `main`.
 - [runbook-local.md](runbook-local.md): serviços locais com Docker Compose.
+- [observabilidade.md](observabilidade.md): logs, traces (OpenTelemetry), erros (Sentry) e como ver traces localmente.
+- [filas.md](filas.md): filas BullMQ, worker, tentativas e como criar uma tarefa.
+- [armazenamento.md](armazenamento.md): bucket, chaves por escola e URLs assinadas.
 
 ## Ambientes
 
@@ -20,6 +23,7 @@ Staging e produção usam as mesmas imagens. Só as variáveis de ambiente mudam
 | Imagem | Dockerfile            | Base                                      | Porta | Usuário       | Healthcheck               |
 | ------ | --------------------- | ----------------------------------------- | ----- | ------------- | ------------------------- |
 | API    | `apps/api/Dockerfile` | `node:24-alpine`                          | 3333  | `node` (1000) | `GET /api/health`         |
+| Worker | `apps/api/Dockerfile` | A mesma imagem da API, outro comando      | não   | `node` (1000) | desligado                 |
 | Portal | `apps/web/Dockerfile` | `nginxinc/nginx-unprivileged:1.30-alpine` | 8080  | `nginx` (101) | `GET /healthz` (no nginx) |
 
 O build das 2 imagens parte da raiz do repositório, porque elas usam os workspaces de `packages/`:
@@ -35,10 +39,11 @@ O `.dockerignore` da raiz tira do contexto `node_modules`, `dist`, `.env`, `docs
 
 - O estágio `build` roda `npm ci` e `npm run build -w @recreio/api` (tsc para `dist/`).
 - O estágio `prod-deps` roda `npm ci --omit=dev -w @recreio/api`. Entram só as dependências de produção da API e de `@recreio/contracts`.
-- A imagem final tem `NODE_ENV=production`, roda `node dist/main.js` e os arquivos ficam com dono root, então o processo não altera o próprio código.
+- A imagem final tem `NODE_ENV=production`, roda `node --import ./dist/instrumentation.js dist/main.js` e os arquivos ficam com dono root, então o processo não altera o próprio código. O `--import` liga o OpenTelemetry antes do app ([observabilidade.md](observabilidade.md)).
+- O worker usa a mesma imagem com o comando `node --import ./dist/instrumentation.js dist/worker.js`. O serviço desliga o healthcheck da imagem, porque o worker não serve HTTP. Exemplo no serviço `worker` de `compose.app.yml`.
 - `@recreio/contracts` exporta os arquivos `.ts` de `src/`. O Node 24 remove os tipos de arquivos cujo caminho real fica fora de `node_modules`. O link `node_modules/@recreio/contracts` aponta para `/app/packages/contracts`, então o pacote roda sem compilação. O teste de fumaça confirmou com `GET /api/alunos/xyz`, que valida o id com o schema do pacote.
 - A pasta `apps/api/drizzle` (migrações) entra na imagem. O build cria a pasta vazia quando ela ainda não existe.
-- O `pino-http` registra cada chamada do healthcheck (a cada 15 s). Filtrar `/api/health` do log é uma mudança em `apps/api/src/app.ts`.
+- O `pino-http` não registra `/api/health` nem `/api/ready`, chamados pelo healthcheck a cada 15 s.
 
 ### Portal
 
@@ -55,44 +60,78 @@ O `.dockerignore` da raiz tira do contexto `node_modules`, `dist`, `.env`, `docs
 
 ### Rodar as imagens localmente
 
-`compose.app.yml` sobe a API e o portal com as imagens de produção, ligados aos serviços de `docker-compose.yml`:
+`compose.app.yml` sobe a API, o worker e o portal com as imagens de produção, ligados aos serviços de `docker-compose.yml`:
 
 ```bash
 docker compose -f compose.app.yml up --build
 ```
 
-O portal fica em http://localhost:8080 (mude com `WEB_PORT`). A API fica só na rede interna do Compose.
+O portal fica em http://localhost:8080 (mude com `WEB_PORT`). A API e o worker ficam só na rede interna do Compose.
 
 ## Variáveis de ambiente da API
 
-A API valida as variáveis com Zod em `apps/api/src/config/env.ts` ao subir. Variável inválida derruba o processo com a mensagem do Zod. Hoje o schema lê 4 variáveis. As demais estão em `apps/api/.env.example` e entram no schema junto com o módulo que as usa (banco, filas, e-mail, arquivos).
+A API e o worker validam as variáveis com Zod em `apps/api/src/config/env.ts` ao subir. Variável inválida derruba o processo com a mensagem do Zod. Fora de produção, as variáveis de serviço caem nos valores do `docker-compose.yml`. Em produção, as marcadas como obrigatórias derrubam o processo quando faltam. O modelo local está em `apps/api/.env.example`.
 
-| Variável                 | Padrão                  | No schema hoje | Uso                                                                          |
-| ------------------------ | ----------------------- | -------------- | ---------------------------------------------------------------------------- |
-| `NODE_ENV`               | `development`           | Sim            | `development`, `test` ou `production`. A imagem define `production`.         |
-| `PORT`                   | `3333`                  | Sim            | Porta HTTP da API.                                                           |
-| `CORS_ORIGIN`            | `http://localhost:5173` | Sim            | Origem do portal liberada no CORS. Precisa ser URL válida.                   |
-| `LOG_LEVEL`              | `info`                  | Sim            | Nível do pino: `fatal`, `error`, `warn`, `info`, `debug`, `trace`, `silent`. |
-| `DATABASE_URL`           | sem padrão              | Não            | Postgres com o usuário `recreio_app`, sujeito ao Row Level Security.         |
-| `DATABASE_MIGRATION_URL` | sem padrão              | Não            | Postgres com o dono das tabelas. Só para migrações. Segredo.                 |
-| `DEV_ESCOLA_DOMINIO`     | sem padrão              | Não            | Escola usada quando o portal roda em `localhost` (ADR 0006).                 |
-| `REDIS_URL`              | sem padrão              | Não            | Redis das filas BullMQ (ADR 0009).                                           |
-| `SMTP_URL`               | sem padrão              | Não            | Servidor de e-mail. Mailpit no ambiente local.                               |
-| `S3_ENDPOINT`            | sem padrão              | Não            | Endpoint compatível com S3 (ADR 0010). RustFS no ambiente local.             |
-| `S3_ACCESS_KEY`          | sem padrão              | Não            | Chave de acesso do S3. Segredo.                                              |
-| `S3_SECRET_KEY`          | sem padrão              | Não            | Chave secreta do S3. Segredo.                                                |
-| `S3_BUCKET`              | sem padrão              | Não            | Bucket de documentos e fotos.                                                |
+| Variável                      | Padrão fora de produção                   | Em produção                  | Uso                                                                                            |
+| ----------------------------- | ----------------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------- |
+| `NODE_ENV`                    | `development`                             | `production` (na imagem)     | `development`, `test` ou `production`.                                                         |
+| `PORT`                        | `3333`                                    | `3333`                       | Porta HTTP da API.                                                                             |
+| `CORS_ORIGIN`                 | `http://localhost:5173`                   | Origem do portal             | Origem liberada no CORS. Precisa ser URL válida.                                               |
+| `LOG_LEVEL`                   | `info`                                    | `info`                       | Nível do pino: `fatal`, `error`, `warn`, `info`, `debug`, `trace`, `silent`.                   |
+| `RATE_LIMIT_PER_MINUTE`       | `300`                                     | `300`                        | Requisições por minuto por IP em `/api/v1`. Desligado em `NODE_ENV=test`.                      |
+| `TRUST_PROXY`                 | `loopback`                                | Saltos de proxy (ver abaixo) | `trust proxy` do Express: define `req.ip` e o IP do limite de requisições.                     |
+| `DATABASE_URL`                | `recreio_app` em `localhost:5432`         | Obrigatória                  | Postgres com o usuário `recreio_app`, sujeito ao Row Level Security.                           |
+| `DATABASE_MIGRATION_URL`      | `recreio` em `localhost:5432`             | Obrigatória. Segredo         | Postgres com o dono das tabelas. Só para migrações e seed.                                     |
+| `DEV_ESCOLA_DOMINIO`          | `colegiorecreio.localhost`                | Ignorada                     | Escola usada quando o portal roda em `localhost` (ADR 0006).                                   |
+| `REDIS_URL`                   | `redis://localhost:6379` (vazia em teste) | Obrigatória                  | Redis das filas e do contador do limite (ADR 0009). Sem ela, o limite fica em memória.         |
+| `WORKER_CONCURRENCY`          | `5`                                       | `5`                          | Tarefas por fila que o worker processa ao mesmo tempo.                                         |
+| `SMTP_URL`                    | `smtp://localhost:1025`                   | Obrigatória. Segredo         | Servidor de e-mail. Mailpit no ambiente local.                                                 |
+| `EMAIL_FROM`                  | `Recreio <nao-responda@recreio.app>`      | Remetente verificado         | Remetente dos e-mails.                                                                         |
+| `S3_ENDPOINT`                 | `http://localhost:9000`                   | Vazia na AWS                 | Endpoint compatível com S3 (ADR 0010). RustFS no ambiente local.                               |
+| `S3_PUBLIC_ENDPOINT`          | sem padrão                                | Opcional                     | Endpoint das URLs assinadas entregues ao navegador. Sem valor, vale `S3_ENDPOINT`.             |
+| `S3_REGION`                   | `us-east-1`                               | Região do bucket             | Região do S3.                                                                                  |
+| `S3_ACCESS_KEY`               | `recreio`                                 | Opcional. Segredo            | Chave de acesso. Sem ela, o SDK usa a cadeia padrão de credenciais.                            |
+| `S3_SECRET_KEY`               | `recreio-storage`                         | Opcional. Segredo            | Chave secreta.                                                                                 |
+| `S3_BUCKET`                   | `recreio`                                 | Obrigatória                  | Bucket de documentos e fotos.                                                                  |
+| `S3_FORCE_PATH_STYLE`         | `true` quando há `S3_ENDPOINT`            | `false` na AWS               | URL `endpoint/bucket/chave`, exigida pelo RustFS.                                              |
+| `S3_URL_TTL_SECONDS`          | `300`                                     | `300`                        | Validade das URLs assinadas, de 30 a 3600 segundos.                                            |
+| `OTEL_SDK_DISABLED`           | `false` (`true` nos testes)               | `false`                      | Desliga o OpenTelemetry.                                                                       |
+| `OTEL_SERVICE_NAME`           | `recreio-api` ou `recreio-worker`         | Opcional                     | Nome do serviço nos traces.                                                                    |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | `http://localhost:4318` (padrão do SDK)   | Coletor da hospedagem        | Destino OTLP dos traces. As demais `OTEL_*` estão em [observabilidade.md](observabilidade.md). |
+| `SENTRY_DSN`                  | sem padrão                                | Recomendada                  | Projeto do Sentry. Sem ela, nenhum erro sai para o Sentry.                                     |
+| `SENTRY_ENVIRONMENT`          | valor de `NODE_ENV`                       | `staging` ou `production`    | Ambiente mostrado no Sentry.                                                                   |
 
 No portal, a única variável de execução é `API_UPSTREAM`, lida pelo nginx.
 
+### TRUST_PROXY em produção
+
+O Express só lê `X-Forwarded-For` de proxies confiáveis. Com o valor errado, `req.ip` vira o IP do proxy e todos os clientes dividem a mesma cota do limite de requisições, ou um cliente forja o próprio IP.
+
+| Topologia                                              | Valor         |
+| ------------------------------------------------------ | ------------- |
+| Desenvolvimento (Vite repassa `/api` em `localhost`)   | `loopback`    |
+| `compose.app.yml` (nginx do portal em outro container) | `uniquelocal` |
+| Balanceador da hospedagem na frente da API             | `1`           |
+| Balanceador e nginx do portal na frente da API         | `2`           |
+
+O número conta os saltos a partir da API. Use o número da topologia real depois do ADR 0011. `true` confia em qualquer origem e não deve ir para produção.
+
 ## Health e ready
 
-| Rota          | Situação | Responde 200 quando                                           | Uso                                                                                                                   |
-| ------------- | -------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `/api/health` | Existe   | O processo Node atende HTTP                                   | Healthcheck da imagem e liveness. Não consulta o banco.                                                               |
-| `/api/ready`  | Existe   | Postgres responde a `select 1`. Redis entra quando a API usar | Readiness: o balanceador só manda tráfego com 200 aqui. Responde 503 `{ "status": "indisponivel" }` com o banco fora. |
+| Rota          | Responde 200 quando                                      | Uso                                                                 |
+| ------------- | -------------------------------------------------------- | ------------------------------------------------------------------- |
+| `/api/health` | O processo Node atende HTTP                              | Healthcheck da imagem e liveness. Não consulta dependências.        |
+| `/api/ready`  | Postgres responde a `select 1` e Redis responde a `PING` | Readiness: o balanceador só manda tráfego com 200 aqui. Senão, 503. |
 
-O liveness reinicia o container quando falha. Por isso ele não depende do banco: uma queda do Postgres reiniciaria todas as instâncias da API sem resolver nada. O readiness tira a instância do balanceador até o banco voltar.
+O corpo de `/api/ready` diz qual dependência falhou. Cada verificação tem 3 s de limite e as 2 rodam em paralelo:
+
+```json
+{ "status": "indisponivel", "dependencias": { "postgres": "ok", "redis": "indisponivel" } }
+```
+
+Cada dependência vale `ok`, `indisponivel` ou `desligado` (não configurada no processo, só nos testes sem Redis). O motivo da falha vai só para o log (`dependência indisponível`).
+
+O liveness reinicia o container quando falha. Por isso ele não depende do banco nem do Redis: uma queda do Postgres reiniciaria todas as instâncias da API sem resolver nada. O readiness tira a instância do balanceador até a dependência voltar.
 
 ## Release
 

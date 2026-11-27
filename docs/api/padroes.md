@@ -33,6 +33,7 @@ Regras que todo endpoint segue. A decisão está na [ADR 0008](../adr/0008-padro
 | `401`  | Sem sessão válida (planejado, com o login)                       |
 | `403`  | Sessão sem permissão para a ação (planejado)                     |
 | `404`  | Recurso ou rota não existe (`NAO_ENCONTRADO`)                    |
+| `413`  | Corpo acima de 1 MB (`CORPO_GRANDE_DEMAIS`)                      |
 | `409`  | Conflito de estado, como matrícula duplicada (planejado)         |
 | `422`  | Entrada válida no schema que quebra regra de negócio (planejado) |
 | `429`  | Limite de requisições excedido (`LIMITE_EXCEDIDO`)               |
@@ -68,14 +69,17 @@ Uma falha fora de campo, como corpo que não é objeto, usa a chave `$` em `erro
 
 ### Tipos de problema
 
-| `code`            | Status | `type`                                          | `title`                        |
-| ----------------- | ------ | ----------------------------------------------- | ------------------------------ |
-| `DADOS_INVALIDOS` | 400    | `https://recreio.app/problemas/dados-invalidos` | Dados inválidos                |
-| `NAO_ENCONTRADO`  | 404    | `https://recreio.app/problemas/nao-encontrado`  | Recurso não encontrado         |
-| `LIMITE_EXCEDIDO` | 429    | `https://recreio.app/problemas/limite-excedido` | Limite de requisições excedido |
-| `ERRO_INTERNO`    | 500    | `https://recreio.app/problemas/erro-interno`    | Erro interno                   |
+| `code`                | Status | `type`                                              | `title`                           |
+| --------------------- | ------ | --------------------------------------------------- | --------------------------------- |
+| `DADOS_INVALIDOS`     | 400    | `https://recreio.app/problemas/dados-invalidos`     | Dados inválidos                   |
+| `NAO_ENCONTRADO`      | 404    | `https://recreio.app/problemas/nao-encontrado`      | Recurso não encontrado            |
+| `CORPO_GRANDE_DEMAIS` | 413    | `https://recreio.app/problemas/corpo-grande-demais` | Corpo da requisição grande demais |
+| `LIMITE_EXCEDIDO`     | 429    | `https://recreio.app/problemas/limite-excedido`     | Limite de requisições excedido    |
+| `ERRO_INTERNO`        | 500    | `https://recreio.app/problemas/erro-interno`        | Erro interno                      |
 
 Um código novo entra em 3 lugares: `problemCodeSchema` em `packages/contracts/src/problem.ts`, o catálogo em `apps/api/src/shared/errors/problem-types.ts` e o exemplo em `shared/openapi/problem-responses.ts`. O typecheck falha se o catálogo ficar sem o código.
+
+Corpo JSON malformado responde 400 `DADOS_INVALIDOS` com `detail` "O corpo da requisição não é JSON válido.". Corpo acima de 1 MB (limite do `express.json` em `app.ts`) responde 413 `CORPO_GRANDE_DEMAIS` com o limite no `detail`. No OpenAPI, o montador acrescenta a resposta 413 em toda operação com `requestBody`.
 
 No código, o service lança `NotFoundError`, `ValidationError` ou `TooManyRequestsError`. O `errorHandler` converte em problem+json. Erro que não é `AppError` vira `ERRO_INTERNO` e vai para o log com o `X-Request-Id`.
 
@@ -120,7 +124,9 @@ A tabela fica no PostgreSQL, na mesma transação do efeito. O envio externo (e-
 - Acima do limite a resposta é `429` com `LIMITE_EXCEDIDO` e `Retry-After` em segundos.
 - Em `NODE_ENV=test` o limite fica desligado. Um teste liga com `createApp(container, { rateLimitPerMinute: 2 })`.
 
-O contador fica na memória do processo. Com mais de uma instância, o contador passa para o Redis (`rate-limit-redis`). Atrás de proxy, `app.set('trust proxy', ...)` precisa apontar o número de saltos, senão todos os clientes contam como o IP do proxy. O limite por usuário entra com o login.
+Com `REDIS_URL`, o contador fica no Redis (`rate-limit-redis`, chaves `recreio:limite:*`) e vale para todas as instâncias da API. Sem Redis (testes), ele fica na memória do processo. Com o Redis fora do ar, a requisição passa sem contar (`passOnStoreError`), porque derrubar a API por falta do contador custa mais que alguns minutos sem limite.
+
+O IP vem de `req.ip`, que respeita `TRUST_PROXY` (`app.set('trust proxy', ...)`). O padrão `loopback` confia só no proxy do Vite em `localhost`. Em produção o valor é o número de saltos de proxy, senão todos os clientes contam como o IP do balanceador. A tabela por topologia está em [operacao/README.md](../operacao/README.md#trust_proxy-em-produção). O limite por usuário entra com o login.
 
 ## X-Request-Id
 
