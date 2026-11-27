@@ -108,7 +108,7 @@ Operação documentada em [operacao/](operacao/README.md).
 
 - [x] Testes de integração da API contra Postgres real com Testcontainers.
 - MSW para simular a API nos testes do portal.
-- Playwright para testes de ponta a ponta dos fluxos principais.
+- Playwright para testes de ponta a ponta dos fluxos principais. A base já roda no CI para o portal sem login (`apps/web/e2e`, job `e2e`). Falta cobrir login e dados reais da API.
 
 Critério de pronto: alguém entra no portal em staging com um usuário de teste, vê só os dados da própria escola, e um erro forçado aparece no Sentry com o rastreamento completo.
 
@@ -124,9 +124,11 @@ Feito sem autenticação: até a fase 1 entregar o login, `/` mostra a escolha d
 - [ ] Dados das telas visitadas disponíveis sem conexão (hoje `/api/` é só rede) e convite de instalação próprio (`Celular-Instalar`).
 - [x] Estados de tela padronizados: vazio, erro e carregando com `QueryState` (`Familia-Estados`, `Escola-Estados`).
 - [x] Storybook do design system com o addon de acessibilidade (axe).
-- [ ] Teste de acessibilidade e comparação visual por screenshot rodando em cada pull request.
+- [x] Teste de acessibilidade em cada pull request: axe nas telas do e2e (Playwright) e em cada história do Storybook, Lighthouse em `/` e `/escola` com acessibilidade e boas práticas a partir de 0,9 (jobs `e2e`, `storybook` e `lighthouse`).
+- [x] Páginas sob demanda: arquivo principal do portal de 629 kB para 34 kB, sem o aviso de tamanho do Vite.
+- [ ] Comparação visual por screenshot em cada pull request. Ainda não existe: falta decidir onde guardar as imagens de referência e em qual sistema operacional gerá-las, porque a fonte renderiza diferente no Windows e no Linux.
 
-Critério de pronto: os 4 perfis navegam no celular e no desktop com a marca da escola, e o Lighthouse dá 90 ou mais em acessibilidade e PWA.
+Critério de pronto: os 4 perfis navegam no celular e no desktop com a marca da escola, e o Lighthouse dá 90 ou mais em acessibilidade. O Lighthouse 12 tirou a categoria PWA; manifesto, service worker e abertura sem conexão são conferidos por `e2e/pwa.spec.ts`. Notas atuais: acessibilidade 0,98 e boas práticas 1,00 em `/` e `/escola`.
 
 ## Fase 3. Cadastro escolar
 
