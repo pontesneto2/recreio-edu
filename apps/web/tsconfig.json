@@ -9,7 +9,7 @@
     "jsx": "react-jsx",
     "noEmit": true,
     "paths": { "@/*": ["./src/*"] },
-    "types": ["node", "vite/client", "vitest/globals", "@testing-library/jest-dom/vitest"]
+    "types": ["node", "vite/client", "vite-plugin-pwa/react", "vitest/globals", "@testing-library/jest-dom/vitest"]
   },
-  "include": ["src", "vite.config.ts"]
+  "include": ["src", "scripts", "vite.config.ts"]
 }

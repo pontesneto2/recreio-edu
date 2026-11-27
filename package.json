@@ -16,6 +16,8 @@
     "dev:api": "npm run dev -w @recreio/api",
     "dev:web": "npm run dev -w @recreio/web",
     "prototipo": "serve prototipo/visualizar -l 5000",
+    "storybook": "npm run storybook -w @recreio/design-system",
+    "build-storybook": "npm run build-storybook -w @recreio/design-system",
     "build": "npm run build --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",

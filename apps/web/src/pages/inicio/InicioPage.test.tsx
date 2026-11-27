@@ -17,7 +17,7 @@ const alunos = [
 describe('InicioPage', () => {
   test('mostra unidades e alunos vindos da API', async () => {
     mockApi({ '/api/v1/escola': escola, '/api/v1/alunos': alunos });
-    renderRoute('/');
+    renderRoute('/escola');
 
     expect(await screen.findByText('Davi Lima')).toBeInTheDocument();
     expect(screen.getByText('Alunos · Unidade Aldeota')).toBeInTheDocument();
@@ -25,8 +25,23 @@ describe('InicioPage', () => {
 
   test('avisa quando a API de alunos falha', async () => {
     mockApi({ '/api/v1/escola': escola });
-    renderRoute('/');
+    renderRoute('/escola');
 
     expect(await screen.findByText('Não conseguimos carregar os alunos')).toBeInTheDocument();
+  });
+
+  test('avisa quando a API da escola falha', async () => {
+    mockApi({ '/api/v1/alunos': alunos });
+    renderRoute('/escola');
+
+    expect(await screen.findByText('Não conseguimos carregar as unidades')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Tentar de novo' })).toBeInTheDocument();
+  });
+
+  test('mostra o estado vazio quando a escola não tem unidade', async () => {
+    mockApi({ '/api/v1/escola': { ...escola, unidades: [] }, '/api/v1/alunos': alunos });
+    renderRoute('/escola');
+
+    expect(await screen.findByText('Nenhuma unidade cadastrada')).toBeInTheDocument();
   });
 });
