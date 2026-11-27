@@ -79,13 +79,17 @@ Objetivo: qualquer funcionalidade nova já nasce com banco, login, permissão, l
 
 ### DevOps
 
-- Docker Compose local com Postgres, Redis, Mailpit (e-mail) e RustFS (arquivos compatíveis com S3).
-- Dockerfile multi-stage da API, imagem sem root e com healthcheck.
-- 3 ambientes: desenvolvimento, staging e produção. Hospedagem por ADR.
-- Deploy automático em staging a cada merge na `main`. Produção por tag de versão.
-- Ambiente de preview por pull request para o portal.
-- Migrações rodando no pipeline antes do deploy, sempre compatíveis com a versão anterior.
-- Segredos no gerenciador da hospedagem, nunca no repositório.
+Operação documentada em [operacao/](operacao/README.md).
+
+- [x] Docker Compose local com Postgres, Redis, Mailpit (e-mail) e RustFS (arquivos compatíveis com S3).
+- [x] Dockerfile multi-stage da API, imagem sem root e com healthcheck.
+- [x] Imagem do portal em nginx sem root, com CSP, cache por tipo de arquivo e `/api` repassado para a API.
+- [x] CI constrói as 2 imagens a cada pull request. CodeQL e `npm audit` rodam no CI.
+- [ ] 3 ambientes: desenvolvimento, staging e produção. Hospedagem por ADR. O plano está em `operacao/README.md`; falta o ADR 0011.
+- [ ] Deploy automático em staging a cada merge na `main`. Produção por tag de versão.
+- [ ] Ambiente de preview por pull request para o portal.
+- [ ] Migrações rodando no pipeline antes do deploy, sempre compatíveis com a versão anterior.
+- [ ] Segredos no gerenciador da hospedagem, nunca no repositório.
 
 ### Testes
 

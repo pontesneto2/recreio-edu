@@ -4,26 +4,29 @@ Portal web em React e API em Node para o Recreio. O protótipo com as 173 telas 
 
 ## Stack
 
-| Camada     | Tecnologia                                                                        |
-| ---------- | --------------------------------------------------------------------------------- |
-| Linguagem  | TypeScript 6 em todo o código, modo strict                                        |
-| Portal     | React 19, React Compiler, Vite 8, React Router 8, TanStack Query 5                |
-| API        | Node 24 executando TypeScript nativo, Express 5                                   |
-| Contratos  | Zod 4, schemas compartilhados entre API e portal em `@recreio/contracts`          |
-| Testes     | Vitest e Testing Library no portal, `node --test` na API                          |
-| Qualidade  | ESLint 10, typescript-eslint, Prettier, Husky, lint-staged, commitlint            |
-| CI         | GitHub Actions com format, lint, typecheck, testes e build em cada push e PR      |
-| API extras | pino (logs estruturados), helmet (cabeçalhos de segurança), desligamento gracioso |
+| Camada     | Tecnologia                                                                          |
+| ---------- | ----------------------------------------------------------------------------------- |
+| Linguagem  | TypeScript 6 em todo o código, modo strict                                          |
+| Portal     | React 19, React Compiler, Vite 8, React Router 8, TanStack Query 5                  |
+| API        | Node 24 executando TypeScript nativo, Express 5                                     |
+| Contratos  | Zod 4, schemas compartilhados entre API e portal em `@recreio/contracts`            |
+| Testes     | Vitest e Testing Library no portal, `node --test` na API                            |
+| Qualidade  | ESLint 10, typescript-eslint, Prettier, Husky, lint-staged, commitlint              |
+| CI         | GitHub Actions: auditoria, format, lint, typecheck, testes, build, imagens e CodeQL |
+| Imagens    | Docker multi-stage: API em `node:24-alpine`, portal em nginx sem root               |
+| API extras | pino (logs estruturados), helmet (cabeçalhos de segurança), desligamento gracioso   |
 
 ## Requisitos
 
 - Node 24 ou mais novo (`.nvmrc` aponta 24). A API roda os arquivos `.ts` direto no Node, sem etapa de compilação no desenvolvimento.
 - npm 11 ou mais novo.
+- Docker Desktop (ou Docker Engine) com Compose 2.20 ou mais novo, para Postgres, Redis, Mailpit e RustFS.
 
 ## Primeiros passos
 
 ```bash
 npm install
+docker compose up -d
 npm run dev
 ```
 
@@ -31,6 +34,23 @@ npm run dev
 - API: http://localhost:3333/api/health
 
 O Vite repassa `/api` para a porta 3333, então o portal chama `fetch('/api/...')` sem configurar URL.
+
+## Docker
+
+| Arquivo                                   | O que faz                                                                                                           |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `docker-compose.yml`                      | Serviços do desenvolvimento: Postgres 5432, Redis 6379, Mailpit 1025 e 8025, RustFS 9000 e 9001.                    |
+| `apps/api/Dockerfile`                     | Imagem da API: só dependências de produção, usuário `node`, healthcheck em `/api/health`.                           |
+| `apps/web/Dockerfile` e `apps/web/nginx/` | Imagem do portal: nginx sem root na porta 8080, fallback de SPA, cache e CSP, `/api` repassado para `API_UPSTREAM`. |
+| `compose.app.yml`                         | API e portal com as imagens de produção, ligados aos serviços acima.                                                |
+
+```bash
+docker compose up -d                              # serviços do desenvolvimento
+docker compose -f compose.app.yml up --build      # imagens de produção, portal em http://localhost:8080
+docker compose down                               # para tudo, mantém os dados
+```
+
+Portas, reset de dados e problemas comuns: [docs/operacao/runbook-local.md](docs/operacao/runbook-local.md). Imagens, variáveis e release: [docs/operacao](docs/operacao/README.md).
 
 ## Ver as telas do protótipo
 
