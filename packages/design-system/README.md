@@ -1,6 +1,6 @@
 # @recreio/design-system
 
-Componentes React do Sistema Recreio em TypeScript. O código veio de `prototipo/design-system/fonte`.
+Componentes React do Sistema Recreio em TypeScript, com as telas de referência em `prototipo/`.
 
 ## Uso
 
