@@ -1,0 +1,26 @@
+# Contexto de build das imagens: só o que a API e o portal precisam.
+**/node_modules
+**/dist
+**/coverage
+**/*.tsbuildinfo
+**/*.log
+
+# Segredos e configuração local nunca entram na imagem.
+**/.env
+**/.env.*
+!**/.env.example
+
+.git
+.github
+.husky
+.vscode
+.idea
+docs
+infra
+prototipo
+**/.DS_Store
+**/Thumbs.db
+compose*.yml
+docker-compose*.yml
+**/Dockerfile
+.dockerignore
