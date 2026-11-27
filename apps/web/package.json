@@ -10,7 +10,8 @@
     "typecheck": "tsc -b",
     "test": "vitest run",
     "test:watch": "vitest",
-    "icones": "node scripts/gerar-icones.ts"
+    "icones": "node scripts/gerar-icones.ts",
+    "test:e2e": "npm run build && playwright test"
   },
   "dependencies": {
     "@recreio/contracts": "*",

@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import type { Plugin } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { defineConfig } from 'vitest/config';
+import { apiFalsa } from './e2e/api-falsa.ts';
 
 const TOKENS = readFileSync(
   fileURLToPath(new URL('../../packages/design-system/src/tokens.css', import.meta.url)),
@@ -27,11 +28,13 @@ const corDoTemaNoHtml = (): Plugin => ({
   transformIndexHtml: () => [{ tag: 'meta', attrs: { name: 'theme-color', content: COR_DO_TEMA }, injectTo: 'head' }],
 });
 
-export default defineConfig({
+// `--mode api-falsa` (só no `vite preview` do e2e e do Lighthouse) troca a API por respostas fixas.
+export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     babel({ presets: [reactCompilerPreset()] }),
     corDoTemaNoHtml(),
+    mode === 'api-falsa' && apiFalsa(),
     VitePWA({
       registerType: 'prompt',
       strategies: 'generateSW',
@@ -99,8 +102,10 @@ export default defineConfig({
   },
   test: {
     globals: true,
+    // e2e/ é do Playwright, fora do Vitest.
+    include: ['src/**/*.test.{ts,tsx}'],
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     css: false,
   },
-});
+}));
