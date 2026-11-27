@@ -109,14 +109,19 @@ Operação documentada em [operacao/](operacao/README.md).
 
 Critério de pronto: alguém entra no portal em staging com um usuário de teste, vê só os dados da própria escola, e um erro forçado aparece no Sentry com o rastreamento completo.
 
-## Fase 2. Casca do portal por perfil e PWA
+## Fase 2. Casca do portal por perfil e PWA (em andamento)
 
-- Layout por perfil: família, aluno, professor e escola, cada um com o próprio menu lateral (`SideNav`) e barra inferior no celular (`TabBar`, telas `Celular-Hoje` e `Celular-Mais`).
-- Tema da escola aplicado pelo `SchoolTheme` a partir da cor e logo cadastradas.
-- Preferências de acessibilidade: tamanho de texto, fonte legível, movimento reduzido, alto contraste (`Familia-Preferencias`).
-- PWA instalável com Workbox: ícone, tela de abertura, cache das telas visitadas (`Celular-Instalar`, `Celular-Offline`).
-- Estados de tela padronizados: vazio, erro e carregando (`Familia-Estados`, `Escola-Estados`).
-- Storybook do design system, com teste de acessibilidade (axe) e comparação visual por screenshot em cada pull request.
+Feito sem autenticação: até a fase 1 entregar o login, `/` mostra a escolha de perfil. Detalhes em [frontend.md](frontend.md).
+
+- [x] Layout por perfil: família, aluno, professor e escola, cada um com o próprio menu lateral (`SideNav`) e barra inferior no celular (`TabBar`, telas `Celular-Hoje` e `Celular-Mais`). Itens sem tela abrem "Em construção".
+- [x] Tema da escola aplicado pelo `SchoolTheme` a partir da cor cadastrada (`corMarca` de `/api/v1/escola`).
+- [ ] Logo da escola no menu e no manifesto, vinda do cadastro.
+- [x] Preferências de acessibilidade: tamanho de texto, fonte legível, movimento reduzido, alto contraste (`Familia-Preferencias`). Hoje salvas no navegador; passam para a conta com o login.
+- [x] PWA instalável com Workbox: manifesto, ícones, tela de abertura, casca do portal salva para abrir sem conexão, aviso de versão nova e tela `/sem-internet` (`Celular-Offline`).
+- [ ] Dados das telas visitadas disponíveis sem conexão (hoje `/api/` é só rede) e convite de instalação próprio (`Celular-Instalar`).
+- [x] Estados de tela padronizados: vazio, erro e carregando com `QueryState` (`Familia-Estados`, `Escola-Estados`).
+- [x] Storybook do design system com o addon de acessibilidade (axe).
+- [ ] Teste de acessibilidade e comparação visual por screenshot rodando em cada pull request.
 
 Critério de pronto: os 4 perfis navegam no celular e no desktop com a marca da escola, e o Lighthouse dá 90 ou mais em acessibilidade e PWA.
 

@@ -84,19 +84,25 @@ Cada módulo declara as próprias operações em `<dominio>.openapi.ts`. `src/op
 src/
 ├── main.tsx                 Ponto de entrada
 ├── app/
-│   ├── providers.tsx        TanStack Query e tema da escola
-│   └── router.tsx           Rotas (React Router, modo data)
+│   ├── providers.tsx        TanStack Query, tema da escola e preferências salvas
+│   └── router.tsx           Rotas por perfil (React Router, modo data)
 ├── pages/<pagina>/          Uma pasta por rota; compõe features
 ├── features/<dominio>/
 │   ├── api/                 queryOptions do TanStack Query
 │   ├── components/          Componentes do domínio
+│   ├── hooks/               Hooks do domínio (useEscolaTema)
 │   └── index.ts             API pública da feature
 ├── shared/
 │   ├── api/                 Cliente HTTP e QueryClient
-│   ├── config/              Menu lateral
-│   └── layout/              Casca do portal (AppShell + SideNav)
+│   ├── config/navigation/   Menu de cada perfil (familia, aluno, professor, escola)
+│   ├── layout/              Cascas: PerfilLayout (SideNav + TabBar) e AvulsaLayout
+│   ├── preferencias/        Preferências de acessibilidade salvas no navegador
+│   ├── pwa/                 Aviso de versão nova, conexão e faixa "Sem internet"
+│   └── ui/                  QueryState e lista de links
 └── test/                    Setup do Vitest e helpers de renderização
 ```
+
+O portal tem uma casca por perfil (`/familia`, `/aluno`, `/professor`, `/escola`), montada a partir do menu em `shared/config/navigation`. Item do menu sem tela pronta abre "Em construção". Até existir login, `/` mostra a escolha de perfil. O portal é um PWA: o service worker guarda a casca para abrir sem conexão e nunca guarda resposta de `/api/`. Rotas, PWA, tema e Storybook estão em [frontend.md](frontend.md).
 
 Regras de importação:
 
@@ -115,14 +121,14 @@ Cada recurso tem um schema Zod e o tipo derivado dele (`Aluno = z.infer<typeof a
 
 ## Design system (`packages/design-system`)
 
-Componentes do protótipo convertidos para TypeScript. As props de cada componente estão em `src/types.ts`. Estilos vêm de `tokens.css` (variáveis) e `recreio.css` (classes `rc-*`). Telas novas usam esses componentes e tokens; cor, tamanho e duração não são escritos à mão.
+Componentes do protótipo convertidos para TypeScript. As props de cada componente estão em `src/types.ts`. Estilos vêm de `tokens.css` (variáveis) e `recreio.css` (classes `rc-*`). Telas novas usam esses componentes e tokens; cor, tamanho e duração não são escritos à mão. O Storybook do pacote (`npm run storybook`) mostra os componentes nos 4 temas, com verificação de acessibilidade pelo axe.
 
 ## Testes
 
-| Onde   | Ferramenta              | O que cobre                                                |
-| ------ | ----------------------- | ---------------------------------------------------------- |
-| API    | `node --test`           | Services com repositório em memória; HTTP de ponta a ponta |
-| Portal | Vitest, Testing Library | Páginas renderizadas com rota real e `fetch` simulado      |
+| Onde   | Ferramenta              | O que cobre                                                    |
+| ------ | ----------------------- | -------------------------------------------------------------- |
+| API    | `node --test`           | Services com repositório em memória; HTTP de ponta a ponta     |
+| Portal | Vitest, Testing Library | Páginas e cascas renderizadas com rota real e `fetch` simulado |
 
 ## Qualidade
 

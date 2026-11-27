@@ -37,5 +37,5 @@ Tipos aceitos: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `buil
 
 1. Consulta em `apps/web/src/features/<dominio>/api/<dominio>.queries.ts`.
 2. Componentes em `features/<dominio>/components`, exportados no `index.ts` da feature.
-3. Página em `pages/<pagina>/<Pagina>Page.tsx` e rota em `app/router.tsx`.
+3. Página em `pages/<pagina>/<Pagina>Page.tsx`, registrada em `TELAS_PRONTAS` de `app/router.tsx` pelo href do item em `shared/config/navigation/<perfil>.ts`. Carregando, vazio e erro passam pelo `QueryState` de `shared/ui`.
 4. Teste da página com `renderRoute` e `mockApi` de `src/test/render.tsx`.

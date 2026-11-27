@@ -31,7 +31,7 @@ docker compose up -d
 npm run dev
 ```
 
-- Portal web: http://localhost:5173
+- Portal web: http://localhost:5173 (escolha de perfil em `/`; rotas por perfil em [docs/frontend.md](docs/frontend.md))
 - API: http://localhost:3333/api/health
 - Documentação da API: http://localhost:3333/api/docs
 
@@ -79,18 +79,20 @@ Cada aplicação tem a própria pasta `src/`. As camadas e as regras de importa�
 
 ## Scripts da raiz
 
-| Script                                | O que faz                                                 |
-| ------------------------------------- | --------------------------------------------------------- |
-| `npm run dev`                         | Sobe API e portal juntos.                                 |
-| `npm run dev:api` / `npm run dev:web` | Sobe só um dos dois.                                      |
-| `npm run prototipo`                   | Serve `prototipo/visualizar` na porta 5000.               |
-| `npm run build`                       | Compila API (`apps/api/dist`) e portal (`apps/web/dist`). |
-| `npm run typecheck`                   | Roda o TypeScript em todos os pacotes.                    |
-| `npm test`                            | Roda os testes da API e do portal.                        |
-| `npm run lint`                        | ESLint em todo o código fora de `prototipo/`.             |
-| `npm run format`                      | Prettier em todo o código fora de `prototipo/`.           |
-| `npm run check`                       | Lint, typecheck, testes e build, na mesma ordem do CI.    |
-| `npm run openapi -w @recreio/api`     | Regrava `docs/api/openapi.json` a partir dos contratos.   |
+| Script                                | O que faz                                                               |
+| ------------------------------------- | ----------------------------------------------------------------------- |
+| `npm run dev`                         | Sobe API e portal juntos.                                               |
+| `npm run dev:api` / `npm run dev:web` | Sobe só um dos dois.                                                    |
+| `npm run prototipo`                   | Serve `prototipo/visualizar` na porta 5000.                             |
+| `npm run storybook`                   | Storybook do design system na porta 6006.                               |
+| `npm run build-storybook`             | Gera o Storybook estático em `packages/design-system/storybook-static`. |
+| `npm run build`                       | Compila API (`apps/api/dist`) e portal (`apps/web/dist`).               |
+| `npm run typecheck`                   | Roda o TypeScript em todos os pacotes.                                  |
+| `npm test`                            | Roda os testes da API e do portal.                                      |
+| `npm run lint`                        | ESLint em todo o código fora de `prototipo/`.                           |
+| `npm run format`                      | Prettier em todo o código fora de `prototipo/`.                         |
+| `npm run check`                       | Lint, typecheck, testes e build, na mesma ordem do CI.                  |
+| `npm run openapi -w @recreio/api`     | Regrava `docs/api/openapi.json` a partir dos contratos.                 |
 
 ## Portar uma tela do protótipo
 
@@ -98,7 +100,7 @@ Cada aplicação tem a própria pasta `src/`. As camadas e as regras de importa�
 2. Leia o `.dc.html` correspondente em `prototipo/telas-fonte`. A marcação usa `Recreio.<Componente>`; cada um existe em `@recreio/design-system` com o mesmo nome.
 3. Descreva os dados de `renderVals()` como schema Zod em `packages/contracts`.
 4. Crie o módulo em `apps/api/src/modules/<dominio>`, com as operações em `<dominio>.openapi.ts`, e a consulta em `apps/web/src/features/<dominio>/api`.
-5. Crie a página em `apps/web/src/pages` e a rota em `apps/web/src/app/router.tsx`.
+5. Crie a página em `apps/web/src/pages` e registre-a pelo href do item do menu em `TELAS_PRONTAS` de `apps/web/src/app/router.tsx` ([docs/frontend.md](docs/frontend.md)).
 
 ## Variáveis de ambiente
 
