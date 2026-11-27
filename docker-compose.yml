@@ -1,0 +1,53 @@
+name: recreio
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: recreio
+      POSTGRES_USER: recreio
+      POSTGRES_PASSWORD: recreio
+      APP_DB_PASSWORD: recreio_app
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./infra/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U recreio -d recreio']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:8-alpine
+    ports:
+      - '6379:6379'
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - '1025:1025'
+      - '8025:8025'
+
+  # Armazenamento compatível com S3 para documentos e fotos.
+  storage:
+    image: rustfs/rustfs:latest
+    environment:
+      RUSTFS_ACCESS_KEY: recreio
+      RUSTFS_SECRET_KEY: recreio-storage
+      RUSTFS_CONSOLE_ENABLE: true
+    ports:
+      - 9000:9000
+      - 9001:9001
+    volumes:
+      - storage-data:/data
+
+volumes:
+  postgres-data:
+  storage-data:

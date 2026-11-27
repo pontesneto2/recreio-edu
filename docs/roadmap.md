@@ -79,7 +79,7 @@ Objetivo: qualquer funcionalidade nova já nasce com banco, login, permissão, l
 
 ### DevOps
 
-- Docker Compose local com Postgres, Redis, Mailpit (e-mail) e MinIO (arquivos).
+- Docker Compose local com Postgres, Redis, Mailpit (e-mail) e RustFS (arquivos compatíveis com S3).
 - Dockerfile multi-stage da API, imagem sem root e com healthcheck.
 - 3 ambientes: desenvolvimento, staging e produção. Hospedagem por ADR.
 - Deploy automático em staging a cada merge na `main`. Produção por tag de versão.
@@ -216,15 +216,17 @@ Esta fase começa junto com a fase 1 e não termina.
 - Definição de pronto: CI verde, revisão de código, tela conferida contra `prototipo/visualizar`, deploy em staging.
 - Versões com tags semânticas e changelog gerado dos commits.
 
-## Decisões pendentes
+## Decisões
 
-| ADR | Decisão                          | Proposta inicial                   |
-| --- | -------------------------------- | ---------------------------------- |
-| 5   | Banco e ORM                      | PostgreSQL 17 com Drizzle          |
-| 6   | Modelo multi-tenant              | `escola_id` com Row Level Security |
-| 7   | Autenticação                     | Better Auth com sessão em cookie   |
-| 8   | Hospedagem e ambientes           | A definir após custo estimado      |
-| 9   | Filas e tarefas agendadas        | BullMQ com Redis                   |
-| 10  | Gateway de pagamento             | A definir após comparar taxas      |
-| 11  | Assinatura eletrônica e NFS-e    | A definir                          |
-| 12  | Tempo real (chat e notificações) | WebSocket na própria API           |
+| ADR                                                | Decisão                          | Situação                                                        |
+| -------------------------------------------------- | -------------------------------- | --------------------------------------------------------------- |
+| [0005](adr/0005-postgresql-e-drizzle.md)           | Banco e ORM                      | Aceita: PostgreSQL 17 com Drizzle                               |
+| [0006](adr/0006-multi-escola-por-dominio-e-rls.md) | Multi-escola                     | Aceita: escola pelo domínio, `escola_id` com Row Level Security |
+| [0007](adr/0007-autenticacao-better-auth.md)       | Autenticação                     | Aceita: Better Auth com sessão em cookie                        |
+| [0008](adr/0008-padroes-de-api.md)                 | Padrões da API                   | Aceita: `/api/v1`, RFC 9457, OpenAPI gerado do Zod              |
+| [0009](adr/0009-filas-com-bullmq.md)               | Filas                            | Aceita: BullMQ com Redis                                        |
+| [0010](adr/0010-armazenamento-de-arquivos-s3.md)   | Arquivos                         | Aceita: API S3, RustFS no ambiente local                        |
+| 0011                                               | Hospedagem e ambientes           | Pendente: comparar custo                                        |
+| 0012                                               | Gateway de pagamento             | Pendente: comparar taxas (Asaas, Efí, Iugu, Pagar.me)           |
+| 0013                                               | Assinatura eletrônica e NFS-e    | Pendente                                                        |
+| 0014                                               | Tempo real (chat e notificações) | Pendente: proposta WebSocket na própria API                     |

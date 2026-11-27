@@ -5,3 +5,4 @@
 
 # O protótipo é referência visual: fica fora das estatísticas de linguagem do GitHub.
 prototipo/** linguist-documentation
+*.sh text eol=lf
