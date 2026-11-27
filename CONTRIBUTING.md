@@ -29,14 +29,16 @@ Tipos aceitos: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `buil
 
 1. Schema em `packages/contracts/src/<dominio>.ts` e export em `index.ts`.
 2. Pasta `apps/api/src/modules/<dominio>` com `routes`, `controller`, `service`, `repository` e teste do service.
-3. Service registrado em `src/container.ts` e rota no router `v1` de `src/app.ts`, depois de `container.resolverEscola`. O caminho segue [docs/api/padroes.md](docs/api/padroes.md).
-4. Operações em `modules/<dominio>/<dominio>.openapi.ts` com `defineOpenApiModule`: `operationId`, `summary`, `tags`, parâmetros, resposta de sucesso e os erros específicos (`problemResponse('NAO_ENCONTRADO')`). O módulo entra na lista de `src/openapi.ts`.
-5. `npm run openapi -w @recreio/api` e commit do `docs/api/openapi.json` junto com a mudança. O teste `openapi.test.ts` falha sem esse passo.
-6. Tabela nova segue o checklist de [docs/banco-de-dados.md](docs/banco-de-dados.md): `escola_id`, RLS, `GRANT` e teste de isolamento.
+3. Service registrado em `src/container.ts` e rota no router `daEscola` de `src/app.ts` (`/api/v1/escolas/:escola`, depois de `container.resolverEscola`). O caminho segue [docs/api/padroes.md](docs/api/padroes.md).
+4. Proteção no router do módulo: `acesso.exigirPermissao(modulo, acao)` em cada rota, ou `acesso.exigirSessao` quando basta o vínculo com a escola. Rota pública não leva nenhum. O passo a passo está em [docs/autenticacao.md](docs/autenticacao.md#proteger-uma-rota-nova).
+5. Operações em `modules/<dominio>/<dominio>.openapi.ts` com `defineOpenApiModule`: `operationId`, `summary`, `tags`, `security: SESSAO_EXIGIDA`, parâmetros (`escolaParamsSchema`), resposta de sucesso e os erros específicos (`problemResponse('NAO_AUTENTICADO')`, `acessoNegadoResponse`, `problemResponse('NAO_ENCONTRADO')`). O módulo entra na lista de `src/openapi.ts`.
+6. `npm run openapi -w @recreio/api` e commit do `docs/api/openapi.json` junto com a mudança. O teste `openapi.test.ts` falha sem esse passo.
+7. Tabela nova segue o checklist de [docs/banco-de-dados.md](docs/banco-de-dados.md): `escola_id`, RLS, `GRANT` e teste de isolamento.
 
 ## Nova tela no portal
 
 1. Consulta em `apps/web/src/features/<dominio>/api/<dominio>.queries.ts`.
 2. Componentes em `features/<dominio>/components`, exportados no `index.ts` da feature.
 3. Página em `pages/<pagina>/<Pagina>Page.tsx`, registrada em `TELAS_PRONTAS` de `app/router.tsx` pelo href do item em `shared/config/navigation/<perfil>.ts`. Carregando, vazio e erro passam pelo `QueryState` de `shared/ui`.
-4. Teste da página com `renderRoute` e `mockApi` de `src/test/render.tsx`.
+4. A consulta usa o slug da rota (`useEscolaDaRota()`) na URL e no começo da chave.
+5. Teste da página com `renderRoute(naEscola('/<perfil>/<item>'))`, `mockApi` e `comSessao([...perfis])` de `src/test/render.tsx`.

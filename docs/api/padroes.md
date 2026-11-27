@@ -24,20 +24,20 @@ Regras que todo endpoint segue. A decisão está na [ADR 0008](../adr/0008-padro
 
 ## Status HTTP
 
-| Status | Quando                                                           |
-| ------ | ---------------------------------------------------------------- |
-| `200`  | Leitura ou alteração com corpo de resposta                       |
-| `201`  | Recurso criado. Cabeçalho `Location` aponta para ele             |
-| `204`  | Sucesso sem corpo, como `DELETE`                                 |
-| `400`  | Entrada fora do schema (`DADOS_INVALIDOS`)                       |
-| `401`  | Sem sessão válida (planejado, com o login)                       |
-| `403`  | Sessão sem permissão para a ação (planejado)                     |
-| `404`  | Recurso ou rota não existe (`NAO_ENCONTRADO`)                    |
-| `413`  | Corpo acima de 1 MB (`CORPO_GRANDE_DEMAIS`)                      |
-| `409`  | Conflito de estado, como matrícula duplicada (planejado)         |
-| `422`  | Entrada válida no schema que quebra regra de negócio (planejado) |
-| `429`  | Limite de requisições excedido (`LIMITE_EXCEDIDO`)               |
-| `500`  | Erro não previsto (`ERRO_INTERNO`). O detalhe fica só no log     |
+| Status | Quando                                                                          |
+| ------ | ------------------------------------------------------------------------------- |
+| `200`  | Leitura ou alteração com corpo de resposta                                      |
+| `201`  | Recurso criado. Cabeçalho `Location` aponta para ele                            |
+| `204`  | Sucesso sem corpo, como `DELETE`                                                |
+| `400`  | Entrada fora do schema (`DADOS_INVALIDOS`)                                      |
+| `401`  | Sem sessão válida (`NAO_AUTENTICADO`)                                           |
+| `403`  | Sem vínculo com a escola (`SEM_ACESSO`) ou sem a permissão (`PERMISSAO_NEGADA`) |
+| `404`  | Recurso ou rota não existe (`NAO_ENCONTRADO`)                                   |
+| `413`  | Corpo acima de 1 MB (`CORPO_GRANDE_DEMAIS`)                                     |
+| `409`  | Conflito de estado, como matrícula duplicada (planejado)                        |
+| `422`  | Entrada válida no schema que quebra regra de negócio (planejado)                |
+| `429`  | Limite de requisições excedido (`LIMITE_EXCEDIDO`)                              |
+| `500`  | Erro não previsto (`ERRO_INTERNO`). O detalhe fica só no log                    |
 
 ## Erros (RFC 9457)
 
@@ -49,7 +49,7 @@ Toda resposta de erro usa `Content-Type: application/problem+json`:
   "title": "Dados inválidos",
   "status": 400,
   "detail": "Os dados enviados não são válidos.",
-  "instance": "/api/v1/alunos/ID%20Inv%C3%A1lido",
+  "instance": "/api/v1/escolas/colegio-recreio/alunos/ID%20Inv%C3%A1lido",
   "code": "DADOS_INVALIDOS",
   "errors": { "id": ["Texto inválido: deve corresponder ao padrão /^[a-z0-9-]+$/"] }
 }
@@ -72,6 +72,9 @@ Uma falha fora de campo, como corpo que não é objeto, usa a chave `$` em `erro
 | `code`                | Status | `type`                                              | `title`                           |
 | --------------------- | ------ | --------------------------------------------------- | --------------------------------- |
 | `DADOS_INVALIDOS`     | 400    | `https://recreio.app/problemas/dados-invalidos`     | Dados inválidos                   |
+| `NAO_AUTENTICADO`     | 401    | `https://recreio.app/problemas/nao-autenticado`     | Sessão ausente ou expirada        |
+| `SEM_ACESSO`          | 403    | `https://recreio.app/problemas/sem-acesso`          | Sem acesso a esta escola          |
+| `PERMISSAO_NEGADA`    | 403    | `https://recreio.app/problemas/permissao-negada`    | Permissão negada                  |
 | `NAO_ENCONTRADO`      | 404    | `https://recreio.app/problemas/nao-encontrado`      | Recurso não encontrado            |
 | `CORPO_GRANDE_DEMAIS` | 413    | `https://recreio.app/problemas/corpo-grande-demais` | Corpo da requisição grande demais |
 | `LIMITE_EXCEDIDO`     | 429    | `https://recreio.app/problemas/limite-excedido`     | Limite de requisições excedido    |
@@ -93,16 +96,16 @@ Listas novas usam cursor. Os helpers estão em `packages/contracts/src/paginatio
 - `paginated(alunoSchema)` monta o schema da resposta `{ data, nextCursor }`. `nextCursor` é `null` na última página.
 
 ```
-GET /api/v1/alunos?limit=20
+GET /api/v1/escolas/colegio-recreio/alunos?limit=20
 → { "data": [...], "nextCursor": "eyJpZCI6ImRhdmkifQ" }
 
-GET /api/v1/alunos?limit=20&cursor=eyJpZCI6ImRhdmkifQ
+GET /api/v1/escolas/colegio-recreio/alunos?limit=20&cursor=eyJpZCI6ImRhdmkifQ
 → { "data": [...], "nextCursor": null }
 ```
 
 O cliente repassa o cursor sem interpretar. O servidor codifica nele a chave de ordenação do último item (por exemplo `nome` e `id` em base64url) e filtra com `WHERE (nome, id) > (...)`. Não há `offset`: a consulta custa o mesmo na página 1 e na 500.
 
-Os endpoints atuais (`/alunos`, `/escola`) ainda devolvem a lista ou o objeto direto. A troca para `{ data, nextCursor }` muda o formato da resposta e entra quando o repositório Drizzle chegar.
+Os endpoints atuais (`/escolas/{escola}/alunos`, `/escolas/{escola}`) ainda devolvem a lista ou o objeto direto. A troca para `{ data, nextCursor }` muda o formato da resposta e entra quando o repositório Drizzle chegar.
 
 ## Idempotency-Key (planejado)
 
@@ -115,6 +118,18 @@ Os endpoints atuais (`/alunos`, `/escola`) ainda devolvem a lista ou o objeto di
 5. Sem o cabeçalho, esses `POST` respondem `400`.
 
 A tabela fica no PostgreSQL, na mesma transação do efeito. O envio externo (e-mail, push, gateway) sai pela fila da [ADR 0009](../adr/0009-filas-com-bullmq.md).
+
+## Escola, sessão e permissões
+
+- Rotas com dados de escola ficam em `/api/v1/escolas/{escola}/...`, com o slug no caminho (ADR 0011). Slug desconhecido responde `404` `NAO_ENCONTRADO`.
+- `/api/v1/eu` e `/api/auth/*` são globais. Um login vale para todas as escolas.
+- A sessão é o cookie httpOnly `recreio.session_token` (`__Secure-` em produção), definido por `POST /api/auth/sign-in/email`. Nenhuma rota aceita token no cabeçalho.
+- Ordem das checagens numa rota protegida: escola do slug (`404`), sessão (`401` `NAO_AUTENTICADO`), vínculo com a escola (`403` `SEM_ACESSO`), permissão no módulo (`403` `PERMISSAO_NEGADA`).
+- `403` responde sempre igual para dado que existe e dado que não existe, então a resposta não revela registros de outra escola.
+- As rotas do Better Auth respondem erro no formato dele, `{ "code": "INVALID_EMAIL_OR_PASSWORD", "message": "..." }`, e não em problem+json. O portal lê os 2 formatos (`shared/api/http-client.ts`).
+- Tentativas de entrada, cadastro e troca de senha têm limite próprio: `AUTH_RATE_LIMIT_PER_MINUTE` por minuto por IP (padrão 10), com o mesmo `429` `LIMITE_EXCEDIDO`.
+
+Fluxos, cookie, perfis e a matriz padrão estão em [autenticacao.md](../autenticacao.md).
 
 ## Limite de requisições
 
@@ -138,17 +153,26 @@ O IP vem de `req.ip`, que respeita `TRUST_PROXY` (`app.set('trust proxy', ...)`)
 ## Exemplos com curl
 
 ```bash
-# Dados da escola, com o id da requisição na resposta
-curl -i http://localhost:3333/api/v1/escola -H 'X-Request-Id: suporte-123'
+# Dados públicos da escola, com o id da requisição na resposta
+curl -i http://localhost:3333/api/v1/escolas/colegio-recreio/publica -H 'X-Request-Id: suporte-123'
 
-# 404 em problem+json
-curl -i http://localhost:3333/api/v1/alunos/nao-existe
+# Entrar com uma conta de demonstração e guardar o cookie (docs/autenticacao.md)
+curl -c cookies.txt -H 'Origin: http://localhost:5173' -H 'Content-Type: application/json' \
+  -d '{"email":"lucia.menezes@colegiorecreio.test","password":"recreio-demo-2026"}' \
+  http://localhost:3333/api/auth/sign-in/email
+
+# Quem está logado e em quais escolas
+curl -b cookies.txt http://localhost:3333/api/v1/eu
+
+# 401 sem cookie, 404 com slug desconhecido
+curl -i http://localhost:3333/api/v1/escolas/colegio-recreio/alunos
+curl -i http://localhost:3333/api/v1/escolas/escola-que-nao-existe/publica
 
 # 400 com erros por campo
-curl -i 'http://localhost:3333/api/v1/alunos/ID%20Invalido'
+curl -i -b cookies.txt 'http://localhost:3333/api/v1/escolas/colegio-recreio/alunos/ID%20Invalido'
 
 # Cabeçalhos de limite
-curl -sI http://localhost:3333/api/v1/alunos | grep -i ratelimit
+curl -sI http://localhost:3333/api/v1/escolas/colegio-recreio/publica | grep -i ratelimit
 
 # Documento OpenAPI
 curl -s http://localhost:3333/api/v1/openapi.json | head

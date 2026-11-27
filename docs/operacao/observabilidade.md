@@ -12,7 +12,7 @@ A API e o worker produzem 3 sinais: logs no stdout (pino), traces por OpenTeleme
 | Campo                  | Origem                                                    |
 | ---------------------- | --------------------------------------------------------- |
 | `req.id`               | `X-Request-Id` do cliente, ou um UUID novo                |
-| `escolaId`             | Escola resolvida pelo `Host`, depois do `resolverEscola`  |
+| `escolaId`             | Escola resolvida pelo slug, depois do `resolverEscola`    |
 | `trace_id` e `span_id` | Span ativo do OpenTelemetry. Só aparecem com o SDK ligado |
 | `fila`, `jobId`        | Linhas do worker: fila e id da tarefa                     |
 
@@ -33,7 +33,7 @@ O worker registra `tarefa concluída`, `tarefa falhou, nova tentativa agendada` 
 O span raiz da requisição leva 2 atributos próprios (`shared/observability/span.ts`):
 
 - `recreio.request_id`: o mesmo valor do cabeçalho `X-Request-Id`.
-- `recreio.escola_id`: a escola resolvida pelo `Host`. Ausente nas rotas sem escola.
+- `recreio.escola_id`: a escola resolvida pelo slug da rota. Ausente nas rotas sem escola.
 
 `/api/health` e `/api/ready` não geram trace.
 
@@ -59,11 +59,11 @@ O hook de ESM (`import-in-the-middle`) intercepta só `http`, `https`, `express`
 
 1. Suba o Jaeger: `docker compose --profile observabilidade up -d`.
 2. Suba a API: `npm run dev:api`. O padrão já envia para `http://localhost:4318`.
-3. Faça uma chamada: `curl -H 'X-Request-Id: teste-1' http://localhost:3333/api/v1/escola`.
+3. Faça uma chamada: `curl -H 'X-Request-Id: teste-1' http://localhost:3333/api/v1/escolas/colegio-recreio/publica`.
 4. Abra http://localhost:16686, escolha o serviço `recreio-api` e clique em **Find Traces**.
 5. Para achar uma requisição pelo id, use a busca por tag `recreio.request_id=teste-1`.
 
-O trace mostra o span `GET /api/v1/escola`, os middlewares do Express, o `EVALSHA` do limite no Redis e as consultas do Postgres dentro da transação da escola. `docker compose --profile observabilidade down` para o Jaeger. Os traces ficam só na memória dele.
+O trace mostra o span `GET /api/v1/escolas/:escola/publica`, os middlewares do Express, o `EVALSHA` do limite no Redis e as consultas do Postgres dentro da transação da escola. `docker compose --profile observabilidade down` para o Jaeger. Os traces ficam só na memória dele.
 
 ## Erros no Sentry
 

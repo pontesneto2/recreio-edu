@@ -37,7 +37,7 @@ npm run db:seed
 npm run dev
 ```
 
-- Portal web: http://localhost:5173 (escolha de perfil em `/`; rotas por perfil em [docs/frontend.md](docs/frontend.md))
+- Portal web: http://localhost:5173/colegio-recreio/entrar. As contas de demonstração e a senha estão em [docs/autenticacao.md](docs/autenticacao.md#contas-de-demonstração-só-desenvolvimento). Rotas em [docs/frontend.md](docs/frontend.md)
 - API: http://localhost:3333/api/health (processo) e http://localhost:3333/api/ready (Postgres e Redis)
 - Worker das filas: sobe junto no `npm run dev`. Os e-mails chegam ao Mailpit em http://localhost:8025
 - Traces: `docker compose --profile observabilidade up -d` e http://localhost:16686 ([docs/operacao/observabilidade.md](docs/operacao/observabilidade.md))
@@ -45,7 +45,7 @@ npm run dev
 
 O Vite repassa `/api` para a porta 3333, então o portal chama `fetch('/api/v1/...')` sem configurar URL. Rotas de negócio ficam sob `/api/v1`; versionamento, erros e o OpenAPI estão em [docs/api](docs/api/README.md).
 
-Em `localhost`, a API atende a escola de `DEV_ESCOLA_DOMINIO` (Colégio Recreio). Banco, usuários, migrações e RLS estão em [docs/banco-de-dados.md](docs/banco-de-dados.md). Os testes da API sobem um PostgreSQL com Testcontainers, então o Docker precisa estar rodando para `npm test`.
+A escola vem do primeiro trecho do caminho: `/colegio-recreio/...` no portal e `/api/v1/escolas/colegio-recreio/...` na API ([ADR 0011](docs/adr/0011-escola-pela-rota.md)). Login, perfis e permissões estão em [docs/autenticacao.md](docs/autenticacao.md). Banco, usuários, migrações e RLS estão em [docs/banco-de-dados.md](docs/banco-de-dados.md). Os testes da API sobem um PostgreSQL com Testcontainers, então o Docker precisa estar rodando para `npm test`.
 
 ## Docker
 
@@ -89,26 +89,26 @@ Cada aplicação tem a própria pasta `src/`. As camadas e as regras de importa�
 
 ## Scripts da raiz
 
-| Script                                | O que faz                                                                                         |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `npm run dev`                         | Sobe API e portal juntos.                                                                         |
-| `npm run dev:api` / `npm run dev:web` | Sobe só um dos dois.                                                                              |
-| `npm run db:migrate`                  | Aplica as migrações pendentes como `recreio`.                                                     |
-| `npm run db:seed`                     | Grava os dados de demonstração. Pode rodar de novo.                                               |
-| `npm run prototipo`                   | Serve `prototipo/visualizar` na porta 5000.                                                       |
-| `npm run storybook`                   | Storybook do design system na porta 6006.                                                         |
-| `npm run build-storybook`             | Gera o Storybook estático em `packages/design-system/storybook-static`.                           |
-| `npm run build`                       | Compila API (`apps/api/dist`) e portal (`apps/web/dist`).                                         |
-| `npm run typecheck`                   | Roda o TypeScript em todos os pacotes.                                                            |
-| `npm test`                            | Roda os testes da API e do portal.                                                                |
-| `npm run test:e2e`                    | Build do portal e testes de ponta a ponta com Playwright e axe, com a API simulada.               |
-| `npm run test:storybook`              | Build do Storybook e axe em cada história.                                                        |
-| `npm run test:lighthouse`             | Build do portal e Lighthouse em `/` e `/escola` (acessibilidade e boas práticas a partir de 0,9). |
-| `npm run lint`                        | ESLint em todo o código fora de `prototipo/`.                                                     |
-| `npm run format`                      | Prettier em todo o código fora de `prototipo/`.                                                   |
-| `npm run check`                       | Lint, typecheck, testes e build, na mesma ordem do CI.                                            |
-| `npm run openapi -w @recreio/api`     | Regrava `docs/api/openapi.json` a partir dos contratos.                                           |
-| `npm run dev:worker`                  | Sobe só o worker das filas.                                                                       |
+| Script                                | O que faz                                                                                                     |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `npm run dev`                         | Sobe API e portal juntos.                                                                                     |
+| `npm run dev:api` / `npm run dev:web` | Sobe só um dos dois.                                                                                          |
+| `npm run db:migrate`                  | Aplica as migrações pendentes como `recreio`.                                                                 |
+| `npm run db:seed`                     | Grava os dados de demonstração. Pode rodar de novo.                                                           |
+| `npm run prototipo`                   | Serve `prototipo/visualizar` na porta 5000.                                                                   |
+| `npm run storybook`                   | Storybook do design system na porta 6006.                                                                     |
+| `npm run build-storybook`             | Gera o Storybook estático em `packages/design-system/storybook-static`.                                       |
+| `npm run build`                       | Compila API (`apps/api/dist`) e portal (`apps/web/dist`).                                                     |
+| `npm run typecheck`                   | Roda o TypeScript em todos os pacotes.                                                                        |
+| `npm test`                            | Roda os testes da API e do portal.                                                                            |
+| `npm run test:e2e`                    | Build do portal e testes de ponta a ponta com Playwright e axe, com a API simulada.                           |
+| `npm run test:storybook`              | Build do Storybook e axe em cada história.                                                                    |
+| `npm run test:lighthouse`             | Build do portal e Lighthouse em `/` e nas páginas da escola (acessibilidade e boas práticas a partir de 0,9). |
+| `npm run lint`                        | ESLint em todo o código fora de `prototipo/`.                                                                 |
+| `npm run format`                      | Prettier em todo o código fora de `prototipo/`.                                                               |
+| `npm run check`                       | Lint, typecheck, testes e build, na mesma ordem do CI.                                                        |
+| `npm run openapi -w @recreio/api`     | Regrava `docs/api/openapi.json` a partir dos contratos.                                                       |
+| `npm run dev:worker`                  | Sobe só o worker das filas.                                                                                   |
 
 ## Portar uma tela do protótipo
 

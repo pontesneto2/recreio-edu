@@ -37,7 +37,7 @@ Roda `npm run test:storybook`: `storybook build` e o axe em cada história do St
 
 ### `lighthouse`
 
-Roda `npm run test:lighthouse`: build do portal e o `lhci autorun` com `apps/web/lighthouserc.json`. Mede `/` e `/escola` com a API falsa do `vite preview --mode api-falsa`. Reprova com acessibilidade ou boas práticas abaixo de 0,9. Usa o Google Chrome que já vem no `ubuntu-latest`. O artefato `relatorio-lighthouse` guarda os relatórios HTML e JSON por 7 dias, em toda execução. Os relatórios não vão para servidor externo (`upload.target: filesystem`).
+Roda `npm run test:lighthouse`: build do portal e o `lhci autorun` com `apps/web/lighthouserc.json`. Mede `/`, `/colegio-recreio/escola` e `/colegio-recreio/entrar` com a API falsa do `vite preview --mode api-falsa`. Reprova com acessibilidade ou boas práticas abaixo de 0,9. Usa o Google Chrome que já vem no `ubuntu-latest`. O artefato `relatorio-lighthouse` guarda os relatórios HTML e JSON por 7 dias, em toda execução. Os relatórios não vão para servidor externo (`upload.target: filesystem`).
 
 O Lighthouse 12 tirou a categoria PWA. O job `e2e` confere manifesto, service worker e abertura sem conexão em `e2e/pwa.spec.ts`.
 
@@ -75,13 +75,13 @@ A proteção é configurada no GitHub, fora do repositório. Caminho: Settings, 
 
 Checks obrigatórios, todos de `ci.yml`. O nome do check é o id do job, então renomear um job tira o check da proteção sem aviso.
 
-| Check        | O que bloqueia                                                    |
-| ------------ | ----------------------------------------------------------------- |
-| `check`      | Auditoria, formatação, lint, typecheck, testes unitários e build  |
-| `e2e`        | Fluxos do portal no navegador, axe nas telas e PWA                |
-| `storybook`  | Violação do axe em qualquer história do Storybook                 |
-| `lighthouse` | Acessibilidade ou boas práticas abaixo de 0,9 em `/` ou `/escola` |
-| `docker`     | Build das imagens da API e do portal                              |
+| Check        | O que bloqueia                                                                                               |
+| ------------ | ------------------------------------------------------------------------------------------------------------ |
+| `check`      | Auditoria, formatação, lint, typecheck, testes unitários e build                                             |
+| `e2e`        | Fluxos do portal no navegador, axe nas telas e PWA                                                           |
+| `storybook`  | Violação do axe em qualquer história do Storybook                                                            |
+| `lighthouse` | Acessibilidade ou boas práticas abaixo de 0,9 em `/`, `/colegio-recreio/escola` ou `/colegio-recreio/entrar` |
+| `docker`     | Build das imagens da API e do portal                                                                         |
 
 O check `analyze` do CodeQL fica fora da lista obrigatória até a base de alertas estar zerada. Depois dele entrar, um alerta novo bloqueia o merge.
 

@@ -82,7 +82,11 @@ A API e o worker validam as variáveis com Zod em `apps/api/src/config/env.ts` a
 | `TRUST_PROXY`                 | `loopback`                                | Saltos de proxy (ver abaixo) | `trust proxy` do Express: define `req.ip` e o IP do limite de requisições.                     |
 | `DATABASE_URL`                | `recreio_app` em `localhost:5432`         | Obrigatória                  | Postgres com o usuário `recreio_app`, sujeito ao Row Level Security.                           |
 | `DATABASE_MIGRATION_URL`      | `recreio` em `localhost:5432`             | Obrigatória. Segredo         | Postgres com o dono das tabelas. Só para migrações e seed.                                     |
-| `DEV_ESCOLA_DOMINIO`          | `colegiorecreio.localhost`                | Ignorada                     | Escola usada quando o portal roda em `localhost` (ADR 0006).                                   |
+| `AUTH_SECRET`                 | Valor local fixo                          | Obrigatória. Segredo         | Assina cookies e tokens do Better Auth. 32 caracteres ou mais (ADR 0007).                      |
+| `AUTH_URL`                    | `http://localhost:5173`                   | Origem do portal             | Origem dos links dos e-mails de conta quando o `Origin` não é confiável.                       |
+| `AUTH_TRUSTED_ORIGINS`        | `http://localhost:5173`                   | Origem do portal             | Origens aceitas pelo Better Auth, por vírgula. Aceita curinga de subdomínio.                   |
+| `AUTH_RATE_LIMIT_PER_MINUTE`  | `10`                                      | `10`                         | Tentativas por minuto por IP em entrar, cadastrar e trocar senha.                              |
+| `SEED_SENHA_PADRAO`           | Vazia                                     | Não usar                     | Senha das contas de demonstração do seed. O seed não roda em produção.                         |
 | `REDIS_URL`                   | `redis://localhost:6379` (vazia em teste) | Obrigatória                  | Redis das filas e do contador do limite (ADR 0009). Sem ela, o limite fica em memória.         |
 | `WORKER_CONCURRENCY`          | `5`                                       | `5`                          | Tarefas por fila que o worker processa ao mesmo tempo.                                         |
 | `SMTP_URL`                    | `smtp://localhost:1025`                   | Obrigatória. Segredo         | Servidor de e-mail. Mailpit no ambiente local.                                                 |

@@ -31,6 +31,7 @@ src/
 ├── config/env.ts            Variáveis de ambiente validadas com Zod
 ├── scripts/                 `generate-openapi.ts` (npm run openapi) e `enviar-email-teste.ts`
 ├── modules/
+│   ├── autenticacao/        Better Auth, /eu e os middlewares exigirLogin, exigirSessao e exigirPermissao
 │   └── <dominio>/
 │       ├── <dominio>.routes.ts       URLs e verbos HTTP
 │       ├── <dominio>.openapi.ts      Operações documentadas no OpenAPI
@@ -52,7 +53,7 @@ src/
 ├── database/
 │   ├── schema/              Tabelas em TypeScript (Drizzle)
 │   ├── client.ts            Pool do pg e instância do Drizzle
-│   ├── escola-context.ts    withEscola e busca da escola pelo domínio
+│   ├── escola-context.ts    withEscola, busca da escola pelo slug e vínculos da conta
 │   ├── migrator.ts          Aplica as migrações de apps/api/drizzle
 │   ├── seed/                Dados de demonstração do protótipo
 │   └── cli/                 Scripts db:migrate, db:seed e db:reset
@@ -67,16 +68,17 @@ Cada requisição percorre `routes → controller → service → repository`. C
 
 Os módulos são funções fábrica (`createAlunosService(repository)`), sem classes de serviço nem framework de injeção. Os testes montam o service com um repositório próprio.
 
-As rotas de negócio ficam sob `/api/v1`. `app.ts` define `trust proxy` (`TRUST_PROXY`) e monta, nesta ordem: pino-http (com `X-Request-Id`, sem log de health e ready), helmet, CORS, `express.json` (até 1 MB), `/api/health`, `/api/ready`, `/api/docs`, o router da v1 (limite por IP com contador no Redis, `openapi.json`, `resolverEscola` e os módulos) e o tratamento de erro.
+As rotas de negócio ficam sob `/api/v1`. `app.ts` define `trust proxy` (`TRUST_PROXY`) e monta, nesta ordem: pino-http (com `X-Request-Id`, sem log de health e ready), helmet, CORS, o limite de tentativas de entrada e o Better Auth em `/api/auth/*` (antes do `express.json`, porque ele lê o corpo cru), `express.json` (até 1 MB), `/api/health`, `/api/ready`, `/api/docs`, o router da v1 (limite por IP com contador no Redis, `openapi.json`, `/eu` e o router `/escolas/:escola` com `resolverEscola` e os módulos) e o tratamento de erro.
 
 ### Dados e escola da requisição
 
-A API é multi-escola (ADR 0006). Toda rota com dados de escola passa antes pelo middleware `resolverEscola`:
+A API é multi-escola (ADR 0006). A escola vem do slug do caminho (ADR 0011): toda rota com dados de escola fica em `/api/v1/escolas/:escola` e passa antes pelo middleware `resolverEscola`:
 
-1. O middleware lê o `Host`, chama a função `escola_por_dominio` no banco e grava `{ escolaId }` em `res.locals`. Host sem escola responde 404.
-2. O controller pega o contexto com `escolaDaRequisicao(res)` e repassa ao service.
-3. O service repassa o `EscolaContexto` ao repositório em toda chamada.
-4. O repositório roda as consultas dentro de `withEscola(escolaId, fn)`. Ele abre uma transação com `app.escola_id` definido, e as políticas de Row Level Security escondem as linhas de outras escolas.
+1. O middleware lê o slug, chama a função `escola_por_slug` no banco e grava `{ escolaId }` em `res.locals`. Slug sem escola responde 404.
+2. `exigirSessao` ou `exigirPermissao(modulo, acao)`, no router do módulo, conferem a sessão, o vínculo com a escola e a permissão ([autenticacao.md](autenticacao.md)).
+3. O controller pega o contexto com `escolaDaRequisicao(res)` e repassa ao service.
+4. O service repassa o `EscolaContexto` ao repositório em toda chamada.
+5. O repositório roda as consultas dentro de `withEscola(escolaId, fn)`. Ele abre uma transação com `app.escola_id` definido, e as políticas de Row Level Security escondem as linhas de outras escolas.
 
 A API conecta como `recreio_app`, que não é dono das tabelas. Migrações e seed rodam como `recreio`. Tabelas, migrações, políticas e o checklist de tabela nova estão em [banco-de-dados.md](banco-de-dados.md).
 
@@ -100,7 +102,7 @@ Erros saem em `application/problem+json` (RFC 9457), com código estável em `co
   "title": "Recurso não encontrado",
   "status": 404,
   "detail": "Aluno não encontrado.",
-  "instance": "/api/v1/alunos/7a1e2b3c-0000-4000-8000-000000000000",
+  "instance": "/api/v1/escolas/colegio-recreio/alunos/7a1e2b3c-0000-4000-8000-000000000000",
   "code": "NAO_ENCONTRADO"
 }
 ```
@@ -108,6 +110,9 @@ Erros saem em `application/problem+json` (RFC 9457), com código estável em `co
 | Código                | Status | Quando                                                      |
 | --------------------- | ------ | ----------------------------------------------------------- |
 | `DADOS_INVALIDOS`     | 400    | Entrada não segue o schema Zod. `errors` lista os campos    |
+| `NAO_AUTENTICADO`     | 401    | Sem cookie de sessão, ou sessão expirada                    |
+| `SEM_ACESSO`          | 403    | A conta não tem vínculo com a escola do caminho             |
+| `PERMISSAO_NEGADA`    | 403    | Nenhum perfil da conta tem a ação no módulo                 |
 | `NAO_ENCONTRADO`      | 404    | Recurso ou rota não existe                                  |
 | `CORPO_GRANDE_DEMAIS` | 413    | Corpo JSON acima de 1 MB                                    |
 | `LIMITE_EXCEDIDO`     | 429    | Passou de `RATE_LIMIT_PER_MINUTE`. `Retry-After` diz quando |
@@ -124,7 +129,8 @@ src/
 ├── main.tsx                 Ponto de entrada
 ├── app/
 │   ├── providers.tsx        TanStack Query, tema da escola e preferências salvas
-│   └── router.tsx           Rotas por perfil (React Router, modo data)
+│   ├── guardas.tsx          Guardas de sessão: InicioGlobal, InicioDaEscola, ExigirPerfil
+│   └── router.tsx           Rotas por escola e perfil (React Router, modo data)
 ├── pages/<pagina>/          Uma pasta por rota; compõe features
 ├── features/<dominio>/
 │   ├── api/                 queryOptions do TanStack Query
@@ -136,12 +142,13 @@ src/
 │   ├── config/navigation/   Menu de cada perfil (familia, aluno, professor, escola)
 │   ├── layout/              Cascas: PerfilLayout (SideNav + TabBar) e AvulsaLayout
 │   ├── preferencias/        Preferências de acessibilidade salvas no navegador
+│   ├── sessao/              euQuery, useSessao, login e saída, slug da rota e perfis da conta
 │   ├── pwa/                 Aviso de versão nova, conexão e faixa "Sem internet"
 │   └── ui/                  QueryState e lista de links
 └── test/                    Setup do Vitest e helpers de renderização
 ```
 
-O portal tem uma casca por perfil (`/familia`, `/aluno`, `/professor`, `/escola`), montada a partir do menu em `shared/config/navigation`. Item do menu sem tela pronta abre "Em construção". Até existir login, `/` mostra a escolha de perfil. O portal é um PWA: o service worker guarda a casca para abrir sem conexão e nunca guarda resposta de `/api/`. Rotas, PWA, tema e Storybook estão em [frontend.md](frontend.md).
+O portal vive em `/{slug}` (ADR 0011) e tem uma casca por perfil (`/colegio-recreio/familia`, `/aluno`, `/professor`, `/escola`), montada a partir do menu em `shared/config/navigation`. Item do menu sem tela pronta abre "Em construção". As cascas exigem sessão e vínculo com a escola; `/` leva a Entrar ou à escola da conta ([autenticacao.md](autenticacao.md)). O portal é um PWA: o service worker guarda a casca para abrir sem conexão e nunca guarda resposta de `/api/`. Rotas, PWA, tema e Storybook estão em [frontend.md](frontend.md).
 
 Regras de importação:
 

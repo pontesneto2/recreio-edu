@@ -58,11 +58,18 @@ Detalhes em [banco-de-dados.md](banco-de-dados.md).
 
 ### Autenticação e autorização
 
-- Login com sessão em cookie `httpOnly`, `Secure`, `SameSite=Lax`. Proposta: Better Auth com adaptador Drizzle (ADR).
-- Perfis: responsável, aluno, professor, secretaria, financeiro, portaria, coordenação, direção.
-- Permissões por módulo e ação (ver, criar, editar, excluir, aprovar), como na tela `Escola-Permissoes`.
-- Uma pessoa com vários perfis troca de perfil sem novo login (`App-Perfil-Escolha`).
-- Telas: `Main` (entrar) e `Celular-Entrar`.
+Detalhes em [autenticacao.md](autenticacao.md).
+
+- [x] Login com sessão em cookie `httpOnly`, `Secure` em produção, `SameSite=Lax`: Better Auth com adaptador Drizzle (ADR 0007). Senha com 10 caracteres ou mais e limite de tentativas por IP.
+- [x] Confirmação de e-mail e troca de senha pela fila `emails`.
+- [x] Perfis em `vinculos`: responsável, aluno, professor, secretaria, financeiro, portaria, coordenação, direção. Um login para todas as escolas (ADR 0011).
+- [x] Permissões por módulo e ação (ver, criar, editar, excluir, aprovar) em `permissoes`, com a matriz padrão de `Escola-Permissoes`. `exigirPermissao` protege `/alunos` e os dados completos da escola.
+- [x] Uma pessoa com vários perfis troca de perfil sem novo login (`App-Perfil-Escolha` e `ProfileSwitcher`).
+- [x] Telas: `Main` (entrar), `Celular-Entrar`, recuperar a senha e senha nova.
+- [ ] Convite da escola para o primeiro acesso. Hoje o cadastro aberto só existe fora de produção.
+- [ ] Responsável ligado aos próprios filhos, e alcance por turma para o professor.
+- [ ] Tela `Escola-Permissoes` gravando a matriz da escola.
+- [ ] Passkeys e login social.
 
 ### API
 
@@ -77,7 +84,7 @@ Padrões da [ADR 0008](adr/0008-padroes-de-api.md), descritos em [api/padroes.md
 - [ ] Listas existentes no formato `{ data, nextCursor }` e filtros validados, junto com os repositórios Drizzle.
 - [x] Contador do limite de taxa no Redis (`rate-limit-redis`), com `trust proxy` configurável (`TRUST_PROXY`).
 - [x] `413` `CORPO_GRANDE_DEMAIS` em problem+json para corpo acima de 1 MB.
-- [ ] Limite de taxa por usuário, depois do login.
+- [ ] Limite de taxa por usuário, agora que o login existe.
 - [ ] Idempotência por cabeçalho `Idempotency-Key` em toda operação que cria cobrança ou envia mensagem.
 
 Outros itens da API:
@@ -115,16 +122,16 @@ Operação documentada em [operacao/](operacao/README.md).
 
 - [x] Testes de integração da API contra Postgres real com Testcontainers.
 - MSW para simular a API nos testes do portal.
-- Playwright para testes de ponta a ponta dos fluxos principais. A base já roda no CI para o portal sem login (`apps/web/e2e`, job `e2e`). Falta cobrir login e dados reais da API.
+- Playwright para testes de ponta a ponta dos fluxos principais. A base roda no CI (`apps/web/e2e`, job `e2e`), com o login simulado em `entrar.spec.ts`. Falta rodar contra a API real.
 
 Critério de pronto: alguém entra no portal em staging com um usuário de teste, vê só os dados da própria escola, e um erro forçado aparece no Sentry com o rastreamento completo.
 
 ## Fase 2. Casca do portal por perfil e PWA (em andamento)
 
-Feito sem autenticação: até a fase 1 entregar o login, `/` mostra a escolha de perfil. Detalhes em [frontend.md](frontend.md).
+As cascas exigem sessão e vínculo desde a entrega do login. Detalhes em [frontend.md](frontend.md).
 
 - [x] Layout por perfil: família, aluno, professor e escola, cada um com o próprio menu lateral (`SideNav`) e barra inferior no celular (`TabBar`, telas `Celular-Hoje` e `Celular-Mais`). Itens sem tela abrem "Em construção".
-- [x] Tema da escola aplicado pelo `SchoolTheme` a partir da cor cadastrada (`corMarca` de `/api/v1/escola`).
+- [x] Tema da escola aplicado pelo `SchoolTheme` a partir da cor cadastrada (`corMarca` de `/api/v1/escolas/{slug}/publica`).
 - [ ] Logo da escola no menu e no manifesto, vinda do cadastro.
 - [x] Preferências de acessibilidade: tamanho de texto, fonte legível, movimento reduzido, alto contraste (`Familia-Preferencias`). Hoje salvas no navegador; passam para a conta com o login.
 - [x] PWA instalável com Workbox: manifesto, ícones, tela de abertura, casca do portal salva para abrir sem conexão, aviso de versão nova e tela `/sem-internet` (`Celular-Offline`).

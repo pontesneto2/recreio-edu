@@ -38,7 +38,7 @@ O arquivo fica fora do Prettier (`.prettierignore`), porque o teste compara o te
 ## Versionamento
 
 - Toda rota de negócio fica sob `/api/v1`. `/api/health` e `/api/ready` não têm versão nem entram no OpenAPI, porque servem ao balanceador e não a clientes. `/api/health` responde 200 com o processo vivo. `/api/ready` responde 200 com Postgres e Redis no ar e 503 com algum fora. O corpo diz qual: `{ "status": "indisponivel", "dependencias": { "postgres": "ok", "redis": "indisponivel" } }`.
-- Toda rota da v1, menos `/api/v1/openapi.json`, resolve a escola pelo `Host` (ADR 0006). Host sem escola responde 404 `NAO_ENCONTRADO`. Em desenvolvimento, `localhost` e `127.0.0.1` apontam para `DEV_ESCOLA_DOMINIO`.
+- Rotas com dados de escola ficam em `/api/v1/escolas/{escola}/...`, com o slug da escola no caminho (ADR 0011). Slug sem escola responde 404 `NAO_ENCONTRADO`. `/api/v1/eu` e `/api/v1/openapi.json` são globais. O `Host` não escolhe escola.
 - Mudança compatível entra na v1 sem aviso: campo novo na resposta, parâmetro opcional novo, endpoint novo, código de erro novo.
 - Mudança incompatível cria `/api/v2`: remover ou renomear campo, mudar tipo, tornar parâmetro obrigatório, mudar o significado de um status.
 - A v2 nasce como um router novo em `app.ts` e um documento OpenAPI próprio. A v1 continua no ar até os clientes migrarem.
@@ -53,11 +53,12 @@ O arquivo fica fora do Prettier (`.prettierignore`), porque o teste compara o te
 
 Os cabeçalhos dos passos 2 e 4 ainda não existem. Entram junto com a primeira descontinuação real.
 
-## Autenticação (planejada)
+## Autenticação
 
-A [ADR 0007](../adr/0007-autenticacao-better-auth.md) define sessão em cookie `httpOnly`, `Secure`, `SameSite=Lax`.
+A [ADR 0007](../adr/0007-autenticacao-better-auth.md) define sessão em cookie `httpOnly`, `Secure`, `SameSite=Lax`. Fluxos, perfis e a matriz de permissões estão em [autenticacao.md](../autenticacao.md).
 
-- O portal chama a API na mesma origem (o Vite repassa `/api` em desenvolvimento), então o navegador envia o cookie sem código extra.
-- O OpenAPI vai declarar um `securityScheme` do tipo `apiKey` em `cookie`, e cada operação protegida vai listar a exigência.
-- Requisição sem sessão válida vai responder `401` com `code` `NAO_AUTENTICADO`. Sessão sem permissão para a ação vai responder `403` com `PERMISSAO_NEGADA`. Os dois códigos entram no catálogo quando o login existir.
+- Entrar, sair, cadastro, confirmação de e-mail e troca de senha ficam em `/api/auth/*`, rotas do [Better Auth](https://www.better-auth.com/docs/concepts/api) fora deste documento. A lista das rotas usadas está em [autenticacao.md](../autenticacao.md#rotas-do-better-auth).
+- O portal chama a API na mesma origem (o Vite repassa `/api` em desenvolvimento) com `credentials: 'include'`, então o navegador envia o cookie.
+- O OpenAPI declara o `securityScheme` `cookieAuth` (`apiKey` no cookie `recreio.session_token`). Cada operação protegida lista a exigência; `/escolas/{escola}/publica` declara `security: []`.
+- Sem sessão válida, a rota responde `401` `NAO_AUTENTICADO`. Sem vínculo com a escola do caminho, `403` `SEM_ACESSO`. Com vínculo e sem a permissão, `403` `PERMISSAO_NEGADA`.
 - Integrações de terceiros vão usar outro esquema (token por escola), decidido em ADR própria.
